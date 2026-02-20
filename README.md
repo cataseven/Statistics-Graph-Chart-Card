@@ -38,6 +38,8 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 |---|---|
 | 📈 | Line and bar charts with smooth Bezier curves |
 | 🔢 | Live state rows with current value, trend icon, and MDI icons |
+| ↕️ | Coloring based on prvious value. Ups and Downs |
+| ⏩ | Trend sign: What is the latest trend of the data? Is it going up or down? |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds |
 | 🎨 | Color thresholds and Rise/Fall colorization |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
