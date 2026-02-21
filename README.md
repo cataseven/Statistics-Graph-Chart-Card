@@ -20,15 +20,15 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 
 ## 🖼️ Preview
 
-![image1](images/line.png)
-
-![image2](images/bar.png)
-
 ![image3](images/editor1.png)
 
 ![image4](images/editor2.png)
 
 ![image5](images/editor3.png)
+
+![image1](images/line.png)
+
+![image2](images/bar.png)
 
 ---
 
@@ -37,11 +37,13 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 | | |
 |---|---|
 | 📈 | Line and bar charts with smooth Bezier curves |
-| 🔢 | Live state rows with current value, trend icon, and MDI icons |
-| ↕️ | Coloring based on prvious value. Ups and Downs |
-| ⏩ | Trend sign: What is the latest trend of the data? Is it going up or down? |
+| 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
+| 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
+| ⏩ | **Trend icon** — a ▲▼● indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
+| 🌐 | **Locale-aware formatting** — control how numbers and timestamps are displayed per entity (`number_format`, `datetime_format`), independent of your HA locale |
+| 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds |
-| 🎨 | Color thresholds and Rise/Fall colorization |
+| 🎨 | Color thresholds with smooth or hard transitions |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
 | 💬 | Tooltip with crosshair on hover |
@@ -53,8 +55,6 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 | 🔗 | Attribute reading with dot-notation nested path support |
 | ⏩ | Forward-fill for sparse sensors (e.g. weather entities) |
 | 🎨 | Adaptive state color — state row inherits entity line color automatically |
-| 🖱️ | Drag-to-reorder entities in the editor |
-| 🛠️ | Full visual editor with live preview |
 
 ---
 
@@ -91,6 +91,8 @@ entities:
     name: Temperature
     color: "#ff6b35"
 ```
+
+> **No YAML needed?** The card has a full visual editor built in. Click the pencil icon on any card in the Lovelace UI to configure everything — including rise/fall colors, trend settings, and number formats — without writing a single line of YAML. See [Visual Editor](#️-visual-editor) for details.
 
 ---
 
@@ -143,8 +145,8 @@ Each entry under `entities` supports the following options.
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
-| `number_format` | string | `"system"` | `system` / `comma` (1.234,56) / `dot` (1,234.56) |
-| `datetime_format` | string | `"system"` | Timestamp format in tooltip/labels. See [Date Formats](#-date-formats). |
+| `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
+| `datetime_format` | string | `"system"` | Controls how timestamps appear in tooltips and extrema labels. `system` follows HA's locale. See [Date Formats](#-date-formats) for all patterns. Useful for international setups or compact displays. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. See [State Map](#-state-map). |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). |
@@ -165,8 +167,8 @@ Each entry under `entities` supports the following options.
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value over the visible time window, labeled in the entity's color. |
 | `show_state` | boolean | `true` | Show the state row above the graph |
 | `show_state_last` | boolean | `false` | Show the last aggregated graph value instead of the live HA state. Useful with heavy aggregation like daily `sum`. |
-| `show_trend_icon` | boolean | `true` | Show ▲▼● trend direction icon |
-| `trend_period_hours` | number | `1` | Hours over which trend direction is calculated. `0` = full range. |
+| `show_trend_icon` | boolean | `true` | Show ▲▼● trend direction icon next to the state value. The icon reflects the slope of the recent window defined by `trend_period_hours`. |
+| `trend_period_hours` | number | `1` | Time window (in hours) used to determine trend direction. Shorter values react faster; longer values smooth out noise. Set `0` to use the full `hours_to_show` range. |
 | `show_in_legend` | boolean | `false` | Show Min / Avg / Max legend below the graph |
 | `lower_bound` | string/number | `null` | Y axis minimum. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Y axis maximum. See [Bounds](#-bounds). |
@@ -287,7 +289,7 @@ Setting `color: threshold` propagates threshold colors to the state row dot as w
 
 ### 📈 Rise/Fall Colors
 
-Colorize each graph segment based on whether the value is rising, falling, or stable relative to the previous point. Cannot be combined with color thresholds.
+Color each graph segment green when rising and red when falling — without needing to define any value thresholds. The trend icon on the state row reflects the same direction. `trend_period_hours` controls how sensitive the detection is.
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -299,6 +301,7 @@ entities:
       increase: "#2ecc71"
       decrease: "#e74c3c"
       stable: "#95a5a6"
+    show_trend_icon: true
     trend_period_hours: 2
 ```
 
@@ -556,6 +559,8 @@ entities:
 
 ### 🕐 Date Formats
 
+Set `datetime_format` per entity to control how timestamps appear in tooltips and extrema labels. `system` follows HA's locale setting. All other formats are applied regardless of locale — useful when your dashboard is shared across regions or when you need a more compact display.
+
 | Value | Example output |
 |-------|---------------|
 | `system` | Follows HA locale |
@@ -584,7 +589,7 @@ Both entity-level (`lower_bound`, `upper_bound`) and card-level secondary axis o
 
 ### 📈 Rise/Fall Colors
 
-Colors each graph segment based on the slope relative to the previous point, using the Trend Period window for smoothing.
+Colors each graph segment based on its slope relative to the previous point. Unlike color thresholds (which react to absolute values), rise/fall coloring reacts to *direction of change* — making it easy to spot momentum shifts at a glance. The `trend_period_hours` setting on the entity controls the smoothing window used to determine whether a segment counts as rising, falling, or stable.
 
 ```yaml
 rise_fall_colors:
@@ -593,6 +598,8 @@ rise_fall_colors:
   decrease: "#e74c3c"   # color when value is falling
   stable: "#95a5a6"     # color when value is flat
 ```
+
+The same direction logic drives the trend icon (▲▼●) on the state row — so the icon and the graph always agree.
 
 > ⚠️ Cannot be combined with `color_thresholds` on the same entity.
 
@@ -656,7 +663,9 @@ The state row always displays the original string, not the number.
 
 ## 🛠️ Visual Editor
 
-The card includes a full visual editor accessible from the Lovelace UI. All settings are organized into collapsible panels:
+The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
+
+All settings are organized into collapsible panels:
 
 - **Card Settings** — Header, icon, graph data, Y axis bounds, visual options
 - **Entities** — Add, remove, and drag-to-reorder entities
@@ -665,13 +674,11 @@ Each entity has three tabs:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, data settings, state map, tap action |
-| **Appearance** | Toggle-controlled sections for Graph (type, extrema, **average**), Line, Fill (with Gradient), Data Points, State Row (with Show Last and Adaptive Color), Trend Icon, Y Axis Range, and Legend |
-| **Colors** | Base colors, Rise/Fall Colors, Color Thresholds (with Transition) |
+| **General** | Entity picker, data settings (aggregate, points per hour, number & date format), state map, tap action |
+| **Appearance** | Toggle-controlled sections for Graph (type, extrema, average), Line, Fill (with Gradient), Data Points, State Row (with Show Last, Adaptive Color, and Trend Icon settings), Y Axis Range, and Legend |
+| **Colors** | Base colors, Rise/Fall Colors (with separate increase/decrease/stable pickers), Color Thresholds (with Transition) |
 
 Turning a section toggle off disables all its child fields visually and prevents accidental edits.
-
-<!-- IMAGE 7: Editor showing entity Appearance tab with several toggles open -->
 
 ---
 
