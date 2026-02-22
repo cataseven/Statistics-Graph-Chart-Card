@@ -39,7 +39,7 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 | 📈 | Line and bar charts with smooth Bezier curves |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
-| ⏩ | **Trend icon** — a ▲▼● indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
+| ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers and timestamps are displayed per entity (`number_format`, `datetime_format`), independent of your HA locale |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds |
@@ -55,6 +55,10 @@ A feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) 
 | 🔗 | Attribute reading with dot-notation nested path support |
 | ⏩ | Forward-fill for sparse sensors (e.g. weather entities) |
 | 🎨 | Adaptive state color — state row inherits entity line color automatically |
+| 🎚️ | **Interval picker** — quick-select time range buttons (1H–7D) directly on the card, no editor needed |
+| 🔀 | **Attribute switcher** — per-entity dropdown on the card to switch between state and any numeric attribute on the fly |
+| 🔍 | **Scrollable graph** — set a visible window smaller than the data range and scroll horizontally through history |
+| ↔️ | **Configurable icon position** — place the header icon on the left or right side of the title |
 
 ---
 
@@ -110,6 +114,7 @@ These options apply to the whole card.
 | `card_icon_color` | string | `null` | Color of the header icon (CSS color). |
 | `card_header_size` | string | `null` | Font size of the title, e.g. `16px` |
 | `card_icon_size` | string | `null` | Size of the header icon, e.g. `22px` |
+| `card_icon_position` | string | `"left"` | Header icon position: `left` or `right` |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
 | `hours_to_show` | number | `24` | Hours of history to load and display |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default) |
@@ -126,6 +131,12 @@ These options apply to the whole card.
 | `show_y_axis` | boolean | `true` | Show Y axis value labels |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale |
 | `animate_graph` | boolean | `false` | Draw-in animation on load |
+| `max_visible_interval` | number | `null` | Maximum visible time range in hours. When set and smaller than `hours_to_show`, the graph becomes horizontally scrollable. |
+| `scroll_mode` | string | `"scrollbar"` | How horizontal scrolling works: `scrollbar` (visible scrollbar) or `wheel` (mouse wheel, no visible scrollbar). Touch swipe always works. |
+| `show_interval_picker` | boolean | `false` | Show quick-select time range buttons (1H, 2H, 4H, 8H, 12H, 24H, 3D, 7D) on the card |
+| `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
+| `show_attribute_list` | boolean | `false` | Show per-entity attribute dropdown selectors on the card |
+| `attribute_list_position` | string | `"left"` | Position of the attribute list: `left` / `center` / `right` |
 
 ---
 
@@ -138,7 +149,7 @@ Each entry under `entities` supports the following options.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `entity` | string | **required** | HA entity ID |
-| `name` | string | `null` | Custom display name. Defaults to friendly name. |
+| `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. |
 | `y_axis` | string | `"primary"` | `primary` (left) or `secondary` (right) |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `delta` / `diff` |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
@@ -167,7 +178,7 @@ Each entry under `entities` supports the following options.
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value over the visible time window, labeled in the entity's color. |
 | `show_state` | boolean | `true` | Show the state row above the graph |
 | `show_state_last` | boolean | `false` | Show the last aggregated graph value instead of the live HA state. Useful with heavy aggregation like daily `sum`. |
-| `show_trend_icon` | boolean | `true` | Show ▲▼● trend direction icon next to the state value. The icon reflects the slope of the recent window defined by `trend_period_hours`. |
+| `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. The icon reflects the slope of the recent window defined by `trend_period_hours`. |
 | `trend_period_hours` | number | `1` | Time window (in hours) used to determine trend direction. Shorter values react faster; longer values smooth out noise. Set `0` to use the full `hours_to_show` range. |
 | `show_in_legend` | boolean | `false` | Show Min / Avg / Max legend below the graph |
 | `lower_bound` | string/number | `null` | Y axis minimum. See [Bounds](#-bounds). |
@@ -481,6 +492,82 @@ entities:
 
 ---
 
+### 🎚️ Interval Picker & Attribute Switcher
+
+Add on-card controls for quick time range switching and live attribute exploration — no need to open the editor.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Weather Station
+hours_to_show: 24
+show_interval_picker: true
+interval_picker_position: left
+show_attribute_list: true
+attribute_list_position: right
+entities:
+  - entity: weather.home
+    name: Temperature
+    attribute: temperature
+    color: "#ff6b35"
+
+  - entity: weather.home
+    name: Humidity
+    attribute: humidity
+    color: "#00bcd4"
+```
+
+The interval picker displays buttons for 1H, 2H, 4H, 8H, 12H, 24H, 3D, and 7D. Clicking a button temporarily overrides `hours_to_show`; clicking again deselects it and returns to the original range.
+
+The attribute list shows a dropdown per entity with a color-coded dot. Select any numeric attribute to instantly re-graph with that data — the graph, state row, and tooltip all update live.
+
+Both controls share a single toolbar row and wrap automatically on narrow cards.
+
+---
+
+### 🔍 Scrollable Graph
+
+Load a wide time range but show only a portion at a time — scroll to explore.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Weekly Overview
+hours_to_show: 168        # 7 days of data
+max_visible_interval: 24  # show 24h at a time
+scroll_mode: wheel         # or: scrollbar
+entities:
+  - entity: sensor.temperature
+    color: "#ff6b35"
+```
+
+The graph starts scrolled to the right (most recent data). Y-axis labels stay fixed while the graph content scrolls underneath. Scroll position is preserved across HA state updates.
+
+| `scroll_mode` | Behavior |
+|---------------|----------|
+| `scrollbar` | Thin visible scrollbar *(default)* |
+| `wheel` | Mouse wheel scrolls horizontally, no visible scrollbar |
+
+On mobile/touch devices, swipe always works regardless of the scroll mode setting.
+
+> 💡 Combines well with the **Interval Picker** — select "7D" to get a wide range, then scroll through it with a 6-hour visible window.
+
+---
+
+### ↔️ Icon Position
+
+Place the header icon on the right side for a different layout feel.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Living Room
+card_icon: mdi:thermometer
+card_icon_position: right   # default: left
+entities:
+  - entity: sensor.temperature
+    color: "#ff6b35"
+```
+
+---
+
 ### 🏆 Full Example
 
 A complete card showing most features together.
@@ -599,7 +686,7 @@ rise_fall_colors:
   stable: "#95a5a6"     # color when value is flat
 ```
 
-The same direction logic drives the trend icon (▲▼●) on the state row — so the icon and the graph always agree.
+The same direction logic drives the trend icon (▲▼⯇⯈) on the state row — so the icon and the graph always agree.
 
 > ⚠️ Cannot be combined with `color_thresholds` on the same entity.
 
@@ -667,14 +754,14 @@ The card ships with a full visual editor — no YAML required. Every option in t
 
 All settings are organized into collapsible panels:
 
-- **Card Settings** — Header, icon, graph data, Y axis bounds, visual options
+- **Card Settings** — Header, icon (with position), graph data (including visible window and scroll mode), Y axis bounds, visual options, card overlays (interval picker, attribute list)
 - **Entities** — Add, remove, and drag-to-reorder entities
 
 Each entity has three tabs:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, data settings (aggregate, points per hour, number & date format), state map, tap action |
+| **General** | Entity picker, data settings (aggregate, points per hour, number & date format, attribute dropdown), state map, tap action |
 | **Appearance** | Toggle-controlled sections for Graph (type, extrema, average), Line, Fill (with Gradient), Data Points, State Row (with Show Last, Adaptive Color, and Trend Icon settings), Y Axis Range, and Legend |
 | **Colors** | Base colors, Rise/Fall Colors (with separate increase/decrease/stable pickers), Color Thresholds (with Transition) |
 
@@ -684,7 +771,15 @@ Turning a section toggle off disables all its child fields visually and prevents
 
 ## 📝 Notes
 
+> 💡 **Entity name display** — The `name` field defaults to hidden. Only entities with an explicitly set `name` show a label on the state row. Tooltips and legends fall back to the HA friendly name.
+
 > 💡 **Attribute state display** — When `attribute` is set, the state row always shows the live attribute value from HA directly, not the last history point.
+
+> 🎚️ **Interval picker** — The picker temporarily overrides `hours_to_show` at runtime. When combined with `max_visible_interval`, changing the interval resets the scroll position to the most recent data.
+
+> 🔀 **Attribute switcher** — Overrides are runtime-only and not saved to the config. Reloading the page resets to the configured attribute. Only numeric attributes are listed in the dropdown.
+
+> 🔍 **Scrollable graph** — Y-axis labels render as fixed overlays so they remain visible while scrolling. Scroll position is preserved across HA state updates but resets when the interval or config changes.
 
 > ⏩ **Forward-fill** — When `points_per_hour` is set, empty time buckets carry forward the last known value. This prevents sparse sensors from appearing as disconnected dots.
 
