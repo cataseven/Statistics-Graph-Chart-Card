@@ -768,8 +768,6 @@ Each entity has three tabs:
 | **Appearance** | Toggle-controlled sections for Graph (type, extrema, average), Line, Fill (with Gradient), Data Points, State Row (with Show Last, Adaptive Color, and Trend Icon settings), Y Axis Range, and Legend |
 | **Colors** | Base colors, Rise/Fall Colors (with separate increase/decrease/stable pickers), Color Thresholds (with Transition) |
 
-Turning a section toggle off disables all its child fields visually and prevents accidental edits.
-
 --- 
 
 ## 📄 License
