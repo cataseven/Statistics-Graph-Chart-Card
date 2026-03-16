@@ -770,31 +770,7 @@ Each entity has three tabs:
 
 Turning a section toggle off disables all its child fields visually and prevents accidental edits.
 
----
-
-## 📝 Notes
-
-> 💡 **Entity name display** — The `name` field defaults to hidden. Only entities with an explicitly set `name` show a label on the state row. Tooltips and legends fall back to the HA friendly name.
-
-> 💡 **Attribute state display** — When `attribute` is set, the state row always shows the live attribute value from HA directly, not the last history point.
-
-> 🎚️ **Interval picker** — The picker temporarily overrides `hours_to_show` at runtime. When combined with `max_visible_interval`, changing the interval resets the scroll position to the most recent data.
-
-> 🔀 **Attribute switcher** — Overrides are runtime-only and not saved to the config. Reloading the page resets to the configured attribute. Only numeric attributes are listed in the dropdown.
-
-> 🔍 **Scrollable graph** — Y-axis labels render as fixed overlays so they remain visible while scrolling. Scroll position is preserved across HA state updates but resets when the interval or config changes.
-
-> ⏩ **Forward-fill** — When `points_per_hour` is set, empty time buckets carry forward the last known value. This prevents sparse sensors from appearing as disconnected dots.
-
-> 📉 **Logarithmic scale** — Cannot handle zero or negative values. A safe minimum (`1e-10`) is applied automatically to prevent rendering errors.
-
-> ⚠️ **rise_fall_colors and color_thresholds** — Mutually exclusive per entity. Enabling one automatically disables the other.
-
-> 🌅 **Gradient** — Configured per entity inside the Fill section. The fill fades from the entity's own color downward using only that hue — no grey or black tones.
-
-> ➖ **Average line** — Uses the same aggregated history data as the graph. The average reflects whatever `aggregate_func` and `hours_to_show` are set for that entity.
-
----
+--- 
 
 ## 📄 License
 
