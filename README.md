@@ -70,11 +70,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ### HACS (recommended)
 
-1. Open **HACS → Frontend**
-2. Click the three-dot menu → **Custom repositories**
-3. Add this repository URL and select **Lovelace** as the category
-4. Install **Home Assistant - Statistics Graph Chart Card**
-5. Hard-refresh your browser
+1. Open **HACS
+2. Search from the search bar: Statistics Graph Chart Card
+3. Install **Home Assistant - Statistics Graph Chart Card**
+4. Hard-refresh your browser
 
 ### Manual
 
