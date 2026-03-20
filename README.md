@@ -46,7 +46,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers and timestamps are displayed per entity (`number_format`, `datetime_format`), independent of your HA locale |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop |
-| ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds |
+| ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | 🎨 | Color thresholds with smooth or hard transitions |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
@@ -129,6 +129,9 @@ These options apply to the whole card.
 | `min_bound_range_secondary` | number | `null` | Minimum span of the secondary Y axis |
 | `lower_bound_secondary` | string/number | `null` | Hard or soft minimum for the secondary Y axis. See [Bounds](#-bounds). |
 | `upper_bound_secondary` | string/number | `null` | Hard or soft maximum for the secondary Y axis. See [Bounds](#-bounds). |
+| `lower_bound` | string/number | `null` | Hard or soft minimum for the primary Y axis. See [Bounds](#-bounds). |
+| `upper_bound` | string/number | `null` | Hard or soft maximum for the primary Y axis. See [Bounds](#-bounds). |
+| `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. For example, bounds 40–100 with `y_axis_ticks: 6` → labels at 40, 50, 60, 70, 80, 90, 100. Works like Apex Charts' `tickAmount`. |
 | `show_grid` | boolean | `true` | Show grid lines (horizontal + vertical aligned to data points) |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_y_axis` | boolean | `true` | Show Y axis value labels |
@@ -667,13 +670,30 @@ Set `datetime_format` per entity to control how timestamps appear in tooltips an
 
 ### 〰️ Bounds
 
-Both entity-level (`lower_bound`, `upper_bound`) and card-level secondary axis options (`lower_bound_secondary`, `upper_bound_secondary`) support three value types:
+Both entity-level (`lower_bound`, `upper_bound`) and card-level axis options (`lower_bound`, `upper_bound` for primary; `lower_bound_secondary`, `upper_bound_secondary` for secondary) support three value types:
 
 | Format | Behavior |
 |--------|----------|
 | `0` | **Hard bound** — axis edge is fixed at this value regardless of data |
 | `"~0"` | **Soft bound** — axis prefers this value but expands if data exceeds it |
 | `"sensor.entity_id"` | **Dynamic bound** — tracks the live state of another entity |
+
+Card-level bounds set the baseline for the axis; entity-level bounds can further tighten or extend the range. When both are present, the most restrictive hard bound or the widest soft bound wins.
+
+#### Y Axis Tick Control
+
+Use `y_axis_ticks` to control how many divisions appear on the Y axis. The axis range is automatically snapped to clean round numbers so labels always look tidy.
+
+```yaml
+type: custom:statistics-graph-chart-card
+lower_bound: 40
+upper_bound: 100
+y_axis_ticks: 6
+entities:
+  - entity: sensor.cpu_temperature
+```
+
+This produces labels at **40, 50, 60, 70, 80, 90, 100** — similar to setting `tickAmount: 6` in Apex Charts or an interval of 10 in Excel.
 
 ---
 
