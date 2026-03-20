@@ -60,6 +60,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏩ | Forward-fill for sparse sensors (e.g. weather entities) |
 | 🎨 | Adaptive state color — state row inherits entity line color automatically |
 | 🎚️ | **Interval picker** — quick-select time range buttons (1H–7D) directly on the card, no editor needed |
+| ⚡ | **Auto scale points** — automatically reduces data density for longer time ranges, keeping performance smooth |
 | 🔀 | **Attribute switcher** — per-entity dropdown on the card to switch between state and any numeric attribute on the fly |
 | 🔍 | **Scrollable graph** — set a visible window smaller than the data range and scroll horizontally through history |
 | ↔️ | **Configurable icon position** — place the header icon on the left or right side of the title |
@@ -121,6 +122,7 @@ These options apply to the whole card.
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
 | `hours_to_show` | number | `24` | Hours of history to load and display |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default) |
+| `auto_scale_points` | boolean | `false` | Automatically scale `points_per_hour` when the interval picker changes the time range. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
@@ -694,6 +696,40 @@ entities:
 ```
 
 This produces labels at **40, 50, 60, 70, 80, 90, 100** — similar to setting `tickAmount: 6` in Apex Charts or an interval of 10 in Excel.
+
+---
+
+### ⚡ Auto Scale Points
+
+When using the interval picker to switch between time ranges (1H → 7D), the default `points_per_hour` can be too dense for long periods or too sparse for short ones. Enable `auto_scale_points` to let the card adjust automatically.
+
+The configured `points_per_hour` is treated as the baseline for the configured `hours_to_show`. When a different interval is selected, the value is scaled proportionally and snapped to the nearest power of 2 (…0.5, 1, 2, 4, 8, 16…).
+
+```yaml
+type: custom:statistics-graph-chart-card
+points_per_hour: 2
+auto_scale_points: true
+show_interval_picker: true
+entities:
+  - entity: sensor.power_consumption
+  - entity: sensor.solar_production
+  - entity: sensor.grid_export
+```
+
+With `hours_to_show: 24` and `points_per_hour: 2` as the baseline:
+
+| Interval | Scaled pph | ≈ One point every |
+|----------|-----------|-------------------|
+| 1H | 64 | ~1 min |
+| 2H | 32 | ~2 min |
+| 4H | 16 | ~4 min |
+| 8H | 8 | 7.5 min |
+| 12H | 4 | 15 min |
+| 24H | 2 | 30 min *(baseline)* |
+| 3D | 1 | 1 hour |
+| 7D | 0.5 | 2 hours |
+
+> **Note:** Entity-level `points_per_hour` overrides are not affected by auto scaling — only entities inheriting the card-level value are scaled.
 
 ---
 
