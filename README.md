@@ -258,6 +258,7 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor:
 | **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Line, Fill, Data Points — all visible |
 | **All other modes** | Graph Type row hidden, Line / Fill / Points sections hidden. Only State Row, Trend Icon, Y Axis Range, and Legend remain |
 
+
 ### Sparkline → Entire Card
 
 When `sparkline` is enabled (Timeline mode only):
@@ -453,6 +454,31 @@ The gauge arc sweeps 270° from `lower_bound` to `upper_bound`. The center shows
 `color_thresholds` work with gauge — the arc color changes dynamically based on value.
 
 The graph below the gauge continues to show the historical trend as usual.
+
+---
+
+## 🔍 Brush Zoom
+
+Click and drag on any Timeline mode graph to zoom into a specific time range. No configuration needed — it's always available.
+
+![Sparkline Example](images/brushzoom.gif)
+
+### How it works
+
+1. **Click and drag** horizontally — a blue selection overlay appears with formatted timestamps at both edges
+2. **Release** — the graph zooms into the selected range, recalculating Y axis, grid, statistics (Min/Avg/Max), extrema labels, and legend values
+3. **Reset** — double-click the graph, or click the **"Reset zoom"** button in the top-right corner
+
+**Key details:**
+
+- **No API calls on zoom** — the full dataset is preserved in memory; zooming only filters and re-renders existing data. Reset is instant.
+- **Progressive zoom** — zoom again within an already-zoomed view to drill deeper into spikes or anomalies
+- **Touch support** — works on mobile: touch and drag to select
+- **Minimum 15px selection** — prevents accidental zoom from regular clicks or taps
+- **Time formatting** — selection labels show time only for ranges under 24H, date + time for longer ranges
+- **Interval picker aware** — changing the time range via the interval picker resets any active zoom and fetches fresh data
+
+Timeline mode only.
 
 ---
 
