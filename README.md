@@ -1334,7 +1334,6 @@ The state row always displays the original string, not the number.
 
 The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
 
-![Editor Overview](images/editor-overview.png)
 
 ### General Settings — Three Tabs
 
