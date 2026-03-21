@@ -633,6 +633,7 @@ If showing last 24H, the ghost shows yesterday. If showing 7D, it shows the prev
 Add reference lines, event markers, and highlight bands to the graph (Timeline mode only). Configure via the editor (General Settings → Overlays → Annotations) or YAML.
 
 ![Anno Example](images/anno.png)
+![Anno Example](images/anno2.png)
 
 ```yaml
 annotations:
