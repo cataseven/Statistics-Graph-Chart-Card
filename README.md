@@ -320,6 +320,8 @@ The `chart_mode` option at the card level controls the overall visualization. Ea
 
 Classic time-series chart. Entities can individually be `line`, `step`, or `bar`. All Timeline-specific options (axes, grid, stacked, scroll, annotations, compare, zoom) are available.
 
+![image2](images/bar.png)
+
 ### Scatter
 
 Plots the first entity on the X axis and the second on the Y axis to reveal correlations. Exactly 2 entities required.
