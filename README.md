@@ -461,7 +461,7 @@ The graph below the gauge continues to show the historical trend as usual.
 
 Click and drag on any Timeline mode graph to zoom into a specific time range. No configuration needed — it's always available.
 
-![Sparkline Example](images/brushzoom.gif)
+![Sparkline Example](images/brush.gif)
 
 ### How it works
 
