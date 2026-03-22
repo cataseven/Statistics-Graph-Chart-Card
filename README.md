@@ -161,8 +161,9 @@ These options apply to the whole card.
 | `animate_graph` | boolean | `false` | Draw-in animation on load. Timeline mode only. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Timeline mode only. |
 | `scroll_mode` | string | `"scrollbar"` | Scroll behavior: `scrollbar` or `wheel`. Timeline mode only. |
-| `show_interval_picker` | boolean | `false` | Show quick-select time range buttons (1H–1Y) on the card |
+| `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
 | `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
+| `interval_options` | list | `null` | Which interval buttons to show. Example: `["2H", "12H", "24H", "7D"]`. When not set, the default compact set (1H–24H + 7D) is used. Available labels: `1H`, `2H`, `4H`, `8H`, `12H`, `24H`, `3D`, `7D`, `14D`, `30D`, `90D`, `6M`, `1Y`. |
 | `show_attribute_list` | boolean | `false` | Show per-entity attribute dropdown selectors on the card |
 | `attribute_list_position` | string | `"left"` | Position of the attribute list: `left` / `center` / `right` |
 | `tooltip_sync` | boolean | `false` | Broadcast hovered timestamp to other synced cards. Timeline mode only. |
@@ -1047,7 +1048,22 @@ entities:
     color: "#00bcd4"
 ```
 
-The interval picker displays buttons for 1H, 2H, 4H, 8H, 12H, 24H, 3D, and 7D. Clicking a button temporarily overrides `hours_to_show`; clicking again deselects it and returns to the original range.
+The interval picker displays buttons for the default set: 1H, 2H, 4H, 8H, 12H, 24H, and 7D. Clicking a button temporarily overrides `hours_to_show`; clicking again deselects it and returns to the original range.
+
+To customize which buttons appear, use `interval_options`:
+
+```yaml
+# Show only the intervals you need — fits on one row on mobile
+show_interval_picker: true
+interval_options:
+  - "2H"
+  - "12H"
+  - "24H"
+  - "7D"
+  - "30D"
+```
+
+Available labels: `1H`, `2H`, `4H`, `8H`, `12H`, `24H`, `3D`, `7D`, `14D`, `30D`, `90D`, `6M`, `1Y`. The editor also provides a **Visible Intervals** checkbox grid under the Interval Picker toggle (General Settings → Overlays).
 
 The attribute list shows a dropdown per entity with a color-coded dot. Select any numeric attribute to instantly re-graph with that data — the graph, state row, and tooltip all update live.
 
