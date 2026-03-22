@@ -77,6 +77,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
 | ⬇️ | **Bottom state rows** — place entity state rows below the graph instead of above with `bottom-left`, `bottom-center`, `bottom-right` alignment |
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
+| 🔀 | **Value Transform** — apply a JavaScript expression to every data point (`return x > 0 ? x : 0`), ideal for splitting a single sensor into export/import lines |
 
 ---
 
@@ -187,6 +188,7 @@ Each entry under `entities` supports the following options.
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
+| `value_transform` | string | `null` | JavaScript expression to transform each data value. Use `x` as the input. Applied after `value_factor`. Example: `return x > 0 ? x : 0`. See [Value Transform](#-value-transform). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear in tooltips and extrema labels. `system` follows HA's locale. See [Date Formats](#-date-formats) for all patterns. Useful for international setups or compact displays. |
@@ -311,6 +313,7 @@ Some options depend on or conflict with each other:
 | `show_legend: true` | Compact Legend appears below graph. Combine with `show_state: false` on entities for maximum graph space |
 | `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
 | `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
+| `value_transform` set | Runs after `value_factor` — order is: raw value → ×10^factor → transform expression. State row shows the transformed value |
 
 ---
 
@@ -594,6 +597,53 @@ entities:
 ```
 
 Useful when the secondary axis labels are distracting or when you want to maximize horizontal graph space. Both entities continue to be plotted against their respective axes — only the labels are hidden.
+
+---
+
+## 🔀 Value Transform
+
+Apply a JavaScript expression to every data point before graphing. Use `x` as the input variable. The transform runs after `value_factor`, so both can be combined.
+
+### Splitting a sensor into export/import
+
+A common use case: a single power sensor reports positive values for export and negative values for import. Use two entity entries with different transforms to separate them:
+
+```yaml
+entities:
+  - entity: sensor.grid_power
+    name: "Grid Export"
+    color: "#2ecc71"
+    value_transform: "return x > 0 ? x : 0"
+
+  - entity: sensor.grid_power
+    name: "Grid Import"
+    color: "#e74c3c"
+    value_transform: "return x < 0 ? -x : 0"
+```
+
+### Common expressions
+
+| Expression | What it does |
+|---|---|
+| `return x > 0 ? x : 0` | Keep only positive values (zero out negatives) |
+| `return x < 0 ? -x : 0` | Keep only negative values, flip to positive |
+| `return Math.abs(x)` | Absolute value |
+| `return x * 1.1` | Add 10% markup |
+| `return x - 273.15` | Convert Kelvin to Celsius |
+| `return (x * 9/5) + 32` | Convert Celsius to Fahrenheit |
+| `return Math.round(x / 100) * 100` | Round to nearest hundred |
+| `return Math.max(0, x - 20)` | Subtract baseline, floor at zero |
+
+### Editor
+
+Entity → General → **Value Transform** — a monospace text input field. Enter the expression directly (e.g., `return x > 0 ? x : 0`).
+
+### Notes
+
+- The expression must be valid JavaScript and include a `return` statement
+- If the expression errors or returns a non-number, the original value is used unchanged
+- Applied to every data point individually — both historical and live values
+- Works with all chart modes, aggregation functions, and other entity options
 
 ---
 
