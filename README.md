@@ -42,7 +42,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
-| 🎯 | **Six chart modes** — Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
+| 🎯 | **Nine chart modes** — Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
 | ✨ | **Sparkline mode** — ultra-compact inline graphs with no chrome, ideal for dashboard overview tiles |
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
@@ -78,6 +78,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⬇️ | **Bottom state rows** — place entity state rows below the graph instead of above with `bottom-left`, `bottom-center`, `bottom-right` alignment |
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
 | 🔀 | **Value Transform** — apply a JavaScript expression to every data point (`return x > 0 ? x : 0`), ideal for splitting a single sensor into export/import lines |
+| 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
+| ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 
 ---
 
@@ -126,7 +128,7 @@ These options apply to the whole card.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `heatmap` \| `calendar` |
+| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `radialbar` \| `polararea` \| `radar` \| `heatmap` \| `calendar` |
 | `sparkline` | boolean | `false` | Compact mode — strips all chrome (header, axes, grid, toolbar) and renders tiny inline graphs. See [Sparkline Mode](#-sparkline-mode). Only available in Timeline mode. |
 | `card_header` | string | `""` | Title shown at the top. Leave empty to hide. |
 | `card_icon` | string | `null` | MDI icon next to the title, e.g. `mdi:thermometer` |
@@ -204,6 +206,7 @@ Each entry under `entities` supports the following options.
 | `show_graph` | boolean | `true` | Show this entity on the graph |
 | `show_line` | boolean | `true` | Show the line edge. Timeline mode only. |
 | `show_fill` | boolean | `true` | Show the fill area below the line. Timeline mode only. |
+| `show_range_band` | boolean | `false` | Draw a min/max shaded band behind the line showing the value range within each aggregation bucket. The line shows the average while the band shows how much the value fluctuated. See [Range Band](#-range-band). Timeline mode only. |
 | `gradient` | boolean | `true` | Fade the fill from the entity color to transparent. Only applies when `show_fill` is true. Timeline mode only. |
 | `show_points` | boolean | `false` | Show a dot at each data point. Timeline mode only. |
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
@@ -292,6 +295,9 @@ The "Add Entity" button automatically hides when the chart mode's limit is reach
 | Timeline | Unlimited | Mix line, step, bar freely |
 | Scatter | 2 | Entities labeled **X** and **Y** in the editor |
 | Pie / Ranking | Unlimited | Each entity = one slice / bar |
+| Radial Bar | Unlimited | Each entity = one concentric ring |
+| Polar Area | Unlimited | Each entity = one equal-angle slice |
+| Radar | 3+ minimum | Each entity = one spoke of the polygon |
 | Heatmap / Calendar | 1 | Only the first entity is used |
 
 ### Option Interactions
@@ -314,6 +320,9 @@ Some options depend on or conflict with each other:
 | `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
 | `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
 | `value_transform` set | Runs after `value_factor` — order is: raw value → ×10^factor → transform expression. State row shows the transformed value |
+| `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
+| `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
+| `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
 
 ---
 
@@ -419,22 +428,100 @@ entities:
     color: "#1D9E75"
 ```
 
+### Radial Bar
+
+Concentric progress arcs — each entity is a ring showing its value as a percentage of a defined range. The center displays the average.
+
+![Radial Bar Example](images/radialbar-example.png)
+
+```yaml
+chart_mode: radialbar
+height: 250
+entities:
+  - entity: sensor.living_room_temp
+    color: "#ff4757"
+    lower_bound: 0
+    upper_bound: 40
+  - entity: sensor.bedroom_temp
+    color: "#378ADD"
+    lower_bound: 0
+    upper_bound: 40
+  - entity: sensor.garage_temp
+    color: "#2ecc71"
+    lower_bound: 0
+    upper_bound: 40
+```
+
+Set `lower_bound` / `upper_bound` per entity to define the 0–100% range. If not set, the entity's historical min/max from the current time window is used. Supports color thresholds for dynamic ring colors.
+
+### Polar Area
+
+Equal-angle slices with variable radius — larger values produce bigger slices. Like a pie chart but comparing magnitudes instead of shares.
+
+![Polar Area Example](images/polararea-example.png)
+
+```yaml
+chart_mode: polararea
+height: 250
+entities:
+  - entity: sensor.living_room_temp
+    color: "#ff4757"
+  - entity: sensor.bedroom_temp
+    color: "#378ADD"
+  - entity: sensor.garage_temp
+    color: "#2ecc71"
+```
+
+Includes concentric grid circles for reference. Percentage labels appear on slices ≥ 4%. The center shows the total.
+
+### Radar
+
+Spider/polygon chart where each entity forms one spoke. The filled polygon reveals the overall sensor profile at a glance.
+
+![Radar Example](images/radar-example.png)
+
+```yaml
+chart_mode: radar
+height: 300
+entities:
+  - entity: sensor.temperature
+    name: "Temperature"
+    lower_bound: 0
+    upper_bound: 40
+  - entity: sensor.humidity
+    name: "Humidity"
+    lower_bound: 0
+    upper_bound: 100
+  - entity: sensor.co2
+    name: "CO₂"
+    lower_bound: 400
+    upper_bound: 2000
+  - entity: sensor.pm25
+    name: "PM2.5"
+    lower_bound: 0
+    upper_bound: 50
+```
+
+Requires at least 3 entities. Each entity's value is normalized to its `lower_bound` / `upper_bound` range. Polygon grid rings provide reference levels. Colored dots at each vertex show the exact position, with value labels nearby. Supports color thresholds for per-dot colors.
+
 ### Chart Mode Compatibility
 
 Not all card options apply to every mode. The visual editor hides irrelevant options automatically.
 
-| Feature | Timeline | Scatter | Pie | Ranking | Heatmap | Calendar |
-|---------|----------|---------|-----|---------|---------|----------|
-| Y / X axes | ✅ | ✅ | — | — | Own axes | Own axes |
-| Grid | ✅ | ✅ | — | — | — | — |
-| Stacked | ✅ | — | — | — | — | — |
-| Compare | ✅ | — | — | — | — | — |
-| Annotations | ✅ | — | — | — | — | — |
-| Zoom brush | ✅ | — | — | — | — | — |
-| Scroll | ✅ | — | — | — | — | — |
-| Sparkline | ✅ | — | — | — | — | — |
-| Entity limit | ∞ | 2 | ∞ | ∞ | 1 | 1 |
-| Entity graph_type | line/step/bar | — | — | — | — | — |
+| Feature | Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar |
+|---------|----------|---------|-----|---------|------------|------------|-------|---------|----------|
+| Y / X axes | ✅ | ✅ | — | — | — | — | — | Own axes | Own axes |
+| Grid | ✅ | ✅ | — | — | — | Grid circles | Polygon grid | — | — |
+| Stacked | ✅ | — | — | — | — | — | — | — | — |
+| Compare | ✅ | — | — | — | — | — | — | — | — |
+| Annotations | ✅ | — | — | — | — | — | — | — | — |
+| Zoom brush | ✅ | — | — | — | — | — | — | — | — |
+| Scroll | ✅ | — | — | — | — | — | — | — | — |
+| Sparkline | ✅ | — | — | — | — | — | — | — | — |
+| Range Band | ✅ | — | — | — | — | — | — | — | — |
+| Entity limit | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
+| Entity graph_type | line/step/bar | — | — | — | — | — | — | — | — |
+| lower/upper_bound | Y axis range | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
 
 ---
 
@@ -644,6 +731,42 @@ Entity → General → **Value Transform** — a monospace text input field. Ent
 - If the expression errors or returns a non-number, the original value is used unchanged
 - Applied to every data point individually — both historical and live values
 - Works with all chart modes, aggregation functions, and other entity options
+
+---
+
+## 📏 Range Band
+
+The Range Band feature draws a shaded min/max area behind each line entity, showing how much the value fluctuated within each aggregation bucket.
+
+![Range Band Example](images/rangeband-example.png)
+
+### How it works
+
+When `points_per_hour` aggregates multiple raw data points into a single graph point, the displayed value is typically the average (or whichever `aggregate_func` you've chosen). The range band shows the **full min → max spread** of raw values that were combined — so you can see both the trend and the volatility.
+
+```yaml
+entities:
+  - entity: sensor.outdoor_temperature
+    show_range_band: true
+    color: "#ff4757"
+  - entity: sensor.indoor_temperature
+    show_range_band: false
+    color: "#378ADD"
+```
+
+### Use cases
+
+- **Temperature**: narrow band = stable climate, wide band = fluctuating (e.g. HVAC cycling)
+- **Energy**: see consumption spikes vs steady draw within each time bucket
+- **Sensor noise**: distinguish real signal changes from noisy sensor readings
+
+### Editor
+
+Entity → General → **Range Band** toggle (next to Show Average).
+
+### Tooltip
+
+When hovering, an additional row shows the range: `Range: 21.2 → 22.8 °C`.
 
 ---
 
