@@ -80,6 +80,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔀 | **Value Transform** — apply a JavaScript expression to every data point (`return x > 0 ? x : 0`), ideal for splitting a single sensor into export/import lines |
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
+| ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
 
 ---
 
@@ -171,6 +172,7 @@ These options apply to the whole card.
 | `attribute_list_position` | string | `"left"` | Position of the attribute list: `left` / `center` / `right` |
 | `tooltip_sync` | boolean | `false` | Broadcast hovered timestamp to other synced cards. Timeline mode only. |
 | `tooltip_sync_group` | string | `null` | Named group for tooltip sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
+| `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -323,6 +325,7 @@ Some options depend on or conflict with each other:
 | `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
 | `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
 | `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
+| `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
 
 ---
 
@@ -906,6 +909,57 @@ In this setup:
 Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
 
 Timeline mode only.
+
+---
+
+## ⚡ Energy Date Sync
+
+Syncs the card's time range with Home Assistant's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card.
+
+![Energy Date Sync Example](images/picker.gif)
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+energy_date_sync: true
+entities:
+  - entity: sensor.energy_consumption
+    color: "#ff4757"
+    aggregate_func: sum
+  - entity: sensor.solar_production
+    color: "#2ecc71"
+    aggregate_func: sum
+```
+
+Place the card on the same dashboard as an Energy date picker. When the user selects a day, week, month, or custom range, this card automatically updates to show the same period.
+
+### Behavior
+
+| Date selection | X-axis range | Live updates |
+|---|---|---|
+| **Today** | 00:00 → current time | ✅ Active — graph updates in real time |
+| **Yesterday** | 00:00 → 23:59 | ❌ Paused — historical data is frozen |
+| **This week** | Monday 00:00 → current time | ✅ Active |
+| **Last week** | Monday 00:00 → Sunday 23:59 | ❌ Paused |
+| **This month** | 1st 00:00 → current time | ✅ Active |
+| **Custom range** | Start → End (clamped to now if end is in the future) | Depends on whether end is today |
+
+### Compatible with
+
+- HA's built-in Energy dashboard date picker (DAY / WEEK / MONTH / YEAR)
+- [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card
+- Any card that uses HA's energy data collection system
+
+### Editor
+
+General Settings → Overlays → **Energy Date Sync** toggle.
+
+### Notes
+
+- When `energy_date_sync` is active, it overrides `hours_to_show` and the interval picker selection
+- The card subscribes to HA's energy data collection on the WebSocket connection — no polling needed
+- If the Energy panel hasn't loaded yet, the card retries every 2 seconds for up to 60 seconds
 
 ---
 
