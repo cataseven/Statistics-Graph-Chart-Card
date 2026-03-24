@@ -61,7 +61,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph |
 | 🔄 | **Tooltip sync** — hover one card and see crosshairs on all synced cards, with optional named groups |
 | 📊 | **Stacked** mode — stack line/area/bar entities to show composition |
-| ↔️ | **Compare with previous** — overlay a ghost dashed line from the previous period |
+| ↔️ | **Time Offset** — per-entity hour offset to overlay the same sensor from different periods on one graph |
 | 〰️ | Soft bounds (`~` prefix) — axis expands when data exceeds the bound |
 | 🔣 | `state_map` for non-numeric entities (binary sensors, input selects) |
 | 🔗 | Attribute reading with dot-notation nested path support |
@@ -77,7 +77,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
 | ⬇️ | **Bottom state rows** — place entity state rows below the graph instead of above with `bottom-left`, `bottom-center`, `bottom-right` alignment |
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
-| 🔀 | **Value Transform** — apply a JavaScript expression to every data point (`return x > 0 ? x : 0`), ideal for splitting a single sensor into export/import lines |
+| 🔀 | **Value Transform** — apply a JavaScript expression to every data point using `x`, `first`, `min`, `max`, `avg`, `last`, `index` — ideal for normalize-to-zero, splitting sensors, and percentage calculations |
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
@@ -148,7 +148,6 @@ These options apply to the whole card.
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
-| `compare_with` | boolean | `false` | Overlay ghost dashed line from the previous period. Timeline mode only. See [Compare with Previous](#-compare-with-previous-period). |
 | `min_bound_range` | number | `null` | Minimum span of the primary Y axis |
 | `min_bound_range_secondary` | number | `null` | Minimum span of the secondary Y axis |
 | `lower_bound` | string/number | `null` | Hard or soft minimum for the primary Y axis. See [Bounds](#-bounds). |
@@ -158,6 +157,7 @@ These options apply to the whole card.
 | `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
+| `show_tooltip_total` | boolean | `true` | Show a Total row at the bottom of the tooltip summing all visible entity values. Only appears when 2+ entities are present. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `true` | Show secondary (right) Y axis value labels independently. Only visible when at least one entity uses `y_axis: secondary`. Disable to hide right-side labels while keeping secondary entities plotted. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
@@ -194,7 +194,8 @@ Each entry under `entities` supports the following options.
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
-| `value_transform` | string | `null` | JavaScript expression to transform each data value. Use `x` as the input. Applied after `value_factor`. Example: `return x > 0 ? x : 0`. See [Value Transform](#-value-transform). |
+| `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position). Applied after `value_factor`. Example: `return x - first`. See [Value Transform](#-value-transform). |
+| `offset` | number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. See [Time Offset](#-time-offset). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear in tooltips and extrema labels. `system` follows HA's locale. See [Date Formats](#-date-formats) for all patterns. Useful for international setups or compact displays. |
@@ -310,7 +311,8 @@ Some options depend on or conflict with each other:
 
 | If you set… | Then… |
 |---|---|
-| `compare_with: true` | `show_interval_picker` must also be `true` for the "vs Prev" button to appear |
+| `value_transform` set | Runs after `value_factor`. Available variables: `x`, `first`, `last`, `min`, `max`, `avg`, `index`. State row shows the transformed value |
+| `offset` set (per entity) | Data is fetched from a shifted time window but displayed aligned with the current window. Same entity with different offsets = period comparison at full graph quality |
 | `stacked: true` | Only affects entities with the same `y_axis` and `graph_type` |
 | `auto_scale_points: true` | Only scales entities that inherit the card-level `points_per_hour` — entity-level overrides are not affected |
 | `color_thresholds` enabled | Cannot combine with `rise_fall_colors` on the same entity |
@@ -323,7 +325,6 @@ Some options depend on or conflict with each other:
 | `show_legend: true` | Compact Legend appears below graph. Combine with `show_state: false` on entities for maximum graph space |
 | `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
 | `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
-| `value_transform` set | Runs after `value_factor` — order is: raw value → ×10^factor → transform expression. State row shows the transformed value |
 | `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
 | `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
 | `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
@@ -338,7 +339,7 @@ The `chart_mode` option at the card level controls the overall visualization. Ea
 
 ### Timeline *(default)*
 
-Classic time-series chart. Entities can individually be `line`, `step`, or `bar`. All Timeline-specific options (axes, grid, stacked, scroll, annotations, compare, zoom) are available.
+Classic time-series chart. Entities can individually be `line`, `step`, or `bar`. All Timeline-specific options (axes, grid, stacked, scroll, annotations, offset, zoom) are available.
 
 ![image2](images/bar.png)
 
@@ -519,7 +520,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 | Y / X axes | ✅ | ✅ | — | — | — | — | — | Own axes | Own axes |
 | Grid | ✅ | ✅ | — | — | — | Grid circles | Polygon grid | — | — |
 | Stacked | ✅ | — | — | — | — | — | — | — | — |
-| Compare | ✅ | — | — | — | — | — | — | — | — |
+| Offset | ✅ | — | — | — | — | — | — | — | — |
 | Annotations | ✅ | — | — | — | — | — | — | — | — |
 | Zoom brush | ✅ | — | — | — | — | — | — | — | — |
 | Scroll | ✅ | — | — | — | — | — | — | — | — |
@@ -695,7 +696,33 @@ Useful when the secondary axis labels are distracting or when you want to maximi
 
 ## 🔀 Value Transform
 
-Apply a JavaScript expression to every data point before graphing. Use `x` as the input variable. The transform runs after `value_factor`, so both can be combined.
+Apply a JavaScript expression to every data point before graphing. The transform has access to the current value and series-level statistics, making it possible to normalize, compare, and reshape data in ways that weren't possible before.
+
+### Available variables
+
+| Variable | Description |
+|---|---|
+| `x` | Current data point value |
+| `first` | First value in the visible time window |
+| `last` | Last value in the visible time window |
+| `min` | Minimum value across the series |
+| `max` | Maximum value across the series |
+| `avg` | Average value across the series |
+| `index` | Position of the current point (0, 1, 2…) |
+
+All variables are computed after `value_factor` is applied, before the transform runs.
+
+### Normalize to zero
+
+Display cumulative meter readings as relative consumption starting from zero:
+
+```yaml
+entities:
+  - entity: sensor.gas_meter
+    value_transform: "return x - first;"
+```
+
+A gas meter reading `2200, 2210, 2225, 2240` becomes `0, 10, 25, 40`.
 
 ### Splitting a sensor into export/import
 
@@ -718,6 +745,10 @@ entities:
 
 | Expression | What it does |
 |---|---|
+| `return x - first` | Normalize to zero (cumulative → relative) |
+| `return ((x - first) / first) * 100` | Percentage change from start |
+| `return (x - min) / (max - min)` | Min-max normalization (scale to 0–1) |
+| `return x - avg` | Deviation from average |
 | `return x > 0 ? x : 0` | Keep only positive values (zero out negatives) |
 | `return x < 0 ? -x : 0` | Keep only negative values, flip to positive |
 | `return Math.abs(x)` | Absolute value |
@@ -725,11 +756,10 @@ entities:
 | `return x - 273.15` | Convert Kelvin to Celsius |
 | `return (x * 9/5) + 32` | Convert Celsius to Fahrenheit |
 | `return Math.round(x / 100) * 100` | Round to nearest hundred |
-| `return Math.max(0, x - 20)` | Subtract baseline, floor at zero |
 
 ### Editor
 
-Entity → General → **Value Transform** — a monospace text input field. Enter the expression directly (e.g., `return x > 0 ? x : 0`).
+Entity → General → **Value Transform** — a monospace text input field. Enter the expression directly (e.g., `return x - first`).
 
 ### Notes
 
@@ -737,6 +767,7 @@ Entity → General → **Value Transform** — a monospace text input field. Ent
 - If the expression errors or returns a non-number, the original value is used unchanged
 - Applied to every data point individually — both historical and live values
 - Works with all chart modes, aggregation functions, and other entity options
+- Context variables (`first`, `min`, etc.) are only available when processing a full data series — in the state row live value display, all context variables equal `x`
 
 ---
 
@@ -793,18 +824,54 @@ entities:
 
 ---
 
-## ↔️ Compare with Previous Period
+## ↔️ Time Offset
 
-Card-level `compare_with: true` overlays a ghost dashed line from the previous period of the same duration (Timeline mode only). Requires `show_interval_picker: true` — a "vs Prev" button appears on the card to toggle comparison interactively.
+Compare the same sensor across different time periods by adding multiple entity entries with different `offset` values. Each offset shifts that entity's data backward in time while keeping it aligned on the same graph.
 
 ```yaml
-show_interval_picker: true
-compare_with: true
+hours_to_show: 168
 entities:
-  - entity: sensor.temperature
+  - entity: sensor.energy_consumption
+    name: "This week"
+    offset: 0
+    color: "#ff4757"
+  - entity: sensor.energy_consumption
+    name: "Last week"
+    offset: 168
+    color: "#378ADD"
+  - entity: sensor.energy_consumption
+    name: "2 weeks ago"
+    offset: 336
+    color: "#2ecc71"
 ```
 
-If showing last 24H, the ghost shows yesterday. If showing 7D, it shows the previous 7D. The tooltip displays the comparison value and the difference.
+### How it works
+
+- `offset: 168` means "fetch data from 168 hours (7 days) before the current display window"
+- The fetched data is time-shifted forward to align with the current window on the X axis
+- All rendering features work at full quality — line, bar, step, fill, gradient, points, tooltips, stacking, zoom
+- Each entity with an offset gets its own API call with the correct time range
+
+### Common offset values
+
+| Offset | Period |
+|---|---|
+| `24` | Yesterday |
+| `168` | Last week |
+| `336` | 2 weeks ago |
+| `720` | Last month (~30 days) |
+| `8760` | Last year |
+
+### Editor
+
+Entity → General → Data Settings → **Offset** (in hours).
+
+### Notes
+
+- Offset entities do not receive live WebSocket updates (they show historical data)
+- Works with all chart modes that support multiple entities
+- Can be combined with `value_transform`, `value_factor`, and all other entity options
+- Each offset generates a separate cache entry, so switching between views is fast
 
 ---
 
@@ -952,7 +1019,7 @@ You can mix external statistics with regular entities on the same card.
 - The card detects external statistics by checking for a `:` in the `statistic_id`
 - Data is fetched via HA's `recorder/statistics_during_period` WebSocket API — the same API the Energy dashboard uses
 - Since there is no live state, the state row displays the last known value from the statistics data
-- All card features work: tooltip, legend, axes, stacking, compare, zoom, color thresholds, etc.
+- All card features work: tooltip, legend, axes, stacking, offset, zoom, color thresholds, etc.
 
 ### Editor
 
@@ -1640,7 +1707,7 @@ The General Settings panel is divided into three tabs to reduce clutter:
 |-----|----------|
 | **Display** | Header (title, icon), Visual Options (grid, axes, stacked, sparkline…) |
 | **Data** | Hours to Show, Points/Hour, Group By, Scroll settings, Y Axis bounds and ticks |
-| **Overlays** | Interval Picker, Compare with Previous, Attribute List, Tooltip Sync, Annotations |
+| **Overlays** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
 **Chart Mode** and **Height** sit above the tabs — always visible regardless of which tab is active. Changing Chart Mode instantly reconfigures the entire editor. See [Dynamic Editor Behavior](#-dynamic-editor-behavior) for the full visibility rules.
 
