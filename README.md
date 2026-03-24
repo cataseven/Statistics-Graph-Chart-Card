@@ -919,7 +919,6 @@ Timeline mode only.
 
 Display data from imported statistics that don't have a regular entity in Home Assistant. This covers energy data from integrations like Gazpar, Linky, Tibber, and others that import directly into HA's statistics database.
 
-![External Statistics Example](images/external-statistics-example.png)
 
 ### Background
 
