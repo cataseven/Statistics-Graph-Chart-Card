@@ -81,6 +81,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
+| 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
 
 ---
 
@@ -185,7 +186,8 @@ Each entry under `entities` supports the following options.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `entity` | string | **required** | HA entity ID |
+| `entity` | string | **required** | HA entity ID. Can be left empty when using `statistic_id`. |
+| `statistic_id` | string | `null` | For imported/external statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`). These exist only in the statistics database. Leave empty for normal entities. See [External Statistics](#-external-statistics). |
 | `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. |
 | `y_axis` | string | `"primary"` | `primary` (left) or `secondary` (right) |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `delta` / `diff` |
@@ -326,6 +328,7 @@ Some options depend on or conflict with each other:
 | `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
 | `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
 | `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
+| `statistic_id` set (with empty `entity`) | Data is fetched from the statistics database only — no History API call. State row shows last statistics value. WebSocket live updates are skipped for this entity |
 
 ---
 
@@ -909,6 +912,58 @@ In this setup:
 Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
 
 Timeline mode only.
+
+---
+
+## 🔌 External Statistics
+
+Display data from imported statistics that don't have a regular entity in Home Assistant. This covers energy data from integrations like Gazpar, Linky, Tibber, and others that import directly into HA's statistics database.
+
+![External Statistics Example](images/external-statistics-example.png)
+
+### Background
+
+Some HA integrations don't create `sensor.*` entities. Instead, they write data directly into the `statistics` and `statistics_meta` database tables using HA's `async_import_statistics()` API. These statistics have IDs with a colon separator (e.g. `gazpar:gazpar_consumption`) and are visible on the Energy dashboard and the built-in Statistics Graph card, but not in the entity registry.
+
+### Setup
+
+Use `statistic_id` instead of (or alongside) `entity`:
+
+```yaml
+entities:
+  - entity: ""
+    statistic_id: "gazpar:gazpar_consumption"
+    name: "Gas Consumption"
+    color: "#f39c12"
+    aggregate_func: sum
+  - entity: ""
+    statistic_id: "linky:linky_consumption"
+    name: "Electricity"
+    color: "#378ADD"
+    aggregate_func: sum
+  - entity: sensor.indoor_temperature
+    name: "Temperature"
+    color: "#ff4757"
+```
+
+You can mix external statistics with regular entities on the same card.
+
+### How it works
+
+- The card detects external statistics by checking for a `:` in the `statistic_id`
+- Data is fetched via HA's `recorder/statistics_during_period` WebSocket API — the same API the Energy dashboard uses
+- Since there is no live state, the state row displays the last known value from the statistics data
+- All card features work: tooltip, legend, axes, stacking, compare, zoom, color thresholds, etc.
+
+### Editor
+
+Entity → General → **Statistic ID** input field (monospace, below the entity picker). Set the entity picker to empty and fill in the statistic ID.
+
+### Finding your statistic IDs
+
+1. Go to **Developer Tools → Statistics** in HA
+2. Search for the integration name (e.g. "gazpar")
+3. The statistic ID is shown in the list (e.g. `gazpar:gazpar_consumption`)
 
 ---
 
