@@ -22,6 +22,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image6](images/scroll2.gif)
 
+![image6](images/duplicate.gif)
+
 ![image6](images/scroll.gif)
 
 ![image3](images/editor1.png)
