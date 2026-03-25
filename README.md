@@ -30,7 +30,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image3](images/editor1.png)
 
-![image4](images/editor2.png)
+![image4](images/editor21.png)
 
 ![image5](images/editor3.png)
 
