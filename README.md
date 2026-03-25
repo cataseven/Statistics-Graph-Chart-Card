@@ -51,7 +51,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ✨ | **Sparkline mode** — ultra-compact inline graphs with no chrome, ideal for dashboard overview tiles |
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
-| 🌐 | **Locale-aware formatting** — control how numbers and timestamps are displayed per entity (`number_format`, `datetime_format`), independent of your HA locale |
+| 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
+| 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop. The editor adapts dynamically: irrelevant options hide based on the selected chart mode |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | 🎨 | Color thresholds with smooth or hard transitions |
@@ -65,7 +66,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph |
 | 🔄 | **Tooltip sync** — hover one card and see crosshairs on all synced cards, with optional named groups |
 | 📊 | **Stacked** mode — stack line/area/bar entities to show composition |
-| ↔️ | **Time Offset** — per-entity hour offset to overlay the same sensor from different periods on one graph |
+| ↔️ | **Time Offset** — per-entity hour offset to overlay the same sensor from different periods on one graph. Supports helper entities (e.g. `input_number`) for dynamic offset values |
 | 〰️ | Soft bounds (`~` prefix) — axis expands when data exceeds the bound |
 | 🔣 | `state_map` for non-numeric entities (binary sensors, input selects) |
 | 🔗 | Attribute reading with dot-notation nested path support |
@@ -159,6 +160,11 @@ These options apply to the whole card.
 | `lower_bound_secondary` | string/number | `null` | Hard or soft minimum for the secondary Y axis. See [Bounds](#-bounds). |
 | `upper_bound_secondary` | string/number | `null` | Hard or soft maximum for the secondary Y axis. See [Bounds](#-bounds). |
 | `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. |
+| `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
+| `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
+| `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. |
+| `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5. |
+| `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_tooltip_total` | boolean | `true` | Show a Total row at the bottom of the tooltip summing all visible entity values. Only appears when 2+ entities are present. |
@@ -199,10 +205,10 @@ Each entry under `entities` supports the following options.
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position). Applied after `value_factor`. Example: `return x - first`. See [Value Transform](#-value-transform). |
-| `offset` | number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. See [Time Offset](#-time-offset). |
+| `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
-| `datetime_format` | string | `"system"` | Controls how timestamps appear in tooltips and extrema labels. `system` follows HA's locale. See [Date Formats](#-date-formats) for all patterns. Useful for international setups or compact displays. |
+| `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. See [State Map](#-state-map). |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). |
@@ -866,6 +872,31 @@ entities:
 | `720` | Last month (~30 days) |
 | `8760` | Last year |
 
+### Dynamic Offset via Helper Entity
+
+Instead of a fixed number, you can point `offset` to any HA entity whose state is a number (in hours). The card reads the entity's current state and re-fetches history automatically when it changes.
+
+```yaml
+entities:
+  - entity: sensor.energy_consumption
+    name: "Current"
+  - entity: sensor.energy_consumption
+    name: "Comparison"
+    offset: input_number.comparison_offset
+    color: "#378ADD"
+```
+
+This works with any entity type — `input_number`, template sensors, or any sensor that outputs a numeric state. Combine with HA template sensors for fully dynamic comparisons:
+
+```yaml
+# In HA configuration.yaml
+template:
+  - sensor:
+      - name: "Dynamic Offset"
+        state: "{{ 24 if now().weekday() < 5 else 168 }}"
+        unit_of_measurement: "h"
+```
+
 ### Editor
 
 Entity → General → Data Settings → **Offset** (in hours).
@@ -873,6 +904,7 @@ Entity → General → Data Settings → **Offset** (in hours).
 ### Notes
 
 - Offset entities do not receive live WebSocket updates (they show historical data)
+- The state row, sparkline, and gauge correctly display the last value from the offset time window — not the live entity state
 - Works with all chart modes that support multiple entities
 - Can be combined with `value_transform`, `value_factor`, and all other entity options
 - Each offset generates a separate cache entry, so switching between views is fast
@@ -1545,7 +1577,9 @@ entities:
 
 ### 🕐 Date Formats
 
-Set `datetime_format` per entity to control how timestamps appear in tooltips and extrema labels. `system` follows HA's locale setting. All other formats are applied regardless of locale — useful when your dashboard is shared across regions or when you need a more compact display.
+Set `datetime_format` at the card level to control how timestamps appear on the X-axis, tooltips, and extrema labels. `system` follows HA's locale setting. All other formats are applied regardless of locale — useful when your dashboard is shared across regions or when you need a more compact display.
+
+> **Note:** In earlier versions, `datetime_format` was an entity-level option. It has been promoted to a card-level setting. Entity-level values still work for backward compatibility and override the card setting when present.
 
 | Value | Example output |
 |-------|---------------|
@@ -1703,17 +1737,18 @@ The state row always displays the original string, not the number.
 The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
 
 
-### General Settings — Three Tabs
+### General Settings — Four Tabs
 
-The General Settings panel is divided into three tabs to reduce clutter:
+The General Settings panel is divided into four tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **Display** | Header (title, icon), Visual Options (grid, axes, stacked, sparkline…) |
-| **Data** | Hours to Show, Points/Hour, Group By, Scroll settings, Y Axis bounds and ticks |
-| **Overlays** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
+| **Display** | Chart mode, height, header, icon, visual toggles (grid, tooltip, stacked, sparkline, auto scale…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode) |
+| **Y Axis** | Visibility (Y-axis, Y2-axis, logarithmic), labels (ticks, font size, opacity), bounds (min range, lower/upper bounds) |
+| **X Axis** | Visibility (X-axis), labels (date format, bar spacing, font size, opacity) |
+| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
-**Chart Mode** and **Height** sit above the tabs — always visible regardless of which tab is active. Changing Chart Mode instantly reconfigures the entire editor. See [Dynamic Editor Behavior](#-dynamic-editor-behavior) for the full visibility rules.
+Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
 
 ### Entity Configuration — Three Tabs
 
@@ -1721,7 +1756,7 @@ Each entity panel has three tabs:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number/date formats), state map, tap action |
+| **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number format, offset), state map, tap action |
 | **Appearance** | Graph toggle, graph type, extrema, average, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
 | **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
 
