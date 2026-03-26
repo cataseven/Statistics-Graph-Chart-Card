@@ -20,7 +20,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ## 🖼️ Preview
 
-![image6](images/add1.gif)
+![image6](images/add2.gif)
 
 ![image6](images/scroll2.gif)
 
