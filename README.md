@@ -24,6 +24,22 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image6](images/scroll2.gif)
 
+![Scatter Example](images/scatter-example.png)
+
+![Pie Example](images/pie-example.png)
+
+![Heatmap Example](images/heatmap-example.png)
+
+![Ranking Example](images/ranking-example.png)
+
+![Radial Bar Example](images/radialbar-example.png)
+
+![Calendar Example](images/calendar-example.png)
+
+![Polar Area Example](images/polararea-example.png)
+
+![Radar Example](images/radar-example.png)
+
 ![image6](images/duplicate.gif)
 
 ![image6](images/scroll.gif)
@@ -456,6 +472,7 @@ entities:
 Concentric progress arcs — each entity is a ring showing its value as a percentage of a defined range. The center displays the average.
 
 ![Radial Bar Example](images/radialbar-example.png)
+
 
 ```yaml
 chart_mode: radialbar
