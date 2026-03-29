@@ -77,9 +77,11 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔀 | **Attribute switcher** — per-entity dropdown on the card to switch between state and any numeric attribute on the fly |
 | 🔍 | **Scrollable graph** — set a visible window smaller than the data range and scroll horizontally through history |
 | ↔️ | **Configurable icon position** — place the header icon on the left or right side of the title |
-| 🏷️ | **Compact Legend** — color-coded entity name key below the graph in a single wrapping row, no values |
-| 📊 | **Per-entity legend stats** — choose any combination of Min, Avg, Max, Last for each entity's legend row |
+| 🏷️ | **Compact Legend** — color-coded entity name key below the graph with configurable position (left, center, right). Click any legend item to temporarily hide that entity from the graph |
+| 📊 | **Per-entity legend stats** — choose any combination of Min, Avg, Max, Last for each entity's legend row. Click to toggle entity visibility |
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
+| 🏷️ | **Vertical axis labels** — optional vertical unit labels on the left and right edges of the graph. Defaults to the entity's unit of measurement, with custom text override |
+| 🕐 | **Smart X-axis labels** — when the time range spans multiple days, midnight ticks automatically show the date (e.g. "28 Mar") while other ticks show `HH:mm`. Tick density adapts to label width and font size |
 | ⬇️ | **Bottom state rows** — place entity state rows below the graph instead of above with `bottom-left`, `bottom-center`, `bottom-right` alignment |
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
 | 🔀 | **Value Transform** — apply a JavaScript expression to every data point using `x`, `first`, `min`, `max`, `avg`, `last`, `index` — ideal for normalize-to-zero, splitting sensors, and percentage calculations |
@@ -160,6 +162,9 @@ These options apply to the whole card.
 | `lower_bound_secondary` | string/number | `null` | Hard or soft minimum for the secondary Y axis. See [Bounds](#-bounds). |
 | `upper_bound_secondary` | string/number | `null` | Hard or soft maximum for the secondary Y axis. See [Bounds](#-bounds). |
 | `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. |
+| `show_y_axis_label` | boolean | `false` | Show vertical unit labels on the left and/or right edge of the graph. When enabled, defaults to the unit of measurement of the first entity on each axis. |
+| `y_axis_label` | string | `null` | Custom text for the left (primary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
+| `y2_axis_label` | string | `null` | Custom text for the right (secondary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
 | `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
 | `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. |
@@ -171,7 +176,8 @@ These options apply to the whole card.
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `true` | Show secondary (right) Y axis value labels independently. Only visible when at least one entity uses `y_axis: secondary`. Disable to hide right-side labels while keeping secondary entities plotted. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
-| `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Just colored dots and names in a wrapping row — no values. For per-entity stats, use the entity-level Legend toggle. |
+| `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
+| `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load. Timeline mode only. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Timeline mode only. |
@@ -636,6 +642,8 @@ entities:
 This produces: `● Memory  ● Disk  ● CPU` in a centered wrapping row below the graph. Combine with `show_state: false` on entities to maximize graph area while still identifying colors.
 
 For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend** toggle instead — see [Entity Legend Stats](#per-entity-legend-stats).
+
+![tempo](images/temp.gif)
 
 ---
 
@@ -1581,6 +1589,14 @@ Set `datetime_format` at the card level to control how timestamps appear on the 
 
 > **Note:** In earlier versions, `datetime_format` was an entity-level option. It has been promoted to a card-level setting. Entity-level values still work for backward compatibility and override the card setting when present.
 
+#### Smart X-Axis Labels
+
+When using the default `system` format, the X-axis automatically adapts to the visible time range. If the graph spans multiple calendar days, midnight ticks (00:00) display the date (e.g. "28 Mar") instead of the time — making it easy to identify day boundaries at a glance. All other ticks show `HH:mm` as usual. This behavior is inspired by ApexCharts.
+
+When a custom `datetime_format` is set, all ticks use that format uniformly.
+
+The number of ticks on the X-axis is calculated dynamically based on the label width, which depends on font size (`x_axis_font_size`) and the chosen format. Shorter formats like `HH:mm` fit more ticks; longer formats like `DD/MM HH:mm` produce fewer ticks automatically.
+
 | Value | Example output |
 |-------|---------------|
 | `system` | Follows HA locale |
@@ -1743,8 +1759,8 @@ The General Settings panel is divided into four tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **Display** | Chart mode, height, header, icon, visual toggles (grid, tooltip, stacked, sparkline, auto scale…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode) |
-| **Y Axis** | Visibility (Y-axis, Y2-axis, logarithmic), labels (ticks, font size, opacity), bounds (min range, lower/upper bounds) |
+| **Display** | Chart mode, height, header, icon, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode) |
+| **Y Axis** | Visibility (Y-axis, Y2-axis, axis labels toggle, logarithmic), labels (custom axis label text, ticks, font size, opacity), bounds (min range, lower/upper bounds) |
 | **X Axis** | Visibility (X-axis), labels (date format, bar spacing, font size, opacity) |
 | **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
