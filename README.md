@@ -69,6 +69,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
+| 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
+| 🕐 | **Graph Start Hour** — pin the X-axis to a fixed start hour (e.g. 06:00) to cut out irrelevant nighttime data on solar dashboards |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop. The editor adapts dynamically: irrelevant options hide based on the selected chart mode |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | 🎨 | Color thresholds with smooth or hard transitions |
@@ -192,6 +194,9 @@ These options apply to the whole card.
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `true` | Show secondary (right) Y axis value labels independently. Only visible when at least one entity uses `y_axis: secondary`. Disable to hide right-side labels while keeping secondary entities plotted. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
+| `show_x_ticks` | boolean | `false` | Draw small tick marks at each X-axis label position. |
+| `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
+| `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -1777,8 +1782,8 @@ The General Settings panel is divided into four tabs to reduce clutter:
 | Tab | Contents |
 |-----|----------|
 | **Display** | Chart mode, height, header, icon, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode) |
-| **Y Axis** | Visibility (Y-axis, Y2-axis, axis labels toggle, logarithmic), labels (custom axis label text, ticks, font size, opacity), bounds (min range, lower/upper bounds) |
-| **X Axis** | Visibility (X-axis), labels (date format, bar spacing, font size, opacity) |
+| **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, font size, opacity), bounds (min range, lower/upper bounds) |
+| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity), time window (graph start hour) |
 | **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
