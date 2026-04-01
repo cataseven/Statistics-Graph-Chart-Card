@@ -107,6 +107,13 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
 | 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
+| 📅 | **Long-range views** — `group_by: week` and `month` with native HA statistics periods, `graph_start` anchoring to calendar boundaries, and smart X-axis labels that adapt to the grouping mode |
+| ⚡ | **Change aggregation** — `aggregate_func: change` uses HA's native `change` field for energy, gas, and water meters. Combine with `group_by: date/week/month` for accurate consumption charts |
+| 🔀 | **Stacked Groups** — per-entity `stack_group` names let you create multiple side-by-side stacked bar groups on a single chart |
+| 🏷️ | **Template names** — use `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters (`capitalize`, `upper`, `replace()`, `round()`, etc.) for dynamic entity names |
+| ↔️ | **Horizontal state layout** — `state_layout: horizontal` flows entity values side by side instead of stacking vertically |
+| 🔢 | **Y-axis decimals** — card-level `y_axis_decimals` overrides per-entity decimals for axis labels only, keeping state row precision separate |
+| ⏱️ | **X-axis interval** — `x_axis_interval` for manual tick spacing (1h–3M) with clean boundary snapping |
 
 ---
 
@@ -165,11 +172,12 @@ These options apply to the whole card.
 | `card_icon_size` | string | `null` | Size of the header icon, e.g. `22px` |
 | `card_icon_position` | string | `"left"` | Header icon position: `left` or `right` |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
+| `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) / `horizontal` / `horizontal-center` / `horizontal-right`. Horizontal modes flow entities side by side in a single row. |
 | `hours_to_show` | number | `24` | Hours of history to load and display |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. |
 | `auto_scale_points` | boolean | `false` | Automatically scale `points_per_hour` when the interval picker changes the time range. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
-| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` |
+| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month`. When set to `week` or `month`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
@@ -180,6 +188,7 @@ These options apply to the whole card.
 | `lower_bound_secondary` | string/number | `null` | Hard or soft minimum for the secondary Y axis. See [Bounds](#-bounds). |
 | `upper_bound_secondary` | string/number | `null` | Hard or soft maximum for the secondary Y axis. See [Bounds](#-bounds). |
 | `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. |
+| `y_axis_decimals` | number | `null` | Number of decimal places for Y-axis labels. Overrides per-entity `decimals` for axis labels only — state row values are not affected. Leave empty for auto. |
 | `show_y_axis_label` | boolean | `false` | Show vertical unit labels on the left and/or right edge of the graph. When enabled, defaults to the unit of measurement of the first entity on each axis. |
 | `y_axis_label` | string | `null` | Custom text for the left (primary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
 | `y2_axis_label` | string | `null` | Custom text for the right (secondary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
@@ -187,6 +196,7 @@ These options apply to the whole card.
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
 | `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. |
 | `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5. |
+| `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
@@ -197,6 +207,7 @@ These options apply to the whole card.
 | `show_x_ticks` | boolean | `false` | Draw small tick marks at each X-axis label position. |
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
 | `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
+| `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). Useful with `group_by: week/month` for clean period views. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -225,9 +236,9 @@ Each entry under `entities` supports the following options.
 |--------|------|---------|-------------|
 | `entity` | string | **required** | HA entity ID. Can be left empty when using `statistic_id`. |
 | `statistic_id` | string | `null` | For imported/external statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`). These exist only in the statistics database. Leave empty for normal entities. See [External Statistics](#-external-statistics). |
-| `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. |
+| `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. Supports HA-style templates: `{{ states('sensor.x') }}`, `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters like `capitalize`, `upper`, `replace()`. See [Template Names](#-template-names). |
 | `y_axis` | string | `"primary"` | `primary` (left) or `secondary` (right) |
-| `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `delta` / `diff` |
+| `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `change` / `delta` / `diff`. The `change` option uses HA's native statistics `change` field — ideal for energy, gas, and water meters with `group_by: date/week/month`. |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
@@ -264,6 +275,7 @@ Each entry under `entities` supports the following options.
 | `lower_bound` | string/number | `null` | Y axis minimum / gauge minimum. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Y axis maximum / gauge maximum. See [Bounds](#-bounds). |
 | `align_state` | string | `"left"` | State row position and alignment. Top variants: `left` / `center` / `right` (above the graph). Bottom variants: `bottom-left` / `bottom-center` / `bottom-right` (below the graph). |
+| `stack_group` | string | `null` | Named group for stacked bars/lines. Entities with the same group name stack on top of each other; different groups sit side by side. Leave empty to stack all entities together (default). Requires `stacked: true`. See [Stacked Groups](#-stacked-groups). |
 | `icon` | string | `null` | MDI icon in the state row, e.g. `mdi:thermometer` |
 | `icon_size` | string | `null` | State row icon size, e.g. `18px` |
 | `name_size` | string | `null` | State row name font size, e.g. `14px` |
@@ -861,6 +873,138 @@ entities:
   - entity: sensor.battery_discharge
     color: "#3498db"
 ```
+
+### Stacked Groups
+
+By default, all bar entities stack into a single column. Use `stack_group` to create **named groups** — entities within the same group stack on top of each other, while different groups sit side by side.
+
+```yaml
+stacked: true
+group_by: date
+entities:
+  - entity: sensor.solar_production
+    graph_type: bar
+    stack_group: energy
+    color: "#2ecc71"
+  - entity: sensor.grid_import
+    graph_type: bar
+    stack_group: energy
+    color: "#e74c3c"
+  - entity: sensor.cost_peak
+    graph_type: bar
+    stack_group: cost
+    color: "#f39c12"
+  - entity: sensor.cost_offpeak
+    graph_type: bar
+    stack_group: cost
+    color: "#3498db"
+```
+
+This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
+
+> **Editor:** Per-entity → Appearance tab → *Stack Group* text field (visible when Stacked is enabled)
+
+---
+
+## 📅 Long-Range Views
+
+Visualize data over weeks, months, and years with calendar-aware grouping and native HA statistics.
+
+### Weekly and Monthly Grouping
+
+```yaml
+group_by: week
+hours_to_show: 720        # 30 days → 4 weekly bars
+aggregate_func: change     # consumption per week
+graph_type: bar
+```
+
+```yaml
+group_by: month
+hours_to_show: 8760        # 1 year → 12 monthly bars
+graph_start: year          # start from Jan 1
+```
+
+When `group_by` is set to `date`, `week`, or `month`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
+
+### Graph Start Anchoring
+
+Snap the start of your graph to a clean calendar boundary:
+
+| Value | Behavior |
+|-------|----------|
+| `week` | Start from Monday 00:00 |
+| `month` | Start from the 1st of the month |
+| `year` | Start from January 1st |
+
+> **Editor:** General Settings → Display → Graph Navigation → *Graph Start*
+
+### X-Axis Interval
+
+Manual control over tick spacing:
+
+```yaml
+x_axis_interval: 2h    # Every 2 hours (00:00, 02:00, 04:00…)
+x_axis_interval: 1d    # Daily (midnight)
+x_axis_interval: 1w    # Weekly (Mondays)
+x_axis_interval: 1M    # Monthly (1st of month)
+```
+
+Available presets in the editor: Auto, 1H–12H, 1D, 2D, 7D, 1W, 2W, 1M, 3M.
+
+> **Editor:** General Settings → X-Axis → *X Axis Interval*
+
+### Smart X-Axis Labels
+
+The X-axis automatically adapts to the `group_by` setting:
+
+- **Week** — Ticks on Mondays: "3 Mar", "10 Mar"
+- **Month** — Ticks on the 1st: "Jan", "Feb" (with year when spanning multiple years)
+- **Date** — Daily ticks: "3 Mar", "4 Mar"
+- **Hour** — Hourly ticks; midnight shows date instead of "00:00"
+
+In `interval` mode, midnight labels also show the date for any view longer than 12 hours.
+
+---
+
+## 🏷️ Template Names
+
+Entity names support HA-style `{{ }}` templates that resolve dynamically using `hass.states`:
+
+```yaml
+name: "{{ state_attr('sensor.room', 'friendly_name') }}"
+name: "{{ states('sensor.power') }} W"
+name: "{{ state_attr('sensor.temperature', 'device_class') | capitalize }}"
+name: "Room: {{ state_attr('sensor.room', 'friendly_name') | upper }}"
+```
+
+### Supported functions
+
+| Function | Description |
+|----------|-------------|
+| `states('entity_id')` | Current state value |
+| `state_attr('entity_id', 'attribute')` | Entity attribute value |
+| `is_state('entity_id', 'value')` | Returns `"true"` or `"false"` |
+
+### Supported filters
+
+Filters are chained with `|`, just like Jinja2:
+
+| Filter | Example | Result |
+|--------|---------|--------|
+| `capitalize` | `temperature` → | `Temperature` |
+| `upper` | `salon` → | `SALON` |
+| `lower` | `SALON` → | `salon` |
+| `title` | `living room` → | `Living Room` |
+| `trim` | `" text "` → | `"text"` |
+| `int` | `"22.5"` → | `"22"` |
+| `float` | `"22"` → | `"22"` |
+| `round(n)` | `22.567 \| round(1)` → | `"22.6"` |
+| `replace('a','b')` | `replace('_',' ')` | Replaces all occurrences |
+| `default('val')` | Fallback if empty/unknown | |
+| `truncate(n)` | Cuts to n chars + `…` | |
+
+Multiple filters can be chained: `{{ state_attr('sensor.x', 'type') | replace('_', ' ') | title }}`
 
 ---
 
@@ -1781,9 +1925,9 @@ The General Settings panel is divided into four tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **Display** | Chart mode, height, header, icon, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode) |
-| **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, font size, opacity), bounds (min range, lower/upper bounds) |
-| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity), time window (graph start hour) |
+| **Display** | Chart mode, height, header, icon, state layout, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode, graph start) |
+| **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
+| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour) |
 | **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
@@ -1795,7 +1939,7 @@ Each entity panel has three tabs:
 | Tab | Contents |
 |-----|----------|
 | **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number format, offset), state map, tap action |
-| **Appearance** | Graph toggle, graph type, extrema, average, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
+| **Appearance** | Graph toggle, graph type, extrema, average, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
 | **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
 
 Entity options also adapt dynamically based on Chart Mode — see [Dynamic Editor Behavior](#-dynamic-editor-behavior).
