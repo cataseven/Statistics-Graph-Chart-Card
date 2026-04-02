@@ -1037,7 +1037,7 @@ This is especially useful for:
 
 > **Editor:** General Settings → **X-Axis** tab → *Show Full Period* checkbox
 
-![full Example](images/full.png)
+![full Example](images/full1.png)
 ---
 
 ## ↕️ Independent Y-Axis
