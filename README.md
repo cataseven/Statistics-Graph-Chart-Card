@@ -114,6 +114,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↔️ | **Horizontal state layout** — `state_layout: horizontal` flows entity values side by side instead of stacking vertically |
 | 🔢 | **Y-axis decimals** — card-level `y_axis_decimals` overrides per-entity decimals for axis labels only, keeping state row precision separate |
 | ⏱️ | **X-axis interval** — `x_axis_interval` for manual tick spacing (1h–3M) with clean boundary snapping |
+| 📅 | **Show Full Period** — extend the X-axis to cover a complete calendar period (day, week, month, year) with a "now" indicator line, leaving empty space after the current time. Ideal for imported data or comparing today vs yesterday |
+| ↕️ | **Independent Y-axis** — `y_axis: independent` gives each entity its own hidden scale based on its min/max, enabling trend comparison across sensors with wildly different units (°C, %, lux, hPa) on a single graph |
 
 ---
 
@@ -208,6 +210,7 @@ These options apply to the whole card.
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
 | `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
 | `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). Useful with `group_by: week/month` for clean period views. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
+| `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. The period is determined by `graph_start`: off → end of today, `week` → end of week, `month` → end of month, `year` → end of year. See [Show Full Period](#-show-full-period). |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -237,7 +240,7 @@ Each entry under `entities` supports the following options.
 | `entity` | string | **required** | HA entity ID. Can be left empty when using `statistic_id`. |
 | `statistic_id` | string | `null` | For imported/external statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`). These exist only in the statistics database. Leave empty for normal entities. See [External Statistics](#-external-statistics). |
 | `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. Supports HA-style templates: `{{ states('sensor.x') }}`, `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters like `capitalize`, `upper`, `replace()`. See [Template Names](#-template-names). |
-| `y_axis` | string | `"primary"` | `primary` (left) or `secondary` (right) |
+| `y_axis` | string | `"primary"` | `primary` (left), `secondary` (right), or `independent` (hidden, own scale). Independent entities are scaled to their own min/max — ideal for overlaying sensors with different units for trend comparison. See [Independent Y-Axis](#-independent-y-axis). |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `change` / `delta` / `diff`. The `change` option uses HA's native statistics `change` field — ideal for energy, gas, and water meters with `group_by: date/week/month`. |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
@@ -1005,6 +1008,60 @@ Filters are chained with `|`, just like Jinja2:
 | `truncate(n)` | Cuts to n chars + `…` | |
 
 Multiple filters can be chained: `{{ state_attr('sensor.x', 'type') | replace('_', ' ') | title }}`
+
+---
+
+## 📅 Show Full Period
+
+Extends the X-axis to cover a complete calendar period, leaving empty space after the current time. A dashed vertical "now" line marks where live data ends.
+
+```yaml
+graph_start_hour: 0
+hours_to_show: 24
+show_full_period: true    # X-axis: 00:00 → 23:59, empty after now
+```
+
+The end of the period is determined by `graph_start`:
+
+| `graph_start` | X-axis extends to |
+|---------------|-------------------|
+| off | End of today (next midnight) |
+| `week` | End of week (next Monday 00:00) |
+| `month` | End of month (1st of next month) |
+| `year` | End of year (Jan 1st next year) |
+
+This is especially useful for:
+- **Imported data** (energy, gas) that arrives with a few days delay — the graph shows the gap instead of filling it with the last known value
+- **Day comparison** with offset — today's card shows a partial day with empty space; yesterday's card (offset: 24) shows a complete day
+- **Weekly/monthly dashboards** — see the full period at a glance with the "now" marker
+
+> **Editor:** General Settings → **X-Axis** tab → *Show Full Period* checkbox
+
+---
+
+## ↕️ Independent Y-Axis
+
+Overlay sensors with completely different units on a single graph for trend comparison. Each `independent` entity gets its own hidden scale based on its data's min/max range. No axis labels are shown — only the visual trend matters.
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    y_axis: primary          # Left axis, shared scale, visible labels
+    color: "#ff4757"
+  - entity: sensor.humidity
+    y_axis: secondary        # Right axis, shared scale, visible labels
+    color: "#378ADD"
+  - entity: sensor.illuminance
+    y_axis: independent      # Own hidden scale: 0–10000 lux
+    color: "#f39c12"
+  - entity: sensor.pressure
+    y_axis: independent      # Own hidden scale: 980–1020 hPa
+    color: "#2ecc71"
+```
+
+There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
+
+> **Editor:** Per-entity → **General** tab → *Y Axis* dropdown → "Independent"
 
 ---
 
@@ -1927,7 +1984,7 @@ The General Settings panel is divided into four tabs to reduce clutter:
 |-----|----------|
 | **Display** | Chart mode, height, header, icon, state layout, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode, graph start) |
 | **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
-| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour) |
+| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
 | **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
