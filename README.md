@@ -119,6 +119,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔋 | **Battery icon** — `battery_entity` displays a color-coded battery level indicator in the header or state row, with configurable low threshold |
 | 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions |
 | 📅 | **Group by Year** — `group_by: year` for multi-year trend views with automatic bar width and X-axis labels |
+| 🔄 | **Invert bars** — per-entity `invert: true` draws bars downward from zero. Combine with `stacked: true` for butterfly charts (energy import/export, network in/out) |
 
 ---
 
@@ -215,7 +216,7 @@ These options apply to the whole card.
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
 | `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
 | `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). Useful with `group_by: week/month` for clean period views. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
-| `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. The period is determined by `graph_start`: off → end of today, `week` → end of week, `month` → end of month, `year` → end of year. See [Show Full Period](#-show-full-period). |
+| `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. See [Show Full Period](#-show-full-period). |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -259,6 +260,7 @@ Each entry under `entities` supports the following options.
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
+| `invert` | boolean | `false` | Draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Use with `stacked: true` for butterfly charts. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. See [State Map](#-state-map). |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). |
 
@@ -1044,10 +1046,20 @@ The end of the period is determined by `graph_start`:
 | `month` | End of month (1st of next month) |
 | `year` | End of year (Jan 1st next year) |
 
+### With Energy Date Sync
+
+`show_full_period` also works with `energy_date_sync: true`. When the energy date picker selects a current period (today, this week, this month), the X-axis extends to the full period end. Past periods display in full as before.
+
+```yaml
+energy_date_sync: true
+show_full_period: true    # energy picker "This Month" → X-axis: Apr 1 → May 1
+```
+
 This is especially useful for:
 - **Imported data** (energy, gas) that arrives with a few days delay — the graph shows the gap instead of filling it with the last known value
 - **Day comparison** with offset — today's card shows a partial day with empty space; yesterday's card (offset: 24) shows a complete day
 - **Weekly/monthly dashboards** — see the full period at a glance with the "now" marker
+- **Energy dashboard** — combine with `energy_date_sync` to see the full billing period
 
 > **Editor:** General Settings → **X-Axis** tab → *Show Full Period* checkbox
 
@@ -1137,6 +1149,32 @@ Common configurations:
 Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
 
 > **Editor:** Per-entity → **General** tab → *Attribute Data Source*
+
+---
+
+## 🔄 Invert Bars (Butterfly Charts)
+
+Per-entity `invert: true` draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Combined with `stacked: true`, creates butterfly charts for energy import/export, network in/out, and similar comparisons.
+
+```yaml
+stacked: true
+entities:
+  - entity: sensor.grid_import
+    graph_type: bar
+    aggregate_func: change
+    color: "#f39c12"
+    name: Import
+  - entity: sensor.grid_export
+    graph_type: bar
+    aggregate_func: change
+    invert: true
+    color: "#3498db"
+    name: Export
+```
+
+Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
+
+> **Editor:** Per-entity → **General** tab → *Invert (Mirror)* checkbox
 
 ---
 
