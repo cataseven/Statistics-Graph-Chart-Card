@@ -173,11 +173,11 @@ These options apply to the whole card.
 | `card_icon` | string | `null` | MDI icon next to the title, e.g. `mdi:thermometer` |
 | `card_icon_image` | string | `null` | URL to a custom image. Overrides `card_icon`. |
 | `card_icon_color` | string | `null` | Color of the header icon (CSS color). Set to `"threshold"` to color dynamically based on the first entity's value and its color threshold rules. |
-| `card_header_size` | string | `null` | Font size of the title, e.g. `16px` |
+| `card_header_size` | string | `null` | Font size of the title and battery icon. The battery indicator scales proportionally with this value. Accepts CSS values like `16px` or `1.2em`. |
 | `card_icon_size` | string | `null` | Size of the header icon, e.g. `22px` |
 | `card_icon_position` | string | `"left"` | Header icon position: `left` or `right` |
 | `battery_entity` | string | `null` | Entity ID reporting battery level (0–100%). Shows a color-coded battery icon with percentage in the header (when header exists) or state row (when no header). See [Battery Icon](#-battery-icon). |
-| `battery_low_threshold` | number | `20` | Battery percentage below which the icon turns red. Accepts a number or entity ID. |
+| `battery_low_threshold` | string/number | `20` | Battery percentage below which the icon turns red. Accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
 | `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) / `horizontal` / `horizontal-center` / `horizontal-right`. Horizontal modes flow entities side by side in a single row. |
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
@@ -1082,9 +1082,9 @@ There is no limit on the number of independent entities. Each one is scaled indi
 
 ## 🔋 Battery Icon
 
-![battery Example](images/battery.png)
-
 Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
+
+![Battery Example](images/battery.png)
 
 ```yaml
 battery_entity: sensor.temperature_battery
@@ -1100,7 +1100,9 @@ Color adapts to battery level:
 | low–25% | Orange |
 | Below threshold | Red |
 
-The low threshold defaults to 20% and accepts a number or entity ID. Hover shows the entity friendly name and exact percentage.
+The low threshold defaults to 20% and accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). Hover shows the entity friendly name and exact percentage.
+
+The icon and percentage text scale proportionally with the **Header & Battery Size** setting (`card_header_size`). This applies in both header and state row positions.
 
 > **Editor:** General Settings → **Display** tab → *Battery*
 
@@ -1261,6 +1263,18 @@ annotations:
 | `span` | Vertical shaded band for the duration a binary entity is in a specific state |
 
 Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
+
+Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible:
+
+```yaml
+annotations:
+  - type: band
+    value: 20
+    value_end: 25
+    label: "Comfort"
+    color: "#1D9E75"
+    show_values: false    # band visible, no text labels
+```
 
 ---
 
