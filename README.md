@@ -116,6 +116,9 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔢 | **Y-axis decimals** — card-level `y_axis_decimals` overrides per-entity decimals for axis labels only, keeping state row precision separate |
 | ⏱️ | **X-axis interval** — `x_axis_interval` for manual tick spacing (1h–3M) with clean boundary snapping |
 | 📅 | **Show Full Period** — extend the X-axis to cover a complete calendar period (day, week, month, year) with a "now" indicator line, leaving empty space after the current time. Ideal for imported data or comparing today vs yesterday |
+| 🔋 | **Battery icon** — `battery_entity` displays a color-coded battery level indicator in the header or state row, with configurable low threshold |
+| 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions |
+| 📅 | **Group by Year** — `group_by: year` for multi-year trend views with automatic bar width and X-axis labels |
 
 ---
 
@@ -173,13 +176,15 @@ These options apply to the whole card.
 | `card_header_size` | string | `null` | Font size of the title, e.g. `16px` |
 | `card_icon_size` | string | `null` | Size of the header icon, e.g. `22px` |
 | `card_icon_position` | string | `"left"` | Header icon position: `left` or `right` |
+| `battery_entity` | string | `null` | Entity ID reporting battery level (0–100%). Shows a color-coded battery icon with percentage in the header (when header exists) or state row (when no header). See [Battery Icon](#-battery-icon). |
+| `battery_low_threshold` | number | `20` | Battery percentage below which the icon turns red. Accepts a number or entity ID. |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
 | `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) / `horizontal` / `horizontal-center` / `horizontal-right`. Horizontal modes flow entities side by side in a single row. |
-| `hours_to_show` | number | `24` | Hours of history to load and display |
+| `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. |
 | `auto_scale_points` | boolean | `false` | Automatically scale `points_per_hour` when the interval picker changes the time range. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
-| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month`. When set to `week` or `month`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
+| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month` / `year`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
@@ -246,6 +251,9 @@ Each entry under `entities` supports the following options.
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position). Applied after `value_factor`. Example: `return x - first`. See [Value Transform](#-value-transform). |
+| `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). See [Attribute Data Source](#-attribute-data-source). |
+| `data_time_field` | string | `"start_time"` | Name of the time field in each array item when using `data_attribute`. |
+| `data_value_field` | string | `"price_per_kwh"` | Name of the value field in each array item when using `data_attribute`. |
 | `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
@@ -651,7 +659,7 @@ grid_options:
   rows: 2
 ```
 
-Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds.
+Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds, and rise/fall colors.
 
 ---
 
@@ -913,26 +921,32 @@ This renders two side-by-side bar groups per time slot: an "energy" stack (solar
 
 Visualize data over weeks, months, and years with calendar-aware grouping and native HA statistics.
 
-### Weekly and Monthly Grouping
+### Weekly, Monthly, and Yearly Grouping
 
 ```yaml
 group_by: week
-hours_to_show: 720        # 30 days → 4 weekly bars
+graph_start: month         # this month's weeks
 aggregate_func: change     # consumption per week
 graph_type: bar
 ```
 
 ```yaml
 group_by: month
-hours_to_show: 8760        # 1 year → 12 monthly bars
 graph_start: year          # start from Jan 1
 ```
 
-When `group_by` is set to `date`, `week`, or `month`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
+```yaml
+group_by: year
+hours_to_show: 87600       # ~10 years
+aggregate_func: change     # annual consumption
+graph_type: bar
+```
+
+When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
 
 ### Graph Start Anchoring
 
-Snap the start of your graph to a clean calendar boundary:
+When `graph_start` is set, `hours_to_show` is ignored — the calendar period directly determines the start:
 
 | Value | Behavior |
 |-------|----------|
@@ -1066,6 +1080,64 @@ There is no limit on the number of independent entities. Each one is scaled indi
 
 ---
 
+## 🔋 Battery Icon
+
+![battery Example](images/battery.png)
+
+Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
+
+```yaml
+battery_entity: sensor.temperature_battery
+battery_low_threshold: 20
+```
+
+Color adapts to battery level:
+
+| Level | Color |
+|-------|-------|
+| >50% | Green |
+| 25–50% | Yellow |
+| low–25% | Orange |
+| Below threshold | Red |
+
+The low threshold defaults to 20% and accepts a number or entity ID. Hover shows the entity friendly name and exact percentage.
+
+> **Editor:** General Settings → **Display** tab → *Battery*
+
+---
+
+## 📡 Attribute Data Source
+
+Read chart data directly from an entity attribute instead of history. The attribute must contain an array of objects with time and value fields. The X-axis automatically extends into the future when data contains future timestamps.
+
+Ideal for energy spot prices, weather forecasts, and solar production predictions. No history or statistics API calls are made for these entities.
+
+```yaml
+entities:
+  - entity: sensor.epex_spot_price
+    data_attribute: data
+    data_time_field: start_time
+    data_value_field: price_per_kwh
+    value_factor: 2
+    graph_type: step
+    name: "Electricity Price"
+```
+
+Common configurations:
+
+| Integration | `data_attribute` | `data_time_field` | `data_value_field` |
+|---|---|---|---|
+| EPEX Spot | `data` | `start_time` | `price_per_kwh` |
+| Nordpool | `raw_today` | `start` | `value` |
+| Tibber | `price_info` | `startsAt` | `total` |
+| Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
+
+Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
+
+> **Editor:** Per-entity → **General** tab → *Attribute Data Source*
+
+---
+
 ## ↔️ Time Offset
 
 Compare the same sensor across different time periods by adding multiple entity entries with different `offset` values. Each offset shifts that entity's data backward in time while keeping it aligned on the same graph.
@@ -1156,11 +1228,20 @@ annotations:
     value: 22.5
     label: "Target"
     color: "#1D9E75"
+  - type: threshold       # dynamic value from entity
+    value: sensor.climate_setpoint
+    label: "Setpoint"
+    color: "#f39c12"
   - type: band            # horizontal shaded band
     value: 20
     value_end: 23
     label: "Comfort zone"
     color: "#1D9E75"
+  - type: band            # dynamic band from entity attributes
+    value: sensor.comfort.min_temp
+    value_end: sensor.comfort.max_temp
+    label: "Dynamic comfort"
+    color: "#3498db"
   - type: event           # vertical marker at state transitions
     entity: binary_sensor.heating
     state: "on"
@@ -1174,10 +1255,12 @@ annotations:
 
 | Type | Description |
 |------|-------------|
-| `threshold` | Horizontal dashed line at a fixed value |
-| `band` | Horizontal shaded band between `value` and `value_end` |
+| `threshold` | Horizontal dashed line at a fixed value, entity state, or entity attribute |
+| `band` | Horizontal shaded band between `value` and `value_end`. Both accept numbers, entity IDs, or `entity.attribute` paths |
 | `event` | Vertical marker at each state transition of a binary entity |
 | `span` | Vertical shaded band for the duration a binary entity is in a specific state |
+
+Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
 
 ---
 
@@ -1983,7 +2066,7 @@ The General Settings panel is divided into four tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **Display** | Chart mode, height, header, icon, state layout, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode, graph start) |
+| **Display** | Chart mode, height, header, icon, battery, state layout, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode, graph start) |
 | **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
 | **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
 | **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
@@ -1996,7 +2079,7 @@ Each entity panel has three tabs:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number format, offset), state map, tap action |
+| **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number format, offset, attribute data source), state map, tap action |
 | **Appearance** | Graph toggle, graph type, extrema, average, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
 | **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
 
