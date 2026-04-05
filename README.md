@@ -20,9 +20,6 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ## 🖼️ Preview
 
-<details>
-<summary>Show preview images</summary>
-
 ![image6](images/add2.gif)
 
 ![image6](images/scroll2.gif)
@@ -57,7 +54,6 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image2](images/bar.png)
 
-</details>
 
 ---
 
