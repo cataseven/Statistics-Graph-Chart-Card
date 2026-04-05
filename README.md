@@ -107,6 +107,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
+| 📅 | **Built-in Date Picker** — navigate through Day, Week, Month, and Year views with arrow buttons, a calendar popup, and preset ranges (Today, Yesterday, Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group`. Works independently of HA's Energy dashboard |
 | 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
 | 📅 | **Long-range views** — `group_by: week` and `month` with native HA statistics periods, `graph_start` anchoring to calendar boundaries, and smart X-axis labels that adapt to the grouping mode |
 | ⚡ | **Change aggregation** — `aggregate_func: change` uses HA's native `change` field for energy, gas, and water meters. Combine with `group_by: date/week/month` for accurate consumption charts |
@@ -231,6 +232,9 @@ These options apply to the whole card.
 | `tooltip_sync` | boolean | `false` | Broadcast hovered timestamp to other synced cards. Timeline mode only. |
 | `tooltip_sync_group` | string | `null` | Named group for tooltip sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
 | `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
+| `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
+| `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
+| `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -1433,6 +1437,80 @@ Entity → General → **Statistic ID** input field (monospace, below the entity
 1. Go to **Developer Tools → Statistics** in HA
 2. Search for the integration name (e.g. "gazpar")
 3. The statistic ID is shown in the list (e.g. `gazpar:gazpar_consumption`)
+
+---
+
+## 📅 Date Picker
+
+A built-in date navigation panel that lets users browse historical data by Day, Week, Month, or Year — without leaving the dashboard.
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_date_picker: true
+date_picker_position: top
+entities:
+  - entity: sensor.temperature_living
+    color: "#ff6b35"
+```
+
+### Navigation
+
+The date picker bar shows the current period label with arrow buttons to move forward/backward:
+
+```
+◀  5 April 2026  ▶   [D] [W] [M] [Y]  📅
+```
+
+- **D / W / M / Y** — switch between Day, Week, Month, and Year views
+- **◀ ▶** — navigate to the previous/next period
+- **📅** — open the calendar popup for direct date selection
+
+### Calendar & Presets
+
+Click the calendar icon to open a panel with:
+
+- **Calendar grid** — click two dates to select a custom range
+- **Quick presets** — Today, Yesterday, This/Last Week, This/Last Month, This/Last Year, Last 7 Days, Last 30 Days, Last 12 Months
+
+The calendar stays open after selection so you can adjust the range. Click the 📅 icon again to close it.
+
+### Group Sync
+
+Cards with the same `date_picker_group` share their date selection:
+
+```yaml
+# Card 1
+show_date_picker: true
+date_picker_group: bedroom
+
+# Card 2
+show_date_picker: true
+date_picker_group: bedroom
+```
+
+Changing the date on either card updates both.
+
+### Behavior
+
+| Period | X-axis range | Live updates |
+|---|---|---|
+| **Today** | 00:00 → end of day | ✅ Active — graph updates in real time |
+| **Yesterday** | 00:00 → 23:59 | ❌ Paused — historical data is frozen |
+| **This Week** | Monday 00:00 → end of week | ✅ Active |
+| **Last 7 Days** | 7 days ago → now | ✅ Active |
+| **Custom range** | Start → End | Depends on whether end is today |
+
+### Editor
+
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row.
+
+### Notes
+
+- Cannot be used together with `energy_date_sync` — enabling one disables the other
+- Date picker state (mode, offset, custom range) is persisted in `localStorage` and restored on page reload
+- When viewing the current period (e.g. today), the X-axis extends to the end of the period with empty space after the current time
 
 ---
 
