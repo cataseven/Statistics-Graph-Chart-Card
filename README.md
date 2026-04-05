@@ -108,7 +108,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
-| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` |
+| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group |
 | 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
 | 📅 | **Long-range views** — `group_by: week` and `month` with native HA statistics periods, `graph_start` anchoring to calendar boundaries, and smart X-axis labels that adapt to the grouping mode |
 | ⚡ | **Change aggregation** — `aggregate_func: change` uses HA's native `change` field for energy, gas, and water meters. Combine with `group_by: date/week/month` for accurate consumption charts |
@@ -253,7 +253,7 @@ These options apply to the whole card.
 | `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
-| `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection. |
+| `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -581,19 +581,23 @@ The calendar stays open after selection so you can adjust the range. Click the �
 
 ### Group Sync
 
-Cards with the same `date_picker_group` share their date selection:
+Cards with the same `date_picker_group` share their date selection. **You don't need a visible date picker on every card** — only one card needs `show_date_picker: true`. Other cards in the same group will follow along automatically.
 
 ```yaml
-# Card 1
+# Card 1: Has the visible date picker — this is the "controller"
 show_date_picker: true
 date_picker_group: bedroom
 
-# Card 2
-show_date_picker: true
+# Card 2: No visible picker — just follows Card 1
+date_picker_group: bedroom
+
+# Card 3: Also follows Card 1
 date_picker_group: bedroom
 ```
 
-Changing the date on either card updates both.
+Changing the date on Card 1 updates all three cards. Cards 2 and 3 show no picker UI but their data range follows the group selection.
+
+This is ideal for dashboards where you want one date picker controlling multiple charts without repeating the picker bar on every card.
 
 ### Behavior
 
@@ -607,13 +611,14 @@ Changing the date on either card updates both.
 
 ### Editor
 
-General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row.
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker.
 
 ### Notes
 
 - Cannot be used together with `energy_date_sync` — enabling one disables the other
 - Date picker state is persisted in `localStorage` and restored on page reload
 - When viewing the current period, the X-axis extends to the end of the period with empty space after the current time
+- Cards with only `date_picker_group` (no `show_date_picker`) use their normal `hours_to_show` until a sync event arrives from a card in the same group
 
 </details>
 
