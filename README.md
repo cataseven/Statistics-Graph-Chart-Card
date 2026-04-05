@@ -18,8 +18,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ---
 
+## 🖼️ Preview
 
-<h2>🖼️ Preview</h2>
+<details>
+<summary>Show preview images</summary>
 
 ![image6](images/add2.gif)
 
@@ -55,7 +57,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image2](images/bar.png)
 
-
+</details>
 
 ---
 
@@ -179,8 +181,10 @@ entities:
 
 ---
 
+## ⚙️ Configuration
+
 <details>
-<summary><h2>⚙️ Configuration</h2></summary>
+<summary>Show card-level and entity-level option tables</summary>
 
 ### 🃏 Card Options
 
@@ -334,8 +338,10 @@ Each entry under `entities` supports the following options.
 
 ---
 
+## 🎯 Chart Modes
+
 <details>
-<summary><h2>🎯 Chart Modes</h2></summary>
+<summary>Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar</summary>
 
 The `chart_mode` option at the card level controls the overall visualization. Each mode takes over the entire graph area.
 
@@ -537,8 +543,10 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 
 ---
 
+## 📚 Feature Guides
+
 <details>
-<summary><h2>📚 Feature Guides</h2></summary>
+<summary>Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and 18 more</summary>
 
 <details>
 <summary><strong>📅 Date Picker</strong></summary>
@@ -1534,8 +1542,10 @@ Entity → General → **Statistic ID** input field (monospace, below the entity
 
 ---
 
+## 💡 Examples
+
 <details>
-<summary><h2>💡 Examples</h2></summary>
+<summary>Ready-to-use YAML configurations</summary>
 
 ### Basic: Single Sensor
 
@@ -1974,8 +1984,10 @@ entities:
 
 ---
 
+## 📖 Reference
+
 <details>
-<summary><h2>📖 Reference</h2></summary>
+<summary>Aggregation functions, date formats, bounds, tap actions</summary>
 
 ### 🧮 Aggregation Functions
 
@@ -2160,8 +2172,10 @@ The state row always displays the original string, not the number.
 
 ---
 
+## 🛠️ Visual Editor
+
 <details>
-<summary><h2>🛠️ Visual Editor</h2></summary>
+<summary>Editor tabs, drag-and-drop, dynamic behavior</summary>
 
 The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
 
