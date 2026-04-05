@@ -564,9 +564,7 @@ entities:
 
 The date picker bar shows the current period label with arrow buttons to move forward/backward:
 
-```
-◀  5 April 2026  ▶   [D] [W] [M] [Y]  📅
-```
+![Date Sync Example](images/Datepicker.gif)
 
 - **D / W / M / Y** — switch between Day, Week, Month, and Year views
 - **◀ ▶** — navigate to the previous/next period
