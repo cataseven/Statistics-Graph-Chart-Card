@@ -18,8 +18,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ---
 
-<details>
-<summary><h2>🖼️ Preview</h2></summary>
+
+<h2>🖼️ Preview</h2>
 
 ![image6](images/add2.gif)
 
@@ -55,7 +55,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image2](images/bar.png)
 
-</details>
+
 
 ---
 
