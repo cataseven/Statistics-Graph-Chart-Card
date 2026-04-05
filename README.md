@@ -18,7 +18,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ---
 
-## 🖼️ Preview
+<details>
+<summary><h2>🖼️ Preview</h2></summary>
 
 ![image6](images/add2.gif)
 
@@ -53,6 +54,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 ![image1](images/line.png)
 
 ![image2](images/bar.png)
+
+</details>
 
 ---
 
@@ -107,7 +110,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
-| 📅 | **Built-in Date Picker** — navigate through Day, Week, Month, and Year views with arrow buttons, a calendar popup, and preset ranges (Today, Yesterday, Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group`. Works independently of HA's Energy dashboard |
+| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` |
 | 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
 | 📅 | **Long-range views** — `group_by: week` and `month` with native HA statistics periods, `graph_start` anchoring to calendar boundaries, and smart X-axis labels that adapt to the grouping mode |
 | ⚡ | **Change aggregation** — `aggregate_func: change` uses HA's native `change` field for energy, gas, and water meters. Combine with `group_by: date/week/month` for accurate consumption charts |
@@ -121,6 +124,21 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions |
 | 📅 | **Group by Year** — `group_by: year` for multi-year trend views with automatic bar width and X-axis labels |
 | 🔄 | **Invert bars** — per-entity `invert: true` draws bars downward from zero. Combine with `stacked: true` for butterfly charts (energy import/export, network in/out) |
+
+---
+
+## 📑 Table of Contents
+
+| Section | Description |
+|---|---|
+| [Installation](#-installation) | HACS and manual setup |
+| [Quick Start](#-quick-start) | Minimal YAML to get started |
+| [Configuration](#%EF%B8%8F-configuration) | Card-level and entity-level options |
+| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar |
+| [Feature Guides](#-feature-guides) | Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and more |
+| [Examples](#-examples) | Ready-to-use YAML configurations |
+| [Reference](#-reference) | Aggregation functions, date formats, bounds, tap actions |
+| [Visual Editor](#%EF%B8%8F-visual-editor) | Editor tabs, drag-and-drop, dynamic behavior |
 
 ---
 
@@ -161,7 +179,8 @@ entities:
 
 ---
 
-## ⚙️ Configuration
+<details>
+<summary><h2>⚙️ Configuration</h2></summary>
 
 ### 🃏 Card Options
 
@@ -234,7 +253,7 @@ These options apply to the whole card.
 | `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
-| `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. |
+| `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection. |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -311,95 +330,12 @@ Each entry under `entities` supports the following options.
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
 
----
-
-## 🔄 Dynamic Editor Behavior
-
-The visual editor adapts in real time based on the current configuration. Options that don't apply are completely removed from the UI — not just disabled, but hidden. This keeps the editor clean regardless of which chart mode or feature combination you choose.
-
-### Chart Mode → General Settings
-
-Changing the Chart Mode dropdown instantly reconfigures the entire editor:
-
-| When Chart Mode is… | Display tab | Data tab | Overlays tab |
-|---|---|---|---|
-| **Timeline** | All options visible | All options visible | All options visible |
-| **Scatter** | Grid ✅, Axes ✅, but Stacked / Sparkline / Animate / Logarithmic hidden | Y Axis ✅, but Scroll / Bar Spacing hidden | Compare / Tooltip Sync / Annotations hidden |
-| **Pie / Ranking** | Only Tooltip toggle visible | No Y Axis, no Scroll / Bar Spacing | Only Interval Picker and Attribute List visible |
-| **Heatmap / Calendar** | Same as Pie / Ranking | Same as Pie / Ranking | Same as Pie / Ranking |
-
-### Chart Mode → Entity Settings
-
-| When Chart Mode is… | What changes in entity Appearance tab |
-|---|---|
-| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Line, Fill, Data Points — all visible |
-| **All other modes** | Graph Type row hidden, Line / Fill / Points sections hidden. Only State Row, Trend Icon, Y Axis Range, and Legend remain |
-
-
-### Sparkline → Entire Card
-
-When `sparkline` is enabled (Timeline mode only):
-
-- **Display tab**: Header and Icon sections disappear
-- **Overlays tab**: Shows *"Overlays are hidden in sparkline mode"*
-- The card renders with zero chrome — no toolbar, axes, grid, or legend
-
-### Entity-Level Cascading
-
-Within each entity, toggle states cascade downward — disabling a parent hides or disables all its children:
-
-| When this is… | These become hidden / disabled |
-|---|---|
-| `show_graph: off` | Graph Type, Extrema, Average, Line, Fill, Points — all hidden |
-| `show_line: off` | Line Width, Bezier — disabled |
-| `show_fill: off` | Gradient — disabled |
-| `show_state: off` | Show Last, Adaptive Color, Icon, Align, all Size fields — disabled |
-| `show_state: gauge` | Same fields disabled (gauge draws its own layout from `lower_bound` / `upper_bound`) |
-| `show_trend_icon: off` | Trend Period, Trend Icon Size — disabled |
-
-### Entity Count Limits
-
-The "Add Entity" button automatically hides when the chart mode's limit is reached:
-
-| Chart Mode | Max Entities | Notes |
-|---|---|---|
-| Timeline | Unlimited | Mix line, step, bar freely |
-| Scatter | 2 | Entities labeled **X** and **Y** in the editor |
-| Pie / Ranking | Unlimited | Each entity = one slice / bar |
-| Radial Bar | Unlimited | Each entity = one concentric ring |
-| Polar Area | Unlimited | Each entity = one equal-angle slice |
-| Radar | 3+ minimum | Each entity = one spoke of the polygon |
-| Heatmap / Calendar | 1 | Only the first entity is used |
-
-### Option Interactions
-
-Some options depend on or conflict with each other:
-
-| If you set… | Then… |
-|---|---|
-| `value_transform` set | Runs after `value_factor`. Available variables: `x`, `first`, `last`, `min`, `max`, `avg`, `index`. State row shows the transformed value |
-| `offset` set (per entity) | Data is fetched from a shifted time window but displayed aligned with the current window. Same entity with different offsets = period comparison at full graph quality |
-| `stacked: true` | Only affects entities with the same `y_axis` and `graph_type` |
-| `auto_scale_points: true` | Only scales entities that inherit the card-level `points_per_hour` — entity-level overrides are not affected |
-| `color_thresholds` enabled | Cannot combine with `rise_fall_colors` on the same entity |
-| `show_state: gauge` | Uses entity `lower_bound` / `upper_bound` as gauge min/max; falls back to stats if not set |
-| `chart_mode: heatmap` + `color_thresholds` | Heatmap cells use threshold colors instead of single-color opacity gradient |
-| `sparkline: true` | Only works in Timeline mode; ignored in other chart modes |
-| `max_visible_interval` set | Enables scroll; `scroll_mode` controls whether scrollbar is visible or mouse-wheel only |
-| `show_y_axis: false` | Hides primary (left) axis labels; secondary axis is not affected |
-| `show_y2_axis: false` | Hides secondary (right) axis labels; primary axis is not affected. Right padding shrinks. |
-| `show_legend: true` | Compact Legend appears below graph. Combine with `show_state: false` on entities for maximum graph space |
-| `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
-| `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
-| `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
-| `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
-| `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
-| `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
-| `statistic_id` set (with empty `entity`) | Data is fetched from the statistics database only — no History API call. State row shows last statistics value. WebSocket live updates are skipped for this entity |
+</details>
 
 ---
 
-## 🎯 Chart Modes
+<details>
+<summary><h2>🎯 Chart Modes</h2></summary>
 
 The `chart_mode` option at the card level controls the overall visualization. Each mode takes over the entire graph area.
 
@@ -597,9 +533,251 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 | Entity graph_type | line/step/bar | — | — | — | — | — | — | — | — |
 | lower/upper_bound | Y axis range | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
 
+</details>
+
 ---
 
-## 🎛️ Gauge Display
+<details>
+<summary><h2>📚 Feature Guides</h2></summary>
+
+<details>
+<summary><strong>📅 Date Picker</strong></summary>
+
+A built-in date navigation panel that lets users browse historical data by Day, Week, Month, or Year — without leaving the dashboard.
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_date_picker: true
+date_picker_position: top
+entities:
+  - entity: sensor.temperature_living
+    color: "#ff6b35"
+```
+
+### Navigation
+
+The date picker bar shows the current period label with arrow buttons to move forward/backward:
+
+```
+◀  5 April 2026  ▶   [D] [W] [M] [Y]  📅
+```
+
+- **D / W / M / Y** — switch between Day, Week, Month, and Year views
+- **◀ ▶** — navigate to the previous/next period
+- **📅** — open the calendar popup for direct date selection
+
+### Calendar & Presets
+
+Click the calendar icon to open a panel with:
+
+- **Calendar grid** — click two dates to select a custom range
+- **Quick presets** — Today, Yesterday, This/Last Week, This/Last Month, This/Last Year, Last 7 Days, Last 30 Days, Last 12 Months
+
+The calendar stays open after selection so you can adjust the range. Click the 📅 icon again to close it.
+
+### Group Sync
+
+Cards with the same `date_picker_group` share their date selection:
+
+```yaml
+# Card 1
+show_date_picker: true
+date_picker_group: bedroom
+
+# Card 2
+show_date_picker: true
+date_picker_group: bedroom
+```
+
+Changing the date on either card updates both.
+
+### Behavior
+
+| Period | X-axis range | Live updates |
+|---|---|---|
+| **Today** | 00:00 → end of day | ✅ Active |
+| **Yesterday** | 00:00 → 23:59 | ❌ Paused |
+| **This Week** | Monday 00:00 → end of week | ✅ Active |
+| **Last 7 Days** | 7 days ago → now | ✅ Active |
+| **Custom range** | Start → End | Depends on whether end is today |
+
+### Editor
+
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row.
+
+### Notes
+
+- Cannot be used together with `energy_date_sync` — enabling one disables the other
+- Date picker state is persisted in `localStorage` and restored on page reload
+- When viewing the current period, the X-axis extends to the end of the period with empty space after the current time
+
+</details>
+
+<details>
+<summary><strong>⚡ Energy Date Sync</strong></summary>
+
+Syncs the card's time range with Home Assistant's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card.
+
+![Energy Date Sync Example](images/picker.gif)
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+energy_date_sync: true
+entities:
+  - entity: sensor.energy_consumption
+    color: "#ff4757"
+    aggregate_func: sum
+  - entity: sensor.solar_production
+    color: "#2ecc71"
+    aggregate_func: sum
+```
+
+Place the card on the same dashboard as an Energy date picker. When the user selects a day, week, month, or custom range, this card automatically updates to show the same period.
+
+### Behavior
+
+| Date selection | X-axis range | Live updates |
+|---|---|---|
+| **Today** | 00:00 → current time | ✅ Active — graph updates in real time |
+| **Yesterday** | 00:00 → 23:59 | ❌ Paused — historical data is frozen |
+| **This week** | Monday 00:00 → current time | ✅ Active |
+| **Last week** | Monday 00:00 → Sunday 23:59 | ❌ Paused |
+| **This month** | 1st 00:00 → current time | ✅ Active |
+| **Custom range** | Start → End (clamped to now if end is in the future) | Depends on whether end is today |
+
+### Compatible with
+
+- HA's built-in Energy dashboard date picker (DAY / WEEK / MONTH / YEAR)
+- [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card
+- Any card that uses HA's energy data collection system
+
+### Editor
+
+General Settings → Overlays → **Energy Date Sync** toggle.
+
+### Notes
+
+- When `energy_date_sync` is active, it overrides `hours_to_show` and the interval picker selection
+- The card subscribes to HA's energy data collection on the WebSocket connection — no polling needed
+- If the Energy panel hasn't loaded yet, the card retries every 2 seconds for up to 60 seconds
+
+</details>
+
+<details>
+<summary><strong>📅 Show Full Period</strong></summary>
+
+Extends the X-axis to cover a complete calendar period, leaving empty space after the current time. A dashed vertical "now" line marks where live data ends.
+
+```yaml
+graph_start_hour: 0
+hours_to_show: 24
+show_full_period: true    # X-axis: 00:00 → 23:59, empty after now
+```
+
+The end of the period is determined by `graph_start`:
+
+| `graph_start` | X-axis extends to |
+|---------------|-------------------|
+| off | End of today (next midnight) |
+| `week` | End of week (next Monday 00:00) |
+| `month` | End of month (1st of next month) |
+| `year` | End of year (Jan 1st next year) |
+
+### With Energy Date Sync
+
+`show_full_period` also works with `energy_date_sync: true`. When the energy date picker selects a current period (today, this week, this month), the X-axis extends to the full period end. Past periods display in full as before.
+
+```yaml
+energy_date_sync: true
+show_full_period: true    # energy picker "This Month" → X-axis: Apr 1 → May 1
+```
+
+This is especially useful for:
+- **Imported data** (energy, gas) that arrives with a few days delay — the graph shows the gap instead of filling it with the last known value
+- **Day comparison** with offset — today's card shows a partial day with empty space; yesterday's card (offset: 24) shows a complete day
+- **Weekly/monthly dashboards** — see the full period at a glance with the "now" marker
+- **Energy dashboard** — combine with `energy_date_sync` to see the full billing period
+
+> **Editor:** General Settings → **X-Axis** tab → *Show Full Period* checkbox
+
+![full Example](images/full1.png)
+
+</details>
+
+<details>
+<summary><strong>📅 Long-Range Views</strong></summary>
+
+Visualize data over weeks, months, and years with calendar-aware grouping and native HA statistics.
+
+### Weekly, Monthly, and Yearly Grouping
+
+```yaml
+group_by: week
+graph_start: month         # this month's weeks
+aggregate_func: change     # consumption per week
+graph_type: bar
+```
+
+```yaml
+group_by: month
+graph_start: year          # start from Jan 1
+```
+
+```yaml
+group_by: year
+hours_to_show: 87600       # ~10 years
+aggregate_func: change     # annual consumption
+graph_type: bar
+```
+
+When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
+
+### Graph Start Anchoring
+
+When `graph_start` is set, `hours_to_show` is ignored — the calendar period directly determines the start:
+
+| Value | Behavior |
+|-------|----------|
+| `week` | Start from Monday 00:00 |
+| `month` | Start from the 1st of the month |
+| `year` | Start from January 1st |
+
+> **Editor:** General Settings → Display → Graph Navigation → *Graph Start*
+
+### X-Axis Interval
+
+Manual control over tick spacing:
+
+```yaml
+x_axis_interval: 2h    # Every 2 hours (00:00, 02:00, 04:00…)
+x_axis_interval: 1d    # Daily (midnight)
+x_axis_interval: 1w    # Weekly (Mondays)
+x_axis_interval: 1M    # Monthly (1st of month)
+```
+
+Available presets in the editor: Auto, 1H–12H, 1D, 2D, 7D, 1W, 2W, 1M, 3M.
+
+> **Editor:** General Settings → X-Axis → *X Axis Interval*
+
+### Smart X-Axis Labels
+
+The X-axis automatically adapts to the `group_by` setting:
+
+- **Week** — Ticks on Mondays: "3 Mar", "10 Mar"
+- **Month** — Ticks on the 1st: "Jan", "Feb" (with year when spanning multiple years)
+- **Date** — Daily ticks: "3 Mar", "4 Mar"
+- **Hour** — Hourly ticks; midnight shows date instead of "00:00"
+
+In `interval` mode, midnight labels also show the date for any view longer than 12 hours.
+
+</details>
+
+<details>
+<summary><strong>🎛️ Gauge Display</strong></summary>
 
 Replace the numeric state row with a half-circle gauge arc. Set `show_state: gauge` on any entity.
 
@@ -620,9 +798,33 @@ The gauge arc sweeps 270° from `lower_bound` to `upper_bound`. The center shows
 
 The graph below the gauge continues to show the historical trend as usual.
 
----
+</details>
 
-## 🔍 Brush Zoom
+<details>
+<summary><strong>✨ Sparkline Mode</strong></summary>
+
+Card-level `sparkline: true` strips all chrome and renders ultra-compact inline graphs. Only available in Timeline mode.
+
+![Sparkline Example](images/sparkline-example.png)
+
+```yaml
+sparkline: true
+entities:
+  - entity: sensor.temperature
+    color: "#ff4757"
+  - entity: sensor.humidity
+    color: "#378ADD"
+grid_options:
+  columns: 12
+  rows: 2
+```
+
+Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds, and rise/fall colors.
+
+</details>
+
+<details>
+<summary><strong>🔍 Brush Zoom</strong></summary>
 
 Click and drag on any Timeline mode graph to zoom into a specific time range. No configuration needed — it's always available.
 
@@ -645,31 +847,58 @@ Click and drag on any Timeline mode graph to zoom into a specific time range. No
 
 Timeline mode only.
 
----
+</details>
 
-## ✨ Sparkline Mode
+<details>
+<summary><strong>📊 Stacked Mode</strong></summary>
 
-Card-level `sparkline: true` strips all chrome and renders ultra-compact inline graphs. Only available in Timeline mode.
-
-![Sparkline Example](images/sparkline-example.png)
+Card-level `stacked: true` stacks entities on top of each other (Timeline mode only). Bar entities stack vertically. Line/area entities stack as bands. Entities on the same Y axis and graph type are stacked together. The tooltip shows a "Total" row.
 
 ```yaml
-sparkline: true
+stacked: true
 entities:
-  - entity: sensor.temperature
-    color: "#ff4757"
-  - entity: sensor.humidity
-    color: "#378ADD"
-grid_options:
-  columns: 12
-  rows: 2
+  - entity: sensor.solar_production
+    color: "#f39c12"
+  - entity: sensor.grid_import
+    color: "#e74c3c"
+  - entity: sensor.battery_discharge
+    color: "#3498db"
 ```
 
-Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds, and rise/fall colors.
+### Stacked Groups
 
----
+By default, all bar entities stack into a single column. Use `stack_group` to create **named groups** — entities within the same group stack on top of each other, while different groups sit side by side.
 
-## 🏷️ Compact Legend
+```yaml
+stacked: true
+group_by: date
+entities:
+  - entity: sensor.solar_production
+    graph_type: bar
+    stack_group: energy
+    color: "#2ecc71"
+  - entity: sensor.grid_import
+    graph_type: bar
+    stack_group: energy
+    color: "#e74c3c"
+  - entity: sensor.cost_peak
+    graph_type: bar
+    stack_group: cost
+    color: "#f39c12"
+  - entity: sensor.cost_offpeak
+    graph_type: bar
+    stack_group: cost
+    color: "#3498db"
+```
+
+This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
+
+> **Editor:** Per-entity → Appearance tab → *Stack Group* text field (visible when Stacked is enabled)
+
+</details>
+
+<details>
+<summary><strong>🏷️ Compact Legend</strong></summary>
 
 Card-level `show_legend: true` adds a compact color-coded entity name key below the graph. Just colored dots and names — no values, no stats. Wraps to multiple lines on narrow cards.
 
@@ -696,9 +925,10 @@ For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend**
 
 ![tempo](images/temp.gif)
 
----
+</details>
 
-## 📊 Per-Entity Legend Stats
+<details>
+<summary><strong>📊 Per-Entity Legend Stats</strong></summary>
 
 Each entity's Legend toggle (`show_in_legend: true`) now lets you choose which statistics to display. Select any combination of Min, Avg, Max, and Last.
 
@@ -718,9 +948,10 @@ entities:
 
 The editor shows four checkboxes (Min, Avg, Max, Last) inside the Legend section. Default is `[min, avg, max]` for backward compatibility.
 
----
+</details>
 
-## ⬇️ State Row Position
+<details>
+<summary><strong>⬇️ State Row Position</strong></summary>
 
 Entity state rows can now be placed **below** the graph instead of above. The `align_state` option accepts six positions:
 
@@ -743,9 +974,10 @@ entities:
 
 Mix and match — some entities above, some below. Useful when you want the graph to be the first thing visible, with values underneath.
 
----
+</details>
 
-## ↕️ Independent Y2 Axis
+<details>
+<summary><strong>↕️ Independent Y2 Axis</strong></summary>
 
 The primary (left) and secondary (right) Y axis labels can be toggled independently:
 
@@ -761,9 +993,37 @@ entities:
 
 Useful when the secondary axis labels are distracting or when you want to maximize horizontal graph space. Both entities continue to be plotted against their respective axes — only the labels are hidden.
 
----
+</details>
 
-## 🔀 Value Transform
+<details>
+<summary><strong>↕️ Independent Y-Axis</strong></summary>
+
+Overlay sensors with completely different units on a single graph for trend comparison. Each `independent` entity gets its own hidden scale based on its data's min/max range. No axis labels are shown — only the visual trend matters.
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    y_axis: primary          # Left axis, shared scale, visible labels
+    color: "#ff4757"
+  - entity: sensor.humidity
+    y_axis: secondary        # Right axis, shared scale, visible labels
+    color: "#378ADD"
+  - entity: sensor.illuminance
+    y_axis: independent      # Own hidden scale: 0–10000 lux
+    color: "#f39c12"
+  - entity: sensor.pressure
+    y_axis: independent      # Own hidden scale: 980–1020 hPa
+    color: "#2ecc71"
+```
+
+There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
+
+> **Editor:** Per-entity → **General** tab → *Y Axis* dropdown → "Independent"
+
+</details>
+
+<details>
+<summary><strong>🔀 Value Transform</strong></summary>
 
 Apply a JavaScript expression to every data point before graphing. The transform has access to the current value and series-level statistics, making it possible to normalize, compare, and reshape data in ways that weren't possible before.
 
@@ -838,9 +1098,10 @@ Entity → General → **Value Transform** — a monospace text input field. Ent
 - Works with all chart modes, aggregation functions, and other entity options
 - Context variables (`first`, `min`, etc.) are only available when processing a full data series — in the state row live value display, all context variables equal `x`
 
----
+</details>
 
-## 📏 Range Band
+<details>
+<summary><strong>📏 Range Band</strong></summary>
 
 The Range Band feature draws a shaded min/max area behind each line entity, showing how much the value fluctuated within each aggregation bucket.
 
@@ -874,315 +1135,142 @@ Entity → General → **Range Band** toggle (next to Show Average).
 
 When hovering, an additional row shows the range: `Range: 21.2 → 22.8 °C`.
 
----
+</details>
 
-## 📊 Stacked Mode
+<details>
+<summary><strong>📌 Annotations</strong></summary>
 
-Card-level `stacked: true` stacks entities on top of each other (Timeline mode only). Bar entities stack vertically. Line/area entities stack as bands. Entities on the same Y axis and graph type are stacked together. The tooltip shows a "Total" row.
+Add reference lines, event markers, and highlight bands to the graph (Timeline mode only). Configure via the editor (General Settings → Overlays → Annotations) or YAML.
+
+![Anno Example](images/anno.png)
+![Anno Example](images/anno2.png)
 
 ```yaml
-stacked: true
-entities:
-  - entity: sensor.solar_production
+annotations:
+  - type: threshold       # horizontal dashed line
+    value: 22.5
+    label: "Target"
+    color: "#1D9E75"
+  - type: threshold       # dynamic value from entity
+    value: sensor.climate_setpoint
+    label: "Setpoint"
     color: "#f39c12"
-  - entity: sensor.grid_import
-    color: "#e74c3c"
-  - entity: sensor.battery_discharge
+  - type: band            # horizontal shaded band
+    value: 20
+    value_end: 23
+    label: "Comfort zone"
+    color: "#1D9E75"
+  - type: band            # dynamic band from entity attributes
+    value: sensor.comfort.min_temp
+    value_end: sensor.comfort.max_temp
+    label: "Dynamic comfort"
     color: "#3498db"
+  - type: event           # vertical marker at state transitions
+    entity: binary_sensor.heating
+    state: "on"
+    label: "Heating on"
+    color: "#D85A30"
+  - type: span            # vertical band for active periods
+    entity: binary_sensor.heating
+    state: "on"
+    color: "#D85A30"
 ```
 
-### Stacked Groups
+| Type | Description |
+|------|-------------|
+| `threshold` | Horizontal dashed line at a fixed value, entity state, or entity attribute |
+| `band` | Horizontal shaded band between `value` and `value_end`. Both accept numbers, entity IDs, or `entity.attribute` paths |
+| `event` | Vertical marker at each state transition of a binary entity |
+| `span` | Vertical shaded band for the duration a binary entity is in a specific state |
 
-By default, all bar entities stack into a single column. Use `stack_group` to create **named groups** — entities within the same group stack on top of each other, while different groups sit side by side.
+Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
+
+Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible:
 
 ```yaml
-stacked: true
-group_by: date
+annotations:
+  - type: band
+    value: 20
+    value_end: 25
+    label: "Comfort"
+    color: "#1D9E75"
+    show_values: false    # band visible, no text labels
+```
+
+</details>
+
+<details>
+<summary><strong>🔗 Tooltip Sync</strong></summary>
+
+Synchronize hover crosshairs across multiple cards on the same dashboard page. When you hover over one card, all synced cards show their tooltip and crosshair at the **same timestamp** — even if they display different entities or different time ranges.
+
+This is a **card-level** feature (not entity-level), because what's shared is a timestamp, not an entity value. All entities on a synced card show their values at that moment simultaneously.
+
+![Sync Example](images/sync.gif)
+
+### Setup
+
+Enable Tooltip Sync on each card you want to participate, and give related cards the same Sync Group name:
+
+```yaml
+# Card 1 — Bedroom Temperature
+type: custom:statistics-graph-chart-card
+tooltip_sync: true
+tooltip_sync_group: "bedroom"
 entities:
-  - entity: sensor.solar_production
-    graph_type: bar
-    stack_group: energy
-    color: "#2ecc71"
-  - entity: sensor.grid_import
-    graph_type: bar
-    stack_group: energy
-    color: "#e74c3c"
-  - entity: sensor.cost_peak
-    graph_type: bar
-    stack_group: cost
-    color: "#f39c12"
-  - entity: sensor.cost_offpeak
-    graph_type: bar
-    stack_group: cost
-    color: "#3498db"
-```
+  - entity: sensor.bedroom_temperature
 
-This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
-
-> **Editor:** Per-entity → Appearance tab → *Stack Group* text field (visible when Stacked is enabled)
-
----
-
-## 📅 Long-Range Views
-
-Visualize data over weeks, months, and years with calendar-aware grouping and native HA statistics.
-
-### Weekly, Monthly, and Yearly Grouping
-
-```yaml
-group_by: week
-graph_start: month         # this month's weeks
-aggregate_func: change     # consumption per week
-graph_type: bar
-```
-
-```yaml
-group_by: month
-graph_start: year          # start from Jan 1
-```
-
-```yaml
-group_by: year
-hours_to_show: 87600       # ~10 years
-aggregate_func: change     # annual consumption
-graph_type: bar
-```
-
-When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
-
-### Graph Start Anchoring
-
-When `graph_start` is set, `hours_to_show` is ignored — the calendar period directly determines the start:
-
-| Value | Behavior |
-|-------|----------|
-| `week` | Start from Monday 00:00 |
-| `month` | Start from the 1st of the month |
-| `year` | Start from January 1st |
-
-> **Editor:** General Settings → Display → Graph Navigation → *Graph Start*
-
-### X-Axis Interval
-
-Manual control over tick spacing:
-
-```yaml
-x_axis_interval: 2h    # Every 2 hours (00:00, 02:00, 04:00…)
-x_axis_interval: 1d    # Daily (midnight)
-x_axis_interval: 1w    # Weekly (Mondays)
-x_axis_interval: 1M    # Monthly (1st of month)
-```
-
-Available presets in the editor: Auto, 1H–12H, 1D, 2D, 7D, 1W, 2W, 1M, 3M.
-
-> **Editor:** General Settings → X-Axis → *X Axis Interval*
-
-### Smart X-Axis Labels
-
-The X-axis automatically adapts to the `group_by` setting:
-
-- **Week** — Ticks on Mondays: "3 Mar", "10 Mar"
-- **Month** — Ticks on the 1st: "Jan", "Feb" (with year when spanning multiple years)
-- **Date** — Daily ticks: "3 Mar", "4 Mar"
-- **Hour** — Hourly ticks; midnight shows date instead of "00:00"
-
-In `interval` mode, midnight labels also show the date for any view longer than 12 hours.
-
----
-
-## 🏷️ Template Names
-
-Entity names support HA-style `{{ }}` templates that resolve dynamically using `hass.states`:
-
-```yaml
-name: "{{ state_attr('sensor.room', 'friendly_name') }}"
-name: "{{ states('sensor.power') }} W"
-name: "{{ state_attr('sensor.temperature', 'device_class') | capitalize }}"
-name: "Room: {{ state_attr('sensor.room', 'friendly_name') | upper }}"
-```
-
-### Supported functions
-
-| Function | Description |
-|----------|-------------|
-| `states('entity_id')` | Current state value |
-| `state_attr('entity_id', 'attribute')` | Entity attribute value |
-| `is_state('entity_id', 'value')` | Returns `"true"` or `"false"` |
-
-### Supported filters
-
-Filters are chained with `|`, just like Jinja2:
-
-| Filter | Example | Result |
-|--------|---------|--------|
-| `capitalize` | `temperature` → | `Temperature` |
-| `upper` | `salon` → | `SALON` |
-| `lower` | `SALON` → | `salon` |
-| `title` | `living room` → | `Living Room` |
-| `trim` | `" text "` → | `"text"` |
-| `int` | `"22.5"` → | `"22"` |
-| `float` | `"22"` → | `"22"` |
-| `round(n)` | `22.567 \| round(1)` → | `"22.6"` |
-| `replace('a','b')` | `replace('_',' ')` | Replaces all occurrences |
-| `default('val')` | Fallback if empty/unknown | |
-| `truncate(n)` | Cuts to n chars + `…` | |
-
-Multiple filters can be chained: `{{ state_attr('sensor.x', 'type') | replace('_', ' ') | title }}`
-
----
-
-## 📅 Show Full Period
-
-Extends the X-axis to cover a complete calendar period, leaving empty space after the current time. A dashed vertical "now" line marks where live data ends.
-
-```yaml
-graph_start_hour: 0
-hours_to_show: 24
-show_full_period: true    # X-axis: 00:00 → 23:59, empty after now
-```
-
-The end of the period is determined by `graph_start`:
-
-| `graph_start` | X-axis extends to |
-|---------------|-------------------|
-| off | End of today (next midnight) |
-| `week` | End of week (next Monday 00:00) |
-| `month` | End of month (1st of next month) |
-| `year` | End of year (Jan 1st next year) |
-
-### With Energy Date Sync
-
-`show_full_period` also works with `energy_date_sync: true`. When the energy date picker selects a current period (today, this week, this month), the X-axis extends to the full period end. Past periods display in full as before.
-
-```yaml
-energy_date_sync: true
-show_full_period: true    # energy picker "This Month" → X-axis: Apr 1 → May 1
-```
-
-This is especially useful for:
-- **Imported data** (energy, gas) that arrives with a few days delay — the graph shows the gap instead of filling it with the last known value
-- **Day comparison** with offset — today's card shows a partial day with empty space; yesterday's card (offset: 24) shows a complete day
-- **Weekly/monthly dashboards** — see the full period at a glance with the "now" marker
-- **Energy dashboard** — combine with `energy_date_sync` to see the full billing period
-
-> **Editor:** General Settings → **X-Axis** tab → *Show Full Period* checkbox
-
-![full Example](images/full1.png)
----
-
-## ↕️ Independent Y-Axis
-
-Overlay sensors with completely different units on a single graph for trend comparison. Each `independent` entity gets its own hidden scale based on its data's min/max range. No axis labels are shown — only the visual trend matters.
-
-```yaml
+# Card 2 — Bedroom Humidity (syncs with Card 1)
+type: custom:statistics-graph-chart-card
+tooltip_sync: true
+tooltip_sync_group: "bedroom"
 entities:
-  - entity: sensor.temperature
-    y_axis: primary          # Left axis, shared scale, visible labels
-    color: "#ff4757"
-  - entity: sensor.humidity
-    y_axis: secondary        # Right axis, shared scale, visible labels
-    color: "#378ADD"
-  - entity: sensor.illuminance
-    y_axis: independent      # Own hidden scale: 0–10000 lux
-    color: "#f39c12"
-  - entity: sensor.pressure
-    y_axis: independent      # Own hidden scale: 980–1020 hPa
-    color: "#2ecc71"
-```
+  - entity: sensor.bedroom_humidity
 
-There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
-
-> **Editor:** Per-entity → **General** tab → *Y Axis* dropdown → "Independent"
-
----
-
-## 🔋 Battery Icon
-
-Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
-
-![Battery Example](images/battery.png)
-
-```yaml
-battery_entity: sensor.temperature_battery
-battery_low_threshold: 20
-```
-
-Color adapts to battery level:
-
-| Level | Color |
-|-------|-------|
-| >50% | Green |
-| 25–50% | Yellow |
-| low–25% | Orange |
-| Below threshold | Red |
-
-The low threshold defaults to 20% and accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). Hover shows the entity friendly name and exact percentage.
-
-The icon and percentage text scale proportionally with the **Header & Battery Size** setting (`card_header_size`). This applies in both header and state row positions.
-
-> **Editor:** General Settings → **Display** tab → *Battery*
-
----
-
-## 📡 Attribute Data Source
-
-Read chart data directly from an entity attribute instead of history. The attribute must contain an array of objects with time and value fields. The X-axis automatically extends into the future when data contains future timestamps.
-
-Ideal for energy spot prices, weather forecasts, and solar production predictions. No history or statistics API calls are made for these entities.
-
-```yaml
+# Card 3 — Kitchen Temperature (independent)
+type: custom:statistics-graph-chart-card
+tooltip_sync: true
+tooltip_sync_group: "kitchen"
 entities:
-  - entity: sensor.epex_spot_price
-    data_attribute: data
-    data_time_field: start_time
-    data_value_field: price_per_kwh
-    value_factor: 2
-    graph_type: step
-    name: "Electricity Price"
-```
+  - entity: sensor.kitchen_temperature
 
-Common configurations:
-
-| Integration | `data_attribute` | `data_time_field` | `data_value_field` |
-|---|---|---|---|
-| EPEX Spot | `data` | `start_time` | `price_per_kwh` |
-| Nordpool | `raw_today` | `start` | `value` |
-| Tibber | `price_info` | `startsAt` | `total` |
-| Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
-
-Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
-
-> **Editor:** Per-entity → **General** tab → *Attribute Data Source*
-
----
-
-## 🔄 Invert Bars (Butterfly Charts)
-
-Per-entity `invert: true` draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Combined with `stacked: true`, creates butterfly charts for energy import/export, network in/out, and similar comparisons.
-
-```yaml
-stacked: true
+# Card 4 — Energy (no sync at all)
+type: custom:statistics-graph-chart-card
 entities:
-  - entity: sensor.grid_import
-    graph_type: bar
-    aggregate_func: change
-    color: "#f39c12"
-    name: Import
-  - entity: sensor.grid_export
-    graph_type: bar
-    aggregate_func: change
-    invert: true
-    color: "#3498db"
-    name: Export
+  - entity: sensor.energy
 ```
 
-Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
+In this setup:
+- Cards 1 and 2 sync with each other (both in "bedroom" group)
+- Card 3 syncs only with other "kitchen" cards
+- Card 4 has no sync — hovering over it broadcasts nothing, and it ignores broadcasts from others
 
-> **Editor:** Per-entity → **General** tab → *Invert (Mirror)* checkbox
+### Sync Group Rules
 
----
+| Sync Group value | Behavior |
+|---|---|
+| `"bedroom"` | Syncs only with other cards that have `tooltip_sync_group: "bedroom"` |
+| `"kitchen"` | Syncs only with "kitchen" cards |
+| *(empty / not set)* | Syncs with **all** tooltip-synced cards on the page, regardless of their group |
+| `tooltip_sync: false` | Card does not participate in sync at all |
 
-## ↔️ Time Offset
+> **Tip:** The group name is completely arbitrary — use room names, floor numbers, or any string you like. It just needs to match across the cards you want to link.
+
+### How It Works
+
+1. You hover over Card A → a `sgc-tooltip-sync` event is dispatched on `window` containing the hovered timestamp, the sync group name, and the card's unique instance ID
+2. All other cards with Tooltip Sync enabled listen for this event
+3. If the group matches (or either card has no group), the receiving card calls `_showTooltipAtTime(timestamp)` — which positions its crosshair and tooltip at the matching time position
+4. When you move the mouse away, a hide event clears all synced tooltips
+
+Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
+
+Timeline mode only.
+
+</details>
+
+<details>
+<summary><strong>↔️ Time Offset</strong></summary>
 
 Compare the same sensor across different time periods by adding multiple entity entries with different `offset` values. Each offset shifts that entity's data backward in time while keeping it aligned on the same graph.
 
@@ -1257,139 +1345,141 @@ Entity → General → Data Settings → **Offset** (in hours).
 - Can be combined with `value_transform`, `value_factor`, and all other entity options
 - Each offset generates a separate cache entry, so switching between views is fast
 
----
+</details>
 
-## 📌 Annotations
+<details>
+<summary><strong>🏷️ Template Names</strong></summary>
 
-Add reference lines, event markers, and highlight bands to the graph (Timeline mode only). Configure via the editor (General Settings → Overlays → Annotations) or YAML.
-
-![Anno Example](images/anno.png)
-![Anno Example](images/anno2.png)
+Entity names support HA-style `{{ }}` templates that resolve dynamically using `hass.states`:
 
 ```yaml
-annotations:
-  - type: threshold       # horizontal dashed line
-    value: 22.5
-    label: "Target"
-    color: "#1D9E75"
-  - type: threshold       # dynamic value from entity
-    value: sensor.climate_setpoint
-    label: "Setpoint"
+name: "{{ state_attr('sensor.room', 'friendly_name') }}"
+name: "{{ states('sensor.power') }} W"
+name: "{{ state_attr('sensor.temperature', 'device_class') | capitalize }}"
+name: "Room: {{ state_attr('sensor.room', 'friendly_name') | upper }}"
+```
+
+### Supported functions
+
+| Function | Description |
+|----------|-------------|
+| `states('entity_id')` | Current state value |
+| `state_attr('entity_id', 'attribute')` | Entity attribute value |
+| `is_state('entity_id', 'value')` | Returns `"true"` or `"false"` |
+
+### Supported filters
+
+Filters are chained with `|`, just like Jinja2:
+
+| Filter | Example | Result |
+|--------|---------|--------|
+| `capitalize` | `temperature` → | `Temperature` |
+| `upper` | `salon` → | `SALON` |
+| `lower` | `SALON` → | `salon` |
+| `title` | `living room` → | `Living Room` |
+| `trim` | `" text "` → | `"text"` |
+| `int` | `"22.5"` → | `"22"` |
+| `float` | `"22"` → | `"22"` |
+| `round(n)` | `22.567 \| round(1)` → | `"22.6"` |
+| `replace('a','b')` | `replace('_',' ')` | Replaces all occurrences |
+| `default('val')` | Fallback if empty/unknown | |
+| `truncate(n)` | Cuts to n chars + `…` | |
+
+Multiple filters can be chained: `{{ state_attr('sensor.x', 'type') | replace('_', ' ') | title }}`
+
+</details>
+
+<details>
+<summary><strong>🔋 Battery Icon</strong></summary>
+
+Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
+
+![Battery Example](images/battery.png)
+
+```yaml
+battery_entity: sensor.temperature_battery
+battery_low_threshold: 20
+```
+
+Color adapts to battery level:
+
+| Level | Color |
+|-------|-------|
+| >50% | Green |
+| 25–50% | Yellow |
+| low–25% | Orange |
+| Below threshold | Red |
+
+The low threshold defaults to 20% and accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). Hover shows the entity friendly name and exact percentage.
+
+The icon and percentage text scale proportionally with the **Header & Battery Size** setting (`card_header_size`). This applies in both header and state row positions.
+
+> **Editor:** General Settings → **Display** tab → *Battery*
+
+</details>
+
+<details>
+<summary><strong>📡 Attribute Data Source</strong></summary>
+
+Read chart data directly from an entity attribute instead of history. The attribute must contain an array of objects with time and value fields. The X-axis automatically extends into the future when data contains future timestamps.
+
+Ideal for energy spot prices, weather forecasts, and solar production predictions. No history or statistics API calls are made for these entities.
+
+```yaml
+entities:
+  - entity: sensor.epex_spot_price
+    data_attribute: data
+    data_time_field: start_time
+    data_value_field: price_per_kwh
+    value_factor: 2
+    graph_type: step
+    name: "Electricity Price"
+```
+
+Common configurations:
+
+| Integration | `data_attribute` | `data_time_field` | `data_value_field` |
+|---|---|---|---|
+| EPEX Spot | `data` | `start_time` | `price_per_kwh` |
+| Nordpool | `raw_today` | `start` | `value` |
+| Tibber | `price_info` | `startsAt` | `total` |
+| Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
+
+Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
+
+> **Editor:** Per-entity → **General** tab → *Attribute Data Source*
+
+</details>
+
+<details>
+<summary><strong>🔄 Invert Bars (Butterfly Charts)</strong></summary>
+
+Per-entity `invert: true` draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Combined with `stacked: true`, creates butterfly charts for energy import/export, network in/out, and similar comparisons.
+
+```yaml
+stacked: true
+entities:
+  - entity: sensor.grid_import
+    graph_type: bar
+    aggregate_func: change
     color: "#f39c12"
-  - type: band            # horizontal shaded band
-    value: 20
-    value_end: 23
-    label: "Comfort zone"
-    color: "#1D9E75"
-  - type: band            # dynamic band from entity attributes
-    value: sensor.comfort.min_temp
-    value_end: sensor.comfort.max_temp
-    label: "Dynamic comfort"
+    name: Import
+  - entity: sensor.grid_export
+    graph_type: bar
+    aggregate_func: change
+    invert: true
     color: "#3498db"
-  - type: event           # vertical marker at state transitions
-    entity: binary_sensor.heating
-    state: "on"
-    label: "Heating on"
-    color: "#D85A30"
-  - type: span            # vertical band for active periods
-    entity: binary_sensor.heating
-    state: "on"
-    color: "#D85A30"
+    name: Export
 ```
 
-| Type | Description |
-|------|-------------|
-| `threshold` | Horizontal dashed line at a fixed value, entity state, or entity attribute |
-| `band` | Horizontal shaded band between `value` and `value_end`. Both accept numbers, entity IDs, or `entity.attribute` paths |
-| `event` | Vertical marker at each state transition of a binary entity |
-| `span` | Vertical shaded band for the duration a binary entity is in a specific state |
+Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
 
-Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
+> **Editor:** Per-entity → **General** tab → *Invert (Mirror)* checkbox
 
-Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible:
+</details>
 
-```yaml
-annotations:
-  - type: band
-    value: 20
-    value_end: 25
-    label: "Comfort"
-    color: "#1D9E75"
-    show_values: false    # band visible, no text labels
-```
-
----
-
-## 🔗 Tooltip Sync
-
-Synchronize hover crosshairs across multiple cards on the same dashboard page. When you hover over one card, all synced cards show their tooltip and crosshair at the **same timestamp** — even if they display different entities or different time ranges.
-
-This is a **card-level** feature (not entity-level), because what's shared is a timestamp, not an entity value. All entities on a synced card show their values at that moment simultaneously.
-
-![Sync Example](images/sync.gif)
-
-### Setup
-
-Enable Tooltip Sync on each card you want to participate, and give related cards the same Sync Group name:
-
-```yaml
-# Card 1 — Bedroom Temperature
-type: custom:statistics-graph-chart-card
-tooltip_sync: true
-tooltip_sync_group: "bedroom"
-entities:
-  - entity: sensor.bedroom_temperature
-
-# Card 2 — Bedroom Humidity (syncs with Card 1)
-type: custom:statistics-graph-chart-card
-tooltip_sync: true
-tooltip_sync_group: "bedroom"
-entities:
-  - entity: sensor.bedroom_humidity
-
-# Card 3 — Kitchen Temperature (independent)
-type: custom:statistics-graph-chart-card
-tooltip_sync: true
-tooltip_sync_group: "kitchen"
-entities:
-  - entity: sensor.kitchen_temperature
-
-# Card 4 — Energy (no sync at all)
-type: custom:statistics-graph-chart-card
-entities:
-  - entity: sensor.energy
-```
-
-In this setup:
-- Cards 1 and 2 sync with each other (both in "bedroom" group)
-- Card 3 syncs only with other "kitchen" cards
-- Card 4 has no sync — hovering over it broadcasts nothing, and it ignores broadcasts from others
-
-### Sync Group Rules
-
-| Sync Group value | Behavior |
-|---|---|
-| `"bedroom"` | Syncs only with other cards that have `tooltip_sync_group: "bedroom"` |
-| `"kitchen"` | Syncs only with "kitchen" cards |
-| *(empty / not set)* | Syncs with **all** tooltip-synced cards on the page, regardless of their group |
-| `tooltip_sync: false` | Card does not participate in sync at all |
-
-> **Tip:** The group name is completely arbitrary — use room names, floor numbers, or any string you like. It just needs to match across the cards you want to link.
-
-### How It Works
-
-1. You hover over Card A → a `sgc-tooltip-sync` event is dispatched on `window` containing the hovered timestamp, the sync group name, and the card's unique instance ID
-2. All other cards with Tooltip Sync enabled listen for this event
-3. If the group matches (or either card has no group), the receiving card calls `_showTooltipAtTime(timestamp)` — which positions its crosshair and tooltip at the matching time position
-4. When you move the mouse away, a hide event clears all synced tooltips
-
-Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
-
-Timeline mode only.
-
----
-
-## 🔌 External Statistics
+<details>
+<summary><strong>🔌 External Statistics</strong></summary>
 
 Display data from imported statistics that don't have a regular entity in Home Assistant. This covers energy data from integrations like Gazpar, Linky, Tibber, and others that import directly into HA's statistics database.
 
@@ -1438,134 +1528,14 @@ Entity → General → **Statistic ID** input field (monospace, below the entity
 2. Search for the integration name (e.g. "gazpar")
 3. The statistic ID is shown in the list (e.g. `gazpar:gazpar_consumption`)
 
----
+</details>
 
-## 📅 Date Picker
-
-A built-in date navigation panel that lets users browse historical data by Day, Week, Month, or Year — without leaving the dashboard.
-
-### Setup
-
-```yaml
-type: custom:statistics-graph-chart-card
-show_date_picker: true
-date_picker_position: top
-entities:
-  - entity: sensor.temperature_living
-    color: "#ff6b35"
-```
-
-### Navigation
-
-The date picker bar shows the current period label with arrow buttons to move forward/backward:
-
-```
-◀  5 April 2026  ▶   [D] [W] [M] [Y]  📅
-```
-
-- **D / W / M / Y** — switch between Day, Week, Month, and Year views
-- **◀ ▶** — navigate to the previous/next period
-- **📅** — open the calendar popup for direct date selection
-
-### Calendar & Presets
-
-Click the calendar icon to open a panel with:
-
-- **Calendar grid** — click two dates to select a custom range
-- **Quick presets** — Today, Yesterday, This/Last Week, This/Last Month, This/Last Year, Last 7 Days, Last 30 Days, Last 12 Months
-
-The calendar stays open after selection so you can adjust the range. Click the 📅 icon again to close it.
-
-### Group Sync
-
-Cards with the same `date_picker_group` share their date selection:
-
-```yaml
-# Card 1
-show_date_picker: true
-date_picker_group: bedroom
-
-# Card 2
-show_date_picker: true
-date_picker_group: bedroom
-```
-
-Changing the date on either card updates both.
-
-### Behavior
-
-| Period | X-axis range | Live updates |
-|---|---|---|
-| **Today** | 00:00 → end of day | ✅ Active — graph updates in real time |
-| **Yesterday** | 00:00 → 23:59 | ❌ Paused — historical data is frozen |
-| **This Week** | Monday 00:00 → end of week | ✅ Active |
-| **Last 7 Days** | 7 days ago → now | ✅ Active |
-| **Custom range** | Start → End | Depends on whether end is today |
-
-### Editor
-
-General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row.
-
-### Notes
-
-- Cannot be used together with `energy_date_sync` — enabling one disables the other
-- Date picker state (mode, offset, custom range) is persisted in `localStorage` and restored on page reload
-- When viewing the current period (e.g. today), the X-axis extends to the end of the period with empty space after the current time
+</details>
 
 ---
 
-## ⚡ Energy Date Sync
-
-Syncs the card's time range with Home Assistant's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card.
-
-![Energy Date Sync Example](images/picker.gif)
-
-### Setup
-
-```yaml
-type: custom:statistics-graph-chart-card
-energy_date_sync: true
-entities:
-  - entity: sensor.energy_consumption
-    color: "#ff4757"
-    aggregate_func: sum
-  - entity: sensor.solar_production
-    color: "#2ecc71"
-    aggregate_func: sum
-```
-
-Place the card on the same dashboard as an Energy date picker. When the user selects a day, week, month, or custom range, this card automatically updates to show the same period.
-
-### Behavior
-
-| Date selection | X-axis range | Live updates |
-|---|---|---|
-| **Today** | 00:00 → current time | ✅ Active — graph updates in real time |
-| **Yesterday** | 00:00 → 23:59 | ❌ Paused — historical data is frozen |
-| **This week** | Monday 00:00 → current time | ✅ Active |
-| **Last week** | Monday 00:00 → Sunday 23:59 | ❌ Paused |
-| **This month** | 1st 00:00 → current time | ✅ Active |
-| **Custom range** | Start → End (clamped to now if end is in the future) | Depends on whether end is today |
-
-### Compatible with
-
-- HA's built-in Energy dashboard date picker (DAY / WEEK / MONTH / YEAR)
-- [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card
-- Any card that uses HA's energy data collection system
-
-### Editor
-
-General Settings → Overlays → **Energy Date Sync** toggle.
-
-### Notes
-
-- When `energy_date_sync` is active, it overrides `hours_to_show` and the interval picker selection
-- The card subscribes to HA's energy data collection on the WebSocket connection — no polling needed
-- If the Energy panel hasn't loaded yet, the card retries every 2 seconds for up to 60 seconds
-
----
-
-## 💡 Examples
+<details>
+<summary><h2>💡 Examples</h2></summary>
 
 ### Basic: Single Sensor
 
@@ -2000,9 +1970,12 @@ entities:
     upper_bound: "~100"
 ```
 
+</details>
+
 ---
 
-## 📖 Reference
+<details>
+<summary><h2>📖 Reference</h2></summary>
 
 ### 🧮 Aggregation Functions
 
@@ -2183,9 +2156,12 @@ The state row always displays the original string, not the number.
 
 > ⚠️ State values are case-sensitive and must match exactly what HA reports (always lowercase for `binary_sensor`).
 
+</details>
+
 ---
 
-## 🛠️ Visual Editor
+<details>
+<summary><h2>🛠️ Visual Editor</h2></summary>
 
 The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
 
@@ -2223,7 +2199,97 @@ Entities can be reordered by dragging the grip handle (⠿) on the left side of 
 
 Every configuration field has an info tooltip (ⓘ) with a detailed explanation. Hover or tap the icon next to any label to learn what the option does, see practical examples, and understand how it interacts with other settings.
 
---- 
+---
+
+---
+
+### 🔄 Dynamic Editor Behavior
+
+The visual editor adapts in real time based on the current configuration. Options that don't apply are completely removed from the UI — not just disabled, but hidden. This keeps the editor clean regardless of which chart mode or feature combination you choose.
+
+### Chart Mode → General Settings
+
+Changing the Chart Mode dropdown instantly reconfigures the entire editor:
+
+| When Chart Mode is… | Display tab | Data tab | Overlays tab |
+|---|---|---|---|
+| **Timeline** | All options visible | All options visible | All options visible |
+| **Scatter** | Grid ✅, Axes ✅, but Stacked / Sparkline / Animate / Logarithmic hidden | Y Axis ✅, but Scroll / Bar Spacing hidden | Compare / Tooltip Sync / Annotations hidden |
+| **Pie / Ranking** | Only Tooltip toggle visible | No Y Axis, no Scroll / Bar Spacing | Only Interval Picker and Attribute List visible |
+| **Heatmap / Calendar** | Same as Pie / Ranking | Same as Pie / Ranking | Same as Pie / Ranking |
+
+### Chart Mode → Entity Settings
+
+| When Chart Mode is… | What changes in entity Appearance tab |
+|---|---|
+| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Line, Fill, Data Points — all visible |
+| **All other modes** | Graph Type row hidden, Line / Fill / Points sections hidden. Only State Row, Trend Icon, Y Axis Range, and Legend remain |
+
+
+### Sparkline → Entire Card
+
+When `sparkline` is enabled (Timeline mode only):
+
+- **Display tab**: Header and Icon sections disappear
+- **Overlays tab**: Shows *"Overlays are hidden in sparkline mode"*
+- The card renders with zero chrome — no toolbar, axes, grid, or legend
+
+### Entity-Level Cascading
+
+Within each entity, toggle states cascade downward — disabling a parent hides or disables all its children:
+
+| When this is… | These become hidden / disabled |
+|---|---|
+| `show_graph: off` | Graph Type, Extrema, Average, Line, Fill, Points — all hidden |
+| `show_line: off` | Line Width, Bezier — disabled |
+| `show_fill: off` | Gradient — disabled |
+| `show_state: off` | Show Last, Adaptive Color, Icon, Align, all Size fields — disabled |
+| `show_state: gauge` | Same fields disabled (gauge draws its own layout from `lower_bound` / `upper_bound`) |
+| `show_trend_icon: off` | Trend Period, Trend Icon Size — disabled |
+
+### Entity Count Limits
+
+The "Add Entity" button automatically hides when the chart mode's limit is reached:
+
+| Chart Mode | Max Entities | Notes |
+|---|---|---|
+| Timeline | Unlimited | Mix line, step, bar freely |
+| Scatter | 2 | Entities labeled **X** and **Y** in the editor |
+| Pie / Ranking | Unlimited | Each entity = one slice / bar |
+| Radial Bar | Unlimited | Each entity = one concentric ring |
+| Polar Area | Unlimited | Each entity = one equal-angle slice |
+| Radar | 3+ minimum | Each entity = one spoke of the polygon |
+| Heatmap / Calendar | 1 | Only the first entity is used |
+
+### Option Interactions
+
+Some options depend on or conflict with each other:
+
+| If you set… | Then… |
+|---|---|
+| `value_transform` set | Runs after `value_factor`. Available variables: `x`, `first`, `last`, `min`, `max`, `avg`, `index`. State row shows the transformed value |
+| `offset` set (per entity) | Data is fetched from a shifted time window but displayed aligned with the current window. Same entity with different offsets = period comparison at full graph quality |
+| `stacked: true` | Only affects entities with the same `y_axis` and `graph_type` |
+| `auto_scale_points: true` | Only scales entities that inherit the card-level `points_per_hour` — entity-level overrides are not affected |
+| `color_thresholds` enabled | Cannot combine with `rise_fall_colors` on the same entity |
+| `show_state: gauge` | Uses entity `lower_bound` / `upper_bound` as gauge min/max; falls back to stats if not set |
+| `chart_mode: heatmap` + `color_thresholds` | Heatmap cells use threshold colors instead of single-color opacity gradient |
+| `sparkline: true` | Only works in Timeline mode; ignored in other chart modes |
+| `max_visible_interval` set | Enables scroll; `scroll_mode` controls whether scrollbar is visible or mouse-wheel only |
+| `show_y_axis: false` | Hides primary (left) axis labels; secondary axis is not affected |
+| `show_y2_axis: false` | Hides secondary (right) axis labels; primary axis is not affected. Right padding shrinks. |
+| `show_legend: true` | Compact Legend appears below graph. Combine with `show_state: false` on entities for maximum graph space |
+| `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
+| `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
+| `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
+| `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
+| `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
+| `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
+| `statistic_id` set (with empty `entity`) | Data is fetched from the statistics database only — no History API call. State row shows last statistics value. WebSocket live updates are skipped for this entity |
+
+</details>
+
+---
 
 ## 📄 License
 
