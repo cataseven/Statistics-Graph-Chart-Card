@@ -62,7 +62,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | | |
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
-| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group |
+| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
 | 🎯 | **Nine chart modes** — Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
@@ -255,6 +255,7 @@ These options apply to the whole card.
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
 | `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
+| `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Example: `[month, year]`. When only one mode is listed, the D/W/M/Y buttons are hidden and the navigation is centered. Default (null) = all four modes visible. |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -306,10 +307,11 @@ Each entry under `entities` supports the following options.
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
 | `show_state_last` | boolean | `false` | Show the last aggregated graph value instead of the live HA state. |
+| `show_second_state_as` | string | `null` | Show a secondary stat value next to the primary state. Options: `min`, `max`, `avg`, `sum`, `first`, `last`. Displays with the same styling as the primary value, with a small label prefix. |
 | `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. |
 | `trend_period_hours` | number | `1` | Time window (in hours) for trend direction calculation. Set `0` for full range. |
 | `show_in_legend` | boolean | `false` | Show a statistics row below the graph for this entity. Which stats are shown is controlled by `legend_stats`. |
-| `legend_stats` | list | `["min","avg","max"]` | Which statistics to display in the legend row. Any combination of `min`, `avg`, `max`, `last`. Requires `show_in_legend: true`. |
+| `legend_stats` | list | `["min","avg","max"]` | Which statistics to display in the legend row. Any combination of `min`, `avg`, `max`, `last`, `sum`. Requires `show_in_legend: true`. |
 | `lower_bound` | string/number | `null` | Y axis minimum / gauge minimum. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Y axis maximum / gauge maximum. See [Bounds](#-bounds). |
 | `align_state` | string | `"left"` | State row position and alignment. Top variants: `left` / `center` / `right` (above the graph). Bottom variants: `bottom-left` / `bottom-center` / `bottom-right` (below the graph). |
@@ -604,6 +606,23 @@ Changing the date on Card 1 updates all three cards. Cards 2 and 3 show no picke
 
 This is ideal for dashboards where you want one date picker controlling multiple charts without repeating the picker bar on every card.
 
+### Customizing Modes
+
+Control which period buttons appear with `date_picker_modes`:
+
+```yaml
+# Show only Month and Year
+date_picker_modes:
+  - month
+  - year
+
+# Lock to Month — buttons hidden, navigation centered
+date_picker_modes:
+  - month
+```
+
+When only one mode is listed, the D/W/M/Y buttons are hidden entirely and the navigation (◀ label ▶) is centered for a minimal look. The 📅 calendar icon stays visible on the right.
+
 ### Behavior
 
 | Period | X-axis range | Live updates |
@@ -616,7 +635,7 @@ This is ideal for dashboards where you want one date picker controlling multiple
 
 ### Editor
 
-General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker.
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker. When enabled, a **Visible Modes** section appears below with D/W/M/Y checkboxes.
 
 ### Notes
 
@@ -2193,7 +2212,7 @@ The General Settings panel is divided into four tabs to reduce clutter:
 | **Display** | Chart mode, height, header, icon, graph data (hours, points/hour, group by, update interval, visible window, scroll mode), visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), battery |
 | **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
 | **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
-| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Date Picker (position + group), Annotations |
+| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Date Picker (position + group + visible modes), Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
 
