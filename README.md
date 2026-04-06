@@ -70,6 +70,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
+| 🏷️ | **Custom unit per entity** — override auto-detected units with `unit: kWh` on any entity. Essential for attributes and unitless sensors |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
 | 🕐 | **Graph Start Hour** — pin the X-axis to a fixed start hour (e.g. 06:00) to cut out irrelevant nighttime data on solar dashboards |
@@ -228,7 +229,7 @@ These options apply to the whole card.
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
-| `show_tooltip_total` | boolean | `true` | Show a Total row at the bottom of the tooltip summing all visible entity values. Only appears when 2+ entities are present. |
+| `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip. Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `true` | Show secondary (right) Y axis value labels independently. Only visible when at least one entity uses `y_axis: secondary`. Disable to hide right-side labels while keeping secondary entities plotted. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
@@ -269,6 +270,7 @@ Each entry under `entities` supports the following options.
 | `entity` | string | **required** | HA entity ID. Can be left empty when using `statistic_id`. |
 | `statistic_id` | string | `null` | For imported/external statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`). These exist only in the statistics database. Leave empty for normal entities. See [External Statistics](#-external-statistics). |
 | `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. Supports HA-style templates: `{{ states('sensor.x') }}`, `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters like `capitalize`, `upper`, `replace()`. See [Template Names](#-template-names). |
+| `unit` | string | `null` | Custom unit label (e.g. `kWh`, `°C`, `%`). Overrides the auto-detected `unit_of_measurement`. Useful for attributes, unitless sensors, or when you want a different label. Appears in state row, tooltip, chart center, and axis labels. |
 | `y_axis` | string | `"primary"` | `primary` (left), `secondary` (right), or `independent` (hidden, own scale). Independent entities are scaled to their own min/max — ideal for overlaying sensors with different units for trend comparison. See [Independent Y-Axis](#-independent-y-axis). |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `change` / `delta` / `diff`. The `change` option uses HA's native statistics `change` field — ideal for energy, gas, and water meters with `group_by: date/week/month`. |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
@@ -366,7 +368,10 @@ Points are matched by timestamp (5-minute tolerance). Older dots are faded, newe
 
 ### Pie Chart
 
-Centered donut showing proportional shares. Percentage labels appear inside slices ≥ 5%. The center shows the total.
+Centered chart showing proportional shares. Percentage labels appear inside slices ≥ 5%.
+
+- **Donut** (default) — center hole shows total value. `show_tooltip_total: true`
+- **Full Pie** — solid pie with no center hole. `show_tooltip_total: false`
 
 ![Pie Example](images/pie-example.png)
 
@@ -1025,7 +1030,7 @@ entities:
 
 There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
 
-> **Editor:** Per-entity → **General** tab → *Y Axis* dropdown → "Independent"
+> **Editor:** Per-entity → **Data** tab → *Y Axis* dropdown → "Independent"
 
 </details>
 
@@ -1454,7 +1459,7 @@ Common configurations:
 
 Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
 
-> **Editor:** Per-entity → **General** tab → *Attribute Data Source*
+> **Editor:** Per-entity → **Data** tab → *Attribute Data Source*
 
 </details>
 
@@ -1481,7 +1486,7 @@ entities:
 
 Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
 
-> **Editor:** Per-entity → **General** tab → *Invert (Mirror)* checkbox
+> **Editor:** Per-entity → **Data** tab → *Invert (Mirror)* checkbox
 
 </details>
 
@@ -2185,20 +2190,21 @@ The General Settings panel is divided into four tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **Display** | Chart mode, height, header, icon, battery, state layout, visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), graph data (hours, points/hour, group by, update interval), graph navigation (visible window, scroll mode, graph start) |
+| **Display** | Chart mode, height, header, icon, graph data (hours, points/hour, group by, update interval, visible window, scroll mode), visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), battery |
 | **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
 | **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
-| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Annotations |
+| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Date Picker (position + group), Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
 
-### Entity Configuration — Three Tabs
+### Entity Configuration — Four Tabs
 
-Each entity panel has three tabs:
+Each entity panel has four tabs:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, custom name, data settings (aggregate, decimals, attribute, value factor, points per hour, number format, offset, attribute data source), state map, tap action |
+| **General** | Entity picker, statistic ID, custom name, custom unit, tap action |
+| **Data** | Y axis, aggregation, attribute, decimals, points/hour, offset, value factor, number format, value transform, fixed value, invert, attribute data source, state map |
 | **Appearance** | Graph toggle, graph type, extrema, average, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
 | **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
 
