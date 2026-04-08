@@ -120,9 +120,13 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏱️ | **X-axis interval** — `x_axis_interval` for manual tick spacing (1h–3M) with clean boundary snapping |
 | 📅 | **Show Full Period** — extend the X-axis to cover a complete calendar period (day, week, month, year) with a "now" indicator line, leaving empty space after the current time. Ideal for imported data or comparing today vs yesterday |
 | 🔋 | **Battery icon** — `battery_entity` displays a color-coded battery level indicator in the header or state row, with configurable low threshold |
-| 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions |
+| 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions. Also accepts numeric/categorical time fields (`month_of_year`, `day_of_year`, `hour_of_day`, epoch seconds/ms) so monthly summaries and hourly profiles work without artificial timestamps |
 | 📅 | **Group by Year** — `group_by: year` for multi-year trend views with automatic bar width and X-axis labels |
 | 🔄 | **Invert bars** — per-entity `invert: true` draws bars downward from zero. Combine with `stacked: true` for butterfly charts (energy import/export, network in/out) |
+| 🔁 | **Rolling date picker window** — `date_picker_step` turns the picker into an N-unit rolling window. `step: 4` + `mode: week` shows the last 4 weeks and prev/next jumps a full 4 weeks at a time |
+| 💾 | **Long-term statistics auto-routing** — entities with `state_class` declared automatically use HA's long-term statistics for ranges beyond recorder retention. Set `statistic_id` explicitly or use `hours_to_show > 240` to opt in for short ranges. A console warning lists entities lacking `state_class` when the range exceeds retention |
+| 📈 | **Static data carry-forward** — when a sensor stops emitting state changes, the last known value is carried forward to "now" instead of leaving the chart blank. Matches the behavior of HA's built-in statistics card |
+| ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts |
 
 ---
 
@@ -256,6 +260,7 @@ These options apply to the whole card.
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
 | `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
 | `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Example: `[month, year]`. When only one mode is listed, the D/W/M/Y buttons are hidden and the navigation is centered. Default (null) = all four modes visible. |
+| `date_picker_step` | number | `1` | Window width in units of the selected mode. `1` = single-unit window (legacy behavior — one day, one month, etc.). `>1` turns the picker into a rolling N-unit window: prev/next buttons jump a full N units at a time. Example: `4` with `week` mode shows the last 4 weeks and navigates back/forward 4 weeks per click. See [Date Picker → Window Step](#-date-picker). |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
 ---
@@ -281,6 +286,8 @@ Each entry under `entities` supports the following options.
 | `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). See [Attribute Data Source](#-attribute-data-source). |
 | `data_time_field` | string | `"start_time"` | Name of the time field in each array item when using `data_attribute`. |
 | `data_value_field` | string | `"price_per_kwh"` | Name of the value field in each array item when using `data_attribute`. |
+| `data_time_unit` | string | `"iso"` | How to interpret the time field. `iso` = string or epoch ms (default — existing behavior). `epoch_seconds` / `epoch_ms` = Unix timestamp. `month_of_year` (1–12), `day_of_year` (1–366), `week_of_year` (1–53), `hour_of_day` (0–23) = numeric category — perfect for monthly summaries, day-of-year datasets, and hourly profiles without generating artificial timestamps. See [Attribute Data Source → Time Unit](#-attribute-data-source). |
+| `data_time_year` | number | `null` | Reference year used to anchor categorical time units (`month_of_year`, `day_of_year`, `week_of_year`). Empty = current year. Has no effect for `iso` or `epoch_*` units. |
 | `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
@@ -623,6 +630,29 @@ date_picker_modes:
 
 When only one mode is listed, the D/W/M/Y buttons are hidden entirely and the navigation (◀ label ▶) is centered for a minimal look. The 📅 calendar icon stays visible on the right.
 
+### Window Step
+
+`date_picker_step` controls how many units make up one "window". Default `1` = the legacy behavior (each click moves one day, one week, one month, etc.). When you set it higher, the picker becomes a **rolling N-unit window** and prev/next buttons jump a full N units at a time.
+
+```yaml
+# Last 4 weeks, prev/next jumps 4 weeks
+show_date_picker: true
+date_picker_step: 4
+date_picker_modes:
+  - week
+```
+
+```yaml
+# Last 30 days, prev/next jumps 30 days
+date_picker_step: 30
+date_picker_modes:
+  - day
+```
+
+The label adapts automatically: `step > 1` shows the date range (`Mar 11 – Apr 7`), `step = 1` keeps the existing single-period labels (`April 2026`, `Apr 1 – Apr 7`).
+
+> **Editor:** General Settings → Overlays → *Window Step* (appears next to *Visible Modes* when the date picker is enabled)
+
 ### Behavior
 
 | Period | X-axis range | Live updates |
@@ -766,6 +796,17 @@ graph_type: bar
 ```
 
 When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
+
+### Auto-Routing to Long-Term Statistics
+
+Even in `interval` mode with short ranges (`hours_to_show ≤ 24`), the card auto-routes to long-term statistics in two cases:
+
+1. **Any entity declares `statistic_id` explicitly** — the user vouches that the entity has long-term statistics available. Useful for entities that exist only in the statistics database (Gazpar, Linky, etc.) or for forcing the route.
+2. **`hours_to_show > 240`** (≈ 10 days, the typical recorder retention) — statistics is the only source that can serve the range, so the card switches automatically.
+
+In both cases the route is **conditional on every relevant entity having long-term statistics available** — meaning a `state_class` of `measurement`, `total`, or `total_increasing`, or an explicit `statistic_id`. If any entity in the card lacks LTS, the route falls back to the regular history API to keep that entity working.
+
+When the requested range exceeds 10 days but some entities lack LTS, a console warning is printed once listing the offending entities and explaining how to enable `state_class` in HA.
 
 ### Graph Start Anchoring
 
@@ -1478,6 +1519,41 @@ Common configurations:
 
 Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
 
+### Time Unit
+
+By default, the time field is parsed as an ISO date string. Set `data_time_unit` to interpret it differently — perfect for sensors that expose monthly summaries, hourly profiles, day-of-year datasets, or Unix timestamps without generating artificial timestamps.
+
+| Unit | Range | Behavior |
+|---|---|---|
+| `iso` (default) | string / epoch ms | `new Date(t)` — existing behavior |
+| `epoch_seconds` | number | Unix timestamp in seconds |
+| `epoch_ms` | number | Unix timestamp in milliseconds |
+| `month_of_year` | 1..12 | First day of that month in `data_time_year` (default: current year) |
+| `day_of_year` | 1..366 | That day in `data_time_year` |
+| `week_of_year` | 1..53 | Monday of that ISO week in `data_time_year` |
+| `hour_of_day` | 0..23 | That hour of today |
+
+Example — a sensor exposing monthly yield expectations as `[{Month: 1, Expectation: 320}, {Month: 2, Expectation: 489}, ...]`:
+
+```yaml
+type: custom:statistics-graph-chart-card
+group_by: month
+graph_start: year
+hours_to_show: 8760
+entities:
+  - entity: sensor.sma_month_yield_expectation
+    data_attribute: Expectation
+    data_time_field: Month            # 1..12
+    data_value_field: Expectation
+    data_time_unit: month_of_year     # interpret as Jan..Dec
+    graph_type: bar
+    aggregate_func: max
+```
+
+Renders 12 bars labelled Jan–Dec on the X-axis. Tooltip shows the actual month + value. All other features (date picker, group_by, fill, theming) work normally because the parser converts the numeric category into a real `Date` internally.
+
+> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Time Unit* dropdown and *Reference Year* input
+
 > **Editor:** Per-entity → **Data** tab → *Attribute Data Source*
 
 </details>
@@ -1659,6 +1735,8 @@ entities:
 ```
 
 Setting `color: threshold` propagates threshold colors to the state row dot as well. Setting `state_color: threshold` colors the displayed value text.
+
+**Gradient fill is threshold-aware.** When `gradient: true` is enabled alongside `color_thresholds`, the fill area under the line is rendered as a vertical gradient whose colors match the line — the gradient stops sample threshold colors at chart top, zero line, and chart bottom. For a chart that crosses zero with two threshold bands (e.g. purple above zero, green below), the fill blends from purple at the top through transparent at the zero line down to green at the bottom, just like the line itself.
 
 ---
 
