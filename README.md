@@ -127,7 +127,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 💾 | **Long-term statistics auto-routing** — entities with `state_class` declared automatically use HA's long-term statistics for ranges beyond recorder retention. Set `statistic_id` explicitly or use `hours_to_show > 240` to opt in for short ranges. A console warning lists entities lacking `state_class` when the range exceeds retention |
 | 📈 | **Static data carry-forward** — when a sensor stops emitting state changes, the last known value is carried forward to "now" instead of leaving the chart blank. Matches the behavior of HA's built-in statistics card |
 | ⚠️ | **Offline sensor gaps** — when HA reports a sensor as `unavailable`, the line breaks at that point and resumes when the sensor recovers. Makes it instantly obvious when a sensor was offline versus when its value was simply steady |
-| 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit |
+| 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit. Customize slice and center label fonts/colors with `pie_label_font_size`, `pie_label_color`, `pie_center_font_size`, and `pie_center_color` — all accept theme variables |
+| 🎯 | **Snap-to-data tooltips** — hovering over a line graph snaps the tooltip and dot to the nearest real data point instead of interpolating fake values between samples. The crosshair line aligns with the snapped point too, so what you see is exactly what your sensor recorded |
+| 🔤 | **Theme-aware fonts** — every canvas-rendered chart (Pie, Heatmap, Calendar, Ranking, Radial Bar, Polar Area, Radar, Gauge, axis labels) uses your active HA font (`--primary-font-family`) instead of generic sans-serif |
+| 🧹 | **Clean YAML output** — the visual editor only writes fields you've actually customized. New cards start with 5 lines, not 80. Toggle a setting and it appears in YAML; revert to default and it disappears. Explicit overrides are always preserved |
 | 🏷️ | **Y-axis state names** — when graphing entities with `state_map` (washing machines, alarm panels, media players), the Y-axis automatically shows the original state names (`idle`, `running`, `done`) instead of `0`, `1`, `2`. Optional friendly labels supported via `value, label` in the editor |
 | 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme |
 | ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts |
@@ -239,6 +242,10 @@ These options apply to the whole card.
 | `pie_style` | string | `"donut"` | Pie chart visual preset: `classic` (full pie), `thick` (wide donut), `donut` (default), or `thin` (narrow ring). Pie mode only. |
 | `pie_spacing` | number | `0` | Gap between pie slices in degrees (0–15). Spaced slices automatically get rounded corners. Pie mode only, donut styles only. |
 | `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
+| `pie_label_font_size` | number | `null` | Font size in pixels of slice value labels (the per-slice numbers like *"21.1 kWh"*). Leave empty for auto-size based on chart radius. Pie mode only. |
+| `pie_label_color` | string | `null` | Color for slice value labels. Accepts any CSS color (hex, rgba, name) or CSS variable like `var(--accent-color)`. Leave empty for auto white (high contrast against any slice color). Pie mode only. |
+| `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Pie mode only. |
+| `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
@@ -402,6 +409,15 @@ Centered chart showing proportional shares. Slice labels show the actual value w
 
 **Center total** — when `show_tooltip_total: true`, the total value appears in the donut hole. Disable to make Classic a true full pie.
 
+**Label and color customization** — fine-tune the look of slice labels and the center total to match your theme:
+
+- `pie_label_font_size` — slice value label size in pixels (leave empty for auto)
+- `pie_label_color` — slice value label color (CSS color or `var(--…)`; auto = white)
+- `pie_center_font_size` — center total size in pixels (leave empty for auto)
+- `pie_center_color` — center total color; the small "Total" sub-label inherits this with reduced opacity
+
+All four accept theme variables, so `pie_label_color: var(--accent-color)` updates with your active theme.
+
 **Past dates** — using a date picker to scroll back to a period with no data shows an empty ring with a friendly "No data" message instead of returning today's value.
 
 ![Pie Example](images/pie-example.png)
@@ -412,6 +428,10 @@ height: 200
 pie_style: donut       # classic | thick | donut | thin
 pie_spacing: 4         # 0-15 degrees, gap between slices
 pie_3d: true           # depth/perspective effect
+pie_label_font_size: 14
+pie_label_color: var(--primary-text-color)
+pie_center_font_size: 32
+pie_center_color: var(--accent-color)
 show_tooltip_total: true  # center total
 entities:
   - entity: sensor.hvac_energy
@@ -2395,10 +2415,34 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor:
 
 ### Chart Mode → Entity Settings
 
-| When Chart Mode is… | What changes in entity Appearance tab |
+Switching the chart mode also reshapes the per-entity tabs. Options that have no effect in the current mode are completely hidden — for example, Pie charts no longer show Point Color or Color Thresholds, and Heatmap hides Rise/Fall Colors. The matrix below covers the most common fields.
+
+**Appearance tab**
+
+| When Chart Mode is… | What's visible |
 |---|---|
-| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Line, Fill, Data Points — all visible |
-| **All other modes** | Graph Type row hidden, Line / Fill / Points sections hidden. Only State Row, Trend Icon, Y Axis Range, and Legend remain |
+| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Range Band, Line, Fill, Data Points — all visible |
+| **Scatter** | Show Extrema, Data Points (no Graph Type, no Line/Fill, no Average) |
+| **Radar** | Line, Fill, Data Points (no Graph Type, no Extrema/Average) |
+| **All other modes** (Pie, Ranking, Radial Bar, Polar Area, Heatmap, Calendar) | Only State Row, Trend Icon, Y Axis Range, and Legend remain |
+
+**Colors tab**
+
+| Field | Visible in… |
+|---|---|
+| Line / Fill Color | All modes (universal) |
+| Icon Color, State Color | All modes |
+| **Point Color** | Timeline, Scatter, Radar |
+| **Rise/Fall Colors** | Timeline only |
+| **Color Thresholds** | All modes **except** Pie and Polar Area (single color is meaningful for slices) |
+
+**Data tab**
+
+| Field | Visible in… |
+|---|---|
+| **Y Axis** (Primary / Secondary / Independent) | Timeline, Scatter |
+| **Invert (Mirror)** | Timeline only |
+| Aggregate Function, Decimals, Number Format, Offset, Value Factor, Attribute, etc. | All modes (universal) |
 
 
 ### Sparkline → Entire Card
