@@ -126,6 +126,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔁 | **Rolling date picker window** — `date_picker_step` turns the picker into an N-unit rolling window. `step: 4` + `mode: week` shows the last 4 weeks and prev/next jumps a full 4 weeks at a time |
 | 💾 | **Long-term statistics auto-routing** — entities with `state_class` declared automatically use HA's long-term statistics for ranges beyond recorder retention. Set `statistic_id` explicitly or use `hours_to_show > 240` to opt in for short ranges. A console warning lists entities lacking `state_class` when the range exceeds retention |
 | 📈 | **Static data carry-forward** — when a sensor stops emitting state changes, the last known value is carried forward to "now" instead of leaving the chart blank. Matches the behavior of HA's built-in statistics card |
+| ⚠️ | **Offline sensor gaps** — when HA reports a sensor as `unavailable`, the line breaks at that point and resumes when the sensor recovers. Makes it instantly obvious when a sensor was offline versus when its value was simply steady |
+| 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit |
+| 🏷️ | **Y-axis state names** — when graphing entities with `state_map` (washing machines, alarm panels, media players), the Y-axis automatically shows the original state names (`idle`, `running`, `done`) instead of `0`, `1`, `2`. Optional friendly labels supported via `value, label` in the editor |
+| 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme |
 | ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts |
 
 ---
@@ -227,8 +231,14 @@ These options apply to the whole card.
 | `y2_axis_label` | string | `null` | Custom text for the right (secondary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
 | `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
+| `y_axis_color` | string | `null` | Custom color for Y-axis labels and tick marks. Accepts any CSS color (hex, rgba, color name) or a CSS variable like `var(--my-color)`. Leave empty for theme default. |
 | `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. |
 | `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5. |
+| `x_axis_color` | string | `null` | Custom color for X-axis time labels and tick marks. Accepts any CSS color or CSS variable. Leave empty for theme default. |
+| `x_axis_date_color` | string | `null` | Custom color for X-axis date markers (the bold date dividers shown in 12+ hour views). Defaults to `--primary-color` so dates stand out. Set to match `x_axis_color` for a uniform axis. |
+| `pie_style` | string | `"donut"` | Pie chart visual preset: `classic` (full pie), `thick` (wide donut), `donut` (default), or `thin` (narrow ring). Pie mode only. |
+| `pie_spacing` | number | `0` | Gap between pie slices in degrees (0–15). Spaced slices automatically get rounded corners. Pie mode only, donut styles only. |
+| `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
@@ -377,16 +387,32 @@ Points are matched by timestamp (5-minute tolerance). Older dots are faded, newe
 
 ### Pie Chart
 
-Centered chart showing proportional shares. Percentage labels appear inside slices ≥ 5%.
+Centered chart showing proportional shares. Slice labels show the actual value with the unit (or percentage in Ranking mode).
 
-- **Donut** (default) — center hole shows total value. `show_tooltip_total: true`
-- **Full Pie** — solid pie with no center hole. `show_tooltip_total: false`
+**Style presets** — choose how the pie ring looks:
+
+- **Classic** — full pie with no center hole
+- **Thick** — wide donut ring, plenty of fill
+- **Donut** *(default)* — standard donut with a center hole
+- **Thin** — narrow ring, modern minimal look
+
+**3D effect** — set `pie_3d: true` to add depth, perspective and a subtle highlight on top. Works with any preset.
+
+**Slice spacing** — set `pie_spacing` (in degrees, 0–15) for visible gaps between slices. Spaced slices automatically get rounded corners. Only applies to donut styles, not Classic.
+
+**Center total** — when `show_tooltip_total: true`, the total value appears in the donut hole. Disable to make Classic a true full pie.
+
+**Past dates** — using a date picker to scroll back to a period with no data shows an empty ring with a friendly "No data" message instead of returning today's value.
 
 ![Pie Example](images/pie-example.png)
 
 ```yaml
 chart_mode: pie
 height: 200
+pie_style: donut       # classic | thick | donut | thin
+pie_spacing: 4         # 0-15 degrees, gap between slices
+pie_3d: true           # depth/perspective effect
+show_tooltip_total: true  # center total
 entities:
   - entity: sensor.hvac_energy
     aggregate_func: sum
@@ -1810,18 +1836,33 @@ entities:
 
 Use `state_map` to graph entities with string states like `input_boolean`, `binary_sensor`, or `input_select`. States are mapped to numbers in the order they are listed, starting at 0.
 
-<!-- IMAGE 5: Binary sensor shown as 0/1 step graph -->
+**The Y-axis automatically shows the original state names instead of numeric indexes** — so a washing machine graph displays `idle`, `running`, `done` on the axis, not `0`, `1`, `2`. Tooltips and state rows match.
+
+You can optionally provide friendly display labels with the `label` field — useful when the raw state is technical (`armed_home`) but you want a cleaner axis (`Home`):
 
 ```yaml
 type: custom:statistics-graph-chart-card
 entities:
-  # binary_sensor → 0 (off) / 1 (on)
+  # binary_sensor → 0 (off) / 1 (on), axis shows "off" / "on"
   - entity: binary_sensor.front_door
     name: Front Door
     color: "#9b59b6"
+    graph_type: step
     state_map:
       - value: "off"
       - value: "on"
+
+  # With friendly labels — axis shows "Idle" / "Running" / "Done"
+  - entity: sensor.washing_machine
+    name: Washing Machine
+    graph_type: step
+    state_map:
+      - value: "idle"
+        label: Idle
+      - value: "running"
+        label: Running
+      - value: "done"
+        label: Done
 
   # input_select → 0 / 1 / 2 / 3
   - entity: input_select.heating_mode
@@ -1833,7 +1874,14 @@ entities:
       - value: "boost"
 ```
 
-> The state row displays the original string (`"on"`, `"eco"`, etc.) — not the numeric graph value.
+In the visual editor, the State Map textarea accepts a simple `value, label` syntax — one per line:
+
+```
+off, Idle
+on, Running
+```
+
+> Auto-detected for `binary_sensor`, `input_boolean`, and any `input_select` entity in step mode — you don't need to define a `state_map` for those, the card detects available states automatically and labels the axis accordingly.
 
 ---
 
@@ -2256,18 +2304,29 @@ Setting `color: threshold`, `state_color: threshold`, `icon_color: threshold`, o
 
 ### 🔣 State Map
 
-Maps non-numeric state strings to integer values for graphing. Order determines the number (0-based index).
+Maps non-numeric state strings to integer values for graphing. Order determines the number (0-based index). The Y-axis automatically shows the original state names (or optional `label`) instead of the numeric index.
 
 ```yaml
 state_map:
-  - value: "off"       # → 0
-  - value: "idle"      # → 1
-  - value: "on"        # → 2
+  - value: "off"             # → 0, axis shows "off"
+  - value: "idle"            # → 1, axis shows "idle"
+  - value: "on"              # → 2, axis shows "on"
 ```
 
-The state row always displays the original string, not the number.
+With optional friendly labels:
+
+```yaml
+state_map:
+  - value: "off"
+    label: Stopped           # axis shows "Stopped"
+  - value: "on"
+    label: Running           # axis shows "Running"
+```
+
+The state row always displays the original string (or label if provided), not the number.
 
 > ⚠️ State values are case-sensitive and must match exactly what HA reports (always lowercase for `binary_sensor`).
+> Auto-detected for `binary_sensor`, `input_boolean`, and `input_select` entities — no `state_map` needed in step mode.
 
 </details>
 
