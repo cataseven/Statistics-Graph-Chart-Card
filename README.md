@@ -213,6 +213,7 @@ These options apply to the whole card.
 | `battery_low_threshold` | string/number | `20` | Battery percentage below which the icon turns red. Accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
 | `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) / `horizontal` / `horizontal-center` / `horizontal-right`. Horizontal modes flow entities side by side in a single row. |
+| `chart_align` | string | `"center"` | Horizontal alignment for the non-scrolling chart modes. `center` (default) keeps the chart centered in the card. `left` pins it to the left edge — for Ranking, the name-label strip shrinks so bars start closer to the left. `right` mirrors the layout to the right edge — for Ranking, bars grow from right to left with name labels on the right. Applies to Pie, Radial Bar, Polar Area, Radar, and Ranking modes. |
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. |
 | `auto_scale_points` | boolean | `false` | Automatically scale `points_per_hour` when the interval picker changes the time range. See [Auto Scale Points](#-auto-scale-points). |
@@ -244,6 +245,7 @@ These options apply to the whole card.
 | `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
 | `pie_label_font_size` | number | `null` | Font size in pixels of slice value labels (the per-slice numbers like *"21.1 kWh"*). Leave empty for auto-size based on chart radius. Pie mode only. |
 | `pie_label_color` | string | `null` | Color for slice value labels. Accepts any CSS color (hex, rgba, name) or CSS variable like `var(--accent-color)`. Leave empty for auto white (high contrast against any slice color). Pie mode only. |
+| `pie_label_format` | string | `"value"` | What to show inside each pie slice: `value` (number with unit, e.g. *"42.0 kWh"*), `percentage` (share of the total, e.g. *"23%"*), or `both` (value followed by percentage). Pie mode only. |
 | `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Pie mode only. |
 | `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
@@ -262,7 +264,7 @@ These options apply to the whole card.
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
-| `animate_graph` | boolean | `false` | Draw-in animation on load. Timeline mode only. |
+| `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode). Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Timeline mode only. |
 | `scroll_mode` | string | `"scrollbar"` | Scroll behavior: `scrollbar` or `wheel`. Timeline mode only. |
 | `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
@@ -277,6 +279,7 @@ These options apply to the whole card.
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
 | `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
 | `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Example: `[month, year]`. When only one mode is listed, the D/W/M/Y buttons are hidden and the navigation is centered. Default (null) = all four modes visible. |
+| `date_picker_default_mode` | string | `null` | Forces the date picker to always open in a specific mode regardless of the last-used state. Values: `day`, `week`, `month`, `year`. Leave empty (default) for *Auto* — the picker remembers the last mode you selected. Useful on shared dashboards where you always want the picker to start on, say, Month view. |
 | `date_picker_step` | number | `1` | Window width in units of the selected mode. `1` = single-unit window (legacy behavior — one day, one month, etc.). `>1` turns the picker into a rolling N-unit window: prev/next buttons jump a full N units at a time. Example: `4` with `week` mode shows the last 4 weeks and navigates back/forward 4 weeks per click. See [Date Picker → Window Step](#-date-picker). |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 
@@ -312,7 +315,7 @@ Each entry under `entities` supports the following options.
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
 | `invert` | boolean | `false` | Draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Use with `stacked: true` for butterfly charts. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. See [State Map](#-state-map). |
-| `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). |
+| `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). When left unset (or set to `none`), tapping the state row instead toggles that entity's visibility on the graph — same as clicking its legend item. Hidden entities dim visually so you can tell what's off at a glance. |
 
 #### 🎛️ Appearance
 
@@ -1302,6 +1305,31 @@ annotations:
 | `span` | Vertical shaded band for the duration a binary entity is in a specific state |
 
 Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
+
+**Live updates**: when a threshold or band value references a sensor or input helper, the annotation updates instantly as soon as that entity's state changes — no need to wait for the next data refresh. Combine with a HA template sensor to get seasonal or month-based thresholds that automatically move over time:
+
+```yaml
+# configuration.yaml
+template:
+  - sensor:
+      - name: Solar Target
+        state: >
+          {% set m = now().month %}
+          {% if m in [6,7,8] %}8000
+          {% elif m in [4,5,9,10] %}5000
+          {% else %}2000
+          {% endif %}
+        unit_of_measurement: kWh
+```
+
+```yaml
+# card
+annotations:
+  - type: threshold
+    value: sensor.solar_target
+    label: Seasonal target
+    color: "#1D9E75"
+```
 
 Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible:
 
