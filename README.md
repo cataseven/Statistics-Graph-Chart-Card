@@ -133,7 +133,12 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🧹 | **Clean YAML output** — the visual editor only writes fields you've actually customized. New cards start with 5 lines, not 80. Toggle a setting and it appears in YAML; revert to default and it disappears. Explicit overrides are always preserved |
 | 🏷️ | **Y-axis state names** — when graphing entities with `state_map` (washing machines, alarm panels, media players), the Y-axis automatically shows the original state names (`idle`, `running`, `done`) instead of `0`, `1`, `2`. Optional friendly labels supported via `value, label` in the editor |
 | 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme |
-| ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts |
+| ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts. On mobile, the highlight persists while the finger is held down via a JS-managed class (CSS `:hover` is unreliable on touch devices) |
+| 🎨 | **Color templates** — all color fields (`color`, `icon_color`, `state_color`, `point_colors`, axis/grid colors) accept Jinja2 `{{ }}` templates evaluated server-side by HA via `render_template` WebSocket subscriptions. Use a central `sensor.entity_colors` to manage all entity colors from one place. In the editor, the color picker automatically dims when a template is detected |
+| 📅 | **`graph_start: tomorrow`** — sets the graph window to tomorrow 00:00 → end of day, perfect for displaying next-day spot prices (Nord Pool, EPEX, Tibber) via `data_attribute`. The window extends into the future automatically without requiring `show_full_period` |
+| 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template). All configurable from the editor's Y Axis and X Axis tabs |
+| 📱 | **Mobile touch improvements** — tooltip appears instantly on first tap (no finger movement needed). Long-press (600ms) + drag activates brush zoom; a quick slide shows the tooltip. Bar highlights persist while the finger is held down |
+| 🥧 | **Pie/Radial decimals** — entity `decimals` setting now controls the precision of percentage labels in slice labels, tooltips, and radial bar overlays — not just the value display |
 
 ---
 
@@ -245,12 +250,18 @@ These options apply to the whole card.
 | `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
 | `pie_label_font_size` | number | `null` | Font size in pixels of slice value labels (the per-slice numbers like *"21.1 kWh"*). Leave empty for auto-size based on chart radius. Pie mode only. |
 | `pie_label_color` | string | `null` | Color for slice value labels. Accepts any CSS color (hex, rgba, name) or CSS variable like `var(--accent-color)`. Leave empty for auto white (high contrast against any slice color). Pie mode only. |
-| `pie_label_format` | string | `"value"` | What to show inside each pie slice: `value` (number with unit, e.g. *"42.0 kWh"*), `percentage` (share of the total, e.g. *"23%"*), or `both` (value followed by percentage). Pie mode only. |
+| `pie_label_format` | string | `"value"` | What to show inside each pie slice: `value` (number with unit, e.g. *"42.0 kWh"*), `percentage` (share of the total, e.g. *"23%"*), or `both` (value followed by percentage). Precision is controlled by the entity's `decimals` setting — affects both value and percentage display. Pie mode only. |
 | `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Pie mode only. |
 | `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
+| `y_grid_style` | string | `"dashed"` | Line pattern for horizontal (Y-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. Also accepts a custom SVG stroke-dasharray like `6 2 2 2`. |
+| `y_grid_width` | number | `1` | Thickness of horizontal grid lines in pixels. Accepts decimals like `0.5`. |
+| `y_grid_color` | string | `null` | Color of horizontal grid lines. Accepts any CSS color, variable, or `{{ }}` template. Leave empty for theme default. |
+| `x_grid_style` | string | `"dashed"` | Line pattern for vertical (X-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. |
+| `x_grid_width` | number | `1` | Thickness of vertical grid lines in pixels. |
+| `x_grid_color` | string | `null` | Color of vertical grid lines. Accepts any CSS color, variable, or `{{ }}` template. |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip. Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
@@ -259,8 +270,8 @@ These options apply to the whole card.
 | `show_x_ticks` | boolean | `false` | Draw small tick marks at each X-axis label position. |
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
 | `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
-| `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). Useful with `group_by: week/month` for clean period views. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
-| `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. See [Show Full Period](#-show-full-period). |
+| `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `tomorrow` (tomorrow 00:00 — ideal for next-day spot prices via `data_attribute`), `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). When set to `tomorrow`, the window automatically extends to cover the full next day even without `show_full_period`. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
+| `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. Not required for `graph_start: tomorrow` — that extends automatically. See [Show Full Period](#-show-full-period). |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -353,10 +364,10 @@ Each entry under `entities` supports the following options.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `color` | string | `"#ff4757"` | Line and fill color. Use `threshold` to drive from color thresholds. |
-| `point_colors` | string | `null` | Color of data point dots. Use `threshold` for per-point threshold color. |
-| `icon_color` | string | `null` | State row icon color. Use `threshold` for dynamic color. |
-| `state_color` | string | `null` | State row value text color. Use `threshold` for dynamic color. |
+| `color` | string | `"#ff4757"` | Line and fill color. Use `threshold` to drive from color thresholds. Accepts `{{ }}` Jinja2 templates for dynamic server-side color resolution (e.g. `{{ state_attr('sensor.entity_colors','entities')['Temperature'] }}`). See [Color Templates](#-color-templates). |
+| `point_colors` | string | `null` | Color of data point dots. Use `threshold` for per-point threshold color. Accepts `{{ }}` templates. |
+| `icon_color` | string | `null` | State row icon color. Use `threshold` for dynamic color. Accepts `{{ }}` templates. |
+| `state_color` | string | `null` | State row value text color. Use `threshold` for dynamic color. Accepts `{{ }}` templates. |
 | `state_adaptive_color` | boolean | `false` | Automatically tint state value and icon with the entity's line color. Quick alternative to setting `state_color` and `icon_color` manually. |
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
@@ -869,6 +880,25 @@ When `graph_start` is set, `hours_to_show` is ignored — the calendar period di
 
 > **Editor:** General Settings → Display → Graph Navigation → *Graph Start*
 
+### Graph Start: Tomorrow
+
+`graph_start: tomorrow` sets the window to tomorrow 00:00 → end of day — ideal for next-day spot prices (Nord Pool, EPEX, Tibber) via `data_attribute`. The window extends into the future automatically without `show_full_period`.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Tomorrow Spot Prices
+graph_start: tomorrow
+group_by: hour
+entities:
+  - entity: sensor.nord_pool_fi_contract_current_price
+    data_attribute: tomorrow_hourly
+    data_time_field: start
+    data_value_field: value
+    graph_type: bar
+    decimals: 2
+    unit: c/kWh
+```
+
 ### X-Axis Interval
 
 Manual control over tick spacing:
@@ -883,6 +913,22 @@ x_axis_interval: 1M    # Monthly (1st of month)
 Available presets in the editor: Auto, 1H–12H, 1D, 2D, 7D, 1W, 2W, 1M, 3M.
 
 > **Editor:** General Settings → X-Axis → *X Axis Interval*
+
+### Grid Customization
+
+Control the appearance of horizontal (Y) and vertical (X) grid lines independently.
+
+```yaml
+y_grid_style: solid      # dashed (default), solid, dotted, long-dash
+y_grid_width: 0.5         # thickness in px (default: 1)
+y_grid_color: "rgba(255,255,255,0.1)"  # any CSS color or {{ template }}
+
+x_grid_style: dotted
+x_grid_width: 0.5
+x_grid_color: "var(--divider-color)"
+```
+
+> **Editor:** Y Axis tab → Grid section, X Axis tab → Grid section
 
 ### Smart X-Axis Labels
 
@@ -967,6 +1013,20 @@ Click and drag on any Timeline mode graph to zoom into a specific time range. No
 - **Interval picker aware** — changing the time range via the interval picker resets any active zoom and fetches fresh data
 
 Timeline mode only.
+
+### Mobile Touch Behavior
+
+On phones and tablets, touch gestures separate tooltip exploration from brush zoom:
+
+| Gesture | Action |
+|---|---|
+| **Tap** | Tooltip appears instantly with crosshair and values |
+| **Quick slide** | Tooltip follows finger across the graph |
+| **Hold on bar** | Tooltip + bar highlight stay visible as long as finger is held |
+| **Long press (600ms) + drag** | Brush zoom selection starts |
+| **Lift finger** | Tooltip and highlights clear |
+
+Holding still for 600ms prepares zoom but does not activate it — zoom only starts when the finger moves. This prevents the tooltip from disappearing while exploring a single data point.
 
 </details>
 
@@ -1834,6 +1894,45 @@ entities:
 
 ---
 
+### 🎨 Color Templates
+
+Use Jinja2 templates in any color field to manage colors centrally. Create a single template sensor with all your entity colors, and every card updates when you change it.
+
+**Setup: Create a central color sensor**
+
+```yaml
+# configuration.yaml → template section
+template:
+  - sensor:
+      - name: "Entity Colors"
+        unique_id: entity_colors_map
+        state: "ok"
+        attributes:
+          entities: >-
+            {{
+              {
+                "Temperature": "#FF6B6B",
+                "Humidity": "#2ecc71",
+                "Solar": "#f1c40f"
+              }
+            }}
+```
+
+**Usage in card YAML:**
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    color: "{{ state_attr('sensor.entity_colors','entities')['Temperature'] | default('#ff4757') }}"
+    icon_color: "{{ states('input_select.theme_accent') }}"
+```
+
+Templates are evaluated server-side by HA via WebSocket subscriptions — colors update automatically when dependencies change, with no polling. In the editor, typing `{{` in any color field dims the picker automatically.
+
+Works with `color`, `point_colors`, `icon_color`, `state_color`, and all card-level color options (`y_axis_color`, `x_axis_color`, `y_grid_color`, `x_grid_color`, `card_icon_color`).
+
+---
+
 ### ➖ Average Line
 
 Draw a dashed reference line at the mean value over the visible time window. Useful for spotting trends at a glance.
@@ -2458,8 +2557,8 @@ Switching the chart mode also reshapes the per-entity tabs. Options that have no
 
 | Field | Visible in… |
 |---|---|
-| Line / Fill Color | All modes (universal) |
-| Icon Color, State Color | All modes |
+| Line / Fill Color | All modes (universal). Accepts `{{ }}` Jinja2 templates |
+| Icon Color, State Color | All modes. Accepts `{{ }}` templates |
 | **Point Color** | Timeline, Scatter, Radar |
 | **Rise/Fall Colors** | Timeline only |
 | **Color Thresholds** | All modes **except** Pie and Polar Area (single color is meaningful for slices) |
@@ -2533,6 +2632,10 @@ Some options depend on or conflict with each other:
 | `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
 | `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
 | `statistic_id` set (with empty `entity`) | Data is fetched from the statistics database only — no History API call. State row shows last statistics value. WebSocket live updates are skipped for this entity |
+| `color: "{{ ... }}"` | Template is evaluated server-side via `render_template` WS subscription. Push-based — no polling. Editor color picker dims automatically. Falls back to the raw template string if resolution fails |
+| `graph_start: tomorrow` | Window is tomorrow 00:00 → end of day. `show_full_period` is not required. History fetch is skipped (no past data in tomorrow's range). Ideal with `data_attribute` for forecast/spot price data |
+| `y_grid_style` / `x_grid_style` | Only effective when `show_grid: true`. Applies inline SVG styles that override the default CSS class |
+| `decimals` on pie/radial entity | Controls both value precision *and* percentage precision in slice labels, tooltips, and center totals |
 
 </details>
 
