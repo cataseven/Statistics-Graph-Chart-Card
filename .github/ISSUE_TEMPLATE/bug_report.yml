@@ -9,8 +9,8 @@ body:
       label: "1. Is it related to Long Term Statistics (LTS)?"
       description: "⚠️ IF YOUR ANSWER IS 'YES': You must attach the CSV file for the related entities."
       options:
-        - "Yes"
         - "No"
+        - "Yes"
     validations:
       required: true
 
