@@ -1,6 +1,6 @@
 name: Bug Report
 description: Create a report to help us fix an issue
-title: '[]'
+title: '[B]'
 labels: [Bug]
 body:
   - type: dropdown
