@@ -1,7 +1,7 @@
 name: Bug Report
 description: Create a report to help us fix an issue
-title: '[BUG] '
-labels: [bug]
+title: ''
+labels: [Bug]
 body:
   - type: dropdown
     id: lts_related
