@@ -17,12 +17,10 @@ body:
   - type: dropdown
     id: csv_attached
     attributes:
-      label: "1a. Did you attach your CSV file?"
-      description: "⚠️ ONLY answer this if you selected 'Yes' above. If your answer was 'No', please select 'Not Applicable'."
+      label: "1a. Please attach your CSV file"
+      description: "⚠️ ONLY attach data history (csv) if the bug is related to Long Term Statistics (LTS)."
       options:
-        - "Yes"
-        - "No"
-        - "Not Applicable"
+        - "Attached"
     validations:
       required: true
 
