@@ -17,7 +17,7 @@ body:
   - type: dropdown
     id: csv_attached
     attributes:
-      label: "1a. Please attach your CSV file"
+      label: "1a. If it is related to Long Term Statistics (LTS) then please attach your CSV file"
       description: "⚠️ ONLY attach data history (csv) if the bug is related to Long Term Statistics (LTS)."
       options:
         - "I did"
