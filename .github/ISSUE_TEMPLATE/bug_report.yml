@@ -1,0 +1,48 @@
+name: Bug Report
+description: Create a report to help us fix an issue
+title: '[BUG] '
+labels: [bug]
+body:
+  - type: dropdown
+    id: lts_related
+    attributes:
+      label: "1. Is it related to Long Term Statistics (LTS)?"
+      description: "⚠️ IF YOUR ANSWER IS 'YES': You must attach the CSV file for the related entities."
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: csv_attached
+    attributes:
+      label: "1a. Did you attach your CSV file?"
+      description: "⚠️ ONLY answer this if you selected 'Yes' above. If your answer was 'No', please select 'Not Applicable'."
+      options:
+        - "Yes"
+        - "No"
+        - "Not Applicable"
+    validations:
+      required: true
+
+  - type: textarea
+    id: yaml_code
+    attributes:
+      label: "2. Your YAML Code"
+      description: "Please paste your relevant YAML code in the area below. (The triple backticks are already provided, paste your code between them without breaking the format)."
+      value: |
+        ```yaml
+        # Paste your yaml code here
+        
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_message
+    attributes:
+      label: "3. Bug Description"
+      description: "Please provide the details of the issue or paste the exact error log you received below. (You can also drag and drop your CSV file here)."
+    validations:
+      required: true
