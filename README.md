@@ -78,15 +78,15 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
 | ↕️ | **Independent Y-axis** — `y_axis: independent` gives each entity its own hidden scale based on its min/max, enabling trend comparison across sensors with wildly different units (°C, %, lux, hPa) on a single graph |
-| 🎨 | Color thresholds with smooth or hard transitions |
+| 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch) |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
 | 💬 | Tooltip with crosshair on hover |
-| 🌅 | Per-entity gradient fill with same-hue fade |
+| 🌅 | Per-entity gradient fill with same-hue fade — applies to both area charts and bar charts (with rounded corners) |
 | ▦ | Grid lines — horizontal + vertical aligned to actual data points |
 | 📉 | Logarithmic scale |
 | 🔍 | **Zoom brush** — click and drag on the graph to zoom into a time range; double-click or "Reset zoom" to restore |
-| 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph |
+| 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph. Entity-driven or manual timestamps, with per-annotation opacity and Jinja2 template support |
 | 🔄 | **Tooltip sync** — hover one card and see crosshairs on all synced cards, with optional named groups |
 | 📊 | **Stacked** mode — stack line/area/bar entities to show composition |
 | ↔️ | **Time Offset** — per-entity hour offset to overlay the same sensor from different periods on one graph. Supports helper entities (e.g. `input_number`) for dynamic offset values |
@@ -1361,8 +1361,15 @@ annotations:
 |------|-------------|
 | `threshold` | Horizontal dashed line at a fixed value, entity state, or entity attribute |
 | `band` | Horizontal shaded band between `value` and `value_end`. Both accept numbers, entity IDs, or `entity.attribute` paths |
-| `event` | Vertical marker at each state transition of a binary entity |
-| `span` | Vertical shaded band for the duration a binary entity is in a specific state |
+| `event` | Vertical marker — entity-driven (at each state transition) or manual (fixed timestamp) |
+| `span` | Vertical shaded band — entity-driven (duration in a specific state) or manual (fixed start/end timestamps) |
+
+| Option | Applies to | Description |
+|--------|-----------|-------------|
+| `opacity` | All types | Opacity of the annotation (0–1). Default: 0.15 for bands/spans, 1 for lines/events |
+| `show_values` | threshold, band | Show numeric values alongside the label. Default: true |
+| `label` | All types | Text label displayed on the annotation |
+| `color` | All types | Color of the annotation line, fill, or marker |
 
 Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
 
@@ -1391,7 +1398,7 @@ annotations:
     color: "#1D9E75"
 ```
 
-Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible:
+Use `show_values: false` on any threshold or band to hide the value label while keeping the line/band visible. When enabled (default), the numeric value appears alongside the label — or by itself if no label is set:
 
 ```yaml
 annotations:
@@ -1401,6 +1408,51 @@ annotations:
     label: "Comfort"
     color: "#1D9E75"
     show_values: false    # band visible, no text labels
+```
+
+**Manual timestamps** — event markers and time spans can use fixed timestamps instead of tracking an entity. Switch between Entity and Manual source in the editor, or set directly in YAML:
+
+```yaml
+annotations:
+  - type: span
+    start: "2026-04-15T08:00:00"
+    end: "2026-04-15T18:00:00"
+    label: "Day shift"
+    color: "#ff9800"
+  - type: event
+    time: "2026-04-15T12:00:00"
+    label: "Noon"
+    color: "#e74c3c"
+```
+
+**Opacity** — control the prominence of each annotation with the `opacity` option (0–1). Applies to all types: fill opacity for bands and spans, stroke opacity for threshold lines and event markers:
+
+```yaml
+annotations:
+  - type: band
+    value: 18
+    value_end: 24
+    color: "#1D9E75"
+    opacity: 0.3        # more prominent than default 0.15
+  - type: threshold
+    value: 30
+    color: "#e74c3c"
+    opacity: 0.5         # semi-transparent line
+```
+
+**Jinja2 templates** — annotation fields `start`, `end`, `time`, `value`, `value_end`, and `label` accept Jinja2 templates. Values update automatically when referenced entities change:
+
+```yaml
+annotations:
+  - type: threshold
+    value: "{{ states('sensor.target_temperature') | float }}"
+    label: "{{ states('input_text.target_label') }}"
+    color: "#e74c3c"
+  - type: span
+    start: "{{ states('input_datetime.shift_start') }}"
+    end: "{{ states('input_datetime.shift_end') }}"
+    label: "Shift"
+    color: "#ff9800"
 ```
 
 </details>
@@ -1843,7 +1895,15 @@ entities:
 
 ### 🎨 Color Thresholds
 
-Colorize the graph based on value ranges. The `transition` option controls whether color changes smoothly or switches instantly at each threshold.
+Colorize the graph based on value ranges. Two independent settings control the behavior:
+
+- **Direction** — which axis the colors are painted along:
+  - `vertical` *(default)* — Y-axis gradient. The entire chart is colored based on value height.
+  - `horizontal` — per-segment coloring along the time axis. Each line segment gets the color matching its data value.
+
+- **Transition** — how colors change at threshold boundaries:
+  - `smooth` *(default)* — gradual interpolation between adjacent threshold colors.
+  - `hard` — instant color switch exactly at the threshold value.
 
 <!-- IMAGE 4: Temperature graph with gradient color from blue (cold) through green to red (hot) -->
 
@@ -1856,7 +1916,8 @@ entities:
     state_color: threshold
     color_thresholds:
       enabled: true
-      transition: smooth   # or: hard
+      direction: vertical   # or: horizontal
+      transition: smooth     # or: hard
       values:
         - value: 0
           color: "#3498db"
@@ -1867,6 +1928,8 @@ entities:
         - value: 35
           color: "#e74c3c"
 ```
+
+All four direction × transition combinations are available from the editor under Colors → Color Thresholds.
 
 Setting `color: threshold` propagates threshold colors to the state row dot as well. Setting `state_color: threshold` colors the displayed value text.
 
@@ -2415,6 +2478,7 @@ The same direction logic drives the trend icon (▲▼⯇⯈) on the state row �
 ```yaml
 color_thresholds:
   enabled: true
+  direction: vertical    # vertical or horizontal
   transition: smooth     # smooth or hard
   values:
     - value: 0           # at or above this value → use this color
@@ -2429,8 +2493,12 @@ Thresholds are sorted by value automatically. The color of the lowest threshold 
 
 Setting `color: threshold`, `state_color: threshold`, `icon_color: threshold`, or `point_colors: threshold` on the entity makes those elements also reflect the threshold color.
 
+**`direction`** controls which axis the colors are painted along:
+- `vertical` *(default)* — Y-axis gradient. Colors map to value height on the chart.
+- `horizontal` — per-segment coloring along the time axis. Each segment gets the color of its data value.
+
 **`transition`** controls how color changes between bands:
-- `smooth` — gradual interpolation along the line as values pass through thresholds
+- `smooth` — gradual interpolation as values pass through thresholds
 - `hard` — instant color switch exactly at the threshold value
 
 > ⚠️ Cannot be combined with `rise_fall_colors` on the same entity.
