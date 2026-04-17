@@ -20,7 +20,8 @@ body:
       label: "1a. Please attach your CSV file"
       description: "⚠️ ONLY attach data history (csv) if the bug is related to Long Term Statistics (LTS)."
       options:
-        - "Attached"
+        - "I did"
+        - "I didn't"
     validations:
       required: true
 
