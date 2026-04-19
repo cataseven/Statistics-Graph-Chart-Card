@@ -64,7 +64,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
-| 🎯 | **Nine chart modes** — Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
+| 🎯 | **Ten chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
 | ✨ | **Sparkline mode** — ultra-compact inline graphs with no chrome, ideal for dashboard overview tiles |
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
@@ -73,7 +73,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🏷️ | **Custom unit per entity** — override auto-detected units with `unit: kWh` on any entity. Essential for attributes and unitless sensors |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
-| 🕐 | **Graph Start Hour** — pin the X-axis to a fixed start hour (e.g. 06:00) to cut out irrelevant nighttime data on solar dashboards |
+| 🕐 | **Dynamic Graph Hours** — filter data to specific hours each day with `graph_start_hour` and `graph_end_hour`. Accepts fixed numbers or sensor entities (e.g. `sensor.sunrise_hour`) for sunrise-to-sunset views that adapt throughout the year |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop. The editor adapts dynamically: irrelevant options hide based on the selected chart mode |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
@@ -269,9 +269,11 @@ These options apply to the whole card.
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
 | `show_x_ticks` | boolean | `false` | Draw small tick marks at each X-axis label position. |
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
-| `graph_start_hour` | number | `null` | Anchors the X-axis to a fixed hour of the day (0–23). For example, `6` starts the chart at 06:00 — ideal for solar panels. Ignored when the interval picker is active. |
+| `graph_start_hour` | number / entity | `null` | Daily start hour filter. Points before this hour each day are hidden, creating natural line breaks between days. Accepts a fixed number (`6` = 06:00, `6.5` = 06:30) or a sensor entity ID (`sensor.sunrise_hour`) for dynamic values. Works with Date Picker: in Day mode trims the X-axis, in Week/Month/Year modes filters per day. See [Dynamic Graph Hours](#-dynamic-graph-hours). |
+| `graph_end_hour` | number / entity | `null` | Daily end hour filter. Points after this hour each day are hidden. Same format as `graph_start_hour`. Use with `sensor.sunset_hour` for sunrise-to-sunset views. |
 | `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `tomorrow` (tomorrow 00:00 — ideal for next-day spot prices via `data_attribute`), `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). When set to `tomorrow`, the window automatically extends to cover the full next day even without `show_full_period`. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
 | `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. Not required for `graph_start: tomorrow` — that extends automatically. See [Show Full Period](#-show-full-period). |
+| `card_background_color` | color | `null` | Custom background color for the card. Accepts any CSS color (hex, rgba, name). Replaces `card_mod` workarounds — this value persists across re-renders. |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -590,24 +592,44 @@ entities:
 
 Requires at least 3 entities. Each entity's value is normalized to its `lower_bound` / `upper_bound` range. Polygon grid rings provide reference levels. Colored dots at each vertex show the exact position, with value labels nearby. Supports color thresholds for per-dot colors.
 
+### State Timeline
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: state_timeline
+hours_to_show: 24
+entities:
+  - entity: binary_sensor.window_living_room
+    name: Living Room
+    state_map:
+      - value: "off"
+        label: "Closed"
+        color: "#e74c3c"
+      - value: "on"
+        label: "Open"
+        color: "#5dade2"
+```
+
+Displays horizontal colored bars showing state changes over time — one row per entity. Entity names appear on the left, state labels inside each segment when wide enough. Hover for a tooltip showing state name, duration, and time range. Works with `binary_sensor`, `input_boolean`, `input_select`, and any entity with a `state_map`.
+
 ### Chart Mode Compatibility
 
 Not all card options apply to every mode. The visual editor hides irrelevant options automatically.
 
-| Feature | Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar |
-|---------|----------|---------|-----|---------|------------|------------|-------|---------|----------|
-| Y / X axes | ✅ | ✅ | — | — | — | — | — | Own axes | Own axes |
-| Grid | ✅ | ✅ | — | — | — | Grid circles | Polygon grid | — | — |
-| Stacked | ✅ | — | — | — | — | — | — | — | — |
-| Offset | ✅ | — | — | — | — | — | — | — | — |
-| Annotations | ✅ | — | — | — | — | — | — | — | — |
-| Zoom brush | ✅ | — | — | — | — | — | — | — | — |
-| Scroll | ✅ | — | — | — | — | — | — | — | — |
-| Sparkline | ✅ | — | — | — | — | — | — | — | — |
-| Range Band | ✅ | — | — | — | — | — | — | — | — |
-| Entity limit | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
-| Entity graph_type | line/step/bar | — | — | — | — | — | — | — | — |
-| lower/upper_bound | Y axis range | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
+| Feature | Timeline | State Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar |
+|---------|----------|----------------|---------|-----|---------|------------|------------|-------|---------|----------|
+| Y / X axes | ✅ | X only | ✅ | — | — | — | — | — | Own axes | Own axes |
+| Grid | ✅ | — | ✅ | — | — | — | Grid circles | Polygon grid | — | — |
+| Stacked | ✅ | — | — | — | — | — | — | — | — | — |
+| Offset | ✅ | — | — | — | — | — | — | — | — | — |
+| Annotations | ✅ | — | — | — | — | — | — | — | — | — |
+| Zoom brush | ✅ | — | — | — | — | — | — | — | — | — |
+| Scroll | ✅ | — | — | — | — | — | — | — | — | — |
+| Sparkline | ✅ | — | — | — | — | — | — | — | — | — |
+| Range Band | ✅ | — | — | — | — | — | — | — | — | — |
+| Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
+| Entity graph_type | line/step/bar | — | — | — | — | — | — | — | — | — |
+| lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
 
 </details>
 
@@ -2171,7 +2193,53 @@ entities:
       service: switch.toggle
       service_data:
         entity_id: switch.pump
+
+  # Fire DOM event (browser_mod popup, YAML only)
+  - entity: sensor.power
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          content:
+            type: custom:mini-graph-card
+            entity: sensor.power
 ```
+
+---
+
+### 🌅 Dynamic Graph Hours
+
+Filter data to specific hours each day using sensor values. Ideal for solar panels (sunrise to sunset) or business hours.
+
+```yaml
+type: custom:statistics-graph-chart-card
+graph_start_hour: sensor.sunrise_hour
+graph_end_hour: sensor.sunset_hour
+hours_to_show: 168
+show_date_picker: true
+entities:
+  - entity: sensor.solar_power
+```
+
+Create template sensors that output fractional hours:
+
+```yaml
+template:
+  - sensor:
+      - name: "Sunrise Hour"
+        unique_id: sunrise_hour
+        state: >
+          {% set dt = state_attr('sun.sun', 'next_rising') | as_datetime | as_local %}
+          {{ dt.hour + dt.minute / 60 }}
+      - name: "Sunset Hour"
+        unique_id: sunset_hour
+        state: >
+          {% set dt = state_attr('sun.sun', 'next_setting') | as_datetime | as_local %}
+          {{ dt.hour + dt.minute / 60 }}
+```
+
+When viewing multiple days, data outside the specified hours is hidden and lines break naturally between days. Both `graph_start_hour` and `graph_end_hour` accept fixed numbers (`6`, `22`, `6.5` for 06:30) or entity IDs.
 
 ---
 
