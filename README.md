@@ -139,6 +139,12 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template). All configurable from the editor's Y Axis and X Axis tabs |
 | 📱 | **Mobile touch improvements** — tooltip appears instantly on first tap (no finger movement needed). Long-press (600ms) + drag activates brush zoom; a quick slide shows the tooltip. Bar highlights persist while the finger is held down |
 | 🥧 | **Pie/Radial decimals** — entity `decimals` setting now controls the precision of percentage labels in slice labels, tooltips, and radial bar overlays — not just the value display |
+| 🔮 | **Forecast Horizon** — per-entity `forecast_horizon: N` shifts each recorded data point forward by N hours for sensors whose current state predicts T+N hours ahead (e.g. Solcast PV forecast in 1 hour). The X-axis is extended automatically to keep the shifted line visible. Independent from `offset` — both can be combined |
+| ⏱️ | **Now Line** — a vertical marker showing the current moment, enabled by default. Customize `now_line_color`, `now_line_opacity`, `now_line_width`, and `now_line_style` (solid, dashed, dotted, long-dash) or disable with `show_now_line: false` |
+| 📐 | **Round Y-axis ticks** — the Y axis picks clean round numbers (0, 500, 1000, 1500) that fit within your data range without expanding it. Enabled by default; disable with `y_axis_round_ticks: false` |
+| 🎯 | **Primary Value dropdown** — `primary_state_as` controls what the big value in the state row shows: live state (default), last aggregated point, or Sum / Avg / Min / Max / First over the visible window. Ideal for clean header-only entities |
+| 📑 | **Stacked name layout** — `name_position: below` places the entity name centered below the primary value (ApexCharts-style), great for mobile and header-only entities |
+| 🎨 | **Card shadow & border toggles** — `card_shadow: false` and `card_border: false` allow a flat borderless look or blending with decorated backgrounds |
 
 ---
 
@@ -214,6 +220,8 @@ These options apply to the whole card.
 | `card_header_size` | string | `null` | Font size of the title and battery icon. The battery indicator scales proportionally with this value. Accepts CSS values like `16px` or `1.2em`. |
 | `card_icon_size` | string | `null` | Size of the header icon, e.g. `22px` |
 | `card_icon_position` | string | `"left"` | Header icon position: `left` or `right` |
+| `card_shadow` | boolean | `true` | Show the default HA card drop shadow. Disable for a flat look or when the card sits on a decorated background. |
+| `card_border` | boolean | `true` | Show the default HA card border. Disable for a cleaner borderless appearance. |
 | `battery_entity` | string | `null` | Entity ID reporting battery level (0–100%). Shows a color-coded battery icon with percentage in the header (when header exists) or state row (when no header). See [Battery Icon](#-battery-icon). |
 | `battery_low_threshold` | string/number | `20` | Battery percentage below which the icon turns red. Accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). |
 | `align_header` | string | `"default"` | Header alignment: `default` / `left` / `center` / `right` |
@@ -235,6 +243,7 @@ These options apply to the whole card.
 | `upper_bound_secondary` | string/number | `null` | Hard or soft maximum for the secondary Y axis. See [Bounds](#-bounds). |
 | `y_axis_ticks` | number | `4` | Number of tick marks (grid lines + labels) on the Y axis. |
 | `y_axis_decimals` | number | `null` | Number of decimal places for Y-axis labels. Overrides per-entity `decimals` for axis labels only — state row values are not affected. Leave empty for auto. |
+| `y_axis_round_ticks` | boolean | `true` | Snap Y-axis tick values to clean round numbers (e.g. 0, 500, 1000, 1500) that fit within the data range without expanding it. Produces tidy, evenly-spaced labels similar to Excel's default. Disable to let tick values follow the exact data range. |
 | `show_y_axis_label` | boolean | `false` | Show vertical unit labels on the left and/or right edge of the graph. When enabled, defaults to the unit of measurement of the first entity on each axis. |
 | `y_axis_label` | string | `null` | Custom text for the left (primary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
 | `y2_axis_label` | string | `null` | Custom text for the right (secondary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
@@ -295,6 +304,11 @@ These options apply to the whole card.
 | `date_picker_default_mode` | string | `null` | Forces the date picker to always open in a specific mode regardless of the last-used state. Values: `day`, `week`, `month`, `year`. Leave empty (default) for *Auto* — the picker remembers the last mode you selected. Useful on shared dashboards where you always want the picker to start on, say, Month view. |
 | `date_picker_step` | number | `1` | Window width in units of the selected mode. `1` = single-unit window (legacy behavior — one day, one month, etc.). `>1` turns the picker into a rolling N-unit window: prev/next buttons jump a full N units at a time. Example: `4` with `week` mode shows the last 4 weeks and navigates back/forward 4 weeks per click. See [Date Picker → Window Step](#-date-picker). |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
+| `show_now_line` | boolean | `true` | Show a vertical line marking the current moment on the graph. Timeline mode only. |
+| `now_line_color` | string | `null` | Color of the now line. Accepts any CSS color or variable. Leave empty for theme default. |
+| `now_line_opacity` | number | `null` | Opacity of the now line (0–1). Leave empty for default. |
+| `now_line_width` | number | `null` | Thickness of the now line in pixels. Leave empty for default. |
+| `now_line_style` | string | `null` | Line pattern for the now line: `solid`, `dashed`, `dotted`, or `long-dash`. Leave empty for default. |
 
 ---
 
@@ -322,6 +336,7 @@ Each entry under `entities` supports the following options.
 | `data_time_unit` | string | `"iso"` | How to interpret the time field. `iso` = string or epoch ms (default — existing behavior). `epoch_seconds` / `epoch_ms` = Unix timestamp. `month_of_year` (1–12), `day_of_year` (1–366), `week_of_year` (1–53), `hour_of_day` (0–23) = numeric category — perfect for monthly summaries, day-of-year datasets, and hourly profiles without generating artificial timestamps. See [Attribute Data Source → Time Unit](#-attribute-data-source). |
 | `data_time_year` | number | `null` | Reference year used to anchor categorical time units (`month_of_year`, `day_of_year`, `week_of_year`). Empty = current year. Has no effect for `iso` or `epoch_*` units. |
 | `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
+| `forecast_horizon` | number | `null` | For forecast sensors whose current state predicts T+N hours ahead (e.g. "Solar forecast in 1 hour"). Shifts each recorded data point forward by N hours so the value lands at its target future time on the X axis. The X axis is extended automatically to keep the shifted points visible. Independent from `offset` — both can be combined. See [Forecast Horizon](#-forecast-horizon). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
@@ -346,7 +361,9 @@ Each entry under `entities` supports the following options.
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
-| `show_state_last` | boolean | `false` | Show the last aggregated graph value instead of the live HA state. |
+| `show_state_last` | boolean | `false` | **Legacy** — equivalent to `primary_state_as: last`. Still honored for backward compatibility. |
+| `primary_state_as` | string | `null` | What appears as the big primary value in the state row. `null` (default) = live HA state. `last` = last aggregated graph point. `sum` / `avg` / `min` / `max` / `first` = the chosen aggregate over the visible window, shown as a clean number with no *"SUM"/"AVG"* label prefix. Useful for header-only entities (`show_graph: false`) that just display a computed number. |
+| `name_position` | string | `null` | Controls how the entity name and primary value are arranged in the state row. `null` (default) = name to the left of the value (inline). `below` = value shown larger with the name centered underneath (ApexCharts-style, great for header-only entities and mobile layouts). |
 | `show_second_state_as` | string | `null` | Show a secondary stat value next to the primary state. Options: `min`, `max`, `avg`, `sum`, `first`, `last`. Displays with the same styling as the primary value, with a small label prefix. |
 | `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. |
 | `trend_period_hours` | number | `1` | Time window (in hours) for trend direction calculation. Set `0` for full range. |
@@ -1628,6 +1645,71 @@ Entity → General → Data Settings → **Offset** (in hours).
 </details>
 
 <details>
+<summary><strong>🔮 Forecast Horizon</strong></summary>
+
+Some sensors expose a **forecast value** — their current state represents what is predicted for **N hours in the future**, not what is happening right now. Typical examples:
+
+- `sensor.solcast_pv_forecast_leistung_in_1_stunde` — PV power expected in 1 hour
+- A template sensor whose state is "temperature in 3 hours"
+- A weather forecast exposed as a numeric future-hour prediction
+
+Plotting these directly is misleading: the line shows each prediction at the time it was recorded, not at the time it is predicting. `forecast_horizon: N` fixes this by **shifting each recorded data point forward by N hours** on the X-axis so every point lands at the moment it is forecasting.
+
+```yaml
+type: custom:statistics-graph-chart-card
+graph_start_hour: now
+show_full_period: true
+entities:
+  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
+    name: "Forecast +1h"
+    forecast_horizon: 1
+```
+
+The result: a line that extends **1 hour into the future** past the "now" marker, representing the forecast for each upcoming moment. The X-axis end is automatically extended by the largest `forecast_horizon` across all entities so shifted points stay visible.
+
+### Matching the horizon to the sensor
+
+The `forecast_horizon` value should match the actual prediction horizon the sensor represents:
+
+| Sensor | `forecast_horizon` |
+|---|---|
+| `solcast_pv_forecast_leistung_in_1_stunde` | `1` |
+| `solcast_pv_forecast_leistung_in_8_stunden` | `8` |
+| Custom "temperature in 30 minutes" | `0.5` |
+
+Setting a value that doesn't match the sensor's real horizon will still shift the line — but the displayed time no longer corresponds to what the sensor is actually predicting.
+
+### Combining with `offset`
+
+`forecast_horizon` and `offset` are **orthogonal**:
+
+- `offset` shifts the fetch window **backward** (for past-period overlay comparison)
+- `forecast_horizon` shifts the display **forward** (for future prediction)
+
+Both can be used on the same entity. Example: overlay yesterday's 1-hour forecast sensor onto today's timeline, shifted 1h forward:
+
+```yaml
+entities:
+  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
+    offset: 24            # fetch yesterday's recordings
+    forecast_horizon: 1   # show them shifted 1h forward
+    name: "Yesterday's +1h forecast"
+```
+
+### Editor
+
+Entity → **Data** tab → *Forecast Horizon* (in hours, supports decimals).
+
+### Notes
+
+- Leave empty (or `0`) to disable — the sensor plots at its recording time as before
+- The fetch window is extended backward by the largest horizon so past recordings can be retrieved and shifted forward into the visible future range
+- Works with live state updates — new recordings appear on the chart at recording time + horizon
+- Multiple entities can use different horizons — the X-axis is extended to cover the largest one
+
+</details>
+
+<details>
 <summary><strong>🏷️ Template Names</strong></summary>
 
 Entity names support HA-style `{{ }}` templates that resolve dynamically using `hass.states`:
@@ -1788,6 +1870,8 @@ entities:
 ```
 
 Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
+
+When used with **line or area charts** (not just bars), the fill correctly stops at the zero baseline: mirrored lines fill upward to zero, normal lines fill downward to zero, and series that cross zero get a clean positive/negative split.
 
 > **Editor:** Per-entity → **Data** tab → *Invert (Mirror)* checkbox
 
