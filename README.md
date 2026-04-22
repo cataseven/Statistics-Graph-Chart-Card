@@ -2502,17 +2502,49 @@ entities:
 
 ### 🧮 Aggregation Functions
 
-| Value | Description |
-|-------|-------------|
-| `avg` | Mean of all points in the bucket *(default)* |
-| `min` | Lowest value |
-| `max` | Highest value |
-| `last` | Most recent value |
-| `first` | Oldest value |
-| `median` | Middle value |
-| `sum` | Sum of all values (useful for energy) |
-| `delta` | Last minus first (net change) |
-| `diff` | Max minus min (spread) |
+Controls how raw data points within each time bucket (interval / hour / date / week / month / year) are combined into a single graph value. Set per-entity via `aggregate_func`.
+
+| Value | Formula | Best for |
+|-------|---------|----------|
+| `avg` *(default)* | Σ(values) ÷ count — the mean | Smooth lines for measurement sensors (temperature, power, humidity) |
+| `min` | Lowest value in the bucket | Coldest temperature, minimum pressure, etc. |
+| `max` | Highest value in the bucket | Peak temperature, max demand |
+| `first` | Value at the start of the bucket (earliest) | Opening price, state at midnight |
+| `last` | Value at the end of the bucket (latest) | Closing price, current state of a slowly-changing sensor |
+| `median` | Middle value when sorted | Noise-resistant center (better than avg for data with outliers) |
+| `sum` | Σ(values) | Totals over already-rate quantities (e.g. €/hour pricing × hours) |
+| `delta` | **max − min** | Spread / range — how much the value **fluctuated** inside the bucket |
+| `change` | **Σ of positive step differences** | Total **accumulated increase** over the bucket — ideal for monotonic counters (energy meters, water meters) because counter resets (jumps to zero) are ignored |
+| `diff` | *Legacy alias for `change`* — YAML only (not shown in the editor dropdown since v2.27), behaves identically | Kept for backward compatibility with existing configs; new configs should use `change` |
+
+#### Worked example — 1-hour bucket with values `[10, 25, 5, 30, 28]` recorded in this order
+
+| Function | Result | How |
+|---|---|---|
+| `avg` | 19.6 | (10 + 25 + 5 + 30 + 28) / 5 |
+| `min` | 5 | Smallest |
+| `max` | 30 | Largest |
+| `first` | 10 | First in time |
+| `last` | 28 | Last in time |
+| `median` | 25 | Middle of sorted `[5, 10, 25, 28, 30]` |
+| `sum` | 98 | 10 + 25 + 5 + 30 + 28 |
+| `delta` | 25 | 30 − 5 (max − min) |
+| `change` | 40 | Positive step differences only: (10→25 = +15) + (25→5 ignored) + (5→30 = +25) + (30→28 ignored) = 15 + 25 |
+
+*Note: `change` adds up **only the positive jumps** between consecutive points. If your counter goes `0 → 5 → 3 → 8`, the result is `5 + 5 = 10`, not `8`. The `5 → 3` drop is treated as a reset and ignored, the `3 → 8` rise counts.*
+
+#### When your sensor is a counter (`state_class: total_increasing`)
+
+Use `aggregate_func: change` with `group_by: date`, `week`, or `month`. This triggers an additional optimization: the card uses HA's **native `change` field** from long-term statistics, which is both faster and more accurate across counter resets than computing from raw history.
+
+```yaml
+entities:
+  - entity: sensor.energy_meter
+    aggregate_func: change
+    graph_type: bar
+group_by: date
+hours_to_show: 720    # 30 days of daily consumption bars
+```
 
 ---
 
