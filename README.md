@@ -108,6 +108,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
 | 🔀 | **Value Transform** — apply a JavaScript expression to every data point using `x`, `first`, `min`, `max`, `avg`, `last`, `index` — ideal for normalize-to-zero, splitting sensors, and percentage calculations |
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
+| 🕳️ | **Break on Gaps** — per-entity toggle to break the line at long `unavailable` / `unknown` outages instead of carrying the last known value across the gap |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
 | 🔌 | **External Statistics** — display imported statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`) by setting `statistic_id` |
@@ -287,8 +288,9 @@ These options apply to the whole card.
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode). Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
-| `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Timeline mode only. |
-| `scroll_mode` | string | `"scrollbar"` | Scroll behavior: `scrollbar` or `wheel`. Timeline mode only. |
+| `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
+| `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
+| `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
 | `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
 | `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
 | `interval_options` | list | `null` | Which interval buttons to show. Example: `["2H", "12H", "24H", "7D"]`. When not set, the default compact set (1H–24H + 7D) is used. Available labels: `1H`, `2H`, `4H`, `8H`, `12H`, `24H`, `3D`, `7D`, `14D`, `30D`, `90D`, `6M`, `1Y`. |
@@ -360,6 +362,8 @@ Each entry under `entities` supports the following options.
 | `line_width` | number | `2.5` | Line thickness in pixels. Timeline mode only. |
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
+| `break_on_null` | boolean | `false` | Break the line at long sensor outages instead of carrying the last known value across the gap. When `false` (default), the previous known value is carried forward indefinitely — the line stays continuous even during long `unavailable` / `unknown` periods. When `true`, short blips stay connected but outages longer than a threshold (default `min(3 × bucket, 30 minutes)`) appear as visible breaks in the line. Timeline mode only. Does **not** affect `value_transform` scripts that return `null` (those already drop their buckets before this logic runs). See [Break on Gaps](#-break-on-gaps). |
+| `carry_forward_ms` | number | `null` | Advanced override for the carry-forward threshold in milliseconds. Takes effect regardless of `break_on_null`. Use this when you want a specific time window instead of the default auto threshold. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
 | `show_state_last` | boolean | `false` | **Legacy** — equivalent to `primary_state_as: last`. Still honored for backward compatibility. |
 | `primary_state_as` | string | `null` | What appears as the big primary value in the state row. `null` (default) = live HA state. `last` = last aggregated graph point. `sum` / `avg` / `min` / `max` / `first` = the chosen aggregate over the visible window, shown as a clean number with no *"SUM"/"AVG"* label prefix. Useful for header-only entities (`show_graph: false`) that just display a computed number. |
@@ -615,9 +619,12 @@ Requires at least 3 entities. Each entity's value is normalized to its `lower_bo
 type: custom:statistics-graph-chart-card
 chart_mode: state_timeline
 hours_to_show: 24
+state_timeline_corner_radius: 3       # 0 = sharp, higher = rounder
 entities:
   - entity: binary_sensor.window_living_room
     name: Living Room
+    tap_action:                        # tap a row to open more-info or run an action
+      action: more-info
     state_map:
       - value: "off"
         label: "Closed"
@@ -628,6 +635,11 @@ entities:
 ```
 
 Displays horizontal colored bars showing state changes over time — one row per entity. Entity names appear on the left, state labels inside each segment when wide enough. Hover for a tooltip showing state name, duration, and time range. Works with `binary_sensor`, `input_boolean`, `input_select`, and any entity with a `state_map`.
+
+**v2.28 additions:**
+- **Corner radius** is configurable via `state_timeline_corner_radius` (0–20 px, default 3). Set to `0` for sharp edges or use higher values for pill-shaped segments.
+- **Horizontal scroll** works via `max_visible_interval` + `scroll_mode`, just like in regular Timeline. Load a week of history (`hours_to_show: 168`) but only show 24 hours on screen at once (`max_visible_interval: 24`) — the chart scrolls to reveal the rest.
+- **Tap action** is supported on each row. Because every row in state_timeline corresponds to exactly one entity and its segments fill the row, tapping a row naturally means "do something with this entity". If the entity has a `tap_action` set it fires; otherwise a standard more-info dialog opens.
 
 ### Chart Mode Compatibility
 
@@ -641,7 +653,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 | Offset | ✅ | — | — | — | — | — | — | — | — | — |
 | Annotations | ✅ | — | — | — | — | — | — | — | — | — |
 | Zoom brush | ✅ | — | — | — | — | — | — | — | — | — |
-| Scroll | ✅ | — | — | — | — | — | — | — | — | — |
+| Scroll | ✅ | ✅ | — | — | — | — | — | — | — | — |
 | Sparkline | ✅ | — | — | — | — | — | — | — | — | — |
 | Range Band | ✅ | — | — | — | — | — | — | — | — | — |
 | Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
@@ -1354,6 +1366,48 @@ Entity → General → **Range Band** toggle (next to Show Average).
 ### Tooltip
 
 When hovering, an additional row shows the range: `Range: 21.2 → 22.8 °C`.
+
+</details>
+
+<details>
+<summary><strong>🕳️ Break on Gaps</strong></summary>
+
+When a sensor goes `unavailable` or `unknown`, the card normally keeps the line continuous by carrying the last known value forward across the gap. That's great for short blips (brief WiFi drops, bucket-level reporting irregularity) but can hide genuine multi-hour outages behind a flat line. The per-entity `break_on_null` option lets you opt in to a visible break instead.
+
+```yaml
+entities:
+  - entity: sensor.steady_sensor
+    # default — continuous line, last known value carried across any gap
+
+  - entity: sensor.flakey_sensor
+    break_on_null: true
+    # short blips still connect, but longer outages appear as gaps
+
+  - entity: sensor.very_specific
+    break_on_null: true
+    carry_forward_ms: 900000   # advanced — 15 min threshold
+```
+
+### Behavior
+
+| Setting | Effect |
+|---|---|
+| `break_on_null: false` *(default)* | Carry-forward runs indefinitely within the visible window. No null-induced gaps, ever. The long-standing default behavior. |
+| `break_on_null: true` | Short sample gaps (bucket-level blips, irregular reporting, brief drops) stay connected. Longer outages — default threshold `min(3 × bucket width, 30 minutes)` — appear as visible breaks in the line. |
+| `carry_forward_ms: N` *(YAML, advanced)* | Override the threshold with an explicit value in milliseconds. Applies regardless of the `break_on_null` setting. |
+
+### Why not just "break at every null"?
+
+A pure "zero carry-forward" mode turns out to be too aggressive on real-world sensors. When bucket width is finer than the sensor's natural sample interval (a common setup at high `points_per_hour`), dozens of buckets between two real samples end up empty even though the sensor is perfectly healthy. The time-based threshold distinguishes *"I'm waiting for the next sample"* from *"the device has been gone for a while"* — which is the distinction users actually want to see.
+
+### Editor
+
+Entity → General → **Break on Gaps** toggle (next to Show Average and Range Band). Only shown in Timeline mode.
+
+### Notes
+
+- Does **not** affect `value_transform` scripts that return `null` to drop a bucket — those nulls are removed from the series before carry-forward logic runs.
+- Works independently per entity, so you can mix well-behaved sensors (continuous line) with flakey ones (visible gaps) on the same card.
 
 </details>
 
