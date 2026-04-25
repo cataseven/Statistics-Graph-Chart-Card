@@ -63,6 +63,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
+| 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
 | 🎯 | **Ten chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
@@ -140,7 +141,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template). All configurable from the editor's Y Axis and X Axis tabs |
 | 📱 | **Mobile touch improvements** — tooltip appears instantly on first tap (no finger movement needed). Long-press (600ms) + drag activates brush zoom; a quick slide shows the tooltip. Bar highlights persist while the finger is held down |
 | 🥧 | **Pie/Radial decimals** — entity `decimals` setting now controls the precision of percentage labels in slice labels, tooltips, and radial bar overlays — not just the value display |
-| 🔮 | **Forecast Horizon** — per-entity `forecast_horizon: N` shifts each recorded data point forward by N hours for sensors whose current state predicts T+N hours ahead (e.g. Solcast PV forecast in 1 hour). The X-axis is extended automatically to keep the shifted line visible. Independent from `offset` — both can be combined |
+| 🔮 | **Forecast Horizon** — per-entity `forecast_horizon: N` shifts each recorded data point along the X-axis. **Positive values** (e.g. `1`) shift forward — for sensors whose current state predicts T+N hours ahead (e.g. Solcast PV forecast in 1 hour); the X-axis is extended automatically to keep the shifted line visible. **Negative values** (e.g. `-24`) shift backward — useful with attribute-based forecasts to overlay tomorrow's data onto today's chart. Independent from `offset` — both can be combined |
 | ⏱️ | **Now Line** — a vertical marker showing the current moment, enabled by default. Customize `now_line_color`, `now_line_opacity`, `now_line_width`, and `now_line_style` (solid, dashed, dotted, long-dash) or disable with `show_now_line: false` |
 | 📐 | **Round Y-axis ticks** — the Y axis picks clean round numbers (0, 500, 1000, 1500) that fit within your data range without expanding it. Enabled by default; disable with `y_axis_round_ticks: false` |
 | 🎯 | **Primary Value dropdown** — `primary_state_as` controls what the big value in the state row shows: live state (default), last aggregated point, or Sum / Avg / Min / Max / First over the visible window. Ideal for clean header-only entities |
@@ -283,7 +284,16 @@ These options apply to the whole card.
 | `graph_end_hour` | number / entity | `null` | Daily end hour filter. Points after this hour each day are hidden. Same format as `graph_start_hour`. Use with `sensor.sunset_hour` for sunrise-to-sunset views. |
 | `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `tomorrow` (tomorrow 00:00 — ideal for next-day spot prices via `data_attribute`), `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). When set to `tomorrow`, the window automatically extends to cover the full next day even without `show_full_period`. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
 | `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. Not required for `graph_start: tomorrow` — that extends automatically. See [Show Full Period](#-show-full-period). |
-| `card_background_color` | color | `null` | Custom background color for the card. Accepts any CSS color (hex, rgba, name). Replaces `card_mod` workarounds — this value persists across re-renders. |
+| `card_background_color` | color | `null` | Custom background color for the card. Accepts any CSS color (hex, rgba, name). Use `rgba(R, G, B, A)` for translucent cards. Replaces `card_mod` workarounds — this value persists across re-renders. |
+| `card_padding` | string/number | `null` | Inner spacing of the card. Accepts a single number (treated as px) or any CSS shorthand like `8px 16px` or `0`. Leave empty for theme default. |
+| `card_border_radius` | string/number | `null` | Roundness of the card corners. Accepts a number (px) or any CSS value like `12px`, `1rem`, `0`. Leave empty for theme default. |
+| `card_border_color` | color | `null` | Custom color for the card border. Only effective when `card_border` is `true`. Accepts any CSS color or variable. |
+| `card_border_width` | string/number | `null` | Border thickness. Accepts a number (px) or any CSS value like `2px`. Only effective when `card_border` is `true`. |
+| `card_background_image` | string | `null` | URL of an image to use as the card background. Local files in `/config/www/` resolve via friendly paths — `local/photos/sunset.jpg`, `photos/sunset.jpg`, and `/local/photos/sunset.jpg` all work, as do external URLs (`https://...`). The image overlays the background color (use `rgba(...)` colors for translucent overlays that show the image through). |
+| `card_background_blur` | number | `null` | Blur amount in pixels applied to `card_background_image` only. The chart, header, and other content stay sharp. `0` or empty = no blur. Useful for soft, atmospheric backgrounds (try `4`–`12`). |
+| `card_header_color` | color | `null` | Custom color for the header title text. Accepts any CSS color or variable. Leave empty for theme default. |
+| `card_header_weight` | string/number | `null` | Header text font weight. Accepts CSS keywords (`light`, `normal`, `bold`) or numbers (`300`, `400`, `600`, `700`). Leave empty for theme default. |
+| `card_header_letter_spacing` | string/number | `null` | Header letter spacing. Accepts a number (treated as px) or any CSS value like `0.5px`, `normal`, `-0.02em`. Leave empty for theme default. |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
@@ -1125,7 +1135,7 @@ entities:
 
 This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
 
-> **Editor:** Per-entity → Appearance tab → *Stack Group* text field (visible when Stacked is enabled)
+> **Editor:** Per-entity → Graph tab → *Stack Group* text field (visible when Stacked is enabled)
 
 </details>
 
@@ -1733,12 +1743,32 @@ The `forecast_horizon` value should match the actual prediction horizon the sens
 
 Setting a value that doesn't match the sensor's real horizon will still shift the line — but the displayed time no longer corresponds to what the sensor is actually predicting.
 
+### Negative horizon — overlay tomorrow's forecast onto today
+
+Some forecast integrations (Solcast PV, EPEX spot prices, weather APIs) expose **future data through entity attributes** — a single sensor whose `attributes` contain an array of timestamped points covering the next 24–48 hours. Combined with `data_attribute`, you can plot this future data directly. But what if you want to see **tomorrow's forecast on today's chart timeline** for an at-a-glance comparison?
+
+A **negative `forecast_horizon`** shifts each point *backward* in time. Setting `-24` moves tomorrow's points 24 hours earlier so they appear at today's clock positions:
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_legend: true
+entities:
+  - entity: sensor.solcast_pv_forecast_tomorrow
+    data_attribute: detailedHourly
+    data_time_field: period_start
+    data_value_field: pv_estimate
+    name: "Tomorrow's forecast (shown today)"
+    forecast_horizon: -24
+```
+
+The X-axis stays anchored to today — only the data slides into view. Combine with the live PV sensor (no horizon) on the same chart to see today's reality next to tomorrow's prediction, both aligned to the same hours.
+
 ### Combining with `offset`
 
 `forecast_horizon` and `offset` are **orthogonal**:
 
 - `offset` shifts the fetch window **backward** (for past-period overlay comparison)
-- `forecast_horizon` shifts the display **forward** (for future prediction)
+- `forecast_horizon` shifts the display **forward** (positive) **or backward** (negative)
 
 Both can be used on the same entity. Example: overlay yesterday's 1-hour forecast sensor onto today's timeline, shifted 1h forward:
 
@@ -1752,7 +1782,7 @@ entities:
 
 ### Editor
 
-Entity → **Data** tab → *Forecast Horizon* (in hours, supports decimals).
+Entity → **Advanced** tab → *Forecast Horizon* (in hours, supports decimals — including negative values).
 
 ### Notes
 
@@ -2837,27 +2867,49 @@ The visual editor adapts in real time based on the current configuration. Option
 
 ### Chart Mode → General Settings
 
-Changing the Chart Mode dropdown instantly reconfigures the entire editor:
+Changing the Chart Mode dropdown instantly reconfigures the entire editor. The card-level settings are organized into six tabs (**Chart**, **Card**, **Overlay**, **X Axis**, **Y Axis**, **Calendar**) — irrelevant tabs disappear entirely based on the chart mode.
 
-| When Chart Mode is… | Display tab | Data tab | Overlays tab |
-|---|---|---|---|
-| **Timeline** | All options visible | All options visible | All options visible |
-| **Scatter** | Grid ✅, Axes ✅, but Stacked / Sparkline / Animate / Logarithmic hidden | Y Axis ✅, but Scroll / Bar Spacing hidden | Compare / Tooltip Sync / Annotations hidden |
-| **Pie / Ranking** | Only Tooltip toggle visible | No Y Axis, no Scroll / Bar Spacing | Only Interval Picker and Attribute List visible |
-| **Heatmap / Calendar** | Same as Pie / Ranking | Same as Pie / Ranking | Same as Pie / Ranking |
+| When Chart Mode is… | Visible tabs | What's hidden inside |
+|---|---|---|
+| **Timeline** | All six tabs | Nothing — full editor |
+| **Scatter** | Chart, Card, Overlay, X Axis, Y Axis | Calendar tab gone. Stacked / Sparkline / Animate / Logarithmic hidden in Chart. Bar Spacing hidden in Chart. |
+| **Pie / Ranking / Radar / Polar Area / Radial Bar** | Chart, Card, Overlay, (X Axis only for Pie/Ranking/Radar) | Y Axis and Calendar tabs gone. Most Chart options hidden — only mode-relevant ones remain. Overlay shows only Interval Picker and Attribute List. |
+| **Heatmap / Calendar** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone. Bar / line settings hidden. |
+| **State Timeline** | Chart, Card, Overlay, Calendar | Axis tabs gone — state timelines don't have Y values. |
+| **Sparkline mode** | Chart, Card | Everything else gone — sparkline is chrome-free. |
 
 ### Chart Mode → Entity Settings
 
-Switching the chart mode also reshapes the per-entity tabs. Options that have no effect in the current mode are completely hidden — for example, Pie charts no longer show Point Color or Color Thresholds, and Heatmap hides Rise/Fall Colors. The matrix below covers the most common fields.
+Each entity's expanded settings are organized into six tabs in a 3×2 grid: **General**, **Graph**, **Basic** / **State Row**, **Colors**, **Advanced**. Switching the chart mode reshapes the visible options. Fields that have no effect in the current mode are completely hidden — Pie charts don't show Point Color or Color Thresholds, and Heatmap hides Rise/Fall Colors.
 
-**Appearance tab**
+**Graph tab**
 
 | When Chart Mode is… | What's visible |
 |---|---|
-| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Range Band, Line, Fill, Data Points — all visible |
-| **Scatter** | Show Extrema, Data Points (no Graph Type, no Line/Fill, no Average) |
+| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Range Band, Break on Gaps, Line block (with width & Bezier), Fill block (with gradient), Data Points, Y Axis Range |
+| **Scatter** | Show Extrema, Data Points, Y Axis Range (no Graph Type, no Line/Fill, no Average) |
 | **Radar** | Line, Fill, Data Points (no Graph Type, no Extrema/Average) |
-| **All other modes** (Pie, Ranking, Radial Bar, Polar Area, Heatmap, Calendar) | Only State Row, Trend Icon, Y Axis Range, and Legend remain |
+| **All other modes** (Pie, Ranking, Radial Bar, Polar Area, Heatmap, Calendar) | Only Y Axis Range remains |
+
+**State Row tab**
+
+Available in all chart modes. Shows the State Row block (primary/secondary value, name position, MDI icon, font sizes, adaptive color) and the Trend Icon block.
+
+**Basic tab**
+
+| Field | Visible in… |
+|---|---|
+| **Y Axis** (Primary / Secondary / Independent) | Timeline, Scatter |
+| Aggregate Function, Attribute, Points/Hour, Decimals, Number Format | All modes (universal) |
+| **Legend** (per-entity stats: Min, Avg, Max, Last, Sum) | All modes |
+
+**Advanced tab**
+
+Available in all chart modes. Always shows: Forecast Horizon, Offset, Value Factor, Value Transform, Fixed Value, State Map, Attribute Data Source.
+
+| Field | Visible in… |
+|---|---|
+| **Invert (Mirror)** | Timeline only |
 
 **Colors tab**
 
@@ -2869,21 +2921,14 @@ Switching the chart mode also reshapes the per-entity tabs. Options that have no
 | **Rise/Fall Colors** | Timeline only |
 | **Color Thresholds** | All modes **except** Pie and Polar Area (single color is meaningful for slices) |
 
-**Data tab**
-
-| Field | Visible in… |
-|---|---|
-| **Y Axis** (Primary / Secondary / Independent) | Timeline, Scatter |
-| **Invert (Mirror)** | Timeline only |
-| Aggregate Function, Decimals, Number Format, Offset, Value Factor, Attribute, etc. | All modes (universal) |
-
 
 ### Sparkline → Entire Card
 
 When `sparkline` is enabled (Timeline mode only):
 
-- **Display tab**: Header and Icon sections disappear
-- **Overlays tab**: Shows *"Overlays are hidden in sparkline mode"*
+- **Card tab**: Header and Icon sections disappear; only Card Styling remains
+- **Overlay tab**: Hidden entirely — overlays don't render in sparkline mode
+- **X Axis / Y Axis / Calendar tabs**: Hidden entirely
 - The card renders with zero chrome — no toolbar, axes, grid, or legend
 
 ### Entity-Level Cascading
