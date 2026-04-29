@@ -231,7 +231,7 @@ These options apply to the whole card.
 | `chart_align` | string | `"center"` | Horizontal alignment for the non-scrolling chart modes. `center` (default) keeps the chart centered in the card. `left` pins it to the left edge — for Ranking, the name-label strip shrinks so bars start closer to the left. `right` mirrors the layout to the right edge — for Ranking, bars grow from right to left with name labels on the right. Applies to Pie, Radial Bar, Polar Area, Radar, and Ranking modes. |
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. |
-| `auto_scale_points` | boolean | `false` | Automatically scale `points_per_hour` when the interval picker changes the time range. See [Auto Scale Points](#-auto-scale-points). |
+| `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month` / `year`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
@@ -371,12 +371,20 @@ Each entry under `entities` supports the following options.
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
 | `line_width` | number | `2.5` | Line thickness in pixels. Timeline mode only. |
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
+| `show_extrema_min` | boolean | `true` | Show the Min value label. Disable to show only the Max — useful for sensors where the minimum is always zero (solar power, rain, etc.). Timeline mode only. |
+| `show_extrema_max` | boolean | `true` | Show the Max value label. Timeline mode only. |
+| `extrema_show_timestamp` | boolean | `true` | Show the time the extreme value was recorded below each label. Disable for compact display showing only the value. Timeline mode only. |
+| `extrema_color` | string | `null` | Custom font color for extrema labels. Accepts any CSS color or variable. Leave empty for theme default. Timeline mode only. |
+| `extrema_font_size` | number | `13` | Font size of the extrema value in pixels. Timestamp text scales proportionally. Timeline mode only. |
+| `extrema_bg_color` | string | `null` | Background color of the extrema label box. Combined with `extrema_bg_opacity`. Leave empty for theme default. Timeline mode only. |
+| `extrema_bg_opacity` | number | `1` | Opacity of the extrema label background (`0` = transparent, `1` = solid). Set to `0` for floating text without a visible box. Timeline mode only. |
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
 | `break_on_null` | boolean | `false` | Break the line at long sensor outages instead of carrying the last known value across the gap. When `false` (default), the previous known value is carried forward indefinitely — the line stays continuous even during long `unavailable` / `unknown` periods. When `true`, short blips stay connected but outages longer than a threshold (default `min(3 × bucket, 30 minutes)`) appear as visible breaks in the line. Timeline mode only. Does **not** affect `value_transform` scripts that return `null` (those already drop their buckets before this logic runs). See [Break on Gaps](#-break-on-gaps). |
 | `carry_forward_ms` | number | `null` | Advanced override for the carry-forward threshold in milliseconds. Takes effect regardless of `break_on_null`. Use this when you want a specific time window instead of the default auto threshold. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
 | `show_state_last` | boolean | `false` | **Legacy** — equivalent to `primary_state_as: last`. Still honored for backward compatibility. |
 | `primary_state_as` | string | `null` | What appears as the big primary value in the state row. `null` (default) = live HA state. `last` = last aggregated graph point. `sum` / `avg` / `min` / `max` / `first` = the chosen aggregate over the visible window, shown as a clean number with no *"SUM"/"AVG"* label prefix. Useful for header-only entities (`show_graph: false`) that just display a computed number. |
+| `show_timestamp` | boolean | `false` | When `primary_state_as` is `min`, `max`, `first`, or `last`, also show the time the value was recorded as a subdued suffix next to the main number. Useful for record-tracking cards (coldest day, peak solar, strongest wind, etc.). Format follows the card's `datetime_format` (or HA locale when set to `system`). Has no effect for `sum` / `avg` (no single timestamp applies). |
 | `name_position` | string | `null` | Controls how the entity name and primary value are arranged in the state row. `null` (default) = name to the left of the value (inline). `below` = value shown larger with the name centered underneath (ApexCharts-style, great for header-only entities and mobile layouts). |
 | `show_second_state_as` | string | `null` | Show a secondary stat value next to the primary state. Options: `min`, `max`, `avg`, `sum`, `first`, `last`. Displays with the same styling as the primary value, with a small label prefix. |
 | `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. |
@@ -2691,35 +2699,35 @@ This produces labels at **40, 50, 60, 70, 80, 90, 100** — similar to setting `
 
 ### ⚡ Auto Scale Points
 
-When using the interval picker to switch between time ranges (1H → 7D), the default `points_per_hour` can be too dense for long periods or too sparse for short ones. Enable `auto_scale_points` to let the card adjust automatically.
-
-The configured `points_per_hour` is treated as the baseline for the configured `hours_to_show`. When a different interval is selected, the value is scaled proportionally and snapped to the nearest power of 2 (…0.5, 1, 2, 4, 8, 16…).
+When using the interval picker to switch between time ranges (1H → 7D → 90D), the default `points_per_hour` and `group_by` can be too dense for long periods or too sparse for short ones. Enable `auto_scale_points` to let the card pick a sensible bucket size automatically based on the visible window.
 
 ```yaml
 type: custom:statistics-graph-chart-card
-points_per_hour: 2
 auto_scale_points: true
 show_interval_picker: true
+hours_to_show: 24
 entities:
   - entity: sensor.power_consumption
   - entity: sensor.solar_production
   - entity: sensor.grid_export
 ```
 
-With `hours_to_show: 24` and `points_per_hour: 2` as the baseline:
+The card chooses both bucket size and `group_by` from a fixed table, optimized to keep around 100 visible points at every zoom level:
 
-| Interval | Scaled pph | ≈ One point every |
-|----------|-----------|-------------------|
-| 1H | 64 | ~1 min |
-| 2H | 32 | ~2 min |
-| 4H | 16 | ~4 min |
-| 8H | 8 | 7.5 min |
-| 12H | 4 | 15 min |
-| 24H | 2 | 30 min *(baseline)* |
-| 3D | 1 | 1 hour |
-| 7D | 0.5 | 2 hours |
+| Visible window | Bucket | One point every |
+|----------------|--------|-----------------|
+| ≤ 4 hours | interval | 5 min |
+| ≤ 12 hours | interval | 15 min |
+| ≤ 36 hours | interval | 30 min |
+| ≤ 4 days | hour | 1 hour |
+| ≤ 10 days | interval | 2 hours |
+| ≤ 100 days | date | 1 day |
+| ≤ 1 year | week | 1 week |
+| > 1 year | month | 1 month |
 
-> **Note:** Entity-level `points_per_hour` overrides are not affected by auto scaling — only entities inheriting the card-level value are scaled.
+> **Note:** Entity-level `points_per_hour` overrides are not affected — only entities inheriting the card-level value are scaled.
+
+**Safe fallback for advanced setups.** When any entity uses `offset`, `forecast_horizon`, or `data_attribute` (attribute-based forecast data), Auto-Scale steps aside and keeps your configured `points_per_hour` and `group_by` exactly as-is. These features create their own time windows that don't align with automatic re-bucketing, so the card stays out of the way to avoid breaking them.
 
 ---
 
