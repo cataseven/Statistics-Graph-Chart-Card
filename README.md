@@ -138,13 +138,14 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts. On mobile, the highlight persists while the finger is held down via a JS-managed class (CSS `:hover` is unreliable on touch devices) |
 | 🎨 | **Color templates** — all color fields (`color`, `icon_color`, `state_color`, `point_colors`, axis/grid colors) accept Jinja2 `{{ }}` templates evaluated server-side by HA via `render_template` WebSocket subscriptions. Use a central `sensor.entity_colors` to manage all entity colors from one place. In the editor, the color picker automatically dims when a template is detected |
 | 📅 | **`graph_start: tomorrow`** — sets the graph window to tomorrow 00:00 → end of day, perfect for displaying next-day spot prices (Nord Pool, EPEX, Tibber) via `data_attribute`. The window extends into the future automatically without requiring `show_full_period` |
-| 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template). All configurable from the editor's Y Axis and X Axis tabs |
+| 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template), and `y_grid_opacity` / `x_grid_opacity` to dial the grid up or down without retyping rgba colors. All configurable from the editor's Y Axis and X Axis tabs |
 | 📱 | **Mobile touch improvements** — tooltip appears instantly on first tap (no finger movement needed). Long-press (600ms) + drag activates brush zoom; a quick slide shows the tooltip. Bar highlights persist while the finger is held down |
 | 🥧 | **Pie/Radial decimals** — entity `decimals` setting now controls the precision of percentage labels in slice labels, tooltips, and radial bar overlays — not just the value display |
 | 🔮 | **Forecast Horizon** — per-entity `forecast_horizon: N` shifts each recorded data point along the X-axis. **Positive values** (e.g. `1`) shift forward — for sensors whose current state predicts T+N hours ahead (e.g. Solcast PV forecast in 1 hour); the X-axis is extended automatically to keep the shifted line visible. **Negative values** (e.g. `-24`) shift backward — useful with attribute-based forecasts to overlay tomorrow's data onto today's chart. Independent from `offset` — both can be combined |
 | ⏱️ | **Now Line** — a vertical marker showing the current moment, enabled by default. Customize `now_line_color`, `now_line_opacity`, `now_line_width`, and `now_line_style` (solid, dashed, dotted, long-dash) or disable with `show_now_line: false` |
 | 📐 | **Round Y-axis ticks** — the Y axis picks clean round numbers (0, 500, 1000, 1500) that fit within your data range without expanding it. Enabled by default; disable with `y_axis_round_ticks: false` |
 | 🎯 | **Primary Value dropdown** — `primary_state_as` controls what the big value in the state row shows: live state (default), last aggregated point, or Sum / Avg / Min / Max / First over the visible window. Ideal for clean header-only entities |
+| 📊 | **Show Range** — `show_range_values: true` displays the visible window's min and max as a subdued `(min → max)` suffix next to the primary value. Perfect for compact "records" cards (`show_graph: false` + `primary_state_as: min`/`max`) where the range previously was only reachable via the graph tooltip |
 | 📑 | **Stacked name layout** — `name_position: below` places the entity name centered below the primary value (ApexCharts-style), great for mobile and header-only entities |
 | 🎨 | **Card shadow & border toggles** — `card_shadow: false` and `card_border: false` allow a flat borderless look or blending with decorated backgrounds |
 
@@ -270,9 +271,11 @@ These options apply to the whole card.
 | `y_grid_style` | string | `"dashed"` | Line pattern for horizontal (Y-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. Also accepts a custom SVG stroke-dasharray like `6 2 2 2`. |
 | `y_grid_width` | number | `1` | Thickness of horizontal grid lines in pixels. Accepts decimals like `0.5`. |
 | `y_grid_color` | string | `null` | Color of horizontal grid lines. Accepts any CSS color, variable, or `{{ }}` template. Leave empty for theme default. |
+| `y_grid_opacity` | number | `0.15` | Opacity of horizontal grid lines, from `0` (invisible) to `1` (fully opaque). Lower values keep the grid subtle without competing with the data. |
 | `x_grid_style` | string | `"dashed"` | Line pattern for vertical (X-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. |
 | `x_grid_width` | number | `1` | Thickness of vertical grid lines in pixels. |
 | `x_grid_color` | string | `null` | Color of vertical grid lines. Accepts any CSS color, variable, or `{{ }}` template. |
+| `x_grid_opacity` | number | `0.15` | Opacity of vertical grid lines, from `0` (invisible) to `1` (fully opaque). |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip. Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
@@ -385,6 +388,7 @@ Each entry under `entities` supports the following options.
 | `show_state_last` | boolean | `false` | **Legacy** — equivalent to `primary_state_as: last`. Still honored for backward compatibility. |
 | `primary_state_as` | string | `null` | What appears as the big primary value in the state row. `null` (default) = live HA state. `last` = last aggregated graph point. `sum` / `avg` / `min` / `max` / `first` = the chosen aggregate over the visible window, shown as a clean number with no *"SUM"/"AVG"* label prefix. Useful for header-only entities (`show_graph: false`) that just display a computed number. |
 | `show_timestamp` | boolean | `false` | When `primary_state_as` is `min`, `max`, `first`, or `last`, also show the time the value was recorded as a subdued suffix next to the main number. Useful for record-tracking cards (coldest day, peak solar, strongest wind, etc.). Format follows the card's `datetime_format` (or HA locale when set to `system`). Has no effect for `sum` / `avg` (no single timestamp applies). |
+| `show_range_values` | boolean | `false` | Show the visible window's min and max as a subdued `(min → max)` suffix next to the primary value. Best paired with `show_graph: false` + `primary_state_as: min`/`max` for compact "records" cards (coldest day, peak solar, etc.) where the range otherwise lives only in a tooltip the user can't reach. Available for any aggregate (Last, First, Min, Max, Sum, Avg). When `show_range_band: true` is enabled on the entity, it uses the more accurate per-bucket band data; otherwise it falls back to the aggregate min/max over the visible window. Has no effect for live State (`primary_state_as: null`). |
 | `name_position` | string | `null` | Controls how the entity name and primary value are arranged in the state row. `null` (default) = name to the left of the value (inline). `below` = value shown larger with the name centered underneath (ApexCharts-style, great for header-only entities and mobile layouts). |
 | `show_second_state_as` | string | `null` | Show a secondary stat value next to the primary state. Options: `min`, `max`, `avg`, `sum`, `first`, `last`. Displays with the same styling as the primary value, with a small label prefix. |
 | `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. |
@@ -991,10 +995,12 @@ Control the appearance of horizontal (Y) and vertical (X) grid lines independent
 y_grid_style: solid      # dashed (default), solid, dotted, long-dash
 y_grid_width: 0.5         # thickness in px (default: 1)
 y_grid_color: "rgba(255,255,255,0.1)"  # any CSS color or {{ template }}
+y_grid_opacity: 0.3       # 0–1 (default: 0.15)
 
 x_grid_style: dotted
 x_grid_width: 0.5
 x_grid_color: "var(--divider-color)"
+x_grid_opacity: 0.3
 ```
 
 > **Editor:** Y Axis tab → Grid section, X Axis tab → Grid section
