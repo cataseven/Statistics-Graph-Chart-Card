@@ -161,6 +161,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar |
 | [Feature Guides](#-feature-guides) | Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and more |
 | [Examples](#-examples) | Ready-to-use YAML configurations |
+| [CSS Styling](#-css-styling-with-card_mod) | `card-mod` recipes and class reference |
 | [Reference](#-reference) | Aggregation functions, date formats, bounds, tap actions |
 | [Visual Editor](#%EF%B8%8F-visual-editor) | Editor tabs, drag-and-drop, dynamic behavior |
 
@@ -304,6 +305,7 @@ These options apply to the whole card.
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
+| `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
 | `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
 | `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
 | `interval_options` | list | `null` | Which interval buttons to show. Example: `["2H", "12H", "24H", "7D"]`. When not set, the default compact set (1H–24H + 7D) is used. Available labels: `1H`, `2H`, `4H`, `8H`, `12H`, `24H`, `3D`, `7D`, `14D`, `30D`, `90D`, `6M`, `1Y`. |
@@ -385,6 +387,7 @@ Each entry under `entities` supports the following options.
 | `break_on_null` | boolean | `false` | Break the line at long sensor outages instead of carrying the last known value across the gap. When `false` (default), the previous known value is carried forward indefinitely — the line stays continuous even during long `unavailable` / `unknown` periods. When `true`, short blips stay connected but outages longer than a threshold (default `min(3 × bucket, 30 minutes)`) appear as visible breaks in the line. Timeline mode only. Does **not** affect `value_transform` scripts that return `null` (those already drop their buckets before this logic runs). See [Break on Gaps](#-break-on-gaps). |
 | `carry_forward_ms` | number | `null` | Advanced override for the carry-forward threshold in milliseconds. Takes effect regardless of `break_on_null`. Use this when you want a specific time window instead of the default auto threshold. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
+| `show_color_dot` | boolean | `true` | Show the colored marker next to this entity in the state row, compact legend, detail legend, timeline tooltip and all chart-mode tooltips. Set to `false` to hide the marker while keeping the surrounding text in place (text does not shift). Useful when you only have one entity and don't need a color marker, or when `color_thresholds` causes the static dot color to no longer match the dynamically-colored line / bar / value. |
 | `show_state_last` | boolean | `false` | **Legacy** — equivalent to `primary_state_as: last`. Still honored for backward compatibility. |
 | `primary_state_as` | string | `null` | What appears as the big primary value in the state row. `null` (default) = live HA state. `last` = last aggregated graph point. `sum` / `avg` / `min` / `max` / `first` = the chosen aggregate over the visible window, shown as a clean number with no *"SUM"/"AVG"* label prefix. Useful for header-only entities (`show_graph: false`) that just display a computed number. |
 | `show_timestamp` | boolean | `false` | When `primary_state_as` is `min`, `max`, `first`, or `last`, also show the time the value was recorded as a subdued suffix next to the main number. Useful for record-tracking cards (coldest day, peak solar, strongest wind, etc.). Format follows the card's `datetime_format` (or HA locale when set to `system`). Has no effect for `sum` / `avg` (no single timestamp applies). |
@@ -413,7 +416,7 @@ Each entry under `entities` supports the following options.
 | `point_colors` | string | `null` | Color of data point dots. Use `threshold` for per-point threshold color. Accepts `{{ }}` templates. |
 | `icon_color` | string | `null` | State row icon color. Use `threshold` for dynamic color. Accepts `{{ }}` templates. |
 | `state_color` | string | `null` | State row value text color. Use `threshold` for dynamic color. Accepts `{{ }}` templates. |
-| `state_adaptive_color` | boolean | `false` | Automatically tint state value and icon with the entity's line color. Quick alternative to setting `state_color` and `icon_color` manually. |
+| `state_adaptive_color` | boolean | `false` | Automatically tint the state value, icon, **and the colored dot** with the entity's line color. When `color_thresholds` are defined, all three follow the threshold-resolved color as the value crosses each band — they stay in sync. Quick alternative to setting `state_color` and `icon_color` manually. |
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
 
@@ -2588,6 +2591,155 @@ entities:
     lower_bound: "~0"
     upper_bound: "~100"
 ```
+
+</details>
+
+---
+
+## 🎨 CSS Styling with `card_mod`
+
+For users who want to go beyond the built-in styling options, the card exposes a rich set of CSS class names that can be targeted with [`card-mod`](https://github.com/thomasloven/lovelace-card-mod). This is useful for theme integration, per-card overrides, or visual tweaks that aren't available as configuration options (e.g. animated transitions, custom shadows, gradient backgrounds, repeating-pattern overlays).
+
+<details>
+<summary>Show CSS class reference and examples</summary>
+
+### Setup
+
+Install **card-mod** from HACS first. Then add a `card_mod:` block to any card config:
+
+```yaml
+type: custom:statistics-graph-chart-card
+entities:
+  - entity: sensor.power
+card_mod:
+  style: |
+    .sgc-plot {
+      background: rgba(0, 0, 0, 0.1);
+    }
+```
+
+### CSS class reference
+
+| Class | Where it appears | What it covers |
+|---|---|---|
+| **Container** | | |
+| `.sgc-card` | Root | Outermost card wrapper. Most card-mod overrides target this. |
+| `.sgc-header` | Top of card | Title + icon + battery row. |
+| `.sgc-header-title` | Header | Title text element. |
+| `.sgc-header-icon` | Header | MDI / image icon next to the title. |
+| `.sgc-battery-icon` | Header | Battery indicator. |
+| `.sgc-state-rows` | Above/below graph | Wrapper for all state rows. |
+| `.sgc-state-row` | Per entity | One row with name + value + dot. |
+| `.sgc-state-color` | Per entity | The colored dot. |
+| `.sgc-state-name` | Per entity | Entity name text. |
+| `.sgc-state-value` | Per entity | Primary value text. |
+| `.sgc-state-unit` | Per entity | Unit suffix. |
+| `.sgc-state-icon` | Per entity | MDI icon in the state row. |
+| `.sgc-state-second` | Per entity | Secondary value next to primary. |
+| `.sgc-state-timestamp` | Per entity | Timestamp suffix for record values. |
+| `.sgc-state-range` | Per entity | `(min → max)` suffix. |
+| **Graph area** | | |
+| `.sgc-plot` | Chart container | The SVG/canvas plot region. Target this for chart backgrounds. |
+| `.sgc-plot-wrap` | Outer wrapper | Wraps `.sgc-plot` and handles scrolling. |
+| `.sgc-svg` | Main SVG | All vector chart elements live here. |
+| `.sgc-axis-x` / `.sgc-axis-y` / `.sgc-axis-y2` | Axes | Tick labels and tick marks. |
+| `.sgc-grid` | Grid lines | Horizontal + vertical grid lines. |
+| `.sgc-now-line` | Now indicator | Vertical "now" line. |
+| **Tooltip** | | |
+| `.sgc-tooltip` | Hover tooltip | The floating box that follows the cursor (Timeline / Scatter). |
+| `.sgc-pie-tooltip` | Hover tooltip | Tooltip for Pie / Ranking / Radial Bar / Polar Area / Radar / Heatmap / Calendar. |
+| `.sgc-tt-time` | Tooltip header | Timestamp at the top of the tooltip. |
+| `.sgc-tt-row` | Tooltip row | One row inside the tooltip. |
+| `.sgc-tt-name` / `.sgc-tt-val` / `.sgc-tt-swatch` | Tooltip cells | Name, value, color swatch in the tooltip. |
+| `.sgc-pie-tt-row` / `.sgc-pie-tt-dot` / `.sgc-pie-tt-name` / `.sgc-pie-tt-val` | Pie tooltip | Same parts for the canvas-chart tooltip. |
+| **Legend** | | |
+| `.sgc-legend` | Compact legend | Inline color-key under the graph. |
+| `.sgc-legend-item` | Per entry | One legend item (swatch + name). |
+| `.sgc-legend-swatch` | Per entry | The colored swatch. |
+| `.sgc-detail-legend-row` | Detail legend | One row in the per-entity stats legend. |
+| **Mode-specific** | | |
+| `.sgc-stl-cell` | State Timeline | One state segment in the timeline. Round corners, color, or per-state styling go here. |
+| `.sgc-extrema-label` | Min/Max labels | Floating Min/Max value labels on bars / data points. |
+| `.sgc-date-picker` | Date picker bar | Built-in date navigation bar. |
+| `.sgc-interval-picker` | Interval picker | Quick-select time range buttons. |
+
+### Example: Tooltip with a different background than the card
+
+If the card has a transparent background but you want a solid tooltip:
+
+```yaml
+card_mod:
+  style: |
+    .sgc-card {
+      background: transparent;
+      box-shadow: none;
+    }
+    .sgc-tooltip,
+    .sgc-pie-tooltip {
+      background: rgba(20, 20, 20, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+    }
+    .sgc-tt-time,
+    .sgc-pie-tt-row .sgc-pie-tt-name:first-child {
+      color: #4A90D9;
+      font-weight: 600;
+    }
+```
+
+### Example: Vertical dashed-bar background (Unifi-style)
+
+Paint a repeating gradient pattern behind the chart:
+
+```yaml
+card_mod:
+  style: |
+    .sgc-plot {
+      background-image: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.08) 0px,
+        rgba(255, 255, 255, 0.08) 2px,
+        transparent 2px,
+        transparent 7px
+      );
+    }
+```
+
+Tweak the stripe width (the `2px` value) and spacing (the `7px` value) to taste.
+
+### Example: Pulse animation on a record-tracking state row
+
+```yaml
+card_mod:
+  style: |
+    @keyframes sgc-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .sgc-state-color {
+      animation: sgc-pulse 2s ease-in-out infinite;
+    }
+```
+
+### Example: Theme-aware accent for the header
+
+```yaml
+card_mod:
+  style: |
+    .sgc-header-title {
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+```
+
+### Notes
+
+- All classes are stable across releases, but new ones may be added — existing ones won't be renamed without a version bump in the release notes.
+- Shadow DOM: card-mod handles it transparently, but if you're using raw CSS without card-mod, you'll need to inject into the right shadow root.
+- The `!important` flag is often needed when overriding tooltip / popup styles since the card sets them inline.
 
 </details>
 
