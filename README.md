@@ -89,6 +89,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔍 | **Zoom brush** — click and drag on the graph to zoom into a time range; double-click or "Reset zoom" to restore |
 | 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph. Entity-driven or manual timestamps, with per-annotation opacity and Jinja2 template support |
 | 🔄 | **Tooltip sync** — hover one card and see crosshairs on all synced cards, with optional named groups |
+| 🔍 | **Zoom sync** — brush-zoom on one card and every other card in the group jumps to the same time window (double-click anywhere to reset them all) |
+| ↔️ | **Scroll sync** — horizontal scrolling stays in lock-step across all cards in the same group, even when their `hours_to_show` differ |
 | 📊 | **Stacked** mode — stack line/area/bar entities to show composition |
 | ↔️ | **Time Offset** — per-entity hour offset to overlay the same sensor from different periods on one graph. Supports helper entities (e.g. `input_number`) for dynamic offset values |
 | 〰️ | Soft bounds (`~` prefix) — axis expands when data exceeds the bound |
@@ -313,6 +315,10 @@ These options apply to the whole card.
 | `attribute_list_position` | string | `"left"` | Position of the attribute list: `left` / `center` / `right` |
 | `tooltip_sync` | boolean | `false` | Broadcast hovered timestamp to other synced cards. Timeline mode only. |
 | `tooltip_sync_group` | string | `null` | Named group for tooltip sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
+| `zoom_sync` | boolean | `false` | When you brush-zoom (or double-click to reset) on this card, the same time window is applied to all other cards sharing the group. Timeline mode only; requires Brush Zooming enabled. See [Zoom Sync](#-zoom-sync). |
+| `zoom_sync_group` | string | `null` | Named group for zoom sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
+| `scroll_sync` | boolean | `false` | Mirror horizontal scrolling across all other cards in the same group. Most useful when `max_visible_interval` is set so the chart is actually scrollable. Timeline mode only. See [Scroll Sync](#-scroll-sync). |
+| `scroll_sync_group` | string | `null` | Named group for scroll sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
 | `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
@@ -692,7 +698,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 ## 📚 Feature Guides
 
 <details>
-<summary>Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and 18 more</summary>
+<summary>Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and 20 more</summary>
 
 <details>
 <summary><strong>📅 Date Picker</strong></summary>
@@ -1642,6 +1648,115 @@ In this setup:
 4. When you move the mouse away, a hide event clears all synced tooltips
 
 Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
+
+Timeline mode only.
+
+</details>
+
+<details>
+<summary><strong>🔍 Zoom Sync</strong></summary>
+
+Synchronize **zoom windows** across multiple cards. When you brush-zoom into a time range on one card — or double-click to reset — every other card in the same group adopts the same window. The exact same `tooltip_sync_group` pattern, just for zoom instead of hover.
+
+### Setup
+
+Enable Zoom Sync on each card you want to participate, and give related cards the same Sync Group name:
+
+```yaml
+# Card 1 — Energy Production
+type: custom:statistics-graph-chart-card
+zoom_sync: true
+zoom_sync_group: "energy"
+entities:
+  - entity: sensor.energy_produced
+
+# Card 2 — Energy Consumption (zoom mirrors Card 1)
+type: custom:statistics-graph-chart-card
+zoom_sync: true
+zoom_sync_group: "energy"
+entities:
+  - entity: sensor.energy_consumed
+
+# Card 3 — Climate (independent zoom)
+type: custom:statistics-graph-chart-card
+zoom_sync: true
+zoom_sync_group: "climate"
+entities:
+  - entity: sensor.living_room_temperature
+```
+
+In this setup, brush-zooming Card 1 zooms Card 2 to the same window — Card 3 keeps its own zoom.
+
+### How It Works
+
+1. You brush-zoom on Card A — once the zoom completes, a `sgc-zoom-sync` event is dispatched on `window` containing the start/end timestamps, the sync group name, and the card's instance ID
+2. All other cards with Zoom Sync enabled listen for this event
+3. If the group matches (or both cards have no group), the receiving card adopts the same `_viewWindow` and re-renders
+4. Double-clicking on any synced card to reset the zoom broadcasts a null window, clearing every other card in the group
+
+The time window is shared in real time (timestamps, not pixels) so cards with different `hours_to_show` or `points_per_hour` still land on exactly the same zoomed range.
+
+### Combining with Tooltip and Scroll Sync
+
+All three sync features use independent groups so you can mix them however you like — for a fully-linked dashboard, give all three the same group name on every card:
+
+```yaml
+tooltip_sync: true
+tooltip_sync_group: "main"
+zoom_sync: true
+zoom_sync_group: "main"
+scroll_sync: true
+scroll_sync_group: "main"
+```
+
+Timeline mode only. Requires Brush Zooming to be enabled.
+
+</details>
+
+<details>
+<summary><strong>↔️ Scroll Sync</strong></summary>
+
+Synchronize **horizontal scrolling** across cards. Most useful with `max_visible_interval` set so the chart is wider than what's visible — scrolling one card slides every other card in the same group to the matching position.
+
+### Setup
+
+```yaml
+# Card 1 — 40 days total, 10 days visible at a time
+type: custom:statistics-graph-chart-card
+hours_to_show: 960              # 40 days
+max_visible_interval: 240       # 10 days visible
+scroll_mode: scrollbar
+scroll_sync: true
+scroll_sync_group: "energy"
+entities:
+  - entity: sensor.energy_produced
+
+# Card 2 — same setup, scrolls in lock-step
+type: custom:statistics-graph-chart-card
+hours_to_show: 960
+max_visible_interval: 240
+scroll_mode: scrollbar
+scroll_sync: true
+scroll_sync_group: "energy"
+entities:
+  - entity: sensor.energy_consumed
+```
+
+Now dragging the scrollbar (or wheel-scrolling, depending on `scroll_mode`) on one card moves the other to the matching position.
+
+### How It Works
+
+The shared value is a 0–1 ratio (`scrollLeft / (scrollWidth - clientWidth)`), not absolute pixels. That means:
+
+- Cards with identical width and `hours_to_show` stay perfectly aligned
+- Cards with different sizes still land on the same **relative** point — if you're halfway through Card A's scroll range, Card B jumps to halfway through its own range
+- Cards without a scrollable area (`max_visible_interval` not set, or the data isn't wide enough) silently ignore broadcasts
+
+A ping-pong guard avoids feedback loops: when one card moves in response to a sync event, its own scroll handler skips the next broadcast for one frame.
+
+### Combining with Zoom and Tooltip Sync
+
+Identical group rules to Tooltip / Zoom Sync. Use the same group name across all three for a fully linked experience — hover, zoom and scroll all stay in step.
 
 Timeline mode only.
 
@@ -2998,7 +3113,7 @@ The General Settings panel is divided into four tabs to reduce clutter:
 | **Display** | Chart mode, height, header, icon, graph data (hours, points/hour, group by, update interval, visible window, scroll mode), visual toggles (grid, tooltip, stacked, sparkline, auto scale, compact legend + position…), battery |
 | **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
 | **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
-| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Energy Date Sync, Date Picker (position + group + visible modes), Annotations |
+| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Zoom Sync, Scroll Sync, Energy Date Sync, Date Picker (position + group + visible modes), Annotations |
 
 Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
 
