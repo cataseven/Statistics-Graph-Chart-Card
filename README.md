@@ -111,6 +111,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📏 | **Grid aligned to tick marks** — horizontal grid lines match Y axis tick values exactly |
 | 🔀 | **Value Transform** — apply a JavaScript expression to every data point using `x`, `first`, `min`, `max`, `avg`, `last`, `index` — ideal for normalize-to-zero, splitting sensors, and percentage calculations |
 | 📏 | **Range Band** — per-entity min/max shaded band behind the line showing value fluctuation within each data bucket |
+| 🏷️ | **Data Labels** — print the numeric value of every visible data point right above the bar / line / point, ApexCharts-style. Font size adapts automatically to bar width; text renders in the entity color with a card-background halo for readability. Per-entity opt-in via `show_data_labels` |
 | 🕳️ | **Break on Gaps** — per-entity toggle to break the line at long `unavailable` / `unknown` outages instead of carrying the last known value across the gap |
 | ↔️ | **Dynamic Y-axis width** — axis label areas auto-expand to fit longer numbers without clipping |
 | ⚡ | **Energy Date Sync** — sync the card's time range with HA's Energy dashboard date picker or [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) |
@@ -384,6 +385,8 @@ Each entry under `entities` supports the following options.
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
 | `show_extrema_min` | boolean | `true` | Show the Min value label. Disable to show only the Max — useful for sensors where the minimum is always zero (solar power, rain, etc.). Timeline mode only. |
 | `show_extrema_max` | boolean | `true` | Show the Max value label. Timeline mode only. |
+| `show_data_labels` | boolean | `false` | Print the numeric value of every visible data point right above its bar / line / point — ApexCharts-style. Uses the entity's `decimals` and `number_format` settings. Text renders in the entity color with a card-background halo so it stays readable over busy charts. For bars, font size adapts to bar width and labels shrink down to a minimum of 7 px before being skipped. Best paired with reasonable point counts; dense charts produce overlapping labels. Timeline mode only. |
+| `data_labels_font_size` | number | `null` | Override the auto-picked font size for data labels in pixels. Leave empty to inherit the default (10 px for lines, dynamic per-bar for bars). Has no effect when `show_data_labels: false`. Timeline mode only. |
 | `extrema_show_timestamp` | boolean | `true` | Show the time the extreme value was recorded below each label. Disable for compact display showing only the value. Timeline mode only. |
 | `extrema_color` | string | `null` | Custom font color for extrema labels. Accepts any CSS color or variable. Leave empty for theme default. Timeline mode only. |
 | `extrema_font_size` | number | `13` | Font size of the extrema value in pixels. Timestamp text scales proportionally. Timeline mode only. |
@@ -1399,6 +1402,45 @@ Entity → General → **Range Band** toggle (next to Show Average).
 ### Tooltip
 
 When hovering, an additional row shows the range: `Range: 21.2 → 22.8 °C`.
+
+</details>
+
+<details>
+<summary><strong>🏷️ Data Labels</strong></summary>
+
+Print the numeric value of every visible data point right above its bar / line / point — the same kind of inline annotation ApexCharts calls `dataLabels`. Useful when you want the chart to be readable at a glance without forcing the viewer to hover for every value.
+
+```yaml
+entities:
+  - entity: sensor.solar_production_today
+    graph_type: bar
+    aggregate_func: change
+    show_data_labels: true
+    decimals: 1
+    color: "#f1c40f"
+```
+
+### How it works
+
+- Labels render above each point, in the entity's color, with a card-background halo (paint-order stroke) so they stay readable over crowded areas.
+- Number formatting follows the entity's own `decimals` and `number_format` settings — no separate config.
+- For **bars**, the font size adapts to the available bar width and shrinks down to a minimum of 7 px before the label is skipped entirely. Use `data_labels_font_size` to pin a specific size if you'd rather control it yourself.
+- For **lines / steps**, labels anchor to the X position of each data point at a default 10 px.
+
+### When to use it
+
+- Bar charts of daily / hourly aggregates where the exact number matters (energy, rain, hours of sunshine)
+- Compact summary cards where hover isn't practical (mobile, kiosk displays)
+- Reports / screenshots where the chart needs to stand alone without tooltip interaction
+
+### When NOT to use it
+
+- High-density line charts — labels will overlap and become illegible
+- When you already use `show_extrema` to highlight just the peaks; the two combined creates visual noise
+
+### Editor
+
+Entity → General → **Data Labels** toggle, sitting next to **Break on Gaps**.
 
 </details>
 
