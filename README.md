@@ -62,6 +62,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | | |
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
+| 🕯️ | **Candlestick (OHLC) charts** — render any entity as trading-style candles showing the open, high, low, and close of each time bucket. Green/red up/down bodies with high–low wicks, customizable colors (`candle_up_color`, `candle_down_color`), and an O/H/L/C tooltip. Candles snap to clean clock intervals and sit centered on the X-axis ticks |
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
@@ -77,7 +78,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🕐 | **Dynamic Graph Hours** — filter data to specific hours each day with `graph_start_hour` and `graph_end_hour`. Accepts fixed numbers or sensor entities (e.g. `sensor.sunrise_hour`) for sunrise-to-sunset views that adapt throughout the year |
 | 🛠️ | **Full visual editor** — every option is configurable through the Lovelace UI without touching YAML; entities can be reordered by drag-and-drop. The editor adapts dynamically: irrelevant options hide based on the selected chart mode |
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
-| ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis |
+| ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis. Hidden by default; enable it when you want right-side labels |
 | ↕️ | **Independent Y-axis** — `y_axis: independent` gives each entity its own hidden scale based on its min/max, enabling trend comparison across sensors with wildly different units (°C, %, lux, hPa) on a single graph |
 | 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch) |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
@@ -235,7 +236,7 @@ These options apply to the whole card.
 | `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) / `horizontal` / `horizontal-center` / `horizontal-right`. Horizontal modes flow entities side by side in a single row. |
 | `chart_align` | string | `"center"` | Horizontal alignment for the non-scrolling chart modes. `center` (default) keeps the chart centered in the card. `left` pins it to the left edge — for Ranking, the name-label strip shrinks so bars start closer to the left. `right` mirrors the layout to the right edge — for Ranking, bars grow from right to left with name labels on the right. Applies to Pie, Radial Bar, Polar Area, Radar, and Ranking modes. |
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
-| `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. |
+| `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month` / `year`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
@@ -284,7 +285,7 @@ These options apply to the whole card.
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip. Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
-| `show_y2_axis` | boolean | `true` | Show secondary (right) Y axis value labels independently. Only visible when at least one entity uses `y_axis: secondary`. Disable to hide right-side labels while keeping secondary entities plotted. |
+| `show_y2_axis` | boolean | `false` | Show secondary (right) Y axis value labels independently. **Hidden by default** — enable it to show right-side labels. Only relevant when at least one entity uses `y_axis: secondary`; those entities stay plotted even while the axis labels are hidden. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
 | `show_x_ticks` | boolean | `false` | Draw small tick marks at each X-axis label position. |
 | `show_y_ticks` | boolean | `false` | Draw small tick marks at each Y-axis label position. |
@@ -363,7 +364,7 @@ Each entry under `entities` supports the following options.
 | `data_time_year` | number | `null` | Reference year used to anchor categorical time units (`month_of_year`, `day_of_year`, `week_of_year`). Empty = current year. Has no effect for `iso` or `epoch_*` units. |
 | `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
 | `forecast_horizon` | number | `null` | For forecast sensors whose current state predicts T+N hours ahead (e.g. "Solar forecast in 1 hour"). Shifts each recorded data point forward by N hours so the value lands at its target future time on the X axis. The X axis is extended automatically to keep the shifted points visible. Independent from `offset` — both can be combined. See [Forecast Horizon](#-forecast-horizon). |
-| `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. |
+| `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. The editor offers the same divisor-of-60 presets as the card-level setting; YAML accepts any integer. |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
@@ -375,7 +376,7 @@ Each entry under `entities` supports the following options.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `graph_type` | string | `"line"` | `line` / `step` / `bar`. Only available in Timeline mode — other chart modes ignore this. |
+| `graph_type` | string | `"line"` | `line` / `step` / `bar` / `candlestick`. Only available in Timeline mode — other chart modes ignore this. See [Candlestick (OHLC)](#candlestick-ohlc). |
 | `show_graph` | boolean | `true` | Show this entity on the graph |
 | `show_line` | boolean | `true` | Show the line edge. Timeline mode only. |
 | `show_fill` | boolean | `true` | Show the fill area below the line. Timeline mode only. |
@@ -430,6 +431,8 @@ Each entry under `entities` supports the following options.
 | `state_adaptive_color` | boolean | `false` | Automatically tint the state value, icon, **and the colored dot** with the entity's line color. When `color_thresholds` are defined, all three follow the threshold-resolved color as the value crosses each band — they stay in sync. Quick alternative to setting `state_color` and `icon_color` manually. |
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
+| `candle_up_color` | string | `"#26a69a"` | Body & wick color for **rising** candles (close ≥ open). Only applies when `graph_type: candlestick`. |
+| `candle_down_color` | string | `"#ef5350"` | Body & wick color for **falling** candles (close < open). Only applies when `graph_type: candlestick`. |
 
 </details>
 
@@ -444,9 +447,34 @@ The `chart_mode` option at the card level controls the overall visualization. Ea
 
 ### Timeline *(default)*
 
-Classic time-series chart. Entities can individually be `line`, `step`, or `bar`. All Timeline-specific options (axes, grid, stacked, scroll, annotations, offset, zoom) are available.
+Classic time-series chart. Entities can individually be `line`, `step`, `bar`, or `candlestick`. Interval bars and candles align to clean clock boundaries and sit centered on the X-axis ticks. All Timeline-specific options (axes, grid, stacked, scroll, annotations, offset, zoom) are available.
 
 ![image2](images/bar.png)
+
+### Candlestick (OHLC)
+
+Set `graph_type: candlestick` on any entity to draw it as trading-style candles instead of a line or bar. Each candle summarizes one time bucket:
+
+- **Body** — spans the bucket's open (first value) and close (last value)
+- **Wick** — the thin line spanning the bucket's high (max) and low (min)
+- **Color** — green when the value rose over the bucket (close ≥ open), red when it fell — set your own with `candle_up_color` / `candle_down_color`
+
+Hovering a candle shows its Open / High / Low / Close in the tooltip. Candles align to clean clock intervals (e.g. :00 / :15 / :30) and stay centered on the matching X-axis tick, so they don't drift as time advances.
+
+![Candlestick Example](images/candlestick.png)
+
+```yaml
+type: custom:statistics-graph-chart-card
+entities:
+  - entity: sensor.btc_price
+    graph_type: candlestick
+    candle_up_color: "#26a69a"
+    candle_down_color: "#ef5350"
+hours_to_show: 2
+points_per_hour: 12   # 12 → one candle every 5 minutes
+```
+
+**Tip:** each candle covers exactly one data bucket. Use `points_per_hour` (history) or `group_by: date` / `week` / `month` (long-range statistics) to choose how much time a candle spans. Fewer, wider candles give clearer wicks; very high point counts produce thin single-sample candles with little or no wick.
 
 ### Scatter
 
@@ -693,7 +721,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 | Sparkline | ✅ | — | — | — | — | — | — | — | — | — |
 | Range Band | ✅ | — | — | — | — | — | — | — | — | — |
 | Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
-| Entity graph_type | line/step/bar | — | — | — | — | — | — | — | — | — |
+| Entity graph_type | line/step/bar/candlestick | — | — | — | — | — | — | — | — | — |
 | lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
 
 </details>
