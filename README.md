@@ -64,7 +64,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | | |
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
-| 🕯️ | **Candlestick (OHLC) charts** — render any entity as trading-style candles showing the open, high, low, and close of each time bucket. Green/red up/down bodies with high–low wicks, customizable colors (`candle_up_color`, `candle_down_color`), and an O/H/L/C tooltip. Candles snap to clean clock intervals and sit centered on the X-axis ticks |
+| 🕯️ | **Candlestick (OHLC) charts** — render any entity as trading-style candles showing the open, high, low, and close of each time bucket. Green/red up/down bodies with high–low wicks and an O/H/L/C tooltip; recolor with the Rise/Fall Colors feature. Candles snap to clean clock intervals and sit centered on the X-axis ticks |
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
@@ -433,8 +433,6 @@ Each entry under `entities` supports the following options.
 | `state_adaptive_color` | boolean | `false` | Automatically tint the state value, icon, **and the colored dot** with the entity's line color. When `color_thresholds` are defined, all three follow the threshold-resolved color as the value crosses each band — they stay in sync. Quick alternative to setting `state_color` and `icon_color` manually. |
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
-| `candle_up_color` | string | `"#26a69a"` | Body & wick color for **rising** candles (close ≥ open). Only applies when `graph_type: candlestick`. |
-| `candle_down_color` | string | `"#ef5350"` | Body & wick color for **falling** candles (close < open). Only applies when `graph_type: candlestick`. |
 
 </details>
 
@@ -459,9 +457,11 @@ Set `graph_type: candlestick` on any entity to draw it as trading-style candles 
 
 - **Body** — spans the bucket's open (first value) and close (last value)
 - **Wick** — the thin line spanning the bucket's high (max) and low (min)
-- **Color** — green when the value rose over the bucket (close ≥ open), red when it fell — set your own with `candle_up_color` / `candle_down_color`
+- **Color** — green when the value rose over the bucket (close ≥ open), red when it fell
 
 Hovering a candle shows its Open / High / Low / Close in the tooltip. Candles align to clean clock intervals (e.g. :00 / :15 / :30) and stay centered on the matching X-axis tick, so they don't drift as time advances.
+
+**Custom colors:** the green/red defaults can be overridden with the entity's existing [Rise/Fall Colors](#-risefall-colors) feature — turn it on and the **Rising** color paints up candles while the **Falling** color paints down candles. No separate candlestick color options are needed.
 
 ![Candlestick Example](images/candlestick.png)
 
@@ -470,8 +470,11 @@ type: custom:statistics-graph-chart-card
 entities:
   - entity: sensor.btc_price
     graph_type: candlestick
-    candle_up_color: "#26a69a"
-    candle_down_color: "#ef5350"
+    # Optional — recolor up/down candles via the Rise/Fall Colors feature:
+    rise_fall_colors:
+      enabled: true
+      increase: "#26a69a"   # up candle (close ≥ open)
+      decrease: "#ef5350"   # down candle (close < open)
 hours_to_show: 2
 points_per_hour: 12   # 12 → one candle every 5 minutes
 ```
