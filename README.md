@@ -26,6 +26,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image3](images/editor1.png)
 
+![Candlestick Example](images/candlestick.png)
+
 ![Scatter Example](images/scatter-example.png)
 
 ![Pie Example](images/pie-example.png)
