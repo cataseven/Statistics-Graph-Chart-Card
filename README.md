@@ -28,6 +28,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![Candlestick Example](images/candlestick.png)
 
+![Moving Averages Example](images/movingaverage.png)
+
 ![Scatter Example](images/scatter-example.png)
 
 ![Pie Example](images/pie-example.png)
@@ -85,6 +87,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch) |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
+| 〽️ | **Moving averages** — overlay one or more simple moving-average (SMA) lines per entity, each with its own period (in buckets), color, and width. The card extends the look-back beyond the visible window automatically, so a long period (e.g. MA26) draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value; drawn on the entity's own Y axis |
 | 💬 | Tooltip with crosshair on hover |
 | 🌅 | Per-entity gradient fill with same-hue fade — applies to both area charts and bar charts (with rounded corners) |
 | ▦ | Grid lines — horizontal + vertical aligned to actual data points |
@@ -398,6 +401,7 @@ Each entry under `entities` supports the following options.
 | `extrema_bg_color` | string | `null` | Background color of the extrema label box. Combined with `extrema_bg_opacity`. Leave empty for theme default. Timeline mode only. |
 | `extrema_bg_opacity` | number | `1` | Opacity of the extrema label background (`0` = transparent, `1` = solid). Set to `0` for floating text without a visible box. Timeline mode only. |
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
+| `moving_averages` | list | `null` | One or more simple moving-average (SMA) lines drawn over this entity. Each item takes `period` (length in buckets, **required**), `color`, and an optional `width`. The bucket size comes from `points_per_hour` / `group_by`, so a `period` of `26` means *"average of the last 26 buckets"*. The card extends the history look-back beyond the visible window automatically, so a long period draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value. Plotted on the entity's own Y axis. Timeline mode only. See [Moving Averages](#-moving-averages). |
 | `break_on_null` | boolean | `false` | Break the line at long sensor outages instead of carrying the last known value across the gap. When `false` (default), the previous known value is carried forward indefinitely — the line stays continuous even during long `unavailable` / `unknown` periods. When `true`, short blips stay connected but outages longer than a threshold (default `min(3 × bucket, 30 minutes)`) appear as visible breaks in the line. Timeline mode only. Does **not** affect `value_transform` scripts that return `null` (those already drop their buckets before this logic runs). See [Break on Gaps](#-break-on-gaps). |
 | `carry_forward_ms` | number | `null` | Advanced override for the carry-forward threshold in milliseconds. Takes effect regardless of `break_on_null`. Use this when you want a specific time window instead of the default auto threshold. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
@@ -1437,6 +1441,53 @@ Entity → General → **Range Band** toggle (next to Show Average).
 ### Tooltip
 
 When hovering, an additional row shows the range: `Range: 21.2 → 22.8 °C`.
+
+</details>
+
+<details>
+<summary><strong>〽️ Moving Averages</strong></summary>
+
+Overlay one or more **simple moving-average (SMA)** lines on top of any entity — a smoothed trend line that averages the last *N* buckets. Add as many as you like, each with its own period, color, and width. Perfect for separating signal from noise on busy sensors (CPU load, power, prices) or for classic short/long crossover views (e.g. MA7 vs MA26).
+
+![Moving Averages Example](images/movingaverage.png)
+
+```yaml
+entities:
+  - entity: sensor.keenetic_router_cpu_load
+    graph_type: bar
+    moving_averages:
+      - period: 7          # short MA — averages the last 7 buckets
+        color: "#ffffff"
+      - period: 26         # long MA — averages the last 26 buckets
+        color: "#f1c40f"
+        width: 2           # optional line thickness (px)
+```
+
+### The period is in buckets, not hours
+
+Each line's `period` is a number of **buckets**, and the bucket size comes from the chart's timeframe — `points_per_hour` in `interval` mode, or `group_by` (`hour` / `date` / `week` / `month` / `year`). So with `group_by: hour`, `period: 26` averages the last 26 hourly buckets (MA26). With `points_per_hour: 12` (one bucket every 5 minutes), `period: 26` covers the last ~130 minutes.
+
+### Automatic look-back — long MAs draw on short windows
+
+A 26-bucket average normally needs 26 buckets of history before it can produce its first value. If your visible window only holds a handful of buckets (e.g. `hours_to_show: 24` with `group_by: hour` → 24 buckets), a plain MA26 would never have enough data to draw.
+
+This card solves that by **extending the history fetch backward automatically** by the amount the longest moving average needs — independent of the visible window. The MA is computed over that extended range and then trimmed to the window, so **MA26 draws fully across a 24-hour view without you having to widen `hours_to_show` or scroll.** The visible chart, axis, statistics, and extrema are unchanged — only the moving-average lines use the extra look-back.
+
+> The look-back applies to History- and statistics-routed entities. Synthetic sources (`fixed_value`, `data_attribute`) average only what's in the window.
+
+### Candlesticks
+
+When the entity is drawn as [candlesticks](#candlestick-ohlc), each moving average uses the **close** of every candle (otherwise it averages the bucket value), so an MA over candles behaves like the moving averages on a trading chart.
+
+### Notes
+
+- Each moving average is plotted against the **entity's own Y axis**, so it lines up with the bars / line / candles it summarizes.
+- Lines render in their configured `color`; leave `color` empty to fall back to a default. `width` defaults to a thin line.
+- Timeline mode only.
+
+### Editor
+
+Per-entity → **Appearance** tab → **Moving Averages** (just below the Graph card). Click **Add Moving Average** to add a line, set its **Period** and **Color**, and use the **✕** button to remove one.
 
 </details>
 
@@ -3202,7 +3253,7 @@ Each entity panel has four tabs:
 |-----|----------|
 | **General** | Entity picker, statistic ID, custom name, custom unit, tap action |
 | **Data** | Y axis, aggregation, attribute, decimals, points/hour, offset, value factor, number format, value transform, fixed value, invert, attribute data source, state map |
-| **Appearance** | Graph toggle, graph type, extrema, average, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
+| **Appearance** | Graph toggle, graph type, extrema, average, moving averages, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
 | **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
 
 Entity options also adapt dynamically based on Chart Mode — see [Dynamic Editor Behavior](#-dynamic-editor-behavior).
@@ -3244,7 +3295,7 @@ Each entity's expanded settings are organized into six tabs in a 3×2 grid: **Ge
 
 | When Chart Mode is… | What's visible |
 |---|---|
-| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Range Band, Break on Gaps, Line block (with width & Bezier), Fill block (with gradient), Data Points, Y Axis Range |
+| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Moving Averages, Range Band, Break on Gaps, Line block (with width & Bezier), Fill block (with gradient), Data Points, Y Axis Range |
 | **Scatter** | Show Extrema, Data Points, Y Axis Range (no Graph Type, no Line/Fill, no Average) |
 | **Radar** | Line, Fill, Data Points (no Graph Type, no Extrema/Average) |
 | **All other modes** (Pie, Ranking, Radial Bar, Polar Area, Heatmap, Calendar) | Only Y Axis Range remains |
