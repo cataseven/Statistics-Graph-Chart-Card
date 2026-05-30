@@ -67,7 +67,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 |---|---|
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
 | 🕯️ | **Candlestick (OHLC) charts** — render any entity as trading-style candles showing the open, high, low, and close of each time bucket. Green/red up/down bodies with high–low wicks and an O/H/L/C tooltip; recolor with the Rise/Fall Colors feature. Candles snap to clean clock intervals and sit centered on the X-axis ticks |
-| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
+| 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Or open on a rolling window that ends now — **Last 24H … Last 12M** — set as the default mode or shown as extra picker buttons. Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
 | 🎯 | **Ten chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
@@ -331,8 +331,8 @@ These options apply to the whole card.
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
 | `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
-| `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Example: `[month, year]`. When only one mode is listed, the D/W/M/Y buttons are hidden and the navigation is centered. Default (null) = all four modes visible. |
-| `date_picker_default_mode` | string | `null` | Forces the date picker to always open in a specific mode regardless of the last-used state. Values: `day`, `week`, `month`, `year`. Leave empty (default) for *Auto* — the picker remembers the last mode you selected. Useful on shared dashboards where you always want the picker to start on, say, Month view. |
+| `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Also accepts rolling modes (`last_24h`, `last_3d`, `last_7d`, `last_15d`, `last_30d`, `last_90d`, `last_180d`, `last_12m`) to show them as extra buttons (`24H` … `12M`) next to D/W/M/Y. Example: `[month, year]` or `[day, last_7d, last_30d]`. When only one mode is listed, the buttons are hidden and the navigation is centered. Default (null) = the four calendar modes (rolling ones off). |
+| `date_picker_default_mode` | string | `null` | Forces the date picker to always open in a specific mode regardless of the last-used state. Calendar modes: `day`, `week`, `month`, `year`. Rolling windows that end at *now*: `last_24h`, `last_3d`, `last_7d`, `last_15d`, `last_30d`, `last_90d`, `last_180d`, `last_12m` (e.g. `last_7d` = the last 7 days; prev/next jumps a full period). Leave empty (default) for *Auto* — the picker remembers the last mode you selected. Useful on shared dashboards where you always want the picker to start on, say, Month or the last 30 days. |
 | `date_picker_step` | number | `1` | Window width in units of the selected mode. `1` = single-unit window (legacy behavior — one day, one month, etc.). `>1` turns the picker into a rolling N-unit window: prev/next buttons jump a full N units at a time. Example: `4` with `week` mode shows the last 4 weeks and navigates back/forward 4 weeks per click. See [Date Picker → Window Step](#-date-picker). |
 | `annotations` | list | `[]` | Reference lines and markers on the graph. Timeline mode only. See [Annotations](#-annotations). |
 | `show_now_line` | boolean | `true` | Show a vertical line marking the current moment on the graph. Timeline mode only. |
@@ -814,6 +814,31 @@ date_picker_modes:
 
 When only one mode is listed, the D/W/M/Y buttons are hidden entirely and the navigation (◀ label ▶) is centered for a minimal look. The 📅 calendar icon stays visible on the right.
 
+### Rolling windows (Last 24H … Last 12M)
+
+Alongside the calendar modes, the picker offers **rolling windows** that always end at *now*: `last_24h`, `last_3d`, `last_7d`, `last_15d`, `last_30d`, `last_90d`, `last_180d`, `last_12m`. Unlike Day / Week / Month / Year (which snap to calendar boundaries), these show the **last *N* up to the current moment**, and the ◀ ▶ arrows jump a full *N* back/forward (e.g. the previous 7 days).
+
+Use them two ways:
+
+```yaml
+# Always open on the last 7 days
+show_date_picker: true
+date_picker_default_mode: last_7d
+```
+
+```yaml
+# Offer rolling buttons in the picker bar (shown as 24H / 7D / 30D …)
+show_date_picker: true
+date_picker_modes:
+  - day
+  - last_7d
+  - last_30d
+```
+
+- As **Default Mode** (`date_picker_default_mode`) a rolling window is forced as the starting view on every load.
+- As **Visible Modes** (`date_picker_modes`) the rolling options appear as extra buttons — `24H`, `3D`, `7D`, `15D`, `30D`, `90D`, `180D`, `12M` — next to D/W/M/Y. Calendar modes are on by default; rolling buttons are off until you add them.
+- The label reads e.g. *Last 7 days* at the current window, switching to a date range (`May 16 – May 23`) once you navigate back.
+
 ### Window Step
 
 `date_picker_step` controls how many units make up one "window". Default `1` = the legacy behavior (each click moves one day, one week, one month, etc.). When you set it higher, the picker becomes a **rolling N-unit window** and prev/next buttons jump a full N units at a time.
@@ -849,7 +874,7 @@ The label adapts automatically: `step > 1` shows the date range (`Mar 11 – Apr
 
 ### Editor
 
-General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker. When enabled, a **Visible Modes** section appears below with D/W/M/Y checkboxes.
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker. When enabled, a **Visible Modes** section appears below with D/W/M/Y checkboxes plus the rolling options (24H / 3D / 7D … 12M), and a **Default Mode** dropdown that also lists the rolling windows.
 
 ### Notes
 
