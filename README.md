@@ -87,7 +87,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch) |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
-| 〽️ | **Moving averages** — overlay one or more simple moving-average (SMA) lines per entity, each with its own period (in buckets), color, and width. The card extends the look-back beyond the visible window automatically, so a long period (e.g. MA26) draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value; drawn on the entity's own Y axis |
+| 〽️ | **Moving averages** — overlay one or more simple moving-average (SMA) lines per entity, each with its own period (in buckets), color, and width, plus an optional on-line `MA7`/`MA26` label. The card extends the look-back beyond the visible window automatically, so a long period (e.g. MA26) draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value; drawn on the entity's own Y axis |
 | 💬 | Tooltip with crosshair on hover |
 | 🌅 | Per-entity gradient fill with same-hue fade — applies to both area charts and bar charts (with rounded corners) |
 | ▦ | Grid lines — horizontal + vertical aligned to actual data points |
@@ -401,7 +401,7 @@ Each entry under `entities` supports the following options.
 | `extrema_bg_color` | string | `null` | Background color of the extrema label box. Combined with `extrema_bg_opacity`. Leave empty for theme default. Timeline mode only. |
 | `extrema_bg_opacity` | number | `1` | Opacity of the extrema label background (`0` = transparent, `1` = solid). Set to `0` for floating text without a visible box. Timeline mode only. |
 | `show_average` | boolean | `false` | Draw a dashed horizontal line at the mean value. Timeline mode only. |
-| `moving_averages` | list | `null` | One or more simple moving-average (SMA) lines drawn over this entity. Each item takes `period` (length in buckets, **required**), `color`, and an optional `width`. The bucket size comes from `points_per_hour` / `group_by`, so a `period` of `26` means *"average of the last 26 buckets"*. The card extends the history look-back beyond the visible window automatically, so a long period draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value. Plotted on the entity's own Y axis. Timeline mode only. See [Moving Averages](#-moving-averages). |
+| `moving_averages` | list | `null` | One or more simple moving-average (SMA) lines drawn over this entity. Each item takes `period` (length in buckets, **required**), `color`, and an optional `width`. The bucket size comes from `points_per_hour` / `group_by`, so a `period` of `26` means *"average of the last 26 buckets"*. The card extends the history look-back beyond the visible window automatically, so a long period draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value. Plotted on the entity's own Y axis. Set `show_label: true` on an item to print a small `MA7`/`MA26` label at the end of its line. Timeline mode only. See [Moving Averages](#-moving-averages). |
 | `break_on_null` | boolean | `false` | Break the line at long sensor outages instead of carrying the last known value across the gap. When `false` (default), the previous known value is carried forward indefinitely — the line stays continuous even during long `unavailable` / `unknown` periods. When `true`, short blips stay connected but outages longer than a threshold (default `min(3 × bucket, 30 minutes)`) appear as visible breaks in the line. Timeline mode only. Does **not** affect `value_transform` scripts that return `null` (those already drop their buckets before this logic runs). See [Break on Gaps](#-break-on-gaps). |
 | `carry_forward_ms` | number | `null` | Advanced override for the carry-forward threshold in milliseconds. Takes effect regardless of `break_on_null`. Use this when you want a specific time window instead of the default auto threshold. Timeline mode only. |
 | `show_state` | string/boolean | `true` | State row display: `true` (text), `false` (hidden), `"gauge"` (half-circle arc). See [Gauge Display](#-gauge-display). |
@@ -1458,9 +1458,11 @@ entities:
     moving_averages:
       - period: 7          # short MA — averages the last 7 buckets
         color: "#ffffff"
+        show_label: true   # draw a small "MA7" tag on the line
       - period: 26         # long MA — averages the last 26 buckets
         color: "#f1c40f"
         width: 2           # optional line thickness (px)
+        show_label: true   # draw "MA26"
 ```
 
 ### The period is in buckets, not hours
@@ -1479,6 +1481,19 @@ This card solves that by **extending the history fetch backward automatically** 
 
 When the entity is drawn as [candlesticks](#candlestick-ohlc), each moving average uses the **close** of every candle (otherwise it averages the bucket value), so an MA over candles behaves like the moving averages on a trading chart.
 
+### Line labels
+
+Turn on **`show_label`** for any line to draw a small **`MA7`**, **`MA26`** … tag right at the end of that line, so you can tell several averages apart at a glance:
+
+```yaml
+    moving_averages:
+      - period: 7
+        color: "#ffffff"
+        show_label: true
+```
+
+The label text is the period prefixed with **MA** (`MA7`, `MA26`, …). It's drawn at the end of the line and **clamped inside the chart**, so it never spills outside the plot, with a subtle background halo so it stays readable over the line and the data. It's **off by default** — flip the **Label** switch next to the color picker, or set `show_label: true` in YAML.
+
 ### Notes
 
 - Each moving average is plotted against the **entity's own Y axis**, so it lines up with the bars / line / candles it summarizes.
@@ -1487,7 +1502,7 @@ When the entity is drawn as [candlesticks](#candlestick-ohlc), each moving avera
 
 ### Editor
 
-Per-entity → **Appearance** tab → **Moving Averages** (just below the Graph card). Click **Add Moving Average** to add a line, set its **Period** and **Color**, and use the **✕** button to remove one.
+Per-entity → **Appearance** tab → **Moving Averages** (just below the Graph card). Click **Add Moving Average** to add a line, set its **Period** and **Color**, flip **Label** to print an `MA7`-style tag on the line, and use the **✕** button to remove one.
 
 </details>
 
