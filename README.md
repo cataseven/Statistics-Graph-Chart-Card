@@ -264,10 +264,10 @@ These options apply to the whole card.
 | `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
 | `y_axis_color` | string | `null` | Custom color for Y-axis labels and tick marks. Accepts any CSS color (hex, rgba, color name) or a CSS variable like `var(--my-color)`. Leave empty for theme default. |
-| `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. |
-| `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5. |
-| `x_axis_color` | string | `null` | Custom color for X-axis time labels and tick marks. Accepts any CSS color or CSS variable. Leave empty for theme default. |
-| `x_axis_date_color` | string | `null` | Custom color for X-axis date markers (the bold date dividers shown in 12+ hour views). Defaults to `--primary-color` so dates stand out. Set to match `x_axis_color` for a uniform axis. |
+| `x_axis_font_size` | number | `null` | Font size of X-axis time labels in pixels. Default is 10. Applies in Timeline and State Timeline. |
+| `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5. Applies in Timeline and State Timeline. |
+| `x_axis_color` | string | `null` | Custom color for X-axis time labels and tick marks. Accepts any CSS color or CSS variable. Leave empty for theme default. Applies in Timeline and State Timeline. |
+| `x_axis_date_color` | string | `null` | Custom color for X-axis date markers (the bold date dividers shown in 12+ hour views). Defaults to `--primary-color` so dates stand out. Set to match `x_axis_color` for a uniform axis. In State Timeline it colors the labels when the visible range spans more than a day, and defaults to the X label color there. |
 | `pie_style` | string | `"donut"` | Pie chart visual preset: `classic` (full pie), `thick` (wide donut), `donut` (default), or `thin` (narrow ring). Pie mode only. |
 | `pie_spacing` | number | `0` | Gap between pie slices in degrees (0–15). Spaced slices automatically get rounded corners. Pie mode only, donut styles only. |
 | `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
@@ -288,7 +288,9 @@ These options apply to the whole card.
 | `x_grid_color` | string | `null` | Color of vertical grid lines. Accepts any CSS color, variable, or `{{ }}` template. |
 | `x_grid_opacity` | number | `0.15` | Opacity of vertical grid lines, from `0` (invisible) to `1` (fully opaque). |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
-| `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip. Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
+| `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip — the unit is appended when every visible entity shares it (e.g. *"6.20 kWh"*). Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
+| `tooltip_match_axis` | boolean | `false` | Format the tooltip's date header exactly like the X-axis labels. On long-range views shows e.g. *"May 26"* instead of a full timestamp (ignoring `datetime_format`, just as the axis does). It never appends a time to a date: Month / Year / day views show the date only, intraday (hour) views show the clock only. Timeline mode. |
+| `tooltip_order` | string | `"default"` | Order of the entity rows inside the tooltip: `default` (configuration order, first entity on top), `reverse` (bottom-to-top — matches a stacked chart's visual order so the topmost stacked segment is listed first), or `alphabetic` (A→Z by display name). The Total row, when shown, always stays at the bottom. Timeline mode. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `false` | Show secondary (right) Y axis value labels independently. **Hidden by default** — enable it to show right-side labels. Only relevant when at least one entity uses `y_axis: secondary`; those entities stay plotted even while the axis labels are hidden. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
@@ -359,7 +361,7 @@ Each entry under `entities` supports the following options.
 | `y_axis` | string | `"primary"` | `primary` (left), `secondary` (right), or `independent` (hidden, own scale). Independent entities are scaled to their own min/max — ideal for overlaying sensors with different units for trend comparison. See [Independent Y-Axis](#-independent-y-axis). |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `change` / `delta` / `diff`. The `change` option uses HA's native statistics `change` field — ideal for energy, gas, and water meters with `group_by: date/week/month`. |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
-| `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature` |
+| `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature`. In `state_timeline` mode, pair with `state_map` to plot the attribute's history ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)). |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position). Applied after `value_factor`. Example: `return x - first`. See [Value Transform](#-value-transform). |
 | `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). See [Attribute Data Source](#-attribute-data-source). |
@@ -374,7 +376,7 @@ Each entry under `entities` supports the following options.
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
 | `invert` | boolean | `false` | Draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Use with `stacked: true` for butterfly charts. See [Invert Bars](#-invert-bars-butterfly-charts). |
-| `state_map` | list | `null` | Map non-numeric states to numbers for graphing. See [State Map](#-state-map). |
+| `state_map` | list | `null` | Map non-numeric states to numbers for graphing. Each entry takes a `value` plus optional `label` and `color`. See [State Map](#-state-map). |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). When left unset (or set to `none`), tapping the state row instead toggles that entity's visibility on the graph — same as clicking its legend item. Hidden entities dim visually so you can tell what's off at a glance. |
 
 #### 🎛️ Appearance
@@ -713,6 +715,21 @@ Displays horizontal colored bars showing state changes over time — one row per
 - **Corner radius** is configurable via `state_timeline_corner_radius` (0–20 px, default 3). Set to `0` for sharp edges or use higher values for pill-shaped segments.
 - **Horizontal scroll** works via `max_visible_interval` + `scroll_mode`, just like in regular Timeline. Load a week of history (`hours_to_show: 168`) but only show 24 hours on screen at once (`max_visible_interval: 24`) — the chart scrolls to reveal the rest.
 - **Tap action** is supported on each row. Because every row in state_timeline corresponds to exactly one entity and its segments fill the row, tapping a row naturally means "do something with this entity". If the entity has a `tap_action` set it fires; otherwise a standard more-info dialog opens.
+- **Attribute history** ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)) — set an entity's `attribute` together with a `state_map` to plot the recorded history of a categorical **attribute** instead of its main state. Ideal for values HA already records as attributes — a Wi-Fi band, a media remote's `current_activity`, an HVAC action, a router/AP name — without creating a template sensor. The attribute's values are mapped through `state_map`, so the same `label` and `color` fields apply. Numeric attributes with no `state_map` are unaffected.
+
+```yaml
+# Plot a TV remote's current activity instead of the remote's on/off state
+- entity: remote.living_room_tv
+  name: Activity
+  attribute: current_activity
+  state_map:
+    - value: "Youtube"
+      label: YouTube
+      color: red
+    - value: "Netflix"
+      label: Netflix
+      color: "#E50914"
+```
 
 ### Chart Mode Compatibility
 
@@ -2574,12 +2591,14 @@ entities:
       - value: "boost"
 ```
 
-In the visual editor, the State Map textarea accepts a simple `value, label` syntax — one per line:
+In the visual editor, the State Map textarea accepts a `value, label, color` syntax — one line per state, with the label and color both optional. Any CSS color works (name, hex, or `var(--…)`):
 
 ```
-off, Idle
-on, Running
+off, Idle, grey
+on, Running, green
 ```
+
+These colors are used as the **segment color in `state_timeline`** mode (and for the dot/marker elsewhere). Colors set in YAML — `color:` under a `state_map` entry — now also round-trip correctly in the editor instead of being dropped when you re-open the card.
 
 > Auto-detected for `binary_sensor`, `input_boolean`, and any `input_select` entity in step mode — you don't need to define a `state_map` for those, the card detects available states automatically and labels the axis accordingly.
 
@@ -3106,6 +3125,15 @@ The number of ticks on the X-axis is calculated dynamically based on the label w
 | `DD/MM hh:mm A` | 24/01 02:35 PM |
 | `MM/DD hh:mm A` | 01/24 02:35 PM |
 | `hh:mm A` | 02:35 PM |
+| `YYYY-MM-DD` | 2026-01-24 |
+| `YYYY-MM-DD HH:mm` | 2026-01-24 14:35 |
+| `YYYY-MM` | 2026-01 |
+| `MMM YY` | Jan 26 |
+| `DD MMM YYYY` | 24 Jan 2026 |
+| `DD-MM-YYYY` | 24-01-2026 |
+| `MM-YYYY` | 01-2026 |
+
+**Custom patterns** can also be written directly in YAML using these tokens: `YYYY` / `YY` (year), `MMMM` / `MMM` (full / short month name, localized), `MM` (month number), `DD` (day), `HH` / `hh` (24h / 12h hour), `mm` (minute), `ss` (second), `A` / `a` (AM/PM). Month names follow the dashboard language — e.g. `MMM YY` shows *Jan 26* in English and *Jan 26* / *Jän 26* in German depending on locale.
 
 ---
 
@@ -3324,7 +3352,7 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor. The c
 | **Scatter** | Chart, Card, Overlay, X Axis, Y Axis | Calendar tab gone. Stacked / Sparkline / Animate / Logarithmic hidden in Chart. Bar Spacing hidden in Chart. |
 | **Pie / Ranking / Radar / Polar Area / Radial Bar** | Chart, Card, Overlay, (X Axis only for Pie/Ranking/Radar) | Y Axis and Calendar tabs gone. Most Chart options hidden — only mode-relevant ones remain. Overlay shows only Interval Picker and Attribute List. |
 | **Heatmap / Calendar** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone. Bar / line settings hidden. |
-| **State Timeline** | Chart, Card, Overlay, Calendar | Axis tabs gone — state timelines don't have Y values. |
+| **State Timeline** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone (no Y values). The X Axis tab shows label options only — size, opacity, color, and date color. |
 | **Sparkline mode** | Chart, Card | Everything else gone — sparkline is chrome-free. |
 
 ### Chart Mode → Entity Settings
