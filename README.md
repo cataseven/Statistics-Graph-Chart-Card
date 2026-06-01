@@ -152,6 +152,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🥧 | **Pie/Radial decimals** — entity `decimals` setting now controls the precision of percentage labels in slice labels, tooltips, and radial bar overlays — not just the value display |
 | 🔮 | **Forecast Horizon** — per-entity `forecast_horizon: N` shifts each recorded data point along the X-axis. **Positive values** (e.g. `1`) shift forward — for sensors whose current state predicts T+N hours ahead (e.g. Solcast PV forecast in 1 hour); the X-axis is extended automatically to keep the shifted line visible. **Negative values** (e.g. `-24`) shift backward — useful with attribute-based forecasts to overlay tomorrow's data onto today's chart. Independent from `offset` — both can be combined |
 | ⏱️ | **Now Line** — a vertical marker showing the current moment, enabled by default. Customize `now_line_color`, `now_line_opacity`, `now_line_width`, and `now_line_style` (solid, dashed, dotted, long-dash) or disable with `show_now_line: false` |
+| 🗂️ | **Z-Index layering** — per-entity `z_index` sets which curve is drawn in front (higher = on top, lower or negative = behind). Independent of the legend / state-row order, so you can layer overlapping lines, bars or bands without reordering your entities |
+| 📆 | **Weekday on the X-axis** — `datetime_format` understands `ddd` / `dddd`, so multi-day and "last N days" views can label day boundaries with the day name (Mon / Mo / Pzt …, localized). Use `dddd` alone for just the day name; the intraday clock keeps showing the time |
 | 📐 | **Round Y-axis ticks** — the Y axis picks clean round numbers (0, 500, 1000, 1500) that fit within your data range without expanding it. Enabled by default; disable with `y_axis_round_ticks: false` |
 | 🎯 | **Primary Value dropdown** — `primary_state_as` controls what the big value in the state row shows: live state (default), last aggregated point, or Sum / Avg / Min / Max / First over the visible window. Ideal for clean header-only entities |
 | 📊 | **Show Range** — `show_range_values: true` displays the visible window's min and max as a subdued `(min → max)` suffix next to the primary value. Perfect for compact "records" cards (`show_graph: false` + `primary_state_as: min`/`max`) where the range previously was only reachable via the graph tooltip |
@@ -392,6 +394,7 @@ Each entry under `entities` supports the following options.
 | `show_points` | boolean | `false` | Show a dot at each data point. Timeline mode only. |
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
 | `line_width` | number | `2.5` | Line thickness in pixels. Timeline mode only. |
+| `z_index` | number | `0` | Draw order / layering. Higher = drawn in front (on top of lower-numbered entities); lower or negative = behind. Default `0` keeps configuration order. **Independent of the legend / state-row order**, so you can bring a curve to the front or send it behind another without reordering your entities. Timeline mode. |
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
 | `show_extrema_min` | boolean | `true` | Show the Min value label. Disable to show only the Max — useful for sensors where the minimum is always zero (solar power, rain, etc.). Timeline mode only. |
 | `show_extrema_max` | boolean | `true` | Show the Max value label. Timeline mode only. |
@@ -3110,7 +3113,7 @@ Set `datetime_format` at the card level to control how timestamps appear on the 
 
 When using the default `system` format, the X-axis automatically adapts to the visible time range. If the graph spans multiple calendar days, midnight ticks (00:00) display the date (e.g. "28 Mar") instead of the time — making it easy to identify day boundaries at a glance. All other ticks show `HH:mm` as usual. This behavior is inspired by ApexCharts.
 
-When a custom `datetime_format` is set, all ticks use that format uniformly.
+When a custom `datetime_format` is set, all ticks use that format uniformly. (Exception: a weekday-only format such as `dddd` labels the day boundaries but leaves the intraday clock ticks showing the time — see the note below the table.)
 
 The number of ticks on the X-axis is calculated dynamically based on the label width, which depends on font size (`x_axis_font_size`) and the chosen format. Shorter formats like `HH:mm` fit more ticks; longer formats like `DD/MM HH:mm` produce fewer ticks automatically.
 
@@ -3132,8 +3135,14 @@ The number of ticks on the X-axis is calculated dynamically based on the label w
 | `DD MMM YYYY` | 24 Jan 2026 |
 | `DD-MM-YYYY` | 24-01-2026 |
 | `MM-YYYY` | 01-2026 |
+| `ddd` | Mon (Mo / Pzt …) |
+| `dddd` | Monday |
+| `ddd DD MMM` | Mon 24 Jan |
+| `ddd DD/MM` | Mon 24/01 |
 
-**Custom patterns** can also be written directly in YAML using these tokens: `YYYY` / `YY` (year), `MMMM` / `MMM` (full / short month name, localized), `MM` (month number), `DD` (day), `HH` / `hh` (24h / 12h hour), `mm` (minute), `ss` (second), `A` / `a` (AM/PM). Month names follow the dashboard language — e.g. `MMM YY` shows *Jan 26* in English and *Jan 26* / *Jän 26* in German depending on locale.
+**Custom patterns** can also be written directly in YAML using these tokens: `dddd` / `ddd` (full / short weekday name, localized), `YYYY` / `YY` (year), `MMMM` / `MMM` (full / short month name, localized), `MM` (month number), `DD` (day), `HH` / `hh` (24h / 12h hour), `mm` (minute), `ss` (second), `A` / `a` (AM/PM). Month names follow the dashboard language — e.g. `MMM YY` shows *Jan 26* in English and *Jan 26* / *Jän 26* in German depending on locale.
+
+> **Weekday names on the X-axis:** a format containing `ddd` or `dddd` also drives the X-axis *date* labels on multi-day and "last N days" views — use `dddd` on its own to show just the day name (e.g. *Monday*). Because day names follow your dashboard language, you get *Mon* / *Mo* / *Pzt* automatically. The intraday clock ticks keep showing the time, so the weekday appears only at the day boundaries, not on every hour tick.
 
 ---
 
