@@ -131,7 +131,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏱️ | **X-axis interval** — `x_axis_interval` for manual tick spacing (1h–3M) with clean boundary snapping |
 | 📅 | **Show Full Period** — extend the X-axis to cover a complete calendar period (day, week, month, year) with a "now" indicator line, leaving empty space after the current time. Ideal for imported data or comparing today vs yesterday |
 | 🔋 | **Battery icon** — `battery_entity` displays a color-coded battery level indicator in the header or state row, with configurable low threshold |
-| 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions. Also accepts numeric/categorical time fields (`month_of_year`, `day_of_year`, `hour_of_day`, epoch seconds/ms) so monthly summaries and hourly profiles work without artificial timestamps |
+| 📡 | **Attribute Data Source** — read chart data from an entity attribute array (forecast, spot prices) instead of history. Supports future timestamps for EPEX, Nordpool, Tibber, solar forecasts, and weather predictions. Also accepts numeric/categorical time fields (`month_of_year`, `day_of_year`, `hour_of_day`, epoch seconds/ms) so monthly summaries and hourly profiles work without artificial timestamps. Per-point values can also be **computed** from element fields plus other entities via `data_value_expression` + `data_vars` |
 | 📅 | **Group by Year** — `group_by: year` for multi-year trend views with automatic bar width and X-axis labels |
 | 🔄 | **Invert bars** — per-entity `invert: true` draws bars downward from zero. Combine with `stacked: true` for butterfly charts (energy import/export, network in/out) |
 | 🔁 | **Rolling date picker window** — `date_picker_step` turns the picker into an N-unit rolling window. `step: 4` + `mode: week` shows the last 4 weeks and prev/next jumps a full 4 weeks at a time |
@@ -369,6 +369,8 @@ Each entry under `entities` supports the following options.
 | `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). See [Attribute Data Source](#-attribute-data-source). |
 | `data_time_field` | string | `"start_time"` | Name of the time field in each array item when using `data_attribute`. |
 | `data_value_field` | string | `"price_per_kwh"` | Name of the value field in each array item when using `data_attribute`. |
+| `data_value_expression` | string | `null` | Compute each point's value with a safe arithmetic expression instead of reading a single `data_value_field`. The array element's own fields and any `data_vars` are in scope. Operators `+ - * / %`, parentheses, and the functions `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow`. **Not JavaScript** — no other variables, property access, or calls. Falls back to `data_value_field` when empty or invalid. See [Attribute Data Source → Computed Values](#-attribute-data-source). |
+| `data_vars` | map | `null` | Maps names used in `data_value_expression` to entity IDs (`name: entity_id`). Each resolves to the entity's numeric state and is re-evaluated **live** when that entity changes. |
 | `data_time_unit` | string | `"iso"` | How to interpret the time field. `iso` = string or epoch ms (default — existing behavior). `epoch_seconds` / `epoch_ms` = Unix timestamp. `month_of_year` (1–12), `day_of_year` (1–366), `week_of_year` (1–53), `hour_of_day` (0–23) = numeric category — perfect for monthly summaries, day-of-year datasets, and hourly profiles without generating artificial timestamps. See [Attribute Data Source → Time Unit](#-attribute-data-source). |
 | `data_time_year` | number | `null` | Reference year used to anchor categorical time units (`month_of_year`, `day_of_year`, `week_of_year`). Empty = current year. Has no effect for `iso` or `epoch_*` units. |
 | `offset` | string/number | `0` | Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods. `24` = yesterday, `168` = last week, `720` = last month. Also accepts a helper entity ID (e.g. `input_number.my_offset`) for dynamic offset — the entity's state is read as hours. See [Time Offset](#-time-offset). |
@@ -2212,6 +2214,65 @@ Common configurations:
 | Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
 
 Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
+
+### Computed Values
+
+Sometimes the value you want isn't a single field — you need to combine several fields from each element, fold in other entities (fees, tax rates, tariffs), and apply a formula. Set `data_value_expression` instead of `data_value_field`: a small arithmetic expression evaluated for every array element, with the element's own fields in scope plus any names you map in `data_vars`.
+
+```yaml
+entities:
+  - entity: sensor.tibber_hourly_cost
+    name: Electricity
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
+    data_vars:
+      mwst: input_number.vat_rate
+```
+
+`data_vars` maps a name to an entity ID; each resolves to that entity's **numeric state** and is re-evaluated **live** when it changes. Inside the expression you can use:
+
+| In scope | Examples |
+|---|---|
+| Element fields | `unitPrice`, `consumption`, … (any field of the array item) |
+| `data_vars` names | `mwst`, `base`, … |
+| Operators | `+` `-` `*` `/` `%` and parentheses `( )` |
+| Functions | `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow` |
+
+This is **not JavaScript** — there are no other variables, no property access, and no calls beyond those functions, so it can't run arbitrary code. If the expression is empty or fails to parse, the entity falls back to `data_value_field`.
+
+Because each element is evaluated independently, two entities reading the same array with different expressions stack cleanly — e.g. splitting an hourly energy cost into a consumption layer and a fixed-fee layer:
+
+```yaml
+type: custom:statistics-graph-chart-card
+stacked: true
+group_by: hour
+entities:
+  - entity: sensor.tibber_hourly_cost
+    name: Energy
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
+    data_vars: { mwst: input_number.vat_rate }
+  - entity: sensor.tibber_hourly_cost
+    name: Fees
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(base/30/24 + grid/24 + meter/24) * (1 + mwst) * 100"
+    data_vars:
+      base: input_number.base_price_month
+      grid: input_number.grid_fee_day
+      meter: input_number.meter_fee_day
+      mwst: input_number.vat_rate
+```
+
+> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Value Expression* field, and *Data Vars* (one `name: entity_id` per line).
 
 ### Time Unit
 
