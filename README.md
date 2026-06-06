@@ -291,6 +291,7 @@ These options apply to the whole card.
 | `x_grid_opacity` | number | `0.15` | Opacity of vertical grid lines, from `0` (invisible) to `1` (fully opaque). |
 | `show_tooltip` | boolean | `true` | Show hover tooltip with crosshair |
 | `show_tooltip_total` | boolean | `true` | Controls total/summary displays across chart modes. Timeline/Scatter: Total row in tooltip — the unit is appended when every visible entity shares it (e.g. *"6.20 kWh"*). Pie/Polar Area: total in donut center (off = full pie). Radial Bar: average in center. Ranking: percentage labels on bars and Share row in tooltip. |
+| `tooltip_stacked_total` | boolean | `true` | When the chart is `stacked` with 2+ stack groups, adds a per-group total row to the tooltip — labelled with the group name (e.g. *"Apples Total"*) — for each named group. Independent of `show_tooltip_total`: with both on, the tooltip shows the per-group totals **and** the grand Total of all entities. Timeline mode. See [Stacked Groups](#-stacked-groups). |
 | `tooltip_match_axis` | boolean | `false` | Format the tooltip's date header exactly like the X-axis labels. On long-range views shows e.g. *"May 26"* instead of a full timestamp (ignoring `datetime_format`, just as the axis does). It never appends a time to a date: Month / Year / day views show the date only, intraday (hour) views show the clock only. Timeline mode. |
 | `tooltip_order` | string | `"default"` | Order of the entity rows inside the tooltip: `default` (configuration order, first entity on top), `reverse` (bottom-to-top — matches a stacked chart's visual order so the topmost stacked segment is listed first), or `alphabetic` (A→Z by display name). The Total row, when shown, always stays at the bottom. Timeline mode. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
@@ -1246,6 +1247,8 @@ entities:
 ```
 
 This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
+
+**Per-group tooltip totals.** With `tooltip_stacked_total: true` (the default), the tooltip shows a separate total for each named group — labelled with the group name (e.g. *"energy Total"*, *"cost Total"*) — so you can read each stack's sum at a glance. It is independent of `show_tooltip_total`: leave both on to show the per-group totals **together with** the grand Total of all entities, or turn either one off to show only the other. The per-group rows appear only when there are two or more stack groups; ungrouped entities roll into the grand Total.
 
 > **Editor:** Per-entity → Graph tab → *Stack Group* text field (visible when Stacked is enabled)
 
