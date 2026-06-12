@@ -138,6 +138,12 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 💾 | **Long-term statistics auto-routing** — entities with `state_class` declared automatically use HA's long-term statistics for ranges beyond recorder retention. Set `statistic_id` explicitly or use `hours_to_show > 240` to opt in for short ranges. A console warning lists entities lacking `state_class` when the range exceeds retention |
 | 📈 | **Static data carry-forward** — when a sensor stops emitting state changes, the last known value is carried forward to "now" instead of leaving the chart blank. Matches the behavior of HA's built-in statistics card |
 | ⚠️ | **Offline sensor gaps** — when HA reports a sensor as `unavailable`, the line breaks at that point and resumes when the sensor recovers. Makes it instantly obvious when a sensor was offline versus when its value was simply steady |
+| 🎚️ | **On-card Points/Hour & Group By pickers** — change data resolution and bucketing right on the card; selections persist, take priority over Auto Scale, and "Auto" returns to the configured value |
+| 🕐 | **Multi-hour buckets** — `group_by: 2h / 3h / 4h / 6h / 12h` (any `Nh`) for clean multi-hour bars between `hour` and `date` |
+| 🕒 | **Y-axis label formats** — show durations (`h:mm`, `mm:ss`, `d h:mm`) or custom `{expression}` labels per axis; tooltips, data labels, state row and the average label follow automatically |
+| 🔗 | **Picker group sync** — `interval_picker_group`, `pph_picker_group`, `group_by_picker_group`: one visible picker drives every card sharing the group; receivers don't need a picker at all |
+| 🙈 | **Auto Hide Entities** — start with every series hidden and reveal only what you need from the legend |
+| 📍 | **Date picker layout** — place the ‹ date › navigator and the D/W/M/Y shortcuts left / center / right, independently |
 | 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit. Customize slice and center label fonts/colors with `pie_label_font_size`, `pie_label_color`, `pie_center_font_size`, and `pie_center_color` — all accept theme variables |
 | 🎯 | **Snap-to-data tooltips** — hovering over a line graph snaps the tooltip and dot to the nearest real data point instead of interpolating fake values between samples. The crosshair line aligns with the snapped point too, so what you see is exactly what your sensor recorded |
 | 🔤 | **Theme-aware fonts** — every canvas-rendered chart (Pie, Heatmap, Calendar, Ranking, Radial Bar, Polar Area, Radar, Gauge, axis labels) uses your active HA font (`--primary-font-family`) instead of generic sans-serif |
@@ -246,7 +252,7 @@ These options apply to the whole card.
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number | `150` | Graph area height in pixels |
-| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `date` / `week` / `month` / `year`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
+| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
@@ -263,6 +269,9 @@ These options apply to the whole card.
 | `show_y_axis_label` | boolean | `false` | Show vertical unit labels on the left and/or right edge of the graph. When enabled, defaults to the unit of measurement of the first entity on each axis. |
 | `y_axis_label` | string | `null` | Custom text for the left (primary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
 | `y2_axis_label` | string | `null` | Custom text for the right (secondary) vertical axis label. Overrides the auto-detected unit. Requires `show_y_axis_label: true`. |
+| `y_axis_format` | string | `null` | Custom label format for the primary axis: a duration shorthand (`h:mm`, `h:mm:ss`, `mm:ss`, `d h:mm`) or a safe `{expression}` template (e.g. `{fixed(value/1000,1)} kW`). Also drives tooltips, data labels, the state row and the average-line label for entities on this axis. See [Y-Axis Label Formats](#-y-axis-label-formats). |
+| `y2_axis_format` | string | `null` | Same as `y_axis_format`, for the secondary (right) axis and the entities plotted on it. |
+| `duration_unit` | string | `"s"` | Unit of the raw sensor value when a duration shorthand is used: `s` / `ms` / `min` / `h` — e.g. `5400` with `h:mm` shows `1:30`. Ignored by `{expression}` templates. |
 | `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
 | `y_axis_color` | string | `null` | Custom color for Y-axis labels and tick marks. Accepts any CSS color (hex, rgba, color name) or a CSS variable like `var(--my-color)`. Leave empty for theme default. |
@@ -314,6 +323,7 @@ These options apply to the whole card.
 | `card_header_weight` | string/number | `null` | Header text font weight. Accepts CSS keywords (`light`, `normal`, `bold`) or numbers (`300`, `400`, `600`, `700`). Leave empty for theme default. |
 | `card_header_letter_spacing` | string/number | `null` | Header letter spacing. Accepts a number (treated as px) or any CSS value like `0.5px`, `normal`, `-0.02em`. Leave empty for theme default. |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
+| `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode). Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
@@ -323,9 +333,16 @@ These options apply to the whole card.
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
 | `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
 | `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
+| `interval_picker_group` | string | `null` | Named group for interval picker sync — works exactly like `date_picker_group`: cards sharing the name follow the selected interval together, and receivers don't need `show_interval_picker`. |
 | `interval_options` | list | `null` | Which interval buttons to show. Example: `["2H", "12H", "24H", "7D"]`. When not set, the default compact set (1H–24H + 7D) is used. Available labels: `1H`, `2H`, `4H`, `8H`, `12H`, `24H`, `3D`, `7D`, `14D`, `30D`, `90D`, `6M`, `1Y`. |
 | `show_attribute_list` | boolean | `false` | Show per-entity attribute dropdown selectors on the card |
 | `attribute_list_position` | string | `"left"` | Position of the attribute list: `left` / `center` / `right` |
+| `show_pph_picker` | boolean | `false` | Show a Points/Hour dropdown on the card itself. The pick persists per card, takes priority over Auto Scale, and **Auto** returns to the configured value. |
+| `pph_picker_position` | string | `"left"` | Position of the Points/Hour picker: `left` / `center` / `right` |
+| `pph_picker_group` | string | `null` | Named group syncing the Points/Hour selection across cards — receivers don't need the picker visible. Independent from `group_by_picker_group`. |
+| `show_group_by_picker` | boolean | `false` | Show a Group By dropdown on the card (Interval, Hour, 2H–12H, Date, Week, Month, Year). Persists per card; **Auto** returns to the configured value. |
+| `group_by_picker_position` | string | `"left"` | Position of the Group By picker: `left` / `center` / `right` |
+| `group_by_picker_group` | string | `null` | Named group syncing the Group By selection across cards. Independent from `pph_picker_group`. |
 | `tooltip_sync` | boolean | `false` | Broadcast hovered timestamp to other synced cards. Timeline mode only. |
 | `tooltip_sync_group` | string | `null` | Named group for tooltip sync. Cards with the same name sync only with each other. Leave empty to sync with all. |
 | `zoom_sync` | boolean | `false` | When you brush-zoom (or double-click to reset) on this card, the same time window is applied to all other cards sharing the group. Timeline mode only; requires Brush Zooming enabled. See [Zoom Sync](#-zoom-sync). |
@@ -335,6 +352,8 @@ These options apply to the whole card.
 | `energy_date_sync` | boolean | `false` | Sync the card's time range with HA's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card. When the user selects a date range, this card automatically updates to show the same period. See [Energy Date Sync](#-energy-date-sync). |
 | `show_date_picker` | boolean | `false` | Show a built-in date navigation bar with Day/Week/Month/Year buttons, arrow navigation, calendar popup, and preset ranges. Cannot be used together with `energy_date_sync`. See [Date Picker](#-date-picker). |
 | `date_picker_position` | string | `top` | Position of the date picker bar. `top` or `bottom`. |
+| `date_picker_nav_position` | string | `"left"` | Horizontal position of the ‹ period › navigator inside the picker bar: `left` / `center` / `right`. |
+| `date_picker_shortcuts_position` | string | `"right"` | Position of the D/W/M/Y shortcuts and the calendar icon: `left` / `center` / `right`. Sharing a zone with the navigator places the navigator first. |
 | `date_picker_group` | string | `null` | Named group for date picker sync. Cards with the same group name share date selection — change the date on one card and all cards in the group update together. Works even on cards without `show_date_picker` — a single card with a visible picker can control all other cards in the group. |
 | `date_picker_modes` | list | `null` | Which period buttons to show: `day`, `week`, `month`, `year`. Also accepts rolling modes (`last_24h`, `last_3d`, `last_7d`, `last_15d`, `last_30d`, `last_90d`, `last_180d`, `last_12m`) to show them as extra buttons (`24H` … `12M`) next to D/W/M/Y. Example: `[month, year]` or `[day, last_7d, last_30d]`. When only one mode is listed, the buttons are hidden and the navigation is centered. Default (null) = the four calendar modes (rolling ones off). |
 | `date_picker_default_mode` | string | `null` | Forces the date picker to always open in a specific mode regardless of the last-used state. Calendar modes: `day`, `week`, `month`, `year`. Rolling windows that end at *now*: `last_24h`, `last_3d`, `last_7d`, `last_15d`, `last_30d`, `last_90d`, `last_180d`, `last_12m` (e.g. `last_7d` = the last 7 days; prev/next jumps a full period). Leave empty (default) for *Auto* — the picker remembers the last mode you selected. Useful on shared dashboards where you always want the picker to start on, say, Month or the last 30 days. |
@@ -420,7 +439,7 @@ Each entry under `entities` supports the following options.
 | `show_range_values` | boolean | `false` | Show the visible window's min and max as a subdued `(min → max)` suffix next to the primary value. Best paired with `show_graph: false` + `primary_state_as: min`/`max` for compact "records" cards (coldest day, peak solar, etc.) where the range otherwise lives only in a tooltip the user can't reach. Available for any aggregate (Last, First, Min, Max, Sum, Avg). When `show_range_band: true` is enabled on the entity, it uses the more accurate per-bucket band data; otherwise it falls back to the aggregate min/max over the visible window. Has no effect for live State (`primary_state_as: null`). |
 | `name_position` | string | `null` | Controls how the entity name and primary value are arranged in the state row. `null` (default) = name to the left of the value (inline). `below` = value shown larger with the name centered underneath (ApexCharts-style, great for header-only entities and mobile layouts). |
 | `show_second_state_as` | string | `null` | Show a secondary stat value next to the primary state. Options: `min`, `max`, `avg`, `sum`, `first`, `last`. Displays with the same styling as the primary value, with a small label prefix. |
-| `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. |
+| `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. The icon indicates direction only — its color is fixed and is **not** affected by `color_thresholds` or `rise_fall_colors`. |
 | `trend_period_hours` | number | `1` | Time window (in hours) for trend direction calculation. Set `0` for full range. |
 | `show_in_legend` | boolean | `false` | Show a statistics row below the graph for this entity. Which stats are shown is controlled by `legend_stats`. |
 | `legend_stats` | list | `["min","avg","max"]` | Which statistics to display in the legend row. Any combination of `min`, `avg`, `max`, `last`, `sum`. Requires `show_in_legend: true`. |
@@ -791,6 +810,13 @@ The date picker bar shows the current period label with arrow buttons to move fo
 - **◀ ▶** — navigate to the previous/next period
 - **📅** — open the calendar popup for direct date selection
 
+**Layout:** the ‹ period › navigator and the D/W/M/Y + 📅 shortcuts can each sit `left` / `center` / `right`:
+
+```yaml
+date_picker_nav_position: center
+date_picker_shortcuts_position: right
+```
+
 ### Calendar & Presets
 
 Click the calendar icon to open a panel with:
@@ -819,6 +845,8 @@ date_picker_group: bedroom
 Changing the date on Card 1 updates all three cards. Cards 2 and 3 show no picker UI but their data range follows the group selection.
 
 This is ideal for dashboards where you want one date picker controlling multiple charts without repeating the picker bar on every card.
+
+The same mechanism exists for the other on-card controls: `interval_picker_group` for the Interval Picker, and `pph_picker_group` / `group_by_picker_group` for the on-card Points/Hour and Group By pickers — each group is independent.
 
 ### Customizing Modes
 
@@ -897,7 +925,7 @@ The label adapts automatically: `step > 1` shows the date range (`Mar 11 – Apr
 
 ### Editor
 
-General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker. When enabled, a **Visible Modes** section appears below with D/W/M/Y checkboxes plus the rolling options (24H / 3D / 7D … 12M), and a **Default Mode** dropdown that also lists the rolling windows.
+General Settings → Overlays → **Date Picker** toggle. Position and Group options appear on the same row. The **Group** field is always editable — even when the Date Picker toggle is off — so you can assign a group to cards that don't show their own picker. When enabled, a **Visible Modes** section appears below with D/W/M/Y checkboxes plus the rolling options (24H / 3D / 7D … 12M), and a **Default Mode** dropdown that also lists the rolling windows. The **Date Nav** and **Shortcuts** dropdowns control where the navigator and the mode buttons sit in the bar.
 
 ### Notes
 
@@ -905,6 +933,101 @@ General Settings → Overlays → **Date Picker** toggle. Position and Group opt
 - Date picker state is persisted in `localStorage` and restored on page reload
 - When viewing the current period, the X-axis extends to the end of the period with empty space after the current time
 - Cards with only `date_picker_group` (no `show_date_picker`) use their normal `hours_to_show` until a sync event arrives from a card in the same group
+
+</details>
+
+<details>
+<summary><strong>🎚️ On-Card Pickers (Points/Hour & Group By)</strong></summary>
+
+Change the data resolution and the bucketing strategy directly on the card — no editor round-trip.
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_pph_picker: true
+show_group_by_picker: true
+group_by_picker_position: right
+entities:
+  - entity: sensor.power
+```
+
+### Behavior
+
+- Each dropdown starts on **Auto (…)**, showing your configured value; picking anything else overrides it for this card only.
+- Selections persist across reloads and **take priority over Auto Scale** while active.
+- The Group By picker offers Interval, Hour, **2H / 3H / 4H / 6H / 12H**, Date, Week, Month and Year.
+
+### Group Sync
+
+Each picker has its own, fully independent sync group — same mechanism as `date_picker_group`:
+
+```yaml
+# Controller card
+show_pph_picker: true
+pph_picker_group: page
+
+# Receiver cards — no picker shown, still follow
+pph_picker_group: page
+```
+
+`pph_picker_group` and `group_by_picker_group` don't interact: a card can follow one page-wide resolution group and a different bucketing group (or none).
+
+### Editor
+
+General Settings → Overlays → **Points/Hour Picker** and **Group By Picker** rows. The **Group** fields are always editable, even while the toggles are off.
+
+</details>
+
+<details>
+<summary><strong>🕒 Y-Axis Label Formats</strong></summary>
+
+Render axis values as durations or with a custom template instead of plain numbers. The format follows the entity everywhere: axis ticks, tooltips, data labels, the state row and the average-line label.
+
+### Duration shorthands
+
+```yaml
+y2_axis_format: h:mm    # 5400 → 1:30
+duration_unit: s        # raw unit: s (default) / ms / min / h
+```
+
+| Format | `5400` becomes |
+|---|---|
+| `h:mm` | `1:30` |
+| `h:mm:ss` | `1:30:00` |
+| `mm:ss` | `90:00` |
+| `d h:mm` | `1:30` — and `90000` becomes `1d 1:00` |
+
+### Templates
+
+```yaml
+y_axis_format: "{fixed(value/1000,1)} kW"     # 2350 → 2.4 kW
+y2_axis_format: "{floor(value/3600)}:{pad2(floor(value%3600/60))}"
+```
+
+Templates accept numbers, `value`, `+ - * / %`, parentheses and the functions `floor`, `ceil`, `round`, `abs`, `min`, `max`, `sqrt`, `pad2(x)`, `pad(x,width)`, `fixed(x,decimals)`. No JavaScript is executed — invalid formats are simply ignored and the axis falls back to plain numbers.
+
+### Editor
+
+General Settings → Y Axis → Labels → **Y Tick Format / Y2 Tick Format / Duration Unit**.
+
+</details>
+
+<details>
+<summary><strong>🙈 Auto Hide Entities</strong></summary>
+
+Start the card with every series hidden — ideal for "pick what you want to see" dashboards with many entities.
+
+```yaml
+auto_hide_entities: true
+show_legend: true
+```
+
+Click legend items to reveal series. Reveals stick for the session, and entities added later also start hidden.
+
+### Editor
+
+General Settings → Chart → Visual Options → **Auto Hide Entities**.
 
 </details>
 
@@ -2513,7 +2636,7 @@ Setting `color: threshold` propagates threshold colors to the state row dot as w
 
 ### 📈 Rise/Fall Colors
 
-Color each graph segment green when rising and red when falling — without needing to define any value thresholds. The trend icon on the state row reflects the same direction. `trend_period_hours` controls how sensitive the detection is.
+Color each graph segment green when rising and red when falling — without needing to define any value thresholds. `trend_period_hours` controls how sensitive the detection is.
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -2525,7 +2648,6 @@ entities:
       increase: "#2ecc71"
       decrease: "#e74c3c"
       stable: "#95a5a6"
-    show_trend_icon: true
     trend_period_hours: 2
 ```
 
@@ -2934,8 +3056,6 @@ entities:
     show_in_legend: true
     show_extrema: click
     show_average: true
-    show_trend_icon: true
-    trend_period_hours: 2
     decimals: 1
     gradient: true
     state_adaptive_color: true
@@ -3284,8 +3404,6 @@ rise_fall_colors:
   decrease: "#e74c3c"   # color when value is falling
   stable: "#95a5a6"     # color when value is flat
 ```
-
-The same direction logic drives the trend icon (▲▼⯇⯈) on the state row — so the icon and the graph always agree.
 
 > ⚠️ Cannot be combined with `color_thresholds` on the same entity.
 
