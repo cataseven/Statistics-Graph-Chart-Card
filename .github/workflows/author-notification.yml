@@ -1,57 +1,79 @@
 name: Issue and Release Automation
 
 on:
-  issues:
-    types: [labeled]
-  pull_request:
-    types: [labeled]
   release:
     types: [published]
 
 jobs:
-  notify-on-label:
-    if: (github.event_name == 'issues' || github.event_name == 'pull_request') && github.event.label.name == 'Author is testing now'
+  notify-on-test-release:
+    if: github.event.release.target_commitish == 'test'
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
       contents: read
     steps:
-      - name: Add Dynamic Comment with Latest TEST Release
+      - name: Comment and Add Label on Referenced Issues
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issueOrPr = context.payload.issue || context.payload.pull_request;
-            const author = issueOrPr.user.login;
+            const releaseBody = context.payload.release.body;
+            const releaseTag = context.payload.release.tag_name;
 
-            const { data: releases } = await github.rest.repos.listReleases({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-
-            const testReleases = releases
-              .filter(r => !r.draft && r.target_commitish === 'test')
-              .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-
-            if (testReleases.length === 0) {
-              console.log("No published release found for the 'test' branch. Skipping.");
+            if (!releaseBody) {
+              console.log("Release notes are empty. Skipping.");
               return;
             }
 
-            const latestTag = testReleases[0].tag_name;
-            const message = `**@${author}** hi, Please test with the test-release ${latestTag}`;
+            const regex = /#(\d+)/g;
+            let match;
+            const issueNumbers = new Set();
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueOrPr.number,
-              body: message
-            });
+            while ((match = regex.exec(releaseBody)) !== null) {
+              issueNumbers.add(parseInt(match[1], 10));
+            }
+
+            if (issueNumbers.size === 0) {
+              console.log("No issues referenced in release notes.");
+              return;
+            }
+
+            const labelToAdd = 'Author is testing now';
+
+            for (const issueNumber of issueNumbers) {
+              try {
+                const { data: issue } = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber
+                });
+
+                const author = issue.user.login;
+                const message = `**@${author}** hi, Please test with the test-release ${releaseTag}`;
+
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: message
+                });
+
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  labels: [labelToAdd]
+                });
+
+                console.log(`Commented and added '${labelToAdd}' label on #${issueNumber}`);
+              } catch (error) {
+                console.error(`Could not process #${issueNumber}. It might be a deleted issue or false positive: ${error.message}`);
+              }
+            }
 
   notify-on-release:
-    if: github.event_name == 'release' && github.event.release.target_commitish == 'main'
+    if: github.event.release.target_commitish == 'main'
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -104,7 +126,7 @@ jobs:
 
                 const labelToRemove = 'Author is testing now';
                 const hasLabel = issue.labels.some(label => label.name === labelToRemove);
-                
+
                 if (hasLabel) {
                   await github.rest.issues.removeLabel({
                     owner: context.repo.owner,
