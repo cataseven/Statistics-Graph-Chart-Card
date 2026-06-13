@@ -11,10 +11,10 @@ on:
 
 jobs:
   # ----------------------------------------------------------------
-  # SENARYO 1: Etiket eklendiğinde çalışacak görev
+  # SENARYO 1: "Author is testing now" etiketi eklendiğinde
+  #            -> TEST branch'inden yayınlanan SON release'i bildir
   # ----------------------------------------------------------------
   notify-on-label:
-    # Sadece Issue veya PR ise VE eklenen etiket "Author is testing now" ise çalışır
     if: (github.event_name == 'issues' || github.event_name == 'pull_request') && github.event.label.name == 'Author is testing now'
     runs-on: ubuntu-latest
     permissions:
@@ -22,26 +22,34 @@ jobs:
       pull-requests: write
       contents: read
     steps:
-      - name: Add Dynamic Comment with Latest Tag
+      - name: Add Dynamic Comment with Latest TEST Release
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueOrPr = context.payload.issue || context.payload.pull_request;
             const author = issueOrPr.user.login;
-            
-            const { data: tags } = await github.rest.repos.listTags({
+
+            // Tüm release'leri çek (en fazla 100 tane)
+            const { data: releases } = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              per_page: 5
+              per_page: 100
             });
-            
-            let latestTag = "unknown-tag";
-            if (tags && tags.length > 0) {
-              latestTag = tags[0].name; 
+
+            // Sadece "test" branch'ini hedefleyen, draft olmayan release'ler;
+            // ardından yayın tarihine göre en yeniden eskiye sırala
+            const testReleases = releases
+              .filter(r => !r.draft && r.target_commitish === 'test')
+              .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+
+            if (testReleases.length === 0) {
+              console.log("No published release found for the 'test' branch. Skipping.");
+              return;
             }
-            
-            const message = `**@${author}** Please test with the test-release ${latestTag}`;
+
+            const latestTag = testReleases[0].tag_name;
+            const message = `🚀 **@${author}** Please test with the test-release ${latestTag}`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -51,11 +59,12 @@ jobs:
             });
 
   # ----------------------------------------------------------------
-  # SENARYO 2: Yeni bir Release yayınlandığında çalışacak görev
+  # SENARYO 2: Bir release yayınlandığında
+  #            -> SADECE main branch'ten yayınlanan release'lerde çalış
   # ----------------------------------------------------------------
   notify-on-release:
-    # Sadece olay türü "release" ise çalışır
-    if: github.event_name == 'release'
+    # Olay "release" ise VE release main branch'ini hedefliyorsa çalışır
+    if: github.event_name == 'release' && github.event.release.target_commitish == 'main'
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -67,9 +76,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            // Tetikleyen release zaten main'in en son yayınlanan release'idir
             const releaseBody = context.payload.release.body;
             const releaseTag = context.payload.release.tag_name;
-            
+
             if (!releaseBody) {
               console.log("Release notes are empty. Skipping.");
               return;
@@ -79,7 +89,7 @@ jobs:
             const regex = /#(\d+)/g;
             let match;
             const issueNumbers = new Set();
-            
+
             while ((match = regex.exec(releaseBody)) !== null) {
               issueNumbers.add(parseInt(match[1], 10));
             }
@@ -98,7 +108,7 @@ jobs:
                 });
 
                 const author = issue.user.login;
-                const message = `**@${author}** hi, please try with the update ${releaseTag}`;
+                const message = `🚀 **@${author}** hi, please try with the update ${releaseTag}`;
 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -106,7 +116,7 @@ jobs:
                   issue_number: issueNumber,
                   body: message
                 });
-                
+
                 console.log(`Successfully commented on #${issueNumber}`);
               } catch (error) {
                 console.error(`Could not process #${issueNumber}. It might be a deleted issue or false positive: ${error.message}`);
