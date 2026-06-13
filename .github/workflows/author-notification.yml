@@ -1,6 +1,5 @@
 name: Issue and Release Automation
 
-# Tüm tetikleyicileri tek bir yerde topluyoruz
 on:
   issues:
     types: [labeled]
@@ -10,10 +9,6 @@ on:
     types: [published]
 
 jobs:
-  # ----------------------------------------------------------------
-  # SENARYO 1: "Author is testing now" etiketi eklendiğinde
-  #            -> TEST branch'inden yayınlanan SON release'i bildir
-  # ----------------------------------------------------------------
   notify-on-label:
     if: (github.event_name == 'issues' || github.event_name == 'pull_request') && github.event.label.name == 'Author is testing now'
     runs-on: ubuntu-latest
@@ -30,15 +25,12 @@ jobs:
             const issueOrPr = context.payload.issue || context.payload.pull_request;
             const author = issueOrPr.user.login;
 
-            // Tüm release'leri çek (en fazla 100 tane)
             const { data: releases } = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100
             });
 
-            // Sadece "test" branch'ini hedefleyen, draft olmayan release'ler;
-            // ardından yayın tarihine göre en yeniden eskiye sırala
             const testReleases = releases
               .filter(r => !r.draft && r.target_commitish === 'test')
               .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
@@ -58,12 +50,7 @@ jobs:
               body: message
             });
 
-  # ----------------------------------------------------------------
-  # SENARYO 2: Bir release yayınlandığında
-  #            -> SADECE main branch'ten yayınlanan release'lerde çalış
-  # ----------------------------------------------------------------
   notify-on-release:
-    # Olay "release" ise VE release main branch'ini hedefliyorsa çalışır
     if: github.event_name == 'release' && github.event.release.target_commitish == 'main'
     runs-on: ubuntu-latest
     permissions:
@@ -76,7 +63,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Tetikleyen release zaten main'in en son yayınlanan release'idir
             const releaseBody = context.payload.release.body;
             const releaseTag = context.payload.release.tag_name;
 
@@ -85,7 +71,6 @@ jobs:
               return;
             }
 
-            // Sürüm notlarındaki #123 formatlı numaraları bul
             const regex = /#(\d+)/g;
             let match;
             const issueNumbers = new Set();
