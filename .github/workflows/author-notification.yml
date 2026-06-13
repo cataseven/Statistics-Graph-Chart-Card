@@ -21,10 +21,7 @@ jobs:
             const releaseBody = context.payload.release.body;
             const releaseTag = context.payload.release.tag_name;
 
-            if (!releaseBody) {
-              console.log("Release notes are empty. Skipping.");
-              return;
-            }
+            if (!releaseBody) return;
 
             const regex = /#(\d+)/g;
             let match;
@@ -34,10 +31,7 @@ jobs:
               issueNumbers.add(parseInt(match[1], 10));
             }
 
-            if (issueNumbers.size === 0) {
-              console.log("No issues referenced in release notes.");
-              return;
-            }
+            if (issueNumbers.size === 0) return;
 
             const excludedUsers = ['cataseven'];
             const labelToAdd = 'Author is testing now';
@@ -50,9 +44,6 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                const participants = new Set();
-                participants.add(issue.user.login);
-
                 const comments = await github.paginate(github.rest.issues.listComments, {
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -60,27 +51,29 @@ jobs:
                   per_page: 100
                 });
 
+                const usersToNotify = new Set();
+                usersToNotify.add(issue.user.login);
                 for (const comment of comments) {
                   const u = comment.user;
                   if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
-                    participants.add(u.login);
+                    usersToNotify.add(u.login);
                   }
                 }
 
-                const mentions = [...participants]
-                  .filter(login => !excludedUsers.includes(login.toLowerCase()))
-                  .map(login => `@${login}`)
-                  .join(' ');
+                const mentionList = Array.from(usersToNotify)
+                  .filter(u => !excludedUsers.includes(u.toLowerCase()));
 
-                const greeting = mentions ? `**${mentions}** ` : '';
-                const message = `${greeting}hi, Please test with the test-release ${releaseTag}`;
+                if (mentionList.length > 0) {
+                  const mentions = mentionList.map(u => `@${u}`).join(' ');
+                  const message = `${mentions} hi, Please test with the test-release ${releaseTag}`;
 
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  body: message
-                });
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: message
+                  });
+                }
 
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
@@ -89,9 +82,8 @@ jobs:
                   labels: [labelToAdd]
                 });
 
-                console.log(`Commented and added '${labelToAdd}' label on #${issueNumber}`);
               } catch (error) {
-                console.error(`Could not process #${issueNumber}. It might be a deleted issue or false positive: ${error.message}`);
+                console.error(`Error on #${issueNumber}: ${error.message}`);
               }
             }
 
@@ -111,10 +103,7 @@ jobs:
             const releaseBody = context.payload.release.body;
             const releaseTag = context.payload.release.tag_name;
 
-            if (!releaseBody) {
-              console.log("Release notes are empty. Skipping.");
-              return;
-            }
+            if (!releaseBody) return;
 
             const regex = /#(\d+)/g;
             let match;
@@ -124,10 +113,7 @@ jobs:
               issueNumbers.add(parseInt(match[1], 10));
             }
 
-            if (issueNumbers.size === 0) {
-              console.log("No issues referenced in release notes.");
-              return;
-            }
+            if (issueNumbers.size === 0) return;
 
             const excludedUsers = ['cataseven'];
             const labelToRemove = 'Author is testing now';
@@ -140,9 +126,6 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                const participants = new Set();
-                participants.add(issue.user.login);
-
                 const comments = await github.paginate(github.rest.issues.listComments, {
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -150,27 +133,29 @@ jobs:
                   per_page: 100
                 });
 
+                const usersToNotify = new Set();
+                usersToNotify.add(issue.user.login);
                 for (const comment of comments) {
                   const u = comment.user;
                   if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
-                    participants.add(u.login);
+                    usersToNotify.add(u.login);
                   }
                 }
 
-                const mentions = [...participants]
-                  .filter(login => !excludedUsers.includes(login.toLowerCase()))
-                  .map(login => `@${login}`)
-                  .join(' ');
+                const mentionList = Array.from(usersToNotify)
+                  .filter(u => !excludedUsers.includes(u.toLowerCase()));
 
-                const greeting = mentions ? `**${mentions}** ` : '';
-                const message = `${greeting}hi, please try with the update ${releaseTag}`;
+                if (mentionList.length > 0) {
+                  const mentions = mentionList.map(u => `@${u}`).join(' ');
+                  const message = `${mentions} hi, please try with the update ${releaseTag}`;
 
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  body: message
-                });
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: message
+                  });
+                }
 
                 const hasLabel = issue.labels.some(label => label.name === labelToRemove);
 
@@ -181,11 +166,20 @@ jobs:
                     issue_number: issueNumber,
                     name: labelToRemove
                   });
-                  console.log(`Removed '${labelToRemove}' label from #${issueNumber}`);
                 }
 
-                console.log(`Successfully commented on #${issueNumber}`);
               } catch (error) {
-                console.error(`Could not process #${issueNumber}. It might be a deleted issue or false positive: ${error.message}`);
+                console.error(`Error on #${issueNumber}: ${error.message}`);
               }
             }
+
+  upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: statistics-graph-chart-card.js
+          fail_on_unmatched_files: true
