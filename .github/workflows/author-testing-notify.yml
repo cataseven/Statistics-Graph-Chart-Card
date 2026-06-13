@@ -10,7 +10,7 @@ on:
 jobs:
   add-comment:
     # Sadece "status: author testing" etiketi eklendiğinde çalışsın
-    if: github.event.label.name == 'status: author testing'
+    if: github.event.label.name == 'Author is testing now'
     runs-on: ubuntu-latest
     
     # Yorum atabilmesi için gerekli izinleri veriyoruz
