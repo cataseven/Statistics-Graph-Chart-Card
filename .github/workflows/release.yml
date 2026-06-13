@@ -1,0 +1,19 @@
+name: Build and Upload Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Release'e Yükle
+        uses: softprops/action-gh-release@v2
+        with:
+          files: statistics-graph-chart-card.js
