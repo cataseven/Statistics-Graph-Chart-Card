@@ -49,7 +49,7 @@ jobs:
             }
 
             const latestTag = testReleases[0].tag_name;
-            const message = `🚀 **@${author}** Please test with the test-release ${latestTag}`;
+            const message = `**@${author}** hi, Please test with the test-release ${latestTag}`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -108,7 +108,7 @@ jobs:
                 });
 
                 const author = issue.user.login;
-                const message = `🚀 **@${author}** hi, please try with the update ${releaseTag}`;
+                const message = `**@${author}** hi, please try with the update ${releaseTag}`;
 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
