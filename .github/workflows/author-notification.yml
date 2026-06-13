@@ -39,6 +39,7 @@ jobs:
               return;
             }
 
+            const excludedUsers = ['cataseven'];
             const labelToAdd = 'Author is testing now';
 
             for (const issueNumber of issueNumbers) {
@@ -49,8 +50,30 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                const author = issue.user.login;
-                const message = `**@${author}** hi, Please test with the test-release ${releaseTag}`;
+                const participants = new Set();
+                participants.add(issue.user.login);
+
+                const comments = await github.paginate(github.rest.issues.listComments, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  per_page: 100
+                });
+
+                for (const comment of comments) {
+                  const u = comment.user;
+                  if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
+                    participants.add(u.login);
+                  }
+                }
+
+                const mentions = [...participants]
+                  .filter(login => !excludedUsers.includes(login.toLowerCase()))
+                  .map(login => `@${login}`)
+                  .join(' ');
+
+                const greeting = mentions ? `**${mentions}** ` : '';
+                const message = `${greeting}hi, Please test with the test-release ${releaseTag}`;
 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -106,6 +129,9 @@ jobs:
               return;
             }
 
+            const excludedUsers = ['cataseven'];
+            const labelToRemove = 'Author is testing now';
+
             for (const issueNumber of issueNumbers) {
               try {
                 const { data: issue } = await github.rest.issues.get({
@@ -114,8 +140,30 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                const author = issue.user.login;
-                const message = `**@${author}** hi, please try with the update ${releaseTag}`;
+                const participants = new Set();
+                participants.add(issue.user.login);
+
+                const comments = await github.paginate(github.rest.issues.listComments, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  per_page: 100
+                });
+
+                for (const comment of comments) {
+                  const u = comment.user;
+                  if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
+                    participants.add(u.login);
+                  }
+                }
+
+                const mentions = [...participants]
+                  .filter(login => !excludedUsers.includes(login.toLowerCase()))
+                  .map(login => `@${login}`)
+                  .join(' ');
+
+                const greeting = mentions ? `**${mentions}** ` : '';
+                const message = `${greeting}hi, please try with the update ${releaseTag}`;
 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -124,7 +172,6 @@ jobs:
                   body: message
                 });
 
-                const labelToRemove = 'Author is testing now';
                 const hasLabel = issue.labels.some(label => label.name === labelToRemove);
 
                 if (hasLabel) {
