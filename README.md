@@ -251,13 +251,13 @@ These options apply to the whole card.
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
-| `height` | number | `150` | Graph area height in pixels |
+| `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the grid cell instead — the card then participates in Home Assistant's **Sections** layout sizing. See [Sections Auto-height](#-sections-auto-height). |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
 | `min_bound_range` | number | `null` | Minimum span of the primary Y axis |
-| `min_bound_range_secondary` | number | `null` | Minimum span of the secondary Y axis |
+| `min_bound_range_secondary` | number | `null` | Minimum span of the secondary Y axis. When combined with a locked `lower_bound_secondary` / `upper_bound_secondary`, the range grows only away from the locked edge — it won't push a locked bound past zero. |
 | `lower_bound` | string/number | `null` | Hard or soft minimum for the primary Y axis. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Hard or soft maximum for the primary Y axis. See [Bounds](#-bounds). |
 | `lower_bound_secondary` | string/number | `null` | Hard or soft minimum for the secondary Y axis. See [Bounds](#-bounds). |
@@ -401,6 +401,7 @@ Each entry under `entities` supports the following options.
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
 | `invert` | boolean | `false` | Draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Use with `stacked: true` for butterfly charts. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. Each entry takes a `value` plus optional `label` and `color`. See [State Map](#-state-map). |
+| `auto_hide` | boolean | `false` | Start this single entity hidden — the series is invisible until you reveal it from the legend (the reveal sticks for the session). Per-entity alternative to the card-wide `auto_hide_entities`. When `auto_hide_entities` is set, it takes precedence over per-entity values. |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). When left unset (or set to `none`), tapping the state row instead toggles that entity's visibility on the graph — same as clicking its legend item. Hidden entities dim visually so you can tell what's off at a glance. |
 
 #### 🎛️ Appearance
@@ -783,6 +784,31 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 
 <details>
 <summary>Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and 20 more</summary>
+
+<details>
+<summary><strong>📐 Sections Auto-height</strong></summary>
+
+In Home Assistant's **Sections** view the card now reports proper grid sizing — the "does not fully support resizing" warning is gone, and you can resize it from the card's Layout tab.
+
+By default `height` is a fixed pixel value (`150`). Set it to `auto` to make the chart fill the grid cell it is given instead:
+
+```yaml
+type: custom:statistics-graph-chart-card
+height: auto          # fill the cell; size the card from the Layout tab
+entities:
+  - entity: sensor.power
+```
+
+### Behavior
+
+- A numeric `height` (e.g. `300`) still pins the graph to that many pixels, exactly as before.
+- With `height: auto` the chart grows and shrinks to match the grid cell — drag the card's resize handle (or set `grid_options` rows) in the Layout tab. Handy for lining a chart up with a neighbouring card's height.
+
+### Editor
+
+The **Height** field accepts a number or the word `auto`. Leaving it empty is treated as `auto`.
+
+</details>
 
 <details>
 <summary><strong>📅 Date Picker</strong></summary>
