@@ -6,7 +6,7 @@ on:
 
 jobs:
   notify-on-test-release:
-    if: github.event.release.target_commitish == 'test'
+    if: github.event.release.prerelease == true
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -88,7 +88,7 @@ jobs:
             }
 
   notify-on-release:
-    if: github.event.release.target_commitish == 'main'
+    if: github.event.release.prerelease == false
     runs-on: ubuntu-latest
     permissions:
       issues: write
