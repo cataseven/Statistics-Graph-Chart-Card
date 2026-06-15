@@ -40,7 +40,7 @@ jobs:
             }
 
             const excludedUsers = ['cataseven'];
-            const labelToAdd = 'Author is testing now';
+            const labelName = 'Author is testing now';
 
             for (const issueNumber of issueNumbers) {
               try {
@@ -50,45 +50,51 @@ jobs:
                   issue_number: issueNumber
                 });
 
-                const comments = await github.paginate(github.rest.issues.listComments, {
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  per_page: 100
-                });
+                const hasLabel = issue.labels.some(label => label.name === labelName);
 
-                const usersToNotify = new Set();
-                usersToNotify.add(issue.user.login);
-                for (const comment of comments) {
-                  const u = comment.user;
-                  if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
-                    usersToNotify.add(u.login);
-                  }
-                }
-
-                const mentionList = Array.from(usersToNotify)
-                  .filter(u => !excludedUsers.includes(u.toLowerCase()));
-
-                if (mentionList.length > 0) {
-                  const mentions = mentionList.map(u => `@${u}`).join(' ');
-                  const message = `${mentions} hi, Please test with the test-release ${releaseTag}`;
-
-                  await github.rest.issues.createComment({
+                if (!hasLabel) {
+                  const comments = await github.paginate(github.rest.issues.listComments, {
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: issueNumber,
-                    body: message
+                    per_page: 100
                   });
+
+                  const usersToNotify = new Set();
+                  usersToNotify.add(issue.user.login);
+                  for (const comment of comments) {
+                    const u = comment.user;
+                    if (u && u.type !== 'Bot' && !u.login.endsWith('[bot]')) {
+                      usersToNotify.add(u.login);
+                    }
+                  }
+
+                  const mentionList = Array.from(usersToNotify)
+                    .filter(u => !excludedUsers.includes(u.toLowerCase()));
+
+                  if (mentionList.length > 0) {
+                    const mentions = mentionList.map(u => `@${u}`).join(' ');
+                    const message = `${mentions} hi, Please test with the test-release ${releaseTag}`;
+
+                    await github.rest.issues.createComment({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: issueNumber,
+                      body: message
+                    });
+                  }
+
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    labels: [labelName]
+                  });
+
+                  console.log(`Processed #${issueNumber} for test release (label added).`);
+                } else {
+                  console.log(`#${issueNumber} already has the '${labelName}' label, skipping.`);
                 }
-
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  labels: [labelToAdd]
-                });
-
-                console.log(`Successfully processed #${issueNumber} for test release.`);
               } catch (error) {
                 console.error(`Error on #${issueNumber}: ${error.message}`);
               }
