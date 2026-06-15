@@ -2,11 +2,14 @@ name: Issue and Release Automation
 
 on:
   release:
-    types: [published]
+    # Sürüm yayınlandığında, draft'tan pre-release'e çekildiğinde veya
+    # pre-release'den tam sürüme çekildiğinde garanti çalışmasını sağlar.
+    types: [published, prereleased, released]
 
 jobs:
   notify-on-test-release:
-    if: github.event.release.prerelease == true
+    # Daha güvenli boolean kontrolü
+    if: github.event.release.prerelease
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -21,7 +24,10 @@ jobs:
             const releaseBody = context.payload.release.body;
             const releaseTag = context.payload.release.tag_name;
 
-            if (!releaseBody) return;
+            if (!releaseBody) {
+              console.log("Release body is empty.");
+              return;
+            }
 
             const regex = /#(\d+)/g;
             let match;
@@ -31,7 +37,10 @@ jobs:
               issueNumbers.add(parseInt(match[1], 10));
             }
 
-            if (issueNumbers.size === 0) return;
+            if (issueNumbers.size === 0) {
+              console.log("No issue numbers found in release body.");
+              return;
+            }
 
             const excludedUsers = ['cataseven'];
             const labelToAdd = 'Author is testing now';
@@ -82,13 +91,15 @@ jobs:
                   labels: [labelToAdd]
                 });
 
+                console.log(`Successfully processed #${issueNumber} for test release.`);
               } catch (error) {
                 console.error(`Error on #${issueNumber}: ${error.message}`);
               }
             }
 
   notify-on-release:
-    if: github.event.release.prerelease == false
+    # Pre-release DEĞİLSE çalışır (yani ana sürümler)
+    if: !github.event.release.prerelease
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -167,7 +178,8 @@ jobs:
                     name: labelToRemove
                   });
                 }
-
+                
+                console.log(`Successfully processed #${issueNumber} for main release.`);
               } catch (error) {
                 console.error(`Error on #${issueNumber}: ${error.message}`);
               }
