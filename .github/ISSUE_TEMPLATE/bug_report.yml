@@ -4,23 +4,17 @@ title: '[Bug]'
 labels: [Bug]
 body:
   - type: dropdown
-    id: lts_related
-    attributes:
-      label: "1. Is it related to Long Term Statistics (LTS)?"
-      description: "⚠️ IF YOUR ANSWER IS 'YES': You must attach the CSV file for the related entities."
-      options:
-        - "No"
-        - "Yes"
-    validations:
-      required: true
-
-  - type: dropdown
     id: csv_attached
     attributes:
-      label: "1a. If it is related to Long Term Statistics (LTS) then please attach your CSV file(s) of entities"
-      description: "⚠️ ONLY attach data history (csv) if the bug is related to Long Term Statistics (LTS)."
+      label: "CSV File"
+      description: "Please add cvs file of the entity(s).  For csv file
+        - Please go your entity's more info dialog.
+        - Click on Show More on the history line
+        - Select last 30days on the left
+        - Select Download data from the top right side menu"
+        
       options:
-        - "I did"
+        - "Added"
         - "I didn't"
     validations:
       required: true
