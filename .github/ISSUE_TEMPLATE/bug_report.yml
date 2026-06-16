@@ -6,8 +6,12 @@ body:
   - type: dropdown
     id: csv_attached
     attributes:
-      label: "CSV File: Please add csv file of the entity(s).  For csv file:  Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu"
-      description: "Please add cvs file of the entity(s).  For csv file:  Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu"
+      label: "CSV File: Please add csv file of the entity(s)."
+      description: |
+        Please add csv file of the entity(s). For csv file: Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu.
+        
+        **Example:**
+        ![Örnek Ekran Görüntüsü](https://github.com/cataseven/Statistics-Graph-Chart-Card/blob/main/images/bugreport.png?raw=true)
       options:
         - "Added"
         - "I didn't"
@@ -20,7 +24,7 @@ body:
       label: "2. Your YAML Code"
       description: "Please paste your relevant YAML code in the area below. (The triple backticks are already provided, paste your code between them without breaking the format)."
       value: |
-        ```yaml
+```yaml
         # Paste your yaml code here
         
         ```
