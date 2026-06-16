@@ -11,7 +11,7 @@ body:
         Please add csv file of the entity(s). For csv file: Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu.
         
         **How to send csv file**
-        ![Example](https://github.com/cataseven/Statistics-Graph-Chart-Card/blob/main/images/bugreport.png?raw=true)
+        ![Example](https://github.com/cataseven/Statistics-Graph-Chart-Card/blob/main/images/bugreport1.png?raw=true)
       options:
         - "Added"
         - "I didn't"
