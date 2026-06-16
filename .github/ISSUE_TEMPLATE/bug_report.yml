@@ -7,12 +7,7 @@ body:
     id: csv_attached
     attributes:
       label: "CSV File"
-      description: "Please add cvs file of the entity(s).  For csv file
-        - Please go your entity's more info dialog.
-        - Click on Show More on the history line
-        - Select last 30days on the left
-        - Select Download data from the top right side menu"
-        
+      description: "Please add cvs file of the entity(s).  For csv file:  Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu"
       options:
         - "Added"
         - "I didn't"
