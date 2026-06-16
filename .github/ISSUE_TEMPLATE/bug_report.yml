@@ -24,7 +24,7 @@ body:
       label: "2. Your YAML Code"
       description: "Please paste your relevant YAML code in the area below. (The triple backticks are already provided, paste your code between them without breaking the format)."
       value: |
-```yaml
+        ```yaml
         # Paste your yaml code here
         
         ```
