@@ -84,7 +84,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ↕️ | Dual Y-axis support (primary + secondary) with per-axis bounds and configurable tick count |
 | ↕️ | **Independent Y2 axis toggle** — show or hide the secondary (right) Y axis labels without affecting the primary axis. Hidden by default; enable it when you want right-side labels |
 | ↕️ | **Independent Y-axis** — `y_axis: independent` gives each entity its own hidden scale based on its min/max, enabling trend comparison across sensors with wildly different units (°C, %, lux, hPa) on a single graph |
-| 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch) |
+| 🎨 | Color thresholds with **direction** (vertical gradient or horizontal per-segment) and **transition** (smooth blend or hard switch). Threshold values and colors can also reference live entities (`sensor.x` / `sensor.x.attribute`) |
 | 🔺 | Min / Max extrema labels — always on, on click, or never |
 | ➖ | Average line — dashed reference at the mean value for the visible window |
 | 〽️ | **Moving averages** — overlay one or more simple moving-average (SMA) lines per entity, each with its own period (in buckets), color, and width, plus an optional on-line `MA7`/`MA26` label. The card extends the look-back beyond the visible window automatically, so a long period (e.g. MA26) draws fully even when `hours_to_show` is short. Averages the close for candlesticks, otherwise the bucket value; drawn on the entity's own Y axis |
@@ -151,6 +151,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🏷️ | **Y-axis state names** — when graphing entities with `state_map` (washing machines, alarm panels, media players), the Y-axis automatically shows the original state names (`idle`, `running`, `done`) instead of `0`, `1`, `2`. Optional friendly labels supported via `value, label` in the editor |
 | 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme |
 | ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts. On mobile, the highlight persists while the finger is held down via a JS-managed class (CSS `:hover` is unreliable on touch devices) |
+| ✨ | **Period highlight** — on bar charts, hovering a bar shades the background band of that whole period so it's clear where each period starts and ends, even with several entities side by side. Toggle with `period_highlight` and recolor with `period_highlight_color`; works with or without the tooltip |
 | 🎨 | **Color templates** — all color fields (`color`, `icon_color`, `state_color`, `point_colors`, axis/grid colors) accept Jinja2 `{{ }}` templates evaluated server-side by HA via `render_template` WebSocket subscriptions. Use a central `sensor.entity_colors` to manage all entity colors from one place. In the editor, the color picker automatically dims when a template is detected |
 | 📅 | **`graph_start: tomorrow`** — sets the graph window to tomorrow 00:00 → end of day, perfect for displaying next-day spot prices (Nord Pool, EPEX, Tibber) via `data_attribute`. The window extends into the future automatically without requiring `show_full_period` |
 | 📏 | **Grid customization** — per-axis control over grid line appearance: `y_grid_style` / `x_grid_style` (dashed, solid, dotted, long-dash), `y_grid_width` / `x_grid_width` (thickness in px), `y_grid_color` / `x_grid_color` (any CSS color or template), and `y_grid_opacity` / `x_grid_opacity` to dial the grid up or down without retyping rgba colors. All configurable from the editor's Y Axis and X Axis tabs |
@@ -303,6 +304,8 @@ These options apply to the whole card.
 | `tooltip_stacked_total` | boolean | `true` | When the chart is `stacked` with 2+ stack groups, adds a per-group total row to the tooltip — labelled with the group name (e.g. *"Apples Total"*) — for each named group. Independent of `show_tooltip_total`: with both on, the tooltip shows the per-group totals **and** the grand Total of all entities. Timeline mode. See [Stacked Groups](#-stacked-groups). |
 | `tooltip_match_axis` | boolean | `false` | Format the tooltip's date header exactly like the X-axis labels. On long-range views shows e.g. *"May 26"* instead of a full timestamp (ignoring `datetime_format`, just as the axis does). It never appends a time to a date: Month / Year / day views show the date only, intraday (hour) views show the clock only. Timeline mode. |
 | `tooltip_order` | string | `"default"` | Order of the entity rows inside the tooltip: `default` (configuration order, first entity on top), `reverse` (bottom-to-top — matches a stacked chart's visual order so the topmost stacked segment is listed first), or `alphabetic` (A→Z by display name). The Total row, when shown, always stays at the bottom. Timeline mode. |
+| `period_highlight` | boolean | `false` | Highlight the period under the cursor on bar charts. Hovering a bar shades a background band spanning that whole period, making it easy to see where each period begins and ends — especially with multiple entities drawn side by side. Works whether or not `show_tooltip` is enabled. Timeline mode, bar charts. See [Period Highlight](#-period-highlight). |
+| `period_highlight_color` | string | `null` | Color of the period-highlight band. Accepts any CSS color (hex, rgba, name) or variable; you can also theme it globally with the `--sgc-period-highlight-color` CSS variable. Leave empty for a subtle theme grey. Requires `period_highlight: true`. |
 | `show_y_axis` | boolean | `true` | Show primary (left) Y axis value labels. Available in Timeline and Scatter modes. |
 | `show_y2_axis` | boolean | `false` | Show secondary (right) Y axis value labels independently. **Hidden by default** — enable it to show right-side labels. Only relevant when at least one entity uses `y_axis: secondary`; those entities stay plotted even while the axis labels are hidden. |
 | `show_x_axis` | boolean | `true` | Show X axis labels (time in Timeline, values in Scatter). Available in Timeline and Scatter modes. |
@@ -326,7 +329,7 @@ These options apply to the whole card.
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
-| `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode). Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
+| `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
@@ -2616,6 +2619,31 @@ entities:
 
 ---
 
+### 🎯 Period Highlight
+
+On bar charts, hovering a bar shades the background of the entire period under the cursor — a soft band spanning the full bar slot — so it is immediately clear which period a tooltip or value belongs to. It is most useful with several entities drawn side by side, where the thin gaps between adjacent periods otherwise make the boundaries hard to read.
+
+```yaml
+type: custom:statistics-graph-chart-card
+period_highlight: true
+period_highlight_color: rgba(128,128,128,0.3)   # optional; empty = subtle theme grey
+graph_type: bar
+group_by: date
+entities:
+  - sensor.garage_temp
+  - sensor.kids_room_temp
+  - sensor.living_room_temp
+```
+
+- Off by default. Enable with `period_highlight: true`.
+- `period_highlight_color` accepts any CSS color (hex, rgba, name) or variable. You can also set the `--sgc-period-highlight-color` CSS variable from a theme or `card_mod`. Leave it empty for a subtle theme grey.
+- The band follows the hovered period, so it lines up exactly with the bar group beneath it.
+- Works whether or not `show_tooltip` is enabled — turn the tooltip off and you still get the period band on hover.
+- In the visual editor it lives in the **Tooltip** section.
+- Timeline mode, bar charts.
+
+---
+
 ### 🎨 Color Thresholds
 
 Colorize the graph based on value ranges. Two independent settings control the behavior:
@@ -2657,6 +2685,18 @@ All four direction × transition combinations are available from the editor unde
 Setting `color: threshold` propagates threshold colors to the state row dot as well. Setting `state_color: threshold` colors the displayed value text.
 
 **Gradient fill is threshold-aware.** When `gradient: true` is enabled alongside `color_thresholds`, the fill area under the line is rendered as a vertical gradient whose colors match the line — the gradient stops sample threshold colors at chart top, zero line, and chart bottom. For a chart that crosses zero with two threshold bands (e.g. purple above zero, green below), the fill blends from purple at the top through transparent at the zero line down to green at the bottom, just like the line itself.
+
+**Dynamic thresholds from entities.** Both the `value` and the `color` of each threshold entry can be an entity reference instead of a fixed literal. Use `sensor.x` for an entity's state or `sensor.x.attribute` for one of its attributes (nested attribute paths are supported). This lets thresholds track other sensors — a seasonal comfort target, a calculated limit, or a color served by a template sensor — and they update live as those entities change, without waiting for the next data refresh.
+
+```yaml
+color_thresholds:
+  enabled: true
+  values:
+    - value: sensor.heating_setpoint        # threshold follows a sensor's state
+      color: "#3498db"
+    - value: sensor.comfort.upper           # or one of its attributes
+      color: sensor.theme_colors.warn       # the color can be entity-driven too
+```
 
 ---
 
@@ -3452,6 +3492,8 @@ color_thresholds:
 ```
 
 Thresholds are sorted by value automatically. The color of the lowest threshold applies to everything below it.
+
+Each `value` and `color` also accepts an entity reference — `sensor.x` (state) or `sensor.x.attribute` (attribute, nested paths supported) — so thresholds can track live entities and update as those change.
 
 Setting `color: threshold`, `state_color: threshold`, `icon_color: threshold`, or `point_colors: threshold` on the entity makes those elements also reflect the threshold color.
 
