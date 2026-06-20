@@ -683,7 +683,7 @@ Set `lower_bound` / `upper_bound` per entity to define the 0–100% range. If no
 
 A needle dial per entity, arranged in a column grid. Unlike the [Gauge **display**](#-gauge-display) (which replaces a single state row), `chart_mode: gauge` is a full chart mode — every entity becomes its own dial.
 
-![Gauge Example](images/gauge-example.png)
+![Gauge Example](images/gauges.png)
 
 ```yaml
 chart_mode: gauge
