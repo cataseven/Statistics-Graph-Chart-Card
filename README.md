@@ -35,6 +35,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![Scatter Example](images/scatter-example.png)
 
+![gauge](images/gauges.png)
+
 ![Pie Example](images/pie-example.png)
 
 ![Heatmap Example](images/heatmap-example.png)
