@@ -73,8 +73,9 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Or open on a rolling window that ends now — **Last 24H … Last 12M** — set as the default mode or shown as extra picker buttons. Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
-| 🎯 | **Ten chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid) — selectable from a single dropdown |
+| 🎯 | **Eleven chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial) — selectable from a single dropdown |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
+| 🧭 | **Gauge chart mode** — `chart_mode: gauge` draws a needle dial per entity in a column grid. The arc fills the value range seen in the period (min → max), the needle marks the live value, and `color_thresholds` paint the dial. Configurable span, columns, value position/size, and per-entity `needle_color` |
 | ✨ | **Sparkline mode** — ultra-compact inline graphs with no chrome, ideal for dashboard overview tiles |
 | 📊 | **Rise/Fall colorization** — graph segments automatically change color as values climb or drop, with independent colors for rising, falling, and stable periods |
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
@@ -179,7 +180,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | [Installation](#-installation) | HACS and manual setup |
 | [Quick Start](#-quick-start) | Minimal YAML to get started |
 | [Configuration](#%EF%B8%8F-configuration) | Card-level and entity-level options |
-| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar |
+| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Gauge |
 | [Feature Guides](#-feature-guides) | Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and more |
 | [Examples](#-examples) | Ready-to-use YAML configurations |
 | [CSS Styling](#-css-styling-with-card_mod) | `card-mod` recipes and class reference |
@@ -236,7 +237,7 @@ These options apply to the whole card.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `radialbar` \| `polararea` \| `radar` \| `heatmap` \| `calendar` |
+| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `radialbar` \| `polararea` \| `radar` \| `heatmap` \| `calendar` \| `gauge` |
 | `sparkline` | boolean | `false` | Compact mode — strips all chrome (header, axes, grid, toolbar) and renders tiny inline graphs. See [Sparkline Mode](#-sparkline-mode). Only available in Timeline mode. |
 | `card_header` | string | `""` | Title shown at the top. Leave empty to hide. |
 | `card_icon` | string | `null` | MDI icon next to the title, e.g. `mdi:thermometer` |
@@ -332,11 +333,16 @@ These options apply to the whole card.
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
-| `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, and Polar Area modes — slices sweep out from zero whenever the underlying values change. |
+| `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, Polar Area, and Gauge modes — slices/arcs sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
+| `gauge_columns` | number | `null` | Number of gauge columns in the grid (Gauge mode). Empty / `0` = auto (fits as many dials as the width allows). |
+| `gauge_span` | number | `270` | Arc sweep of each gauge in degrees, `90`–`360`. `180` = top semicircle; `270` = classic open-bottom dial. Gauge mode only. |
+| `gauge_value_position` | string | `"below"` | Where the value is drawn relative to the dial: `below` (default) or `above`. The value sits just outside the arc, clear of the needle. Gauge mode only. |
+| `gauge_value_size` | number | `null` | Font size of the gauge value in pixels. Empty = auto-size from the gauge. Gauge mode only. |
+| `gauge_show_minmax` | boolean | `false` | Show the dial's lower/upper bound labels at the two arc ends (e.g. `0` and `30`). Gauge mode only. |
 | `show_interval_picker` | boolean | `false` | Show quick-select time range buttons on the card. Default set: 1H, 2H, 4H, 8H, 12H, 24H, 7D. Customize with `interval_options`. |
 | `interval_picker_position` | string | `"left"` | Position of the interval picker: `left` / `center` / `right` |
 | `interval_picker_group` | string | `null` | Named group for interval picker sync — works exactly like `date_picker_group`: cards sharing the name follow the selected interval together, and receivers don't need `show_interval_picker`. |
@@ -471,6 +477,7 @@ Each entry under `entities` supports the following options.
 | `state_adaptive_color` | boolean | `false` | Automatically tint the state value, icon, **and the colored dot** with the entity's line color. When `color_thresholds` are defined, all three follow the threshold-resolved color as the value crosses each band — they stay in sync. Quick alternative to setting `state_color` and `icon_color` manually. |
 | `rise_fall_colors` | object | `null` | Color by rise/fall direction. See [Rise/Fall Colors](#-risefall-colors). |
 | `color_thresholds` | object | `null` | Color by value. See [Color Thresholds](#-color-thresholds). |
+| `needle_color` | string | `null` | **Gauge mode** — color of the needle. Use `threshold` to color it from `color_thresholds` at the current value, or any CSS color / `{{ }}` template. Leave empty to follow the value color (threshold-resolved, or the entity `color`). |
 
 </details>
 
@@ -670,6 +677,47 @@ entities:
 
 Set `lower_bound` / `upper_bound` per entity to define the 0–100% range. If not set, the entity's historical min/max from the current time window is used. Supports color thresholds for dynamic ring colors.
 
+### Gauge
+
+A needle dial per entity, arranged in a column grid. Unlike the [Gauge **display**](#-gauge-display) (which replaces a single state row), `chart_mode: gauge` is a full chart mode — every entity becomes its own dial.
+
+![Gauge Example](images/gauge-example.png)
+
+```yaml
+chart_mode: gauge
+height: 240
+gauge_columns: 2              # grid columns (empty = auto)
+gauge_span: 180               # arc sweep in degrees (90-360)
+gauge_value_position: below   # below | above
+gauge_value_size: 18          # px (empty = auto)
+gauge_show_minmax: true       # show the 0 / max labels at the arc ends
+entities:
+  - entity: sensor.living_room_temp
+    name: Living Room
+    lower_bound: 0            # dial start (Min)
+    upper_bound: 30           # dial end (Max)
+    needle_color: "#e2d4d4"
+    color_thresholds:
+      enabled: true
+      values:
+        - { value: 0,  color: "#47fff3" }
+        - { value: 15, color: "#eaff47" }
+        - { value: 25, color: "#ff4757" }
+  - entity: sensor.bedroom_temp
+    name: Bedroom
+    color: "#378ADD"
+```
+
+How it reads:
+- **Dial scale** comes from each entity's `lower_bound` / `upper_bound` (default `0`-`100`), relabeled **Gauge Range -> Min / Max** in the editor.
+- **The arc fills the value range seen in the period** — from the period **minimum** to the period **maximum**, not from the dial start. With `lower_bound: 0`, `upper_bound: 30` and a day that ranged 24-30, the arc spans 24 -> 30.
+- **The needle marks the live value** — the entity's current `hass` state (falls back to the last data point when there is no live state).
+- **Color thresholds paint the dial** — the bright band and the faint background zones follow `color_thresholds`. With **Last Color** enabled, the whole dial uses a single color taken from the current value instead of a per-step gradient.
+- **`needle_color`** sets the needle color independently (see [Entity Colors](#-colors)) — `threshold`, a CSS color, or empty to follow the value color.
+- **`gauge_show_minmax`** prints the bound labels at the two arc ends; the hover tooltip shows the current value plus the period **Peak** and **Low**.
+
+Each gauge is independent, so you can mix ranges, colors, and thresholds across entities in the same card. Columns wrap automatically (`gauge_columns`) and the value sits above or below each dial (`gauge_value_position`) so it never overlaps the needle.
+
 ### Polar Area
 
 Equal-angle slices with variable radius — larger values produce bigger slices. Like a pie chart but comparing magnitudes instead of shares.
@@ -767,20 +815,20 @@ Displays horizontal colored bars showing state changes over time — one row per
 
 Not all card options apply to every mode. The visual editor hides irrelevant options automatically.
 
-| Feature | Timeline | State Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar |
-|---------|----------|----------------|---------|-----|---------|------------|------------|-------|---------|----------|
-| Y / X axes | ✅ | X only | ✅ | — | — | — | — | — | Own axes | Own axes |
-| Grid | ✅ | — | ✅ | — | — | — | Grid circles | Polygon grid | — | — |
-| Stacked | ✅ | — | — | — | — | — | — | — | — | — |
-| Offset | ✅ | — | — | — | — | — | — | — | — | — |
-| Annotations | ✅ | — | — | — | — | — | — | — | — | — |
-| Zoom brush | ✅ | — | — | — | — | — | — | — | — | — |
-| Scroll | ✅ | ✅ | — | — | — | — | — | — | — | — |
-| Sparkline | ✅ | — | — | — | — | — | — | — | — | — |
-| Range Band | ✅ | — | — | — | — | — | — | — | — | — |
-| Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 |
-| Entity graph_type | line/step/bar/candlestick | — | — | — | — | — | — | — | — | — |
-| lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale |
+| Feature | Timeline | State Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar | Gauge |
+|---------|----------|----------------|---------|-----|---------|------------|------------|-------|---------|----------|-------|
+| Y / X axes | ✅ | X only | ✅ | — | — | — | — | — | Own axes | Own axes | Dial |
+| Grid | ✅ | — | ✅ | — | — | — | Grid circles | Polygon grid | — | — | — |
+| Stacked | ✅ | — | — | — | — | — | — | — | — | — | — |
+| Offset | ✅ | — | — | — | — | — | — | — | — | — | — |
+| Annotations | ✅ | — | — | — | — | — | — | — | — | — | — |
+| Zoom brush | ✅ | — | — | — | — | — | — | — | — | — | — |
+| Scroll | ✅ | ✅ | — | — | — | — | — | — | — | — | — |
+| Sparkline | ✅ | — | — | — | — | — | — | — | — | — | — |
+| Range Band | ✅ | — | — | — | — | — | — | — | — | — | Arc = range |
+| Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 | ∞ |
+| Entity graph_type | line/step/bar/candlestick | — | — | — | — | — | — | — | — | — | — |
+| lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale | Dial Min/Max |
 
 </details>
 
