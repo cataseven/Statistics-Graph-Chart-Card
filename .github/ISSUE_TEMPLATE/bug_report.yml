@@ -11,7 +11,10 @@ body:
         Please add txt files of the entity(s). For txt files: Please go Developer Tools page -> Actions Tab -> Yaml Mode -> Run actions below
         Change start time, end time and sensor name
         
-        **How to send text file**
+        **How to send text files**
+
+        5minute data
+        
         ```yaml
         action: recorder.get_statistics
         data:
@@ -29,7 +32,8 @@ body:
             - min
             - state
         ```
-        
+        Hourly data
+         
         ```yaml
         action: recorder.get_statistics
         data:
@@ -47,7 +51,8 @@ body:
             - min
             - state
         ```
-
+        Daily data
+        
         ```yaml
         action: recorder.get_statistics
         data:
