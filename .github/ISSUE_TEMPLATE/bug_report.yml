@@ -23,7 +23,7 @@ body:
           start_time: "2026-06-14 00:00:00"
           end_time: "2026-06-20 00:00:00"
           statistic_ids:
-            - sensor.sandfilteranlage_laufzeit_heute
+            - sensor.your_sensor
           period: 5minute
           types:
             - sum
@@ -61,7 +61,7 @@ body:
           start_time: "2026-06-14 00:00:00"
           end_time: "2026-06-20 00:00:00"
           statistic_ids:
-            - sensor.sandfilteranlage_laufzeit_heute
+            - sensor.your_sensor
           period: day
           types:
             - sum
