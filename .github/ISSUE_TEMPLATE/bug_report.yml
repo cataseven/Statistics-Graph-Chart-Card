@@ -4,14 +4,68 @@ title: '[Bug]'
 labels: [Bug]
 body:
   - type: dropdown
-    id: csv_attached
+    id: data_attached
     attributes:
-      label: "CSV File: Please add csv file of the entity(s)."
+      label: "Data Files: Please add text files of the entity(s)."
       description: |
-        Please add csv file of the entity(s). For csv file: Please go your entity's more info dialog -> Click on Show More on the history line -> Select the related time period from the upper left corner -> Select Download Data from the upper right side menu.
+        Please add txt files of the entity(s). For txt files: Please go Developer Tools page -> Actions Tab -> Yaml Mode -> Run actions below
+        Change start time, end time and sensor name
         
-        **How to send csv file**
-        ![Example](https://github.com/cataseven/Statistics-Graph-Chart-Card/blob/main/images/bugreport1.png?raw=true)
+        **How to send text file**
+        ```yaml
+        action: recorder.get_statistics
+        data:
+          start_time: "2026-06-14 00:00:00"
+          end_time: "2026-06-20 00:00:00"
+          statistic_ids:
+            - sensor.sandfilteranlage_laufzeit_heute
+          period: 5minute
+          types:
+            - sum
+            - change
+            - last_reset
+            - max
+            - mean
+            - min
+            - state
+        ```
+        
+        ```yaml
+        action: recorder.get_statistics
+        data:
+          start_time: "2026-06-14 00:00:00"
+          end_time: "2026-06-20 00:00:00"
+          statistic_ids:
+            - sensor.your_sensor
+          period: hour
+          types:
+            - sum
+            - change
+            - last_reset
+            - max
+            - mean
+            - min
+            - state
+        ```
+
+        ```yaml
+        action: recorder.get_statistics
+        data:
+          start_time: "2026-06-14 00:00:00"
+          end_time: "2026-06-20 00:00:00"
+          statistic_ids:
+            - sensor.sandfilteranlage_laufzeit_heute
+          period: day
+          types:
+            - sum
+            - change
+            - last_reset
+            - max
+            - mean
+            - min
+            - state
+        ```
+        
       options:
         - "Added"
         - "I didn't"
