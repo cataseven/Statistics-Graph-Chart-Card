@@ -6,14 +6,15 @@ body:
   - type: dropdown
     id: data_attached
     attributes:
-      label: "Data Files: Please add text files of the entity(s)."
+      label: "Data Files: Please add all 3 text files of the entity(s)."
       description: |
+
+        **How to send text files?**
+        
         Please add txt files of the entity(s). For txt files: Please go Developer Tools page -> Actions Tab -> Yaml Mode -> Run actions below.
         
         **Change start time, end time and sensor name**
         
-        **How to send text files?**
-
         5minute data
         
         ```yaml
