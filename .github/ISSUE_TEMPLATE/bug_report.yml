@@ -32,7 +32,7 @@ body:
             - min
             - state
         ```
-        Hourly data
+        "Hourly data"
          
         ```yaml
         action: recorder.get_statistics
