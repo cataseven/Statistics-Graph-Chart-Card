@@ -8,10 +8,11 @@ body:
     attributes:
       label: "Data Files: Please add text files of the entity(s)."
       description: |
-        Please add txt files of the entity(s). For txt files: Please go Developer Tools page -> Actions Tab -> Yaml Mode -> Run actions below
-        Change start time, end time and sensor name
+        Please add txt files of the entity(s). For txt files: Please go Developer Tools page -> Actions Tab -> Yaml Mode -> Run actions below.
         
-        **How to send text files**
+        **Change start time, end time and sensor name**
+        
+        **How to send text files?**
 
         5minute data
         
