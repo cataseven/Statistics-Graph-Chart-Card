@@ -75,7 +75,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months). Or open on a rolling window that ends now — **Last 24H … Last 12M** — set as the default mode or shown as extra picker buttons. Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
-| 🎯 | **Eleven chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial) — selectable from a single dropdown |
+| 🎯 | **Fourteen chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial), Box Plot (distribution boxes), Waterfall (running-total bridge), Histogram (value-frequency bars) — selectable from a single dropdown |
+| 📦 | **Box Plot mode** — `chart_mode: box` draws min / Q1 / median / Q3 / max boxes per time bucket, straight from the dense source samples. Answer "what is this room's daily temperature spread?" at a glance. Bucket width follows `group_by` or is picked automatically from the window |
+| 🪜 | **Waterfall mode** — `chart_mode: waterfall` turns each entity into a +/− step of a running total with an automatic **Total** bar — the classic bridge chart for energy balances and budgets. Steps default to `sum`; use `aggregate_func: diff` for cumulative kWh counters and `invert: true` for subtractions |
+| 📊 | **Histogram mode** — `chart_mode: histogram` shows the value-frequency distribution over the visible window. Bin count is automatic (Freedman–Diaconis) or fixed via `histogram_bins`; multiple entities share the same bins side by side |
 | 🎛️ | **Gauge display** — replace the state row with a half-circle gauge showing current value against min/max bounds |
 | 🧭 | **Gauge chart mode** — `chart_mode: gauge` draws a needle dial per entity in a column grid. The arc fills the value range seen in the period (min → max), the needle marks the live value, and `color_thresholds` paint the dial. Configurable span, columns, value position/size, and per-entity `needle_color` |
 | ✨ | **Sparkline mode** — ultra-compact inline graphs with no chrome, ideal for dashboard overview tiles |
@@ -182,7 +185,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | [Installation](#-installation) | HACS and manual setup |
 | [Quick Start](#-quick-start) | Minimal YAML to get started |
 | [Configuration](#%EF%B8%8F-configuration) | Card-level and entity-level options |
-| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Gauge |
+| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Gauge, Box Plot, Waterfall, Histogram |
 | [Feature Guides](#-feature-guides) | Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and more |
 | [Examples](#-examples) | Ready-to-use YAML configurations |
 | [CSS Styling](#-css-styling-with-card_mod) | `card-mod` recipes and class reference |
@@ -239,8 +242,10 @@ These options apply to the whole card.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `radialbar` \| `polararea` \| `radar` \| `heatmap` \| `calendar` \| `gauge` |
+| `chart_mode` | string | `"timeline"` | Chart visualization mode. See [Chart Modes](#-chart-modes). `timeline` \| `scatter` \| `pie` \| `ranking` \| `radialbar` \| `polararea` \| `radar` \| `heatmap` \| `calendar` \| `gauge` \| `box` \| `waterfall` \| `histogram` |
 | `sparkline` | boolean | `false` | Compact mode — strips all chrome (header, axes, grid, toolbar) and renders tiny inline graphs. See [Sparkline Mode](#-sparkline-mode). Only available in Timeline mode. |
+| `waterfall_total` | boolean | `true` | Waterfall mode only — append the automatic **Total** bar (running total from zero) at the end. Set `false` to hide it. |
+| `histogram_bins` | number | auto | Histogram mode only — fixed number of bins (2–80). Leave empty for automatic bin sizing via Freedman–Diaconis (clamped to 5–40). |
 | `card_header` | string | `""` | Title shown at the top. Leave empty to hide. |
 | `card_icon` | string | `null` | MDI icon next to the title, e.g. `mdi:thermometer` |
 | `card_icon_image` | string | `null` | URL to a custom image. Overrides `card_icon`. |
@@ -488,7 +493,7 @@ Each entry under `entities` supports the following options.
 ## 🎯 Chart Modes
 
 <details>
-<summary>Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar</summary>
+<summary>Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Plot Box, Waterfall, Histogram</summary>
 
 The `chart_mode` option at the card level controls the overall visualization. Each mode takes over the entire graph area.
 
@@ -813,24 +818,135 @@ Displays horizontal colored bars showing state changes over time — one row per
       color: "#E50914"
 ```
 
+### Box Plot *(new in v3.21)*
+
+![box Example](images/box.png)
+
+Set `chart_mode: box` to draw the **value distribution per time bucket** as classic
+box-and-whisker plots. Each box summarizes every source sample that fell into its bucket:
+
+- **Whiskers** — the thin line and caps spanning the bucket's minimum and maximum
+- **Box** — spans Q1 → Q3, the middle 50% of the samples
+- **Median line** — the thick line inside the box
+
+Samples come straight from the dense source data, independent of `points_per_hour`, and pass
+through the same per-entity transforms as every other mode (`value_factor`, `invert`,
+`value_transform`, `state_map`, `aggregate_func: diff`). Hovering a box shows Min / Q1 / Median /
+Q3 / Max and the sample count in a compact two-column tooltip.
+
+> **Box Plot vs Candlestick** — they look like cousins, but the body means something different. A
+> candlestick body is **open → close** of the bucket: direction matters, color tells you up/down,
+> and the *order* of values is essential — it's a momentum chart. A box plot body is **Q1 → Q3**
+> with the median inside: order is irrelevant, there is no open/close and no direction. "Where did
+> it go?" → candlestick. "What was typical, and how much did it spread?" → box plot.
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: box
+card_header: Living Room — Daily Temperature Spread
+hours_to_show: 720        # 30 days
+group_by: date            # one box per day
+entities:
+  - entity: sensor.living_room_temperature
+    name: Living Room
+    decimals: 1
+```
+
+**Tip:** the bucket width follows `group_by` (`hour`, `2h` … `12h`, `date`, `week`, `month`,
+`year`). With the default `interval` the card picks automatically from the window: ≤ 2 days → one
+box per hour, ≤ 1 month → per day, ≤ 6 months → per week, longer → per month. The newest 60
+buckets are shown when the window produces more.
+
+
+### Waterfall *(new in v3.21)*
+
+![waterfall Example](images/waterfall.png)
+
+Set `chart_mode: waterfall` to turn each entity into one **+/− step of a running total** — the
+classic bridge chart for energy balances, budgets, or any "these parts add up to this total"
+story:
+
+- **Steps** — one bar per entity; the step value is the entity's aggregate over the visible window (**default `sum`** — steps are meant to add up)
+- **Total** — an automatic summary bar from zero to the running total (hide with `waterfall_total: false`)
+- **Connectors** — dashed guide lines carry each bar's end level to the next bar
+
+Colors: an explicit entity `color` always wins; otherwise positive steps use the theme success
+color, negative steps the error color, and Total the primary color. The tooltip shows the step
+value and the running total after it (the running-total line follows `show_tooltip_total`).
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: waterfall
+card_header: Energy Balance (30 days)
+hours_to_show: 720
+entities:
+  - entity: sensor.grid_import_energy
+    name: Grid Import
+    aggregate_func: diff      # cumulative kWh counters need diff!
+  - entity: sensor.solar_energy_produced
+    name: Solar Production
+    aggregate_func: diff
+  - entity: sensor.grid_export_energy
+    name: Grid Export
+    aggregate_func: diff
+    invert: true              # exported energy leaves the house → negative step
+```
+
+**Tip:** for `total_increasing` counters (energy meters) always use `aggregate_func: diff` — a
+plain sum would add the meter *reading* over and over instead of the consumption. `invert: true`
+makes a step subtract from the bridge.
+
+
+### Histogram *(new in v3.21)*
+
+![histogram Example](images/histogram.png)
+
+Set `chart_mode: histogram` to show the **value-frequency distribution** over the visible window:
+the X axis is value ranges (bins), the Y axis is how often the value landed in each range. Time is
+discarded entirely — it answers *"what value does this sensor usually sit at, and how often?"*.
+
+> **Histogram vs Bar** — a bar chart's X axis is **time**: each bar is the value of one time slot
+> ("CPU was 62% at 14:00"). A histogram's X axis is **value ranges** and Y is the **count**: "CPU
+> spent most of this month in the 55–65% band". Bar tells you *what happened when*; histogram
+> tells you *what's typical and how often*. Technically the bar chart draws the `points_per_hour`
+> display series, while the histogram counts the dense source samples.
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: histogram
+card_header: Room Temperature Distribution
+hours_to_show: 168        # one week
+entities:
+  - entity: sensor.living_room_temperature
+    name: Living Room
+    decimals: 1
+```
+
+**Tip:** bin count is automatic (Freedman–Diaconis, clamped to 5–40) — override it with
+`histogram_bins: 20` (2–80). X-axis labels sit centered under the bars and show each bin's
+midpoint value. Multiple entities share the same bins side by side, so their distributions are
+directly comparable; the tooltip shows the bin range, the count, and the share (the share line
+follows `show_tooltip_total`).
+
+
 ### Chart Mode Compatibility
 
 Not all card options apply to every mode. The visual editor hides irrelevant options automatically.
 
-| Feature | Timeline | State Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar | Gauge |
-|---------|----------|----------------|---------|-----|---------|------------|------------|-------|---------|----------|-------|
-| Y / X axes | ✅ | X only | ✅ | — | — | — | — | — | Own axes | Own axes | Dial |
-| Grid | ✅ | — | ✅ | — | — | — | Grid circles | Polygon grid | — | — | — |
-| Stacked | ✅ | — | — | — | — | — | — | — | — | — | — |
-| Offset | ✅ | — | — | — | — | — | — | — | — | — | — |
-| Annotations | ✅ | — | — | — | — | — | — | — | — | — | — |
-| Zoom brush | ✅ | — | — | — | — | — | — | — | — | — | — |
-| Scroll | ✅ | ✅ | — | — | — | — | — | — | — | — | — |
-| Sparkline | ✅ | — | — | — | — | — | — | — | — | — | — |
-| Range Band | ✅ | — | — | — | — | — | — | — | — | — | Arc = range |
-| Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 | ∞ |
-| Entity graph_type | line/step/bar/candlestick | — | — | — | — | — | — | — | — | — | — |
-| lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale | Dial Min/Max |
+| Feature | Timeline | State Timeline | Scatter | Pie | Ranking | Radial Bar | Polar Area | Radar | Heatmap | Calendar | Gauge | Box Plot | Waterfall | Histogram |
+|---------|----------|----------------|---------|-----|---------|------------|------------|-------|---------|----------|-------|----------|-----------|-----------|
+| Y / X axes | ✅ | X only | ✅ | — | — | — | — | — | Own axes | Own axes | Dial | Own axes | Own axes | Own axes |
+| Grid | ✅ | — | ✅ | — | — | — | Grid circles | Polygon grid | — | — | — | Own grid | Own grid | Own grid |
+| Stacked | ✅ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| Offset | ✅ | — | — | — | — | — | — | — | — | — | — | ✅ | ✅ | ✅ |
+| Annotations | ✅ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| Zoom brush | ✅ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| Scroll | ✅ | ✅ | — | — | — | — | — | — | — | — | — | — | — | — |
+| Sparkline | ✅ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| Range Band | ✅ | — | — | — | — | — | — | — | — | — | Arc = range | Box = spread | — | — |
+| Entity limit | ∞ | ∞ | 2 | ∞ | ∞ | ∞ | ∞ | 3+ | 1 | 1 | ∞ | ∞ | ∞ | ∞ |
+| Entity graph_type | line/step/bar/candlestick | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| lower/upper_bound | Y axis range | — | — | — | — | 0–100% range | — | Normalization | Color scale | Color scale | Dial Min/Max | — | — | — |
 
 </details>
 
