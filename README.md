@@ -436,6 +436,7 @@ Each entry under `entities` supports the following options.
 | `show_points` | boolean | `false` | Show a dot at each data point. Timeline mode only. |
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
 | `line_width` | number | `2.5` | Line thickness in pixels. Timeline mode only. |
+| `line_style` | string | `solid` | Line type: `solid`, `dashed`, `dotted`. |
 | `z_index` | number | `0` | Draw order / layering. Higher = drawn in front (on top of lower-numbered entities); lower or negative = behind. Default `0` keeps configuration order. **Independent of the legend / state-row order**, so you can bring a curve to the front or send it behind another without reordering your entities. Timeline mode. |
 | `show_extrema` | string | `"click"` | Min/Max labels: `never` / `click` / `always`. Timeline mode only. |
 | `show_extrema_min` | boolean | `true` | Show the Min value label. Disable to show only the Max — useful for sensors where the minimum is always zero (solar power, rain, etc.). Timeline mode only. |
