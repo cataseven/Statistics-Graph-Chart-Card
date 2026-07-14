@@ -12,6 +12,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            statistics-graph-chart-card.js.js
+            statistics-graph-chart-card.js
             translations.js
           fail_on_unmatched_files: true
