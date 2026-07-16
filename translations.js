@@ -1,20 +1,4 @@
-// ============================================================================
-// statistics-graph-chart-card — translations.js
-// ----------------------------------------------------------------------------
-// Side-car translation pack. Install this file NEXT TO the main card file;
-// the card imports it automatically and falls back to English if it is
-// missing or outdated (a console notice tells you which).
-//
-// CONTRIBUTING A LANGUAGE
-//   1. Copy the "en"-keyed English strings used below (keys ARE the English
-//      source texts) into a new  <code>: Object.freeze({ ... })  block.
-//   2. Add a display name to LANG_NAMES — it appears in the editor dropdown
-//      automatically.
-//   3. Every key must exist in every language; a missing key falls back to
-//      English, so nothing breaks — but full coverage is expected in PRs.
-// Corrections to existing translations are very welcome.
-// ============================================================================
-export const T_VERSION = "3.25";
+export const T_VERSION = "3.26";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -25,6 +9,24 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Bu karşılaştırma kart yüklendiğinde gizli başlar - lejanttaki girdisine tıklayarak gösterebilirsiniz. Not: lejantta ANA seriye tıklamak tüm karşılaştırma grubunu birlikte açıp kapatır.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Özel Ölçek Kuralları",
+    "Up to (hours)": "En çok (saat)",
+    "Add Rule": "Kural Ekle",
+    "No rules yet - the built-in auto scale decides": "Henüz kural yok - yerleşik otomatik ölçek karar verir",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Yerleşik otomatik ölçeği kendi eşiklerinizle geçersiz kılar. Her kural şöyle okunur: görünen dönem en çok N saat ise bu Gruplama'yı (ve isteğe bağlı bu Nokta/Saat'i) kullan. Eşleşen en küçük eşik kazanır; tüm eşiklerin ötesindeki dönem yerleşik otomatik ölçeğe döner. Tarih seçici duyarlıdır: tam ay veya yıl seçimi, dönem henüz sürerken bile nominal uzunluğuyla eşleşir.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Önceki Gün",
+    "Week Before": "Önceki Hafta",
+    "Month Before": "Önceki Ay",
+    "Year Before": "Önceki Yıl",
+    "Periods Back": "Kaç Dönem Geri",
+    "No comparisons yet": "Henüz karşılaştırma yok",
+    "Add Comparison": "Karşılaştırma Ekle",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Bu satırın kaç dönem geriyle karşılaştırdığı: 1 = önceki dönem, 2 = iki dönem önce. Seçili dönemi ve tarih seçiciyi izler - Hafta görünümünde 2 iki hafta öncesi demektir; seçiciyi Yıl'a alırsanız aynı satır iki yıl öncesini gösterir.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Bu varlığı soluk hayalet seriler olarak geriye kaydırıp bindirir - her satır bir hayalet. Önceki Dönem geçerli pencereyi izler (ay/yıl tarih seçici görünümlerinde takvim duyarlı), Kaç Dönem Geri ise bunu çarpar: 1 = önceki, 2 = iki dönem önce. Hayaletler lejantta ana seriyle birlikte gizlenir; araç ipucu her hayaletin kendi tarihini ve yüzde değişimi gösterir.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Kartın üstünde gösterilen başlık metni. Başlık satırını tamamen gizlemek için boş bırakın.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Kart başlığının ve pil simgesinin yazı boyutu. Pil simgesi ve yüzde metni bu değerle orantılı ölçeklenir. 16px veya 1.2em gibi herhangi bir CSS değeri kabul eder.",
@@ -745,6 +747,24 @@ export const I18N = Object.freeze({
     "Custom": "Özel",
   }),
   de: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Dieser Vergleich startet beim Laden der Karte ausgeblendet - einblenden per Klick auf seinen Legendeneintrag. Hinweis: Ein Klick auf die HAUPTserie in der Legende schaltet die ganze Vergleichsgruppe gemeinsam um.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Eigene Skalierungsregeln",
+    "Up to (hours)": "Bis zu (Stunden)",
+    "Add Rule": "Regel hinzufügen",
+    "No rules yet - the built-in auto scale decides": "Noch keine Regeln - die integrierte Auto-Skalierung entscheidet",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Überschreibt die integrierte Auto-Skalierung mit eigenen Schwellen. Jede Regel liest sich: Wenn der sichtbare Zeitraum bis zu N Stunden beträgt, verwende dieses Gruppieren (und optional diese Punkte/Stunde). Die kleinste passende Schwelle gewinnt; ein Zeitraum jenseits aller Schwellen fällt auf die integrierte Auto-Skalierung zurück. Datumswähler-bewusst: eine volle Monats- oder Jahresauswahl passt über ihre nominale Länge, auch während der Zeitraum noch läuft.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Tag davor",
+    "Week Before": "Woche davor",
+    "Month Before": "Monat davor",
+    "Year Before": "Jahr davor",
+    "Periods Back": "Perioden zurück",
+    "No comparisons yet": "Noch keine Vergleiche",
+    "Add Comparison": "Vergleich hinzufügen",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Wie viele Perioden zurück diese Zeile vergleicht: 1 = die vorherige Periode, 2 = vor zwei Perioden. Folgt der gewählten Periode und dem Datumswähler - in der Wochenansicht bedeutet 2 vor zwei Wochen; auf Jahr umgestellt zeigt dieselbe Zeile zwei Jahre zurück.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Überlagert diese Entität als blasse Geisterserien nach hinten verschoben - ein Geist pro Zeile. Vorherige Periode folgt dem aktuellen Fenster (kalenderbewusst für Monats-/Jahresansichten), Perioden zurück multipliziert dies: 1 = vorherige, 2 = vor zwei Perioden. Geister werden zusammen mit der Hauptserie in der Legende ausgeblendet; der Tooltip zeigt das Datum jedes Geistes und die prozentuale Änderung.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Titeltext oben auf der Karte. Leer lassen, um die Kopfzeile komplett auszublenden.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Schriftgröße des Kartentitels und des Batteriesymbols. Batteriesymbol und Prozenttext skalieren proportional mit diesem Wert. Akzeptiert jeden CSS-Wert wie 16px oder 1.2em.",
@@ -1465,6 +1485,24 @@ export const I18N = Object.freeze({
     "Custom": "Benutzerdef.",
   }),
   cs: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Toto porovnání je při načtení karty skryté - zobrazíte jej kliknutím na jeho položku v legendě. Pozn.: kliknutí na HLAVNÍ řadu v legendě přepíná celou skupinu porovnání najednou.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Vlastní pravidla škálování",
+    "Up to (hours)": "Až do (hodin)",
+    "Add Rule": "Přidat pravidlo",
+    "No rules yet - the built-in auto scale decides": "Zatím žádná pravidla - rozhoduje vestavěné automatické škálování",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Přepíše vestavěné automatické škálování vlastními prahy. Každé pravidlo se čte: pokud je viditelné období až N hodin, použij toto seskupení (a volitelně tyto body/hodinu). Vyhrává nejmenší odpovídající práh; období za všemi prahy se vrací k vestavěnému automatickému škálování. Zohledňuje výběr data: výběr celého měsíce nebo roku odpovídá své nominální délce, i když období ještě běží.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Den zpět",
+    "Week Before": "Týden zpět",
+    "Month Before": "Měsíc zpět",
+    "Year Before": "Rok zpět",
+    "Periods Back": "Období zpět",
+    "No comparisons yet": "Zatím žádná porovnání",
+    "Add Comparison": "Přidat porovnání",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "O kolik období zpět tento řádek porovnává: 1 = předchozí období, 2 = před dvěma obdobími. Řídí se zvoleným obdobím a výběrem data - v týdenním zobrazení znamená 2 před dvěma týdny; po přepnutí na Rok ukáže stejný řádek dva roky zpět.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Překryje tuto entitu posunutou zpět jako bledé stínové řady - jeden stín na řádek. Předchozí období sleduje aktuální okno (kalendářně pro měsíční/roční zobrazení), Období zpět jej násobí: 1 = předchozí, 2 = před dvěma obdobími. Stíny se skrývají spolu s hlavní řadou v legendě; nápověda ukazuje datum každého stínu a procentní změnu.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Text titulku zobrazený v horní části karty. Ponechte prázdné pro úplné skrytí řádku záhlaví.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Velikost písma titulku karty a ikony baterie. Ikona baterie a text s procenty se s touto hodnotou úměrně škálují. Přijímá libovolnou CSS hodnotu, např. 16px nebo 1.2em.",
@@ -2210,6 +2248,24 @@ export const I18N = Object.freeze({
     "Custom": "Vlastní",
   }),
   da: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligning starter skjult, når kortet indlæses - vis den ved at klikke på dens post i signaturforklaringen. Bemærk: et klik på HOVEDserien i signaturforklaringen slår hele sammenligningsgruppen til/fra samlet.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Egne skaleringsregler",
+    "Up to (hours)": "Op til (timer)",
+    "Add Rule": "Tilføj regel",
+    "No rules yet - the built-in auto scale decides": "Ingen regler endnu - den indbyggede autoskalering bestemmer",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Tilsidesætter den indbyggede autoskalering med dine egne tærskler. Hver regel læses: når den synlige periode er op til N timer, brug denne gruppering (og eventuelt dette punkter/time). Den mindste matchende tærskel vinder; en periode ud over alle tærskler falder tilbage til den indbyggede autoskalering. Datovælger-bevidst: et fuldt måneds- eller årsvalg matcher sin nominelle længde, selv mens perioden stadig løber.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dagen før",
+    "Week Before": "Ugen før",
+    "Month Before": "Måneden før",
+    "Year Before": "Året før",
+    "Periods Back": "Perioder tilbage",
+    "No comparisons yet": "Ingen sammenligninger endnu",
+    "Add Comparison": "Tilføj sammenligning",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Hvor mange perioder tilbage denne række sammenligner med: 1 = forrige periode, 2 = to perioder siden. Følger den valgte periode og datovælgeren - i ugevisning betyder 2 to uger siden; skift vælgeren til År, og samme række viser to år tilbage.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Overlejrer denne enhed forskudt bagud som falmede spøgelsesserier - ét spøgelse pr. række. Forrige periode følger det aktuelle vindue (kalenderbevidst for måneds-/årsvisninger), og Perioder tilbage ganger det: 1 = forrige, 2 = to perioder siden. Spøgelser skjules sammen med hovedserien i signaturforklaringen; værktøjstippet viser hvert spøgelses egen dato og ændringen i procent.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Titeltekst vist øverst på kortet. Lad feltet stå tomt for helt at skjule headerrækken.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Skriftstørrelse for kortets titel og batteriikonet. Batteriikonet og procentteksten skalerer proportionalt med denne værdi. Accepterer enhver CSS-værdi som 16px eller 1.2em.",
@@ -2955,6 +3011,24 @@ export const I18N = Object.freeze({
     "Custom": "Tilpasset",
   }),
   es: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparación empieza oculta al cargar la tarjeta - revélala haciendo clic en su entrada de la leyenda. Nota: hacer clic en la serie PRINCIPAL de la leyenda alterna todo el grupo de comparación a la vez.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Reglas de escala personalizadas",
+    "Up to (hours)": "Hasta (horas)",
+    "Add Rule": "Añadir regla",
+    "No rules yet - the built-in auto scale decides": "Aún no hay reglas - decide el autoescalado integrado",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Anula el autoescalado integrado con tus propios umbrales. Cada regla se lee: cuando el periodo visible es de hasta N horas, usa esta agrupación (y opcionalmente estos puntos/hora). Gana el umbral coincidente más pequeño; un periodo más allá de todos los umbrales vuelve al autoescalado integrado. Consciente del selector de fechas: una selección de mes o año completo coincide por su duración nominal incluso mientras el periodo sigue en curso.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Día anterior",
+    "Week Before": "Semana anterior",
+    "Month Before": "Mes anterior",
+    "Year Before": "Año anterior",
+    "Periods Back": "Periodos atrás",
+    "No comparisons yet": "Aún no hay comparaciones",
+    "Add Comparison": "Añadir comparación",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Cuántos periodos atrás compara esta fila: 1 = el periodo anterior, 2 = hace dos periodos. Sigue el periodo seleccionado y el selector de fechas - en la vista Semana, 2 significa hace dos semanas; cambie el selector a Año y la misma fila mostrará dos años atrás.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Superpone esta entidad desplazada hacia atrás como series fantasma atenuadas - un fantasma por fila. Periodo anterior sigue la ventana actual (con lógica de calendario en vistas de mes/año) y Periodos atrás lo multiplica: 1 = anterior, 2 = hace dos periodos. Los fantasmas se ocultan junto con la serie principal en la leyenda; la información emergente muestra la fecha propia de cada fantasma y el cambio porcentual.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Texto del título mostrado en la parte superior de la tarjeta. Déjelo vacío para ocultar por completo la fila de encabezado.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Tamaño de fuente del título de la tarjeta y del icono de batería. El icono de batería y el texto de porcentaje escalan proporcionalmente con este valor. Acepta cualquier valor CSS como 16px o 1.2em.",
@@ -3700,6 +3774,24 @@ export const I18N = Object.freeze({
     "Custom": "Personalizado",
   }),
   fi: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Tämä vertailu on piilotettu kortin latautuessa - näytä se napsauttamalla sen selitemerkintää. Huom: PÄÄsarjan napsautus selitteessä vaihtaa koko vertailuryhmän tilan yhdessä.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Omat skaalaussäännöt",
+    "Up to (hours)": "Enintään (tuntia)",
+    "Add Rule": "Lisää sääntö",
+    "No rules yet - the built-in auto scale decides": "Ei vielä sääntöjä - sisäänrakennettu automaattiskaalaus päättää",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Ohittaa sisäänrakennetun automaattiskaalauksen omilla kynnyksillä. Jokainen sääntö luetaan: kun näkyvä jakso on enintään N tuntia, käytä tätä ryhmittelyä (ja valinnaisesti tätä pistettä/tunti). Pienin osuva kynnys voittaa; kaikkien kynnysten ylittävä jakso palaa sisäänrakennettuun automaattiskaalaukseen. Päivämäärävalitsintietoinen: koko kuukauden tai vuoden valinta osuu nimellispituutensa mukaan, vaikka jakso olisi vielä kesken.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Edellinen päivä",
+    "Week Before": "Edellinen viikko",
+    "Month Before": "Edellinen kuukausi",
+    "Year Before": "Edellinen vuosi",
+    "Periods Back": "Jaksoa taaksepäin",
+    "No comparisons yet": "Ei vielä vertailuja",
+    "Add Comparison": "Lisää vertailu",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Montako jaksoa taaksepäin tämä rivi vertaa: 1 = edellinen jakso, 2 = kaksi jaksoa sitten. Seuraa valittua jaksoa ja päivämäärävalitsinta - viikkonäkymässä 2 tarkoittaa kahta viikkoa sitten; vaihda valitsin Vuoteen, niin sama rivi näyttää kaksi vuotta taaksepäin.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Peittää tämän entiteetin taaksepäin siirrettyinä haaleina haamusarjoina - yksi haamu riviä kohden. Edellinen jakso seuraa nykyistä ikkunaa (kalenteritietoinen kuukausi-/vuosinäkymissä) ja Jaksoa taaksepäin kertoo sen: 1 = edellinen, 2 = kaksi jaksoa sitten. Haamut piilotetaan selitteessä yhdessä pääsarjan kanssa; työkaluvihje näyttää kunkin haamun oman päivämäärän ja prosenttimuutoksen.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Kortin yläreunassa näytettävä otsikkoteksti. Jätä tyhjäksi piilottaaksesi otsikkorivin kokonaan.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Kortin otsikon ja akkukuvakkeen fonttikoko. Akkukuvake ja prosenttiteksti skaalautuvat suhteessa tähän arvoon. Hyväksyy minkä tahansa CSS-arvon, kuten 16px tai 1.2em.",
@@ -4445,6 +4537,24 @@ export const I18N = Object.freeze({
     "Custom": "Mukautettu",
   }),
   fr: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Cette comparaison démarre masquée au chargement de la carte - révélez-la en cliquant sur son entrée de légende. Remarque : cliquer sur la série PRINCIPALE dans la légende bascule tout le groupe de comparaison ensemble.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Règles d'échelle personnalisées",
+    "Up to (hours)": "Jusqu'à (heures)",
+    "Add Rule": "Ajouter une règle",
+    "No rules yet - the built-in auto scale decides": "Aucune règle pour l'instant - l'auto-échelle intégrée décide",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Remplace l'auto-échelle intégrée par vos propres seuils. Chaque règle se lit : quand la période visible est d'au plus N heures, utiliser ce regroupement (et éventuellement ces points/heure). Le plus petit seuil correspondant gagne ; une période au-delà de tous les seuils revient à l'auto-échelle intégrée. Sensible au sélecteur de dates : une sélection de mois ou d'année complète correspond à sa durée nominale même si la période est encore en cours.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Jour précédent",
+    "Week Before": "Semaine précédente",
+    "Month Before": "Mois précédent",
+    "Year Before": "Année précédente",
+    "Periods Back": "Périodes en arrière",
+    "No comparisons yet": "Aucune comparaison pour l'instant",
+    "Add Comparison": "Ajouter une comparaison",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Nombre de périodes en arrière comparées par cette ligne : 1 = la période précédente, 2 = il y a deux périodes. Suit la période sélectionnée et le sélecteur de dates - en vue Semaine, 2 signifie il y a deux semaines ; passez le sélecteur sur Année et la même ligne montrera deux ans en arrière.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Superpose cette entité décalée en arrière sous forme de séries fantômes estompées - un fantôme par ligne. Période précédente suit la fenêtre actuelle (avec prise en compte du calendrier pour les vues mois/année) et Périodes en arrière la multiplie : 1 = précédente, 2 = il y a deux périodes. Les fantômes se masquent avec la série principale dans la légende ; l'infobulle affiche la date propre de chaque fantôme et la variation en pourcentage.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Texte du titre affiché en haut de la carte. Laisser vide pour masquer entièrement la ligne d'en-tête.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Taille de police du titre de la carte et de l'icône de batterie. L'icône de batterie et le texte de pourcentage s'adaptent proportionnellement à cette valeur. Accepte toute valeur CSS comme 16px ou 1.2em.",
@@ -5190,6 +5300,24 @@ export const I18N = Object.freeze({
     "Custom": "Personnalisé",
   }),
   it: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Questo confronto parte nascosto al caricamento della card - rivelalo cliccando la sua voce in legenda. Nota: cliccare la serie PRINCIPALE nella legenda commuta insieme l'intero gruppo di confronto.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Regole di scala personalizzate",
+    "Up to (hours)": "Fino a (ore)",
+    "Add Rule": "Aggiungi regola",
+    "No rules yet - the built-in auto scale decides": "Nessuna regola ancora - decide l'auto-scala integrata",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Sostituisce l'auto-scala integrata con le tue soglie. Ogni regola si legge: quando il periodo visibile è fino a N ore, usa questo raggruppamento (e facoltativamente questi punti/ora). Vince la soglia corrispondente più piccola; un periodo oltre tutte le soglie torna all'auto-scala integrata. Consapevole del selettore date: una selezione di mese o anno intero corrisponde alla sua durata nominale anche mentre il periodo è ancora in corso.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Giorno precedente",
+    "Week Before": "Settimana precedente",
+    "Month Before": "Mese precedente",
+    "Year Before": "Anno precedente",
+    "Periods Back": "Periodi indietro",
+    "No comparisons yet": "Nessun confronto ancora",
+    "Add Comparison": "Aggiungi confronto",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Quanti periodi indietro confronta questa riga: 1 = il periodo precedente, 2 = due periodi fa. Segue il periodo selezionato e il selettore date - nella vista Settimana, 2 significa due settimane fa; passa il selettore su Anno e la stessa riga mostrerà due anni indietro.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Sovrappone questa entità spostata indietro come serie fantasma sbiadite - un fantasma per riga. Periodo precedente segue la finestra corrente (con logica di calendario nelle viste mese/anno) e Periodi indietro lo moltiplica: 1 = precedente, 2 = due periodi fa. I fantasmi si nascondono insieme alla serie principale nella legenda; il tooltip mostra la data di ogni fantasma e la variazione percentuale.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Testo del titolo mostrato in cima alla card. Lasciare vuoto per nascondere completamente la riga dell'intestazione.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Dimensione del carattere del titolo della card e dell'icona batteria. L'icona batteria e il testo della percentuale si ridimensionano proporzionalmente a questo valore. Accetta qualsiasi valore CSS come 16px o 1.2em.",
@@ -5935,6 +6063,24 @@ export const I18N = Object.freeze({
     "Custom": "Personalizzato",
   }),
   nl: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Deze vergelijking start verborgen wanneer de kaart laadt - toon hem door op zijn legenda-item te klikken. Let op: klikken op de HOOFDreeks in de legenda schakelt de hele vergelijkingsgroep samen.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Eigen schaalregels",
+    "Up to (hours)": "Tot (uren)",
+    "Add Rule": "Regel toevoegen",
+    "No rules yet - the built-in auto scale decides": "Nog geen regels - de ingebouwde autoschaal beslist",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Overschrijft de ingebouwde autoschaal met je eigen drempels. Elke regel leest: wanneer de zichtbare periode tot N uur is, gebruik deze groepering (en optioneel deze punten/uur). De kleinste passende drempel wint; een periode voorbij alle drempels valt terug op de ingebouwde autoschaal. Datumkiezer-bewust: een volledige maand- of jaarselectie matcht op zijn nominale lengte, ook terwijl de periode nog loopt.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dag ervoor",
+    "Week Before": "Week ervoor",
+    "Month Before": "Maand ervoor",
+    "Year Before": "Jaar ervoor",
+    "Periods Back": "Perioden terug",
+    "No comparisons yet": "Nog geen vergelijkingen",
+    "Add Comparison": "Vergelijking toevoegen",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Hoeveel perioden terug deze rij vergelijkt: 1 = de vorige periode, 2 = twee perioden geleden. Volgt de gekozen periode en de datumkiezer - in de weekweergave betekent 2 twee weken geleden; zet de kiezer op Jaar en dezelfde rij toont twee jaar terug.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Legt deze entiteit naar achteren verschoven als vervaagde spookreeksen over de grafiek - één spook per rij. Vorige periode volgt het huidige venster (kalenderbewust voor maand-/jaarweergaven) en Perioden terug vermenigvuldigt dit: 1 = vorige, 2 = twee perioden geleden. Spoken verbergen samen met de hoofdreeks in de legenda; de tooltip toont de eigen datum van elk spook plus de procentuele verandering.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Titeltekst die bovenaan de kaart wordt getoond. Laat leeg om de kopregel volledig te verbergen.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Lettergrootte van de kaarttitel en het batterijpictogram. Het batterijpictogram en de percentagetekst schalen evenredig mee met deze waarde. Accepteert elke CSS-waarde zoals 16px of 1.2em.",
@@ -6680,6 +6826,24 @@ export const I18N = Object.freeze({
     "Custom": "Aangepast",
   }),
   nb: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligningen starter skjult når kortet lastes - vis den ved å klikke på oppføringen i tegnforklaringen. Merk: å klikke på HOVEDserien i tegnforklaringen veksler hele sammenligningsgruppen samlet.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Egne skaleringsregler",
+    "Up to (hours)": "Opptil (timer)",
+    "Add Rule": "Legg til regel",
+    "No rules yet - the built-in auto scale decides": "Ingen regler ennå - den innebygde autoskaleringen bestemmer",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Overstyrer den innebygde autoskaleringen med dine egne terskler. Hver regel leses: når den synlige perioden er opptil N timer, bruk denne grupperingen (og eventuelt dette punkter/time). Den minste samsvarende terskelen vinner; en periode utover alle terskler faller tilbake til den innebygde autoskaleringen. Datovelger-bevisst: et helt måneds- eller årsvalg samsvarer med sin nominelle lengde selv mens perioden fortsatt pågår.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dagen før",
+    "Week Before": "Uken før",
+    "Month Before": "Måneden før",
+    "Year Before": "Året før",
+    "Periods Back": "Perioder tilbake",
+    "No comparisons yet": "Ingen sammenligninger ennå",
+    "Add Comparison": "Legg til sammenligning",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Hvor mange perioder tilbake denne raden sammenligner med: 1 = forrige periode, 2 = to perioder siden. Følger valgt periode og datovelgeren - i ukevisning betyr 2 to uker siden; bytt velgeren til År, og samme rad viser to år tilbake.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Legger denne entiteten forskjøvet bakover som falmede spøkelsesserier - ett spøkelse per rad. Forrige periode følger gjeldende vindu (kalenderbevisst for måned-/årsvisninger), og Perioder tilbake multipliserer det: 1 = forrige, 2 = to perioder siden. Spøkelser skjules sammen med hovedserien i tegnforklaringen; verktøytipset viser hvert spøkelses egen dato og endringen i prosent.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Titteltekst som vises øverst på kortet. La stå tom for å skjule overskriftsraden helt.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Skriftstørrelse for korttittelen og batteriikonet. Batteriikonet og prosentteksten skaleres proporsjonalt med denne verdien. Godtar enhver CSS-verdi som 16px eller 1.2em.",
@@ -7425,6 +7589,24 @@ export const I18N = Object.freeze({
     "Custom": "Egendefinert",
   }),
   pl: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "To porównanie startuje ukryte przy ładowaniu karty - pokaż je, klikając jego wpis w legendzie. Uwaga: kliknięcie GŁÓWNEJ serii w legendzie przełącza całą grupę porównań razem.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Własne reguły skalowania",
+    "Up to (hours)": "Do (godzin)",
+    "Add Rule": "Dodaj regułę",
+    "No rules yet - the built-in auto scale decides": "Brak reguł - decyduje wbudowane autoskalowanie",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Zastępuje wbudowane autoskalowanie własnymi progami. Każda reguła brzmi: gdy widoczny okres wynosi do N godzin, użyj tego grupowania (i opcjonalnie tych punktów/godzinę). Wygrywa najmniejszy pasujący próg; okres poza wszystkimi progami wraca do wbudowanego autoskalowania. Świadome selektora dat: wybór pełnego miesiąca lub roku pasuje według nominalnej długości, nawet gdy okres wciąż trwa.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dzień wcześniej",
+    "Week Before": "Tydzień wcześniej",
+    "Month Before": "Miesiąc wcześniej",
+    "Year Before": "Rok wcześniej",
+    "Periods Back": "Okresy wstecz",
+    "No comparisons yet": "Brak porównań",
+    "Add Comparison": "Dodaj porównanie",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "O ile okresów wstecz porównuje ten wiersz: 1 = poprzedni okres, 2 = dwa okresy temu. Podąża za wybranym okresem i selektorem dat - w widoku tygodnia 2 oznacza dwa tygodnie temu; przełącz selektor na Rok, a ten sam wiersz pokaże dwa lata wstecz.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Nakłada tę encję przesuniętą wstecz jako wyblakłe serie-widma - jedno widmo na wiersz. Poprzedni okres podąża za bieżącym oknem (kalendarzowo w widokach miesiąca/roku), a Okresy wstecz to mnożą: 1 = poprzedni, 2 = dwa okresy temu. Widma ukrywają się razem z główną serią w legendzie; podpowiedź pokazuje własną datę każdego widma i zmianę procentową.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Tekst tytułu wyświetlany u góry karty. Pozostaw puste, aby całkowicie ukryć wiersz nagłówka.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Rozmiar czcionki tytułu karty i ikony baterii. Ikona baterii i tekst procentowy skalują się proporcjonalnie do tej wartości. Akceptuje dowolną wartość CSS, np. 16px lub 1.2em.",
@@ -8170,6 +8352,24 @@ export const I18N = Object.freeze({
     "Custom": "Własny",
   }),
   pt: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparação começa oculta quando o cartão carrega - revele-a clicando na sua entrada da legenda. Nota: clicar na série PRINCIPAL na legenda alterna todo o grupo de comparação em conjunto.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Regras de escala personalizadas",
+    "Up to (hours)": "Até (horas)",
+    "Add Rule": "Adicionar regra",
+    "No rules yet - the built-in auto scale decides": "Ainda sem regras - decide o autoescalonamento integrado",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Substitui o autoescalonamento integrado pelos seus próprios limiares. Cada regra lê-se: quando o período visível é de até N horas, usa este agrupamento (e opcionalmente estes pontos/hora). Vence o limiar correspondente mais pequeno; um período além de todos os limiares volta ao autoescalonamento integrado. Sensível ao seletor de datas: uma seleção de mês ou ano completo corresponde pela sua duração nominal mesmo com o período ainda a decorrer.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dia anterior",
+    "Week Before": "Semana anterior",
+    "Month Before": "Mês anterior",
+    "Year Before": "Ano anterior",
+    "Periods Back": "Períodos atrás",
+    "No comparisons yet": "Ainda sem comparações",
+    "Add Comparison": "Adicionar comparação",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Quantos períodos atrás esta linha compara: 1 = o período anterior, 2 = dois períodos atrás. Segue o período selecionado e o seletor de datas - na vista Semana, 2 significa duas semanas atrás; mude o seletor para Ano e a mesma linha mostrará dois anos atrás.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Sobrepõe esta entidade deslocada para trás como séries fantasma esmaecidas - um fantasma por linha. Período anterior segue a janela atual (com lógica de calendário nas vistas de mês/ano) e Períodos atrás multiplica isso: 1 = anterior, 2 = dois períodos atrás. Os fantasmas ocultam-se junto com a série principal na legenda; a dica mostra a data própria de cada fantasma e a variação percentual.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Texto do título exibido no topo do cartão. Deixe vazio para ocultar completamente a linha do cabeçalho.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Tamanho da fonte do título do cartão e do ícone de bateria. O ícone de bateria e o texto de percentagem escalam proporcionalmente com este valor. Aceita qualquer valor CSS como 16px ou 1.2em.",
@@ -8915,6 +9115,24 @@ export const I18N = Object.freeze({
     "Custom": "Personalizado",
   }),
   ru: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Это сравнение при загрузке карточки скрыто - раскройте его щелчком по его записи в легенде. Примечание: щелчок по ОСНОВНОЙ серии в легенде переключает всю группу сравнения вместе.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Свои правила масштабирования",
+    "Up to (hours)": "До (часов)",
+    "Add Rule": "Добавить правило",
+    "No rules yet - the built-in auto scale decides": "Правил пока нет - решает встроенное автомасштабирование",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Заменяет встроенное автомасштабирование вашими порогами. Каждое правило читается так: если видимый период до N часов, использовать эту группировку (и при желании эти точки/час). Побеждает наименьший подходящий порог; период за пределами всех порогов возвращается к встроенному автомасштабированию. Учитывает переключатель дат: выбор полного месяца или года сопоставляется по номинальной длине, даже пока период ещё идёт.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "День назад",
+    "Week Before": "Неделя назад",
+    "Month Before": "Месяц назад",
+    "Year Before": "Год назад",
+    "Periods Back": "Периодов назад",
+    "No comparisons yet": "Пока нет сравнений",
+    "Add Comparison": "Добавить сравнение",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "На сколько периодов назад сравнивает эта строка: 1 = предыдущий период, 2 = два периода назад. Следует выбранному периоду и переключателю дат - в недельном виде 2 означает две недели назад; переключите на Год, и та же строка покажет два года назад.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Накладывает эту сущность со сдвигом назад в виде блеклых серий-призраков - один призрак на строку. Предыдущий период следует текущему окну (с учётом календаря в видах месяц/год), а Периодов назад умножает сдвиг: 1 = предыдущий, 2 = два периода назад. Призраки скрываются вместе с основной серией в легенде; подсказка показывает дату каждого призрака и изменение в процентах.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Текст заголовка в верхней части карточки. Оставьте пустым, чтобы полностью скрыть строку заголовка.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Размер шрифта заголовка карточки и значка батареи. Значок батареи и текст процента масштабируются пропорционально этому значению. Принимает любое CSS-значение, например 16px или 1.2em.",
@@ -9660,6 +9878,24 @@ export const I18N = Object.freeze({
     "Custom": "Свой",
   }),
   sv: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denna jämförelse startar dold när kortet läses in - visa den genom att klicka på dess post i teckenförklaringen. Obs: att klicka på HUVUDserien i teckenförklaringen växlar hela jämförelsegruppen tillsammans.",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "Egna skalningsregler",
+    "Up to (hours)": "Upp till (timmar)",
+    "Add Rule": "Lägg till regel",
+    "No rules yet - the built-in auto scale decides": "Inga regler ännu - den inbyggda autoskalningen bestämmer",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "Åsidosätter den inbyggda autoskalningen med egna trösklar. Varje regel läses: när den synliga perioden är upp till N timmar, använd denna gruppering (och eventuellt detta punkter/timme). Den minsta matchande tröskeln vinner; en period bortom alla trösklar faller tillbaka till den inbyggda autoskalningen. Datumväljarmedveten: ett helt månads- eller årsval matchar sin nominella längd även medan perioden fortfarande pågår.",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "Dagen före",
+    "Week Before": "Veckan före",
+    "Month Before": "Månaden före",
+    "Year Before": "Året före",
+    "Periods Back": "Perioder bakåt",
+    "No comparisons yet": "Inga jämförelser ännu",
+    "Add Comparison": "Lägg till jämförelse",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "Hur många perioder bakåt denna rad jämför med: 1 = föregående period, 2 = två perioder sedan. Följer vald period och datumväljaren - i veckovyn betyder 2 två veckor sedan; byt väljaren till År så visar samma rad två år bakåt.",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "Lägger denna entitet förskjuten bakåt som bleka spökserier - ett spöke per rad. Föregående period följer det aktuella fönstret (kalendermedvetet för månads-/årsvyer) och Perioder bakåt multiplicerar det: 1 = föregående, 2 = två perioder sedan. Spöken döljs tillsammans med huvudserien i teckenförklaringen; verktygstipset visar varje spökes eget datum och ändringen i procent.",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "Rubriktext som visas överst på kortet. Lämna tomt för att dölja rubrikraden helt.",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "Teckenstorlek för kortets rubrik och batteriikonen. Batteriikonen och procenttexten skalas proportionellt med detta värde. Accepterar valfritt CSS-värde som 16px eller 1.2em.",
@@ -10405,6 +10641,24 @@ export const I18N = Object.freeze({
     "Custom": "Anpassad",
   }),
   zh: Object.freeze({
+    // --- added in 3.26 round 3 (compare hide on load)
+    "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "此对比在卡片加载时默认隐藏 - 点击其图例条目即可显示。注意：点击图例中的主序列会同时切换整个对比组。",
+    // --- added in 3.26 round 2 (scale rules)
+    "Custom Scale Rules": "自定义缩放规则",
+    "Up to (hours)": "最多（小时）",
+    "Add Rule": "添加规则",
+    "No rules yet - the built-in auto scale decides": "暂无规则 - 由内置自动缩放决定",
+    "Overrides the built-in auto scale with your own thresholds. Each rule reads: when the visible period is up to N hours, use this Group By (and optionally this Points/Hour). The smallest matching threshold wins; a period beyond every threshold falls back to the built-in auto scale. Date-picker aware: a full month or year selection matches by its nominal length even while the period is still running.": "用您自己的阈值覆盖内置自动缩放。每条规则的含义是：当可见周期不超过 N 小时时，使用该分组方式（以及可选的每小时点数）。匹配的最小阈值生效；超出所有阈值的周期回退到内置自动缩放。感知日期选择器：选择整月或整年时按其名义长度匹配，即使该周期仍在进行中。",
+    // --- added in 3.26 round 1 (multi compare)
+    "Day Before": "前一天",
+    "Week Before": "前一周",
+    "Month Before": "前一月",
+    "Year Before": "前一年",
+    "Periods Back": "回溯周期数",
+    "No comparisons yet": "暂无对比",
+    "Add Comparison": "添加对比",
+    "How many periods back this row compares against: 1 = the previous period, 2 = two periods ago. It follows the selected period and the date picker - on the Week view 2 means two weeks ago; switch the picker to Year and the same row shows two years back.": "此行向前对比多少个周期：1 = 上一周期，2 = 两个周期前。跟随所选周期和日期选择器 - 在周视图中 2 表示两周前；将选择器切换到年，同一行就会显示两年前。",
+    "Overlays this entity shifted back as faded ghost series - one ghost per row. Previous Period follows the current window (calendar-aware for month/year date-picker views) and Periods Back multiplies it: 1 = previous, 2 = two periods ago. Ghosts hide together with the main series from the legend, and the tooltip shows each ghost's own date plus the change in percent.": "将此实体向后平移并以淡化的幻影序列叠加显示 - 每行一个幻影。上一周期跟随当前窗口（月/年日期选择器视图按日历对齐），回溯周期数将其乘倍：1 = 上一个，2 = 两个周期前。幻影随主序列一起在图例中隐藏；提示框显示每个幻影自己的日期和百分比变化。",
     // --- added in 3.25 round 4 (editor tips)
     "Title text shown at the top of the card. Leave empty to hide the header row entirely.": "卡片顶部显示的标题文字。留空可完全隐藏标题行。",
     "Font size of the card title and battery icon. The battery icon and percentage text scale proportionally with this value. Accepts any CSS value like 16px or 1.2em.": "卡片标题和电池图标的字体大小。电池图标及百分比文字会随此值等比缩放。接受任何 CSS 值,如 16px 或 1.2em。",
