@@ -1,4 +1,4 @@
-export const T_VERSION = "3.26";
+export const T_VERSION = "3.27-test-release-andy";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -11,6 +11,9 @@ export const I18N = Object.freeze({
   tr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Bu karşılaştırma kart yüklendiğinde gizli başlar - lejanttaki girdisine tıklayarak gösterebilirsiniz. Not: lejantta ANA seriye tıklamak tüm karşılaştırma grubunu birlikte açıp kapatır.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Bu hayalet çizginin altındaki alanı renginin soluk bir tonuyla doldurur. Üst üste binen dönemler okunaklı kalsın diye varsayılan olarak kapalıdır.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Hayaletin ortalama değerinde - karşılaştırılan dönemin ortalamasında - hayalet renginde kesikli yatay bir çizgi çizer. Dönem ortalamalarını bir bakışta karşılaştırmak için kullanışlıdır.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Özel Ölçek Kuralları",
     "Up to (hours)": "En çok (saat)",
@@ -749,6 +752,9 @@ export const I18N = Object.freeze({
   de: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Dieser Vergleich startet beim Laden der Karte ausgeblendet - einblenden per Klick auf seinen Legendeneintrag. Hinweis: Ein Klick auf die HAUPTserie in der Legende schaltet die ganze Vergleichsgruppe gemeinsam um.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Füllt die Fläche unter der Linie dieses Geists mit einer abgeschwächten Version seiner Farbe. Standardmäßig aus, damit überlappende Zeiträume lesbar bleiben.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Zeichnet eine gestrichelte horizontale Linie beim Durchschnittswert dieses Geists - dem Mittelwert des verglichenen Zeitraums - in der Geisterfarbe. Praktisch, um Periodendurchschnitte auf einen Blick zu vergleichen.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Eigene Skalierungsregeln",
     "Up to (hours)": "Bis zu (Stunden)",
@@ -1487,6 +1493,9 @@ export const I18N = Object.freeze({
   cs: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Toto porovnání je při načtení karty skryté - zobrazíte jej kliknutím na jeho položku v legendě. Pozn.: kliknutí na HLAVNÍ řadu v legendě přepíná celou skupinu porovnání najednou.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Vyplní plochu pod čárou tohoto ducha zesvětlenou verzí jeho barvy. Ve výchozím stavu vypnuto, aby překrývající se období zůstala čitelná.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Nakreslí přerušovanou vodorovnou čáru na průměrné hodnotě tohoto ducha - průměru porovnávaného období - v barvě ducha. Šikovné pro porovnání průměrů období na první pohled.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Vlastní pravidla škálování",
     "Up to (hours)": "Až do (hodin)",
@@ -2250,6 +2259,9 @@ export const I18N = Object.freeze({
   da: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligning starter skjult, når kortet indlæses - vis den ved at klikke på dens post i signaturforklaringen. Bemærk: et klik på HOVEDserien i signaturforklaringen slår hele sammenligningsgruppen til/fra samlet.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Udfylder området under denne spøgelseslinje med en nedtonet version af dens farve. Slået fra som standard, så overlappende perioder forbliver læsbare.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Tegner en stiplet vandret linje ved dette spøgelses gennemsnitsværdi - gennemsnittet af den sammenlignede periode - i spøgelsesfarven. Praktisk til at sammenligne periodegennemsnit med et blik.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Egne skaleringsregler",
     "Up to (hours)": "Op til (timer)",
@@ -3013,6 +3025,9 @@ export const I18N = Object.freeze({
   es: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparación empieza oculta al cargar la tarjeta - revélala haciendo clic en su entrada de la leyenda. Nota: hacer clic en la serie PRINCIPAL de la leyenda alterna todo el grupo de comparación a la vez.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Rellena el área bajo la línea de este fantasma con una versión atenuada de su color. Desactivado por defecto para que los periodos superpuestos sigan siendo legibles.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Dibuja una línea horizontal discontinua en el valor medio de este fantasma - la media del periodo comparado - en el color del fantasma. Útil para comparar medias de periodos de un vistazo.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Reglas de escala personalizadas",
     "Up to (hours)": "Hasta (horas)",
@@ -3776,6 +3791,9 @@ export const I18N = Object.freeze({
   fi: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Tämä vertailu on piilotettu kortin latautuessa - näytä se napsauttamalla sen selitemerkintää. Huom: PÄÄsarjan napsautus selitteessä vaihtaa koko vertailuryhmän tilan yhdessä.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Täyttää tämän haamuviivan alapuolisen alueen sen värin haalistetulla versiolla. Oletuksena pois päältä, jotta päällekkäiset jaksot pysyvät luettavina.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Piirtää katkoviivan vaakasuoraan tämän haamun keskiarvon kohdalle - vertailujakson keskiarvon - haamun värillä. Kätevä jaksojen keskiarvojen vertailuun yhdellä silmäyksellä.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Omat skaalaussäännöt",
     "Up to (hours)": "Enintään (tuntia)",
@@ -4539,6 +4557,9 @@ export const I18N = Object.freeze({
   fr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Cette comparaison démarre masquée au chargement de la carte - révélez-la en cliquant sur son entrée de légende. Remarque : cliquer sur la série PRINCIPALE dans la légende bascule tout le groupe de comparaison ensemble.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Remplit la zone sous la ligne de ce fantôme avec une version atténuée de sa couleur. Désactivé par défaut pour que les périodes superposées restent lisibles.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Trace une ligne horizontale en pointillés à la valeur moyenne de ce fantôme - la moyenne de la période comparée - dans la couleur du fantôme. Pratique pour comparer les moyennes des périodes d'un coup d'œil.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Règles d'échelle personnalisées",
     "Up to (hours)": "Jusqu'à (heures)",
@@ -5302,6 +5323,9 @@ export const I18N = Object.freeze({
   it: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Questo confronto parte nascosto al caricamento della card - rivelalo cliccando la sua voce in legenda. Nota: cliccare la serie PRINCIPALE nella legenda commuta insieme l'intero gruppo di confronto.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Riempie l'area sotto la linea di questo fantasma con una versione attenuata del suo colore. Disattivato per impostazione predefinita così i periodi sovrapposti restano leggibili.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Disegna una linea orizzontale tratteggiata al valore medio di questo fantasma - la media del periodo confrontato - nel colore del fantasma. Comodo per confrontare le medie dei periodi a colpo d'occhio.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Regole di scala personalizzate",
     "Up to (hours)": "Fino a (ore)",
@@ -6065,6 +6089,9 @@ export const I18N = Object.freeze({
   nl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Deze vergelijking start verborgen wanneer de kaart laadt - toon hem door op zijn legenda-item te klikken. Let op: klikken op de HOOFDreeks in de legenda schakelt de hele vergelijkingsgroep samen.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Vult het gebied onder de lijn van deze geest met een vervaagde versie van zijn kleur. Standaard uit, zodat overlappende perioden leesbaar blijven.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Tekent een gestippelde horizontale lijn op de gemiddelde waarde van deze geest - het gemiddelde van de vergeleken periode - in de geestkleur. Handig om periodegemiddelden in één oogopslag te vergelijken.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Eigen schaalregels",
     "Up to (hours)": "Tot (uren)",
@@ -6828,6 +6855,9 @@ export const I18N = Object.freeze({
   nb: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligningen starter skjult når kortet lastes - vis den ved å klikke på oppføringen i tegnforklaringen. Merk: å klikke på HOVEDserien i tegnforklaringen veksler hele sammenligningsgruppen samlet.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Fyller området under denne spøkelseslinjen med en nedtonet versjon av fargen dens. Av som standard slik at overlappende perioder forblir lesbare.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Tegner en stiplet horisontal linje ved dette spøkelsets gjennomsnittsverdi - gjennomsnittet av den sammenlignede perioden - i spøkelsesfargen. Praktisk for å sammenligne periodegjennomsnitt på et blikk.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Egne skaleringsregler",
     "Up to (hours)": "Opptil (timer)",
@@ -7591,6 +7621,9 @@ export const I18N = Object.freeze({
   pl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "To porównanie startuje ukryte przy ładowaniu karty - pokaż je, klikając jego wpis w legendzie. Uwaga: kliknięcie GŁÓWNEJ serii w legendzie przełącza całą grupę porównań razem.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Wypełnia obszar pod linią tego ducha przygaszoną wersją jego koloru. Domyślnie wyłączone, aby nakładające się okresy pozostały czytelne.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Rysuje przerywaną poziomą linię na średniej wartości tego ducha - średniej porównywanego okresu - w kolorze ducha. Przydatne do porównywania średnich okresów na pierwszy rzut oka.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Własne reguły skalowania",
     "Up to (hours)": "Do (godzin)",
@@ -8354,6 +8387,9 @@ export const I18N = Object.freeze({
   pt: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparação começa oculta quando o cartão carrega - revele-a clicando na sua entrada da legenda. Nota: clicar na série PRINCIPAL na legenda alterna todo o grupo de comparação em conjunto.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Preenche a área abaixo da linha deste fantasma com uma versão esmaecida da sua cor. Desligado por predefinição para que períodos sobrepostos continuem legíveis.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Desenha uma linha horizontal tracejada no valor médio deste fantasma - a média do período comparado - na cor do fantasma. Útil para comparar médias de períodos num relance.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Regras de escala personalizadas",
     "Up to (hours)": "Até (horas)",
@@ -9117,6 +9153,9 @@ export const I18N = Object.freeze({
   ru: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Это сравнение при загрузке карточки скрыто - раскройте его щелчком по его записи в легенде. Примечание: щелчок по ОСНОВНОЙ серии в легенде переключает всю группу сравнения вместе.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Заливает область под линией этого призрака приглушённой версией его цвета. По умолчанию выключено, чтобы перекрывающиеся периоды оставались читаемыми.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Рисует пунктирную горизонтальную линию на среднем значении этого призрака - среднем сравниваемого периода - цветом призрака. Удобно для сравнения средних значений периодов с первого взгляда.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Свои правила масштабирования",
     "Up to (hours)": "До (часов)",
@@ -9880,6 +9919,9 @@ export const I18N = Object.freeze({
   sv: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denna jämförelse startar dold när kortet läses in - visa den genom att klicka på dess post i teckenförklaringen. Obs: att klicka på HUVUDserien i teckenförklaringen växlar hela jämförelsegruppen tillsammans.",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "Fyller området under denna spöklinje med en nedtonad version av dess färg. Av som standard så att överlappande perioder förblir läsbara.",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "Ritar en streckad horisontell linje vid detta spökes medelvärde - genomsnittet för den jämförda perioden - i spökfärgen. Praktiskt för att jämföra periodmedelvärden med en blick.",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "Egna skalningsregler",
     "Up to (hours)": "Upp till (timmar)",
@@ -10643,6 +10685,9 @@ export const I18N = Object.freeze({
   zh: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "此对比在卡片加载时默认隐藏 - 点击其图例条目即可显示。注意：点击图例中的主序列会同时切换整个对比组。",
+    // --- added in 3.27 round 1 (compare fill + average toggles)
+    "Fills the area below this ghost's line with a faded version of its color. Off by default so overlapping periods stay readable.": "用其颜色的淡化版本填充此对比幽灵线下方的区域。默认关闭，以保持重叠时段的可读性。",
+    "Draws a dashed horizontal line at this ghost's average value - the mean of the compared period - in the ghost color. Handy for comparing period averages at a glance.": "在此幽灵的平均值处绘制虚线水平线 - 即所对比时段的平均值 - 使用幽灵颜色。便于一眼比较各时段的平均值。",
     // --- added in 3.26 round 2 (scale rules)
     "Custom Scale Rules": "自定义缩放规则",
     "Up to (hours)": "最多（小时）",
