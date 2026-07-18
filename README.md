@@ -192,8 +192,8 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | [Installation](#-installation) | HACS and manual setup |
 | [Quick Start](#-quick-start) | Minimal YAML to get started |
 | [Configuration](#%EF%B8%8F-configuration) | Card-level and entity-level options |
-| [Chart Modes](#-chart-modes) | Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Gauge, Box Plot, Waterfall, Histogram |
-| [Feature Guides](#-feature-guides) | Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and more |
+| [Chart Modes](#-chart-modes) | Timeline, State Timeline, Candlestick, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Gauge, Box Plot, Waterfall, Histogram |
+| [Feature Guides](#-feature-guides) | Grouped guides: Time & History, Data Sources & Math, Layout & Appearance, Zoom & Tools, Multi-Card Sync, Templates |
 | [Examples](#-examples) | Ready-to-use YAML configurations |
 | [CSS Styling](#-css-styling-with-card_mod) | `card-mod` recipes and class reference |
 | [Reference](#-reference) | Aggregation functions, date formats, bounds, tap actions |
@@ -205,7 +205,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ### HACS (recommended)
 
-1. Open **HACS
+1. Open **HACS**
 2. Search from the search bar: Statistics Graph Chart Card
 3. Install **Home Assistant - Statistics Graph Chart Card**
 4. Hard-refresh your browser
@@ -270,10 +270,11 @@ These options apply to the whole card.
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored when `graph_start` is set to `week`, `month`, or `year` — the calendar period defines the range instead. |
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
-| `auto_scale_rules` | list | `null` | Custom thresholds for Auto Scale — only active when `auto_scale_points: true`. Each rule maps a visible period to a bucketing: `up_to_hours` (number, required), `group_by` (same values as the main `group_by` — `interval`, `hour`, any `Nh` like `2h`, `date` [`day` is accepted as an alias], `week`, `month`, `year`, `raw`), and an optional `points_per_hour` (only meaningful for `group_by: interval`). The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale. See [Auto Scale Points](#-auto-scale-points). |
+| `auto_scale_rules` | list | `null` | Custom thresholds for Auto Scale — only active when `auto_scale_points: true`. Each rule maps a visible period to a bucketing: `up_to_hours` (number, required), `group_by` (same values as the main `group_by` — `interval`, `hour`, any `Nh` like `2h`, `date` [`day` is accepted as an alias], `week`, `month`, `year`, `raw`), and an optional `points_per_hour` (only meaningful for `group_by: interval`). The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale. While Auto Scale is on, the resolved rule fully overrides the main `group_by` (bucketing **and** data fetching); the main value only applies when Auto Scale is off. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the grid cell instead — the card then participates in Home Assistant's **Sections** layout sizing. See [Sections Auto-height](#-sections-auto-height). |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds. Empty = HA events only. |
+| `extended_window_multiplier` | number | `null` | *(new in v3.29)* Scrollback for the selected period: renders N× the period and opens scrolled to the newest part — the screen shows exactly the period you picked (same scale and buckets as without scrolling) and you can scroll back through the extra history. Follows the date picker: a Week view with `2` keeps one extra week scrollable behind the current one; the picker's header and arrows stay on the selected period. `1`/empty = off. Overrides `max_visible_interval` while active. Timeline mode. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
 | `min_bound_range` | number | `null` | Minimum span of the primary Y axis |
@@ -412,6 +413,7 @@ Each entry under `entities` supports the following options.
 | `y_axis` | string | `"primary"` | `primary` (left), `secondary` (right), or `independent` (hidden, own scale). Independent entities are scaled to their own min/max — ideal for overlaying sensors with different units for trend comparison. See [Independent Y-Axis](#-independent-y-axis). |
 | `aggregate_func` | string | `"avg"` | Aggregation: `avg` / `min` / `max` / `last` / `first` / `median` / `sum` / `change` / `delta` / `diff`. The `change` option uses HA's native statistics `change` field — ideal for energy, gas, and water meters with `group_by: date/week/month`. |
 | `damp_reset_boundary` | boolean | `true` | Expert. The card automatically repairs the midnight carry-over artifact that daily-reset counters (e.g. `*_today` energy sensors) show when displayed with `aggregate_func: max` + `group_by: date` — without it, the first bucket of each day would inherit the previous day's peak. Set to `false` to disable the heuristic if it damps legitimate peaks near midnight. |
+| `change_ignore_zero` | boolean | `false` | *(new in v3.28)* For `aggregate_func: change` on counters whose integration reports a literal `0` while the device is off or restarting and then jumps back to the previous total (instead of going `unavailable`). Each such dip is normally counted as a meter reset, so the restored value is re-counted as new consumption — inflating daily/monthly totals massively. Enable to skip zero readings entirely; with long-term statistics the change is recomputed from the `state` column, bypassing the polluted sums. Counters that genuinely reset to zero and keep counting from there still work. Also available as an *Ignore transient zeros* toggle under the Aggregation dropdown. |
 | `price_entity` | string | `null` | Multiply every value of this series by the state of another entity **over time** — the cost view. The price is read as a **step function** from the price entity's own history (long-term statistics with hourly mean on long windows), and the multiplication happens per consumption slice **before** bucketing, so each bucket is an exact Σ(valueᵢ × priceᵢ). Intended for `aggregate_func: change` on energy counters — set `unit` to the currency. State changes of the price entity auto-refresh the card. Not applied to `fixed_value` / `data_attribute` entities. See [Cost View](#-cost-view-price_entity). |
 | `price_attribute` | string | `null` | Read the price from an attribute of `price_entity` instead of its state. Supports dot notation for nested paths (e.g. `raw_today.0.value`). Only used when `price_entity` is set. |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
@@ -448,6 +450,7 @@ Each entry under `entities` supports the following options.
 | `show_range_band` | boolean | `false` | Draw a min/max shaded band behind the line showing the value range within each aggregation bucket. The line shows the average while the band shows how much the value fluctuated. See [Range Band](#-range-band). Timeline mode only. |
 | `gradient` | boolean | `true` | Fade the fill from the entity color to transparent. Only applies when `show_fill` is true. Timeline mode only. |
 | `show_points` | boolean | `false` | Show a dot at each data point. Timeline mode only. |
+| `point_size` | number | auto | Radius of the data point dots in pixels (0.5–20). Leave unset for automatic sizing based on `line_width`. Also sets the dot size in scatter and radar modes (via YAML; in scatter, set it on the first entity — the one that styles the dots). In the editor the field appears under the **Data Points** toggle when it is enabled. *(v3.29)* |
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
 | `line_width` | number | `2.5` | Line thickness in pixels. Timeline mode only. |
 | `line_style` | string | `solid` | Line type: `solid`, `dashed`, `dotted`. |
@@ -508,7 +511,7 @@ Each entry under `entities` supports the following options.
 ## 🎯 Chart Modes
 
 <details>
-<summary>Timeline, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Polar Area, Radar, Plot Box, Waterfall, Histogram</summary>
+<summary>Timeline, Candlestick, Scatter, Pie, Ranking, Heatmap, Calendar, Radial Bar, Gauge, Polar Area, Radar, State Timeline, Box Plot, Waterfall, Histogram</summary>
 
 The `chart_mode` option at the card level controls the overall visualization. Each mode takes over the entire graph area.
 
@@ -792,6 +795,9 @@ Requires at least 3 entities. Each entity's value is normalized to its `lower_bo
 
 ### State Timeline
 
+Displays horizontal colored bars showing state changes over time — one row per entity. Entity names appear on the left, state labels inside each segment when wide enough. Hover for a tooltip showing state name, duration, and time range. Works with `binary_sensor`, `input_boolean`, `input_select`, and any entity with a `state_map`.
+
+
 ```yaml
 type: custom:statistics-graph-chart-card
 chart_mode: state_timeline
@@ -810,8 +816,6 @@ entities:
         label: "Open"
         color: "#5dade2"
 ```
-
-Displays horizontal colored bars showing state changes over time — one row per entity. Entity names appear on the left, state labels inside each segment when wide enough. Hover for a tooltip showing state name, duration, and time range. Works with `binary_sensor`, `input_boolean`, `input_select`, and any entity with a `state_map`.
 
 **v2.28 additions:**
 - **Corner radius** is configurable via `state_timeline_corner_radius` (0–20 px, default 3). Set to `0` for sharp edges or use higher values for pill-shaped segments.
@@ -974,32 +978,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 ## 📚 Feature Guides
 
 <details>
-<summary>Date Picker, Energy Sync, Zoom, Sparkline, Annotations, and 20 more</summary>
-
-<details>
-<summary><strong>📐 Sections Auto-height</strong></summary>
-
-In Home Assistant's **Sections** view the card now reports proper grid sizing — the "does not fully support resizing" warning is gone, and you can resize it from the card's Layout tab.
-
-By default `height` is a fixed pixel value (`150`). Set it to `auto` to make the chart fill the grid cell it is given instead:
-
-```yaml
-type: custom:statistics-graph-chart-card
-height: auto          # fill the cell; size the card from the Layout tab
-entities:
-  - entity: sensor.power
-```
-
-### Behavior
-
-- A numeric `height` (e.g. `300`) still pins the graph to that many pixels, exactly as before.
-- With `height: auto` the chart grows and shrinks to match the grid cell — drag the card's resize handle (or set `grid_options` rows) in the Layout tab. Handy for lining a chart up with a neighbouring card's height.
-
-### Editor
-
-The **Height** field accepts a number or the word `auto`. Leaving it empty is treated as `auto`.
-
-</details>
+<summary><strong>🕒 Time, History & Comparison</strong> &nbsp;&mdash;&nbsp; Date Picker | Energy Date Sync | Show Full Period | Long-Range Views | Week Start | Time Offset | Period Comparison | Forecast Horizon</summary>
 
 <details>
 <summary><strong>📅 Date Picker</strong></summary>
@@ -1021,7 +1000,7 @@ entities:
 
 The date picker bar shows the current period label with arrow buttons to move forward/backward:
 
-![Date Sync Example](images/Datepicker.gif)
+![Date Picker Example](images/Datepicker.gif)
 
 - **D / W / M / Y** — switch between Day, Week, Month, and Year views
 - **◀ ▶** — navigate to the previous/next period
@@ -1081,6 +1060,20 @@ date_picker_modes:
 ```
 
 When only one mode is listed, the D/W/M/Y buttons are hidden entirely and the navigation (◀ label ▶) is centered for a minimal look. The 📅 calendar icon stays visible on the right.
+
+### Scrollback (Extended Window) *(new in v3.29)*
+
+The arrows jump period by period — for a quick *peek* into the recent past without leaving the current view, add `extended_window_multiplier`:
+
+```yaml
+show_date_picker: true
+extended_window_multiplier: 2   # render 2× the period, scroll back through the extra half
+```
+
+The card renders N× the selected period but opens showing **exactly the period you picked, at its own scale and bucket density** — then you can scroll horizontally into the extra history (scrollbar or mouse wheel, per `scroll_mode`). It follows the picker: on a Week view one extra week sits behind the current one; switch to Day and it's one extra day. The picker's header and arrows stay on the selected period — scrolling is a peek, the arrows remain the navigation. Also works without the date picker (extends `hours_to_show` or `graph_start` periods the same way).
+
+
+**With forecast data** (`data_attribute` entities or `forecast_horizon` data whose points reach into the future — weather, prices): the chart opens with the **current** period in view (right edge at "now"), with the forecast reachable by scrolling **right** and history by scrolling left. This also works together with `graph_start`: normally `graph_start` cuts the window at the period's end, but with the multiplier active the forecast tail is rendered and scrollable, and the viewport spans the full selected period (so the scale doesn't creep as the day progresses). `show_full_period` is the exception — it keeps its "whole period, cut at its end" contract.
 
 ### Rolling windows (Last 24H … Last 12M)
 
@@ -1154,101 +1147,6 @@ General Settings → Overlays → **Date Picker** toggle. Position and Group opt
 </details>
 
 <details>
-<summary><strong>🎚️ On-Card Pickers (Points/Hour & Group By)</strong></summary>
-
-Change the data resolution and the bucketing strategy directly on the card — no editor round-trip.
-
-### Setup
-
-```yaml
-type: custom:statistics-graph-chart-card
-show_pph_picker: true
-show_group_by_picker: true
-group_by_picker_position: right
-entities:
-  - entity: sensor.power
-```
-
-### Behavior
-
-- Each dropdown starts on **Auto (…)**, showing your configured value; picking anything else overrides it for this card only.
-- Selections persist across reloads and **take priority over Auto Scale** while active.
-- The Group By picker offers Interval, Hour, **2H / 3H / 4H / 6H / 12H**, Date, Week, Month and Year.
-
-### Group Sync
-
-Each picker has its own, fully independent sync group — same mechanism as `date_picker_group`:
-
-```yaml
-# Controller card
-show_pph_picker: true
-pph_picker_group: page
-
-# Receiver cards — no picker shown, still follow
-pph_picker_group: page
-```
-
-`pph_picker_group` and `group_by_picker_group` don't interact: a card can follow one page-wide resolution group and a different bucketing group (or none).
-
-### Editor
-
-General Settings → Overlays → **Points/Hour Picker** and **Group By Picker** rows. The **Group** fields are always editable, even while the toggles are off.
-
-</details>
-
-<details>
-<summary><strong>🕒 Y-Axis Label Formats</strong></summary>
-
-Render axis values as durations or with a custom template instead of plain numbers. The format follows the entity everywhere: axis ticks, tooltips, data labels, the state row and the average-line label.
-
-### Duration shorthands
-
-```yaml
-y2_axis_format: h:mm    # 5400 → 1:30
-duration_unit: s        # raw unit: s (default) / ms / min / h
-```
-
-| Format | `5400` becomes |
-|---|---|
-| `h:mm` | `1:30` |
-| `h:mm:ss` | `1:30:00` |
-| `mm:ss` | `90:00` |
-| `d h:mm` | `1:30` — and `90000` becomes `1d 1:00` |
-
-### Templates
-
-```yaml
-y_axis_format: "{fixed(value/1000,1)} kW"     # 2350 → 2.4 kW
-y2_axis_format: "{floor(value/3600)}:{pad2(floor(value%3600/60))}"
-```
-
-Templates accept numbers, `value`, `+ - * / %`, parentheses and the functions `floor`, `ceil`, `round`, `abs`, `min`, `max`, `sqrt`, `pad2(x)`, `pad(x,width)`, `fixed(x,decimals)`. No JavaScript is executed — invalid formats are simply ignored and the axis falls back to plain numbers.
-
-### Editor
-
-General Settings → Y Axis → Labels → **Y Tick Format / Y2 Tick Format / Duration Unit**.
-
-</details>
-
-<details>
-<summary><strong>🙈 Auto Hide Entities</strong></summary>
-
-Start the card with every series hidden — ideal for "pick what you want to see" dashboards with many entities.
-
-```yaml
-auto_hide_entities: true
-show_legend: true
-```
-
-Click legend items to reveal series. Reveals stick for the session, and entities added later also start hidden.
-
-### Editor
-
-General Settings → Chart → Visual Options → **Auto Hide Entities**.
-
-</details>
-
-<details>
 <summary><strong>⚡ Energy Date Sync</strong></summary>
 
 Syncs the card's time range with Home Assistant's Energy dashboard date picker or the [energy-period-selector-plus](https://github.com/flixlix/energy-period-selector-plus) custom card.
@@ -1295,7 +1193,7 @@ General Settings → Overlays → **Energy Date Sync** toggle.
 ### Notes
 
 - When `energy_date_sync` is active, it overrides `hours_to_show` and the interval picker selection
-- The card subscribes to HA's energy data collection on the WebSocket connection — no polling needed
+- Period changes made in the Energy dashboard are picked up instantly — no polling, no refresh delay
 - If the Energy panel hasn't loaded yet, the card retries every 2 seconds for up to 60 seconds
 
 </details>
@@ -1345,6 +1243,7 @@ This is especially useful for:
 <summary><strong>📅 Long-Range Views</strong></summary>
 
 Visualize data over weeks, months, and years with calendar-aware grouping and native HA statistics.
+
 
 ### Weekly, Monthly, and Yearly Grouping
 
@@ -1462,6 +1361,7 @@ In `interval` mode, midnight labels also show the date for any view longer than 
 
 Everything week-shaped on the card follows Home Assistant's **"First day of the week"** user setting (your profile page) — no YAML, no card option.
 
+
 ### What follows the setting
 
 - **Weekly buckets** — `group_by: week` buckets start on your configured weekday
@@ -1474,6 +1374,338 @@ Everything week-shaped on the card follows Home Assistant's **"First day of the 
 ### Recorder note
 
 Home Assistant's recorder computes weekly long-term statistics **Monday-anchored on the server** — there is no Sunday-based weekly row to fetch. When your week starts on any day other than Monday, the card transparently fetches **daily** statistics rows instead and builds the weekly buckets client-side, so totals and `change` aggregates stay correct. Nothing to configure.
+
+</details>
+
+<details>
+<summary><strong>↔️ Time Offset</strong></summary>
+
+Compare the same sensor across different time periods by adding multiple entity entries with different `offset` values. Each offset shifts that entity's data backward in time while keeping it aligned on the same graph.
+
+```yaml
+hours_to_show: 168
+entities:
+  - entity: sensor.energy_consumption
+    name: "This week"
+    offset: 0
+    color: "#ff4757"
+  - entity: sensor.energy_consumption
+    name: "Last week"
+    offset: 168
+    color: "#378ADD"
+  - entity: sensor.energy_consumption
+    name: "2 weeks ago"
+    offset: 336
+    color: "#2ecc71"
+```
+
+
+### How It Works
+
+- `offset: 168` means "fetch data from 168 hours (7 days) before the current display window"
+- The fetched data is time-shifted forward to align with the current window on the X axis
+- All rendering features work at full quality — line, bar, step, fill, gradient, points, tooltips, stacking, zoom
+- Each entity with an offset gets its own API call with the correct time range
+
+### Common offset values
+
+| Offset | Period |
+|---|---|
+| `24` | Yesterday |
+| `168` | Last week |
+| `336` | 2 weeks ago |
+| `720` | Last month (~30 days) |
+| `8760` | Last year |
+
+### Dynamic Offset via Helper Entity
+
+Instead of a fixed number, you can point `offset` to any HA entity whose state is a number (in hours). The card reads the entity's current state and re-fetches history automatically when it changes.
+
+```yaml
+entities:
+  - entity: sensor.energy_consumption
+    name: "Current"
+  - entity: sensor.energy_consumption
+    name: "Comparison"
+    offset: input_number.comparison_offset
+    color: "#378ADD"
+```
+
+This works with any entity type — `input_number`, template sensors, or any sensor that outputs a numeric state. Combine with HA template sensors for fully dynamic comparisons:
+
+```yaml
+# In HA configuration.yaml
+template:
+  - sensor:
+      - name: "Dynamic Offset"
+        state: "{{ 24 if now().weekday() < 5 else 168 }}"
+        unit_of_measurement: "h"
+```
+
+### Editor
+
+Entity → General → Data Settings → **Offset** (in hours).
+
+### Notes
+
+- Offset entities do not receive live WebSocket updates (they show historical data)
+- The state row, sparkline, and gauge correctly display the last value from the offset time window — not the live entity state
+- Works with all chart modes that support multiple entities
+- Can be combined with `value_transform`, `value_factor`, and all other entity options
+- Each offset generates a separate cache entry, so switching between views is fast
+
+</details>
+
+<details>
+<summary><strong>👥 Period Comparison</strong></summary>
+
+Overlay a faded "ghost" of the same entity from a previous period underneath the main series — today vs yesterday, this week vs last week, this month vs last month — with a single per-entity `compare` option. Unlike a manual [Time Offset](#-time-offset) entry, `compare` needs no duplicate entity: the ghost inherits the main entity's whole configuration and stays in lock-step with it. Since v3.26, `compare` also accepts a **list** of comparisons — one ghost per entry, each reaching further back via `periods_back` — see [Multiple comparisons](#multiple-comparisons-list-form-new-in-v326) below.
+
+### Minimal setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Power — Today vs Yesterday
+hours_to_show: 24
+entities:
+  - entity: sensor.power_consumption
+    compare: yesterday
+```
+
+
+### Short forms
+
+| Value | Ghost shows |
+|---|---|
+| `previous_period` | The window immediately before the visible one (a 24h view compares against the 24h before it) |
+| `yesterday` | Same window, 24 hours earlier |
+| `last_week` | Same window, one week earlier |
+| `last_month` | Same window, one month earlier |
+| `last_year` | Same window, one year earlier |
+| *number* | Same window, that many hours earlier |
+| `true` | Shorthand for `previous_period` |
+
+### Styled example (object form)
+
+For full styling control, use the object form — every sub-option is optional:
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Energy — This Week vs Last Week
+hours_to_show: 168
+group_by: date
+entities:
+  - entity: sensor.energy_daily
+    name: Energy
+    graph_type: bar
+    aggregate_func: change
+    color: "#2ecc71"
+    compare:
+      period: last_week      # which period the ghost shows
+      color: "#9b59b6"       # empty = faded main color
+      opacity: 0.6           # 0.05–1
+      line_style: solid      # dashed (default) | solid | dotted
+      line_width: 1.5        # empty = same as main
+      show_fill: true
+      show_points: false
+      show_in_legend: true   # empty = inherit the main entity's setting
+      show_delta: true       # Δ% next to the main value in the tooltip
+```
+
+| Sub-option | Default | Description |
+|---|---|---|
+| `period` | `previous_period` | Which period the ghost shows — same values as the short forms above (`previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`, or a number of hours). |
+| `periods_back` | `1` | *(new in v3.26)* How many periods back this comparison reaches — an integer ≥ 1, max `520`. `1` = the previous period, `2` = two periods ago, and so on; the value multiplies the shift of `period` (e.g. `period: last_week` + `periods_back: 2` = two weeks ago). Most useful in the [list form](#multiple-comparisons-list-form-new-in-v326) below. |
+| `hide_on_load` | `false` | *(new in v3.26)* This comparison starts hidden when the card loads — click its legend entry to reveal it (the reveal sticks; it is not re-hidden). Note that clicking the **main** series in the legend still toggles the whole comparison group together. Also available as a *Hide on Load* toggle on each editor row. |
+| `color` | `null` | Ghost color. Empty = a faded version of the main entity color. The editor offers the standard color picker for this field, with `{{ }}` template support. |
+| `opacity` | `0.45` | Ghost opacity, `0.05`–`1`. |
+| `line_style` | `dashed` | Ghost line pattern: `dashed`, `solid`, or `dotted`. |
+| `line_width` | `null` | Ghost line thickness in pixels. Empty = same as the main line. |
+| `show_fill` | `false` | Draw the fill area under the ghost line. *(new in v3.27)* Also available as a *Fill* toggle on each editor row. |
+| `show_average` | `false` | *(new in v3.27)* Draw a dashed horizontal line at this ghost's average value — the mean of the compared period, in the ghost color. Handy for comparing period averages at a glance. Also available as a *Show Average* toggle on each editor row. |
+| `show_points` | `false` | Draw dots at the ghost's data points. |
+| `show_in_legend` | `null` | Show the ghost as its own legend entry. Empty = inherit the main entity's `show_in_legend`; an explicit `false` also hides the ghost from the simple legend. |
+| `show_delta` | `true` | Show a Δ% next to the main value in the tooltip — green for a positive delta, red for a negative one. |
+
+In the tooltip, each comparison row is preceded by a small line showing that ghost value's **actual date and time** (hover *15 Jul, 14:00* and the previous-period row is headed by *14 Jul, 14:00* for `yesterday`), so it is always clear which moment is being compared.
+
+### Multiple comparisons (list form) *(new in v3.26)*
+
+`compare` also accepts a **list** of comparison objects — one ghost series per entry. Each entry takes the full sub-option set above plus `periods_back`, which sets how many periods back that ghost reaches:
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Power — vs the last two periods
+hours_to_show: 24
+entities:
+  - entity: sensor.power_consumption
+    compare:
+      - periods_back: 1        # previous period
+      - periods_back: 2        # two periods ago
+      - periods_back: 3
+        line_style: dotted
+        color: "#9b59b6"
+```
+
+- **Follows the date picker.** With the picker on Week, the entries above show the last three weeks; switch to Year and the same config shows the last three years — calendar-aligned in Month/Year modes, leap years handled.
+- **Each ghost is distinct.** Later entries fade progressively by default (opacity `0.45` → `0.30` → `0.20` …), and legend entries beyond the first read *"Name (previous period ×2)"*, *"… ×3"*, and so on.
+- **Per-ghost tooltip.** Every ghost row is headed by its own date sub-header, and with multiple comparisons each ghost row carries its **own Δ%** against the current value. With a single comparison the tooltip looks exactly as in v3.25 — one date sub-header and the Δ% next to the main value.
+- Every entry still takes the full style set (`period`, `color`, `opacity`, `line_style`, `line_width`, `show_fill`, `show_average`, `show_points`, `show_in_legend`, `show_delta`, `hide_on_load`), and hiding the main series from the legend hides all of its ghosts.
+- Existing single string/object `compare` configs are untouched — the list form is purely additive.
+
+### Behavior
+
+- The ghost is drawn faded and dashed **under** the main series and is named *"&lt;main name&gt; (previous period)"* — the suffix follows the dashboard language.
+- `previous_period` shifts by the current window length. In the date picker's **Month / Year** modes the shift is **calendar-aware**: July compares against June, wall-clock aligned, and month-end dates are clamped (Mar 31 → Feb 28/29).
+- A main entity with its own `offset` compares against the previous period of its **shifted** window.
+- Clicking the entity in the legend or its state row toggles the main series and its ghosts **together**.
+- *(improved in v3.28)* Under `stacked: true`, ghosts stack **with each other** — the previous period appears as its own faded stacked column next to the current one (one ghost stack per comparison entry, honoring `stack_group`). Ghosts never stack onto the current period and stay excluded from the tooltip's grand Total.
+- *(new in v3.28)* With stacked comparisons the tooltip also shows the **previous period's stack total** — e.g. *"Aktuell Total (previous period)"*, fully translated — and the current stack's Total row carries a Δ% against it.
+- Ghost values go through **exactly the same aggregation pipeline** as the main entity (`aggregate_func`, `points_per_hour`, `group_by`, transforms) — the comparison is truly like-for-like.
+- Timeline charts only. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities, and in sparkline mode.
+
+### Editor
+
+Per-entity → **Period Comparison** section (shown in Timeline mode). Redesigned as a **list** in v3.26:
+
+- The section starts empty with an **Add Comparison** button; each click adds one comparison row and steps the default *Periods Back* automatically (1, 2, 3 …).
+- Each row holds a period select (labels now read **Previous Period** / **Day Before** / **Week Before** / **Month Before** / **Year Before** — only the labels changed, the YAML values are still `previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`), a **Periods Back** input, line style, color, opacity, a **Show Δ% in tooltip** toggle, and a delete button.
+- Legacy string/object `compare` configs load into the list unchanged, and a one-row list commits back to the legacy short form — your YAML stays as compact as before.
+
+</details>
+
+<details>
+<summary><strong>🔮 Forecast Horizon</strong></summary>
+
+Some sensors expose a **forecast value** — their current state represents what is predicted for **N hours in the future**, not what is happening right now. Typical examples:
+
+- `sensor.solcast_pv_forecast_leistung_in_1_stunde` — PV power expected in 1 hour
+- A template sensor whose state is "temperature in 3 hours"
+- A weather forecast exposed as a numeric future-hour prediction
+
+Plotting these directly is misleading: the line shows each prediction at the time it was recorded, not at the time it is predicting. `forecast_horizon: N` fixes this by **shifting each recorded data point forward by N hours** on the X-axis so every point lands at the moment it is forecasting.
+
+```yaml
+type: custom:statistics-graph-chart-card
+graph_start_hour: now
+show_full_period: true
+entities:
+  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
+    name: "Forecast +1h"
+    forecast_horizon: 1
+```
+
+
+The result: a line that extends **1 hour into the future** past the "now" marker, representing the forecast for each upcoming moment. The X-axis end is automatically extended by the largest `forecast_horizon` across all entities so shifted points stay visible.
+
+### Matching the horizon to the sensor
+
+The `forecast_horizon` value should match the actual prediction horizon the sensor represents:
+
+| Sensor | `forecast_horizon` |
+|---|---|
+| `solcast_pv_forecast_leistung_in_1_stunde` | `1` |
+| `solcast_pv_forecast_leistung_in_8_stunden` | `8` |
+| Custom "temperature in 30 minutes" | `0.5` |
+
+Setting a value that doesn't match the sensor's real horizon will still shift the line — but the displayed time no longer corresponds to what the sensor is actually predicting.
+
+### Negative horizon — overlay tomorrow's forecast onto today
+
+Some forecast integrations (Solcast PV, EPEX spot prices, weather APIs) expose **future data through entity attributes** — a single sensor whose `attributes` contain an array of timestamped points covering the next 24–48 hours. Combined with `data_attribute`, you can plot this future data directly. But what if you want to see **tomorrow's forecast on today's chart timeline** for an at-a-glance comparison?
+
+A **negative `forecast_horizon`** shifts each point *backward* in time. Setting `-24` moves tomorrow's points 24 hours earlier so they appear at today's clock positions:
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_legend: true
+entities:
+  - entity: sensor.solcast_pv_forecast_tomorrow
+    data_attribute: detailedHourly
+    data_time_field: period_start
+    data_value_field: pv_estimate
+    name: "Tomorrow's forecast (shown today)"
+    forecast_horizon: -24
+```
+
+The X-axis stays anchored to today — only the data slides into view. Combine with the live PV sensor (no horizon) on the same chart to see today's reality next to tomorrow's prediction, both aligned to the same hours.
+
+### Combining with `offset`
+
+`forecast_horizon` and `offset` are **orthogonal**:
+
+- `offset` shifts the fetch window **backward** (for past-period overlay comparison)
+- `forecast_horizon` shifts the display **forward** (positive) **or backward** (negative)
+
+Both can be used on the same entity. Example: overlay yesterday's 1-hour forecast sensor onto today's timeline, shifted 1h forward:
+
+```yaml
+entities:
+  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
+    offset: 24            # fetch yesterday's recordings
+    forecast_horizon: 1   # show them shifted 1h forward
+    name: "Yesterday's +1h forecast"
+```
+
+### Editor
+
+Entity → **Advanced** tab → *Forecast Horizon* (in hours, supports decimals — including negative values).
+
+### Notes
+
+- Leave empty (or `0`) to disable — the sensor plots at its recording time as before
+- The fetch window is extended backward by the largest horizon so past recordings can be retrieved and shifted forward into the visible future range
+- Works with live state updates — new recordings appear on the chart at recording time + horizon
+- Multiple entities can use different horizons — the X-axis is extended to cover the largest one
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>📊 Data Sources & Math</strong> &nbsp;&mdash;&nbsp; On-Card Pickers (Points/Hour & Group By) | Raw Grouping (group_by: raw) | Value Transform | Cost View (price_entity) | Range Band | Moving Averages | Break on Gaps | Attribute Data Source | External Statistics</summary>
+
+<details>
+<summary><strong>🎚️ On-Card Pickers (Points/Hour & Group By)</strong></summary>
+
+Change the data resolution and the bucketing strategy directly on the card — no editor round-trip.
+
+### Setup
+
+```yaml
+type: custom:statistics-graph-chart-card
+show_pph_picker: true
+show_group_by_picker: true
+group_by_picker_position: right
+entities:
+  - entity: sensor.power
+```
+
+
+### Behavior
+
+- Each dropdown starts on **Auto (…)**, showing your configured value; picking anything else overrides it for this card only.
+- Selections persist across reloads and **take priority over Auto Scale** while active.
+- The Group By picker offers Interval, Hour, **2H / 3H / 4H / 6H / 12H**, Date, Week, Month and Year.
+
+### Group Sync
+
+Each picker has its own, fully independent sync group — same mechanism as `date_picker_group`:
+
+```yaml
+# Controller card
+show_pph_picker: true
+pph_picker_group: page
+
+# Receiver cards — no picker shown, still follow
+pph_picker_group: page
+```
+
+`pph_picker_group` and `group_by_picker_group` don't interact: a card can follow one page-wide resolution group and a different bucketing group (or none).
+
+### Editor
+
+General Settings → Overlays → **Points/Hour Picker** and **Group By Picker** rows. The **Group** fields are always editable, even while the toggles are off.
 
 </details>
 
@@ -1495,6 +1727,7 @@ entities:
       - value: "on"
 ```
 
+
 ### When to use it
 
 - **Step charts of binary / state sensors** — a door, pump, or heating-demand signal changes state at precise moments; bucketing smears those edges. Raw mode preserves every transition exactly where it happened.
@@ -1507,337 +1740,10 @@ The Group By dropdown offers **"Raw (no grouping)"** whenever at least one entit
 </details>
 
 <details>
-<summary><strong>🎛️ Gauge Display</strong></summary>
-
-Replace the numeric state row with a half-circle gauge arc. Set `show_state: gauge` on any entity.
-
-![Gauge Example](images/gauge-example.png)
-
-```yaml
-entities:
-  - entity: sensor.temperature
-    show_state: gauge
-    color: "#ff4757"
-    lower_bound: 15    # gauge minimum
-    upper_bound: 30    # gauge maximum
-```
-
-The gauge arc sweeps 270° from `lower_bound` to `upper_bound`. The center shows the current value + unit, bottom edges show min/max labels. Multiple gauge entities display side-by-side: 1 entity = large gauge, 2+ = compact.
-
-`color_thresholds` work with gauge — the arc color changes dynamically based on value.
-
-The graph below the gauge continues to show the historical trend as usual.
-
-</details>
-
-<details>
-<summary><strong>✨ Sparkline Mode</strong></summary>
-
-Card-level `sparkline: true` strips all chrome and renders ultra-compact inline graphs. Only available in Timeline mode.
-
-![Sparkline Example](images/sparkline-example.png)
-
-```yaml
-sparkline: true
-entities:
-  - entity: sensor.temperature
-    color: "#ff4757"
-  - entity: sensor.humidity
-    color: "#378ADD"
-grid_options:
-  columns: 12
-  rows: 2
-```
-
-Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds, and rise/fall colors.
-
-</details>
-
-<details>
-<summary><strong>🔍 Brush Zoom</strong></summary>
-
-Click and drag on any Timeline mode graph to zoom into a specific time range. No configuration needed — it's always available.
-
-![Sparkline Example](images/brush.gif)
-
-### How it works
-
-1. **Click and drag** horizontally — a blue selection overlay appears with formatted timestamps at both edges
-2. **Release** — the graph zooms into the selected range, recalculating Y axis, grid, statistics (Min/Avg/Max), extrema labels, and legend values
-3. **Step back / reset** — double-click the graph to step back one zoom level (see [Zoom History](#zoom-history-new-in-v325)), or click the **"Reset zoom"** button in the top-right corner to restore the full window in one go
-
-**Key details:**
-
-- **No API calls on zoom** — the full dataset is preserved in memory; zooming only filters and re-renders existing data. Reset is instant.
-- **Progressive zoom** — zoom again within an already-zoomed view to drill deeper into spikes or anomalies
-- **Touch support** — works on mobile: touch and drag to select
-- **Minimum 15px selection** — prevents accidental zoom from regular clicks or taps
-- **Time formatting** — selection labels show time only for ranges under 24H, date + time for longer ranges
-- **Interval picker aware** — changing the time range via the interval picker resets any active zoom and fetches fresh data
-
-Timeline mode only.
-
-### Pinch Zoom (touch) *(new in v3.25)*
-
-On touch devices, a **two-finger pinch** zooms the timeline directly — no long press needed:
-
-- **Spread two fingers** to zoom in — the view scales **live** around the midpoint of the gesture while the fingers move
-- **Bring them together** to zoom back out — zooming all the way out returns to the full window
-- **Any pinch angle works** *(improved in v3.26)* — the gesture measures the true 2D distance between the fingers, so vertical and diagonal pinches (thumb below, index above — the most natural grip) zoom just like horizontal ones
-- **Amplified response** *(improved in v3.26)* — zoom follows an amplified (squared) curve, so a small real-world pinch zooms meaningfully instead of barely moving the window; pinching inward zooms out just as strongly
-- **Double-tap** still steps back one zoom level at a time — see [Zoom History](#zoom-history-new-in-v325) below
-- Available whenever the drag brush is — the same gate applies (Timeline mode, brush zoom not disabled)
-- Works with cross-card [Zoom Sync](#-zoom-sync): the final window is broadcast **once at gesture end**, not continuously during the pinch
-
-### Zoom History *(new in v3.25)*
-
-Every committed zoom — a released brush selection or a finished pinch — pushes the previous window onto a **history stack** (up to 20 levels):
-
-- **Double-click** (mouse) or **double-tap** (touch) steps **back one level** at a time
-- With an empty stack, double-click shows the full window
-- The stack resets whenever the data window itself refreshes — date/interval picker changes, the live window sliding forward, or a polling refresh
-
-> **Changed in v3.25:** double-click used to reset the zoom completely in one go. It now steps back level by level, so you can retrace a deep drill-down. The **"Reset zoom"** button still restores the full window in a single click.
-
-No new YAML options — pinch zoom and zoom history are part of the standard brush zoom behavior.
-
-### Mobile Touch Behavior
-
-On phones and tablets, touch gestures separate tooltip exploration from brush zoom:
-
-| Gesture | Action |
-|---|---|
-| **Tap** | Tooltip appears instantly with crosshair and values |
-| **Quick slide** | Tooltip follows finger across the graph |
-| **Hold on bar** | Tooltip + bar highlight stay visible as long as finger is held |
-| **Long press (600ms) + drag** | Brush zoom selection starts |
-| **Two-finger pinch** | Zooms the timeline live around the gesture midpoint — any finger angle, amplified response curve *(improved in v3.26)* |
-| **Double-tap** | Steps back one zoom level; full window once the history is empty *(v3.25)* |
-| **Lift finger** | Tooltip and highlights clear |
-
-Holding still for 600ms prepares zoom but does not activate it — zoom only starts when the finger moves. This prevents the tooltip from disappearing while exploring a single data point.
-
-</details>
-
-<details>
-<summary><strong>📥 PNG / CSV Export</strong></summary>
-
-Card-level `show_export: true` overlays a small download icon on the top-right of the card. Clicking it opens a menu — **Download PNG (Chart)** / **Download PNG (Card)** / **Download CSV** — and the menu closes on any outside click.
-
-```yaml
-type: custom:statistics-graph-chart-card
-card_header: Energy Overview
-show_export: true
-entities:
-  - entity: sensor.energy_consumption
-```
-
-### PNG
-
-- **Download PNG (Chart)** — a **2× resolution** snapshot of the current plot — crisp on high-DPI displays
-- **Download PNG (Card)** — captures the **entire card** exactly as rendered: header, chart, state row, and legend included
-- Works in **all chart modes**: canvas-rendered modes (Pie, Heatmap, Ranking, …) are copied directly, and the SVG timeline is serialized with the correct axis-label styling and the card background color, so the file looks exactly like the card
-- When the active theme paints the card with an **external background image**, the Card capture falls back to the Chart export — the cross-origin image would taint the capture canvas
-
-### CSV
-
-- **Wide format** — the first column is `time` (ISO 8601, UTC), followed by one column per **visible** series; series hidden via the legend are excluded
-- **UTF-8 with BOM** and **CRLF** row endings, so the file opens correctly in Excel without an import wizard
-- [Period Comparison](#-period-comparison) ghosts export as their own suffixed columns, with timestamps shifted into the current window so they align with the main series
-- Candlestick series export the bucket value only — no separate OHLC columns
-
-### Behavior
-
-- **Export what you see** — if the chart is zoomed (brush or pinch), both the PNG and the CSV cover exactly the zoomed range
-- Filenames combine the sanitized `card_header` with a timestamp, e.g. `Energy_Overview-20260715-1630.png` / `.csv`
-- Hidden in sparkline mode
-- `show_export` accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates)
-
-### Editor
-
-General Settings → Chart → Visual Options → **Show Export Button**.
-
-</details>
-
-<details>
-<summary><strong>📊 Stacked Mode</strong></summary>
-
-Card-level `stacked: true` stacks entities on top of each other (Timeline mode only). Bar entities stack vertically. Line/area entities stack as bands. Entities on the same Y axis and graph type are stacked together. The tooltip shows a "Total" row.
-
-```yaml
-stacked: true
-entities:
-  - entity: sensor.solar_production
-    color: "#f39c12"
-  - entity: sensor.grid_import
-    color: "#e74c3c"
-  - entity: sensor.battery_discharge
-    color: "#3498db"
-```
-
-### Stacked Groups
-
-By default, all bar entities stack into a single column. Use `stack_group` to create **named groups** — entities within the same group stack on top of each other, while different groups sit side by side.
-
-```yaml
-stacked: true
-group_by: date
-entities:
-  - entity: sensor.solar_production
-    graph_type: bar
-    stack_group: energy
-    color: "#2ecc71"
-  - entity: sensor.grid_import
-    graph_type: bar
-    stack_group: energy
-    color: "#e74c3c"
-  - entity: sensor.cost_peak
-    graph_type: bar
-    stack_group: cost
-    color: "#f39c12"
-  - entity: sensor.cost_offpeak
-    graph_type: bar
-    stack_group: cost
-    color: "#3498db"
-```
-
-This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
-
-**Per-group tooltip totals.** With `tooltip_stacked_total: true` (the default), the tooltip shows a separate total for each named group — labelled with the group name (e.g. *"energy Total"*, *"cost Total"*) — so you can read each stack's sum at a glance. It is independent of `show_tooltip_total`: leave both on to show the per-group totals **together with** the grand Total of all entities, or turn either one off to show only the other. The per-group rows appear only when there are two or more stack groups; ungrouped entities roll into the grand Total.
-
-> **Editor:** Per-entity → Graph tab → *Stack Group* text field (visible when Stacked is enabled)
-
-</details>
-
-<details>
-<summary><strong>🏷️ Compact Legend</strong></summary>
-
-Card-level `show_legend: true` adds a compact color-coded entity name key below the graph. Just colored dots and names — no values, no stats. Wraps to multiple lines on narrow cards.
-
-```yaml
-show_legend: true
-entities:
-  - entity: sensor.memory
-    name: "Memory"
-    color: "#f39c12"
-    show_state: false
-  - entity: sensor.disk
-    name: "Disk"
-    color: "#85b7eb"
-    show_state: false
-  - entity: sensor.cpu
-    name: "CPU"
-    color: "#00bcd4"
-    show_state: false
-```
-
-This produces: `● Memory  ● Disk  ● CPU` in a centered wrapping row below the graph. Combine with `show_state: false` on entities to maximize graph area while still identifying colors.
-
-For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend** toggle instead — see [Entity Legend Stats](#per-entity-legend-stats).
-
-![tempo](images/temp.gif)
-
-</details>
-
-<details>
-<summary><strong>📊 Per-Entity Legend Stats</strong></summary>
-
-Each entity's Legend toggle (`show_in_legend: true`) now lets you choose which statistics to display. Select any combination of Min, Avg, Max, and Last.
-
-```yaml
-entities:
-  - entity: sensor.temperature
-    show_in_legend: true
-    legend_stats:
-      - avg
-      - last
-  - entity: sensor.humidity
-    show_in_legend: true
-    legend_stats:
-      - min
-      - max
-```
-
-The editor shows four checkboxes (Min, Avg, Max, Last) inside the Legend section. Default is `[min, avg, max]` for backward compatibility.
-
-</details>
-
-<details>
-<summary><strong>⬇️ State Row Position</strong></summary>
-
-Entity state rows can now be placed **below** the graph instead of above. The `align_state` option accepts six positions:
-
-| Value | Position |
-|---|---|
-| `left` *(default)* | Above graph, left-aligned |
-| `center` | Above graph, centered |
-| `right` | Above graph, right-aligned |
-| `bottom-left` | Below graph, left-aligned |
-| `bottom-center` | Below graph, centered |
-| `bottom-right` | Below graph, right-aligned |
-
-```yaml
-entities:
-  - entity: sensor.temperature
-    align_state: bottom-left
-  - entity: sensor.humidity
-    align_state: left         # stays above the graph
-```
-
-Mix and match — some entities above, some below. Useful when you want the graph to be the first thing visible, with values underneath.
-
-</details>
-
-<details>
-<summary><strong>↕️ Independent Y2 Axis</strong></summary>
-
-The primary (left) and secondary (right) Y axis labels can be toggled independently:
-
-```yaml
-show_y_axis: true       # primary — left side
-show_y2_axis: false     # secondary — right side hidden
-entities:
-  - entity: sensor.temperature
-    y_axis: primary
-  - entity: sensor.humidity
-    y_axis: secondary     # still plotted, just no labels on right
-```
-
-Useful when the secondary axis labels are distracting or when you want to maximize horizontal graph space. Both entities continue to be plotted against their respective axes — only the labels are hidden.
-
-</details>
-
-<details>
-<summary><strong>↕️ Independent Y-Axis</strong></summary>
-
-Overlay sensors with completely different units on a single graph for trend comparison. Each `independent` entity gets its own hidden scale based on its data's min/max range. No axis labels are shown — only the visual trend matters.
-
-```yaml
-entities:
-  - entity: sensor.temperature
-    y_axis: primary          # Left axis, shared scale, visible labels
-    color: "#ff4757"
-  - entity: sensor.humidity
-    y_axis: secondary        # Right axis, shared scale, visible labels
-    color: "#378ADD"
-  - entity: sensor.illuminance
-    y_axis: independent      # Own hidden scale: 0–10000 lux
-    color: "#f39c12"
-  - entity: sensor.pressure
-    y_axis: independent      # Own hidden scale: 980–1020 hPa
-    color: "#2ecc71"
-```
-
-There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
-
-> **Editor:** Per-entity → **Data** tab → *Y Axis* dropdown → "Independent"
-
-</details>
-
-<details>
 <summary><strong>🔀 Value Transform</strong></summary>
 
 Apply a JavaScript expression to every data point before graphing. The transform has access to the current value and series-level statistics, making it possible to normalize, compare, and reshape data in ways that weren't possible before.
+
 
 ### Available variables
 
@@ -1932,6 +1838,7 @@ entities:
     decimals: 2
 ```
 
+
 ### How it works
 
 - The price is read as a **step function** from the price entity's own history — each price is valid from the moment it was recorded until the next change. Long windows automatically use long-term statistics (hourly mean) for the price series.
@@ -2020,7 +1927,7 @@ A 26-bucket average normally needs 26 buckets of history before it can produce i
 
 This card solves that by **extending the history fetch backward automatically** by the amount the longest moving average needs — independent of the visible window. The MA is computed over that extended range and then trimmed to the window, so **MA26 draws fully across a 24-hour view without you having to widen `hours_to_show` or scroll.** The visible chart, axis, statistics, and extrema are unchanged — only the moving-average lines use the extra look-back.
 
-> The look-back applies to History- and statistics-routed entities. Synthetic sources (`fixed_value`, `data_attribute`) average only what's in the window.
+> The look-back applies to entities whose data comes from History or long-term statistics. Synthetic sources (`fixed_value`, `data_attribute`) average only what's in the window.
 
 ### Candlesticks
 
@@ -2052,45 +1959,6 @@ Per-entity → **Appearance** tab → **Moving Averages** (just below the Graph 
 </details>
 
 <details>
-<summary><strong>🏷️ Data Labels</strong></summary>
-
-Print the numeric value of every visible data point right above its bar / line / point — the same kind of inline annotation ApexCharts calls `dataLabels`. Useful when you want the chart to be readable at a glance without forcing the viewer to hover for every value.
-
-```yaml
-entities:
-  - entity: sensor.solar_production_today
-    graph_type: bar
-    aggregate_func: change
-    show_data_labels: true
-    decimals: 1
-    color: "#f1c40f"
-```
-
-### How it works
-
-- Labels render above each point, in the entity's color, with a card-background halo (paint-order stroke) so they stay readable over crowded areas.
-- Number formatting follows the entity's own `decimals` and `number_format` settings — no separate config.
-- For **bars**, the font size adapts to the available bar width and shrinks down to a minimum of 7 px before the label is skipped entirely. Use `data_labels_font_size` to pin a specific size if you'd rather control it yourself.
-- For **lines / steps**, labels anchor to the X position of each data point at a default 10 px.
-
-### When to use it
-
-- Bar charts of daily / hourly aggregates where the exact number matters (energy, rain, hours of sunshine)
-- Compact summary cards where hover isn't practical (mobile, kiosk displays)
-- Reports / screenshots where the chart needs to stand alone without tooltip interaction
-
-### When NOT to use it
-
-- High-density line charts — labels will overlap and become illegible
-- When you already use `show_extrema` to highlight just the peaks; the two combined creates visual noise
-
-### Editor
-
-Entity → General → **Data Labels** toggle, sitting next to **Break on Gaps**.
-
-</details>
-
-<details>
 <summary><strong>🕳️ Break on Gaps</strong></summary>
 
 When a sensor goes `unavailable` or `unknown`, the card normally keeps the line continuous by carrying the last known value forward across the gap. That's great for short blips (brief WiFi drops, bucket-level reporting irregularity) but can hide genuine multi-hour outages behind a flat line. The per-entity `break_on_null` option lets you opt in to a visible break instead.
@@ -2108,6 +1976,7 @@ entities:
     break_on_null: true
     carry_forward_ms: 900000   # advanced — 15 min threshold
 ```
+
 
 ### Behavior
 
@@ -2130,6 +1999,687 @@ Entity → General → **Break on Gaps** toggle (next to Show Average and Range 
 - **Changed in v3.25** — an empty bucket now carries the previous bucket's **last recorded sample** (its exit state) forward, not the previous bucket's aggregated value. With `aggregate_func: first` or `max`, a momentary spike no longer smears across the quiet buckets that follow it; with `avg`, the carried value is the last actual reading instead of the previous bucket's average.
 - Does **not** affect `value_transform` scripts that return `null` to drop a bucket — those nulls are removed from the series before carry-forward logic runs.
 - Works independently per entity, so you can mix well-behaved sensors (continuous line) with flakey ones (visible gaps) on the same card.
+
+</details>
+
+<details>
+<summary><strong>📡 Attribute Data Source</strong></summary>
+
+Read chart data directly from an entity attribute instead of history. The attribute must contain an array of objects with time and value fields. The X-axis automatically extends into the future when data contains future timestamps.
+
+Ideal for energy spot prices, weather forecasts, and solar production predictions. No history or statistics API calls are made for these entities.
+
+
+```yaml
+entities:
+  - entity: sensor.epex_spot_price
+    data_attribute: data
+    data_time_field: start_time
+    data_value_field: price_per_kwh
+    value_factor: 2
+    graph_type: step
+    name: "Electricity Price"
+```
+
+Common configurations:
+
+| Integration | `data_attribute` | `data_time_field` | `data_value_field` |
+|---|---|---|---|
+| EPEX Spot | `data` | `start_time` | `price_per_kwh` |
+| Nordpool | `raw_today` | `start` | `value` |
+| Tibber | `price_info` | `startsAt` | `total` |
+| Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
+
+Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
+
+### Computed Values
+
+Sometimes the value you want isn't a single field — you need to combine several fields from each element, fold in other entities (fees, tax rates, tariffs), and apply a formula. Set `data_value_expression` instead of `data_value_field`: a small arithmetic expression evaluated for every array element, with the element's own fields in scope plus any names you map in `data_vars`.
+
+```yaml
+entities:
+  - entity: sensor.tibber_hourly_cost
+    name: Electricity
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
+    data_vars:
+      mwst: input_number.vat_rate
+```
+
+`data_vars` maps a name to an entity ID; each resolves to that entity's **numeric state** and is re-evaluated **live** when it changes. Inside the expression you can use:
+
+| In scope | Examples |
+|---|---|
+| Element fields | `unitPrice`, `consumption`, … (any field of the array item) |
+| `data_vars` names | `mwst`, `base`, … |
+| Operators | `+` `-` `*` `/` `%` and parentheses `( )` |
+| Functions | `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow` |
+
+This is **not JavaScript** — there are no other variables, no property access, and no calls beyond those functions, so it can't run arbitrary code. If the expression is empty or fails to parse, the entity falls back to `data_value_field`.
+
+Because each element is evaluated independently, two entities reading the same array with different expressions stack cleanly — e.g. splitting an hourly energy cost into a consumption layer and a fixed-fee layer:
+
+```yaml
+type: custom:statistics-graph-chart-card
+stacked: true
+group_by: hour
+entities:
+  - entity: sensor.tibber_hourly_cost
+    name: Energy
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
+    data_vars: { mwst: input_number.vat_rate }
+  - entity: sensor.tibber_hourly_cost
+    name: Fees
+    graph_type: bar
+    data_attribute: nodes
+    data_time_field: from
+    data_time_unit: iso
+    data_value_expression: "(base/30/24 + grid/24 + meter/24) * (1 + mwst) * 100"
+    data_vars:
+      base: input_number.base_price_month
+      grid: input_number.grid_fee_day
+      meter: input_number.meter_fee_day
+      mwst: input_number.vat_rate
+```
+
+> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Value Expression* field, and *Data Vars* (one `name: entity_id` per line).
+
+### Time Unit
+
+By default, the time field is parsed as an ISO date string. Set `data_time_unit` to interpret it differently — perfect for sensors that expose monthly summaries, hourly profiles, day-of-year datasets, or Unix timestamps without generating artificial timestamps.
+
+| Unit | Range | Behavior |
+|---|---|---|
+| `iso` (default) | string / epoch ms | `new Date(t)` — existing behavior |
+| `epoch_seconds` | number | Unix timestamp in seconds |
+| `epoch_ms` | number | Unix timestamp in milliseconds |
+| `month_of_year` | 1..12 | First day of that month in `data_time_year` (default: current year) |
+| `day_of_year` | 1..366 | That day in `data_time_year` |
+| `week_of_year` | 1..53 | Monday of that ISO week in `data_time_year` |
+| `hour_of_day` | 0..23 | That hour of today |
+
+Example — a sensor exposing monthly yield expectations as `[{Month: 1, Expectation: 320}, {Month: 2, Expectation: 489}, ...]`:
+
+```yaml
+type: custom:statistics-graph-chart-card
+group_by: month
+graph_start: year
+hours_to_show: 8760
+entities:
+  - entity: sensor.sma_month_yield_expectation
+    data_attribute: Expectation
+    data_time_field: Month            # 1..12
+    data_value_field: Expectation
+    data_time_unit: month_of_year     # interpret as Jan..Dec
+    graph_type: bar
+    aggregate_func: max
+```
+
+Renders 12 bars labelled Jan–Dec on the X-axis. Tooltip shows the actual month + value. All other features (date picker, group_by, fill, theming) work normally because the parser converts the numeric category into a real `Date` internally.
+
+> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Time Unit* dropdown and *Reference Year* input
+
+
+</details>
+
+<details>
+<summary><strong>🔌 External Statistics</strong></summary>
+
+Display data from imported statistics that don't have a regular entity in Home Assistant. This covers energy data from integrations like Gazpar, Linky, Tibber, and others that import directly into HA's statistics database.
+
+
+### Background
+
+Some HA integrations don't create `sensor.*` entities. Instead, they write data directly into the `statistics` and `statistics_meta` database tables using HA's `async_import_statistics()` API. These statistics have IDs with a colon separator (e.g. `gazpar:gazpar_consumption`) and are visible on the Energy dashboard and the built-in Statistics Graph card, but not in the entity registry.
+
+### Setup
+
+Use `statistic_id` instead of (or alongside) `entity`:
+
+```yaml
+entities:
+  - entity: ""
+    statistic_id: "gazpar:gazpar_consumption"
+    name: "Gas Consumption"
+    color: "#f39c12"
+    aggregate_func: sum
+  - entity: ""
+    statistic_id: "linky:linky_consumption"
+    name: "Electricity"
+    color: "#378ADD"
+    aggregate_func: sum
+  - entity: sensor.indoor_temperature
+    name: "Temperature"
+    color: "#ff4757"
+```
+
+You can mix external statistics with regular entities on the same card.
+
+### How it works
+
+- The card detects external statistics by checking for a `:` in the `statistic_id`
+- Data is fetched via HA's `recorder/statistics_during_period` WebSocket API — the same API the Energy dashboard uses
+- Since there is no live state, the state row displays the last known value from the statistics data
+- All card features work: tooltip, legend, axes, stacking, offset, zoom, color thresholds, etc.
+
+### Editor
+
+Entity → General → **Statistic ID** input field (monospace, below the entity picker). Set the entity picker to empty and fill in the statistic ID.
+
+### Finding your statistic IDs
+
+1. Go to **Developer Tools → Statistics** in HA
+2. Search for the integration name (e.g. "gazpar")
+3. The statistic ID is shown in the list (e.g. `gazpar:gazpar_consumption`)
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>🎨 Layout & Appearance</strong> &nbsp;&mdash;&nbsp; Sections Auto-height | Y-Axis Label Formats | Y2 Axis Visibility | Independent Y-Axis | Stacked Mode | Invert Bars (Butterfly Charts) | Data Labels | Gauge Display | Sparkline Mode | Battery Icon | Compact Legend | Per-Entity Legend Stats | State Row Position</summary>
+
+<details>
+<summary><strong>📐 Sections Auto-height</strong></summary>
+
+In Home Assistant's **Sections** view the card now reports proper grid sizing — the "does not fully support resizing" warning is gone, and you can resize it from the card's Layout tab.
+
+By default `height` is a fixed pixel value (`150`). Set it to `auto` to make the chart fill the grid cell it is given instead:
+
+```yaml
+type: custom:statistics-graph-chart-card
+height: auto          # fill the cell; size the card from the Layout tab
+entities:
+  - entity: sensor.power
+```
+
+
+### Behavior
+
+- A numeric `height` (e.g. `300`) still pins the graph to that many pixels, exactly as before.
+- With `height: auto` the chart grows and shrinks to match the grid cell — drag the card's resize handle (or set `grid_options` rows) in the Layout tab. Handy for lining a chart up with a neighbouring card's height.
+
+### Editor
+
+The **Height** field accepts a number or the word `auto`. Leaving it empty is treated as `auto`.
+
+</details>
+
+<details>
+<summary><strong>🕒 Y-Axis Label Formats</strong></summary>
+
+Render axis values as durations or with a custom template instead of plain numbers. The format follows the entity everywhere: axis ticks, tooltips, data labels, the state row and the average-line label.
+
+
+### Duration shorthands
+
+```yaml
+y2_axis_format: h:mm    # 5400 → 1:30
+duration_unit: s        # raw unit: s (default) / ms / min / h
+```
+
+| Format | `5400` becomes |
+|---|---|
+| `h:mm` | `1:30` |
+| `h:mm:ss` | `1:30:00` |
+| `mm:ss` | `90:00` |
+| `d h:mm` | `1:30` — and `90000` becomes `1d 1:00` |
+
+### Templates
+
+```yaml
+y_axis_format: "{fixed(value/1000,1)} kW"     # 2350 → 2.4 kW
+y2_axis_format: "{floor(value/3600)}:{pad2(floor(value%3600/60))}"
+```
+
+Templates accept numbers, `value`, `+ - * / %`, parentheses and the functions `floor`, `ceil`, `round`, `abs`, `min`, `max`, `sqrt`, `pad2(x)`, `pad(x,width)`, `fixed(x,decimals)`. No JavaScript is executed — invalid formats are simply ignored and the axis falls back to plain numbers.
+
+### Editor
+
+General Settings → Y Axis → Labels → **Y Tick Format / Y2 Tick Format / Duration Unit**.
+
+</details>
+
+<details>
+<summary><strong>👁️ Y2 Axis Visibility</strong></summary>
+
+The primary (left) and secondary (right) Y axis labels can be toggled independently:
+
+```yaml
+show_y_axis: true       # primary — left side
+show_y2_axis: false     # secondary — right side hidden
+entities:
+  - entity: sensor.temperature
+    y_axis: primary
+  - entity: sensor.humidity
+    y_axis: secondary     # still plotted, just no labels on right
+```
+
+
+Useful when the secondary axis labels are distracting or when you want to maximize horizontal graph space. Both entities continue to be plotted against their respective axes — only the labels are hidden.
+
+</details>
+
+<details>
+<summary><strong>↕️ Independent Y-Axis</strong></summary>
+
+Overlay sensors with completely different units on a single graph for trend comparison. Each `independent` entity gets its own hidden scale based on its data's min/max range. No axis labels are shown — only the visual trend matters.
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    y_axis: primary          # Left axis, shared scale, visible labels
+    color: "#ff4757"
+  - entity: sensor.humidity
+    y_axis: secondary        # Right axis, shared scale, visible labels
+    color: "#378ADD"
+  - entity: sensor.illuminance
+    y_axis: independent      # Own hidden scale: 0–10000 lux
+    color: "#f39c12"
+  - entity: sensor.pressure
+    y_axis: independent      # Own hidden scale: 980–1020 hPa
+    color: "#2ecc71"
+```
+
+
+There is no limit on the number of independent entities. Each one is scaled individually. Primary and secondary entities continue to share their respective axis scales.
+
+> **Editor:** Per-entity → **Data** tab → *Y Axis* dropdown → "Independent"
+
+</details>
+
+<details>
+<summary><strong>📊 Stacked Mode</strong></summary>
+
+Card-level `stacked: true` stacks entities on top of each other (Timeline mode only). Bar entities stack vertically. Line/area entities stack as bands. Entities on the same Y axis and graph type are stacked together. The tooltip shows a "Total" row.
+
+```yaml
+stacked: true
+entities:
+  - entity: sensor.solar_production
+    color: "#f39c12"
+  - entity: sensor.grid_import
+    color: "#e74c3c"
+  - entity: sensor.battery_discharge
+    color: "#3498db"
+```
+
+### Stacked Groups
+
+By default, all bar entities stack into a single column. Use `stack_group` to create **named groups** — entities within the same group stack on top of each other, while different groups sit side by side.
+
+```yaml
+stacked: true
+group_by: date
+entities:
+  - entity: sensor.solar_production
+    graph_type: bar
+    stack_group: energy
+    color: "#2ecc71"
+  - entity: sensor.grid_import
+    graph_type: bar
+    stack_group: energy
+    color: "#e74c3c"
+  - entity: sensor.cost_peak
+    graph_type: bar
+    stack_group: cost
+    color: "#f39c12"
+  - entity: sensor.cost_offpeak
+    graph_type: bar
+    stack_group: cost
+    color: "#3498db"
+```
+
+This renders two side-by-side bar groups per time slot: an "energy" stack (solar + grid) and a "cost" stack (peak + off-peak). Backward compatible — if no `stack_group` is set, all entities stack together as before.
+
+**Per-group tooltip totals.** With `tooltip_stacked_total: true` (the default), the tooltip shows a separate total for each named group — labelled with the group name (e.g. *"energy Total"*, *"cost Total"*) — so you can read each stack's sum at a glance. It is independent of `show_tooltip_total`: leave both on to show the per-group totals **together with** the grand Total of all entities, or turn either one off to show only the other. The per-group rows appear only when there are two or more stack groups; ungrouped entities roll into the grand Total.
+
+> **Editor:** Per-entity → Graph tab → *Stack Group* text field (visible when Stacked is enabled)
+
+</details>
+
+<details>
+<summary><strong>🔄 Invert Bars (Butterfly Charts)</strong></summary>
+
+Per-entity `invert: true` draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Combined with `stacked: true`, creates butterfly charts for energy import/export, network in/out, and similar comparisons.
+
+
+```yaml
+stacked: true
+entities:
+  - entity: sensor.grid_import
+    graph_type: bar
+    aggregate_func: change
+    color: "#f39c12"
+    name: Import
+  - entity: sensor.grid_export
+    graph_type: bar
+    aggregate_func: change
+    invert: true
+    color: "#3498db"
+    name: Export
+```
+
+Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
+
+When used with **line or area charts** (not just bars), the fill correctly stops at the zero baseline: mirrored lines fill upward to zero, normal lines fill downward to zero, and series that cross zero get a clean positive/negative split.
+
+> **Editor:** Per-entity → **Data** tab → *Invert (Mirror)* checkbox
+
+</details>
+
+<details>
+<summary><strong>🏷️ Data Labels</strong></summary>
+
+Print the numeric value of every visible data point right above its bar / line / point — the same kind of inline annotation ApexCharts calls `dataLabels`. Useful when you want the chart to be readable at a glance without forcing the viewer to hover for every value.
+
+```yaml
+entities:
+  - entity: sensor.solar_production_today
+    graph_type: bar
+    aggregate_func: change
+    show_data_labels: true
+    decimals: 1
+    color: "#f1c40f"
+```
+
+
+### How it works
+
+- Labels render above each point, in the entity's color, with a card-background halo so they stay readable over crowded areas.
+- Number formatting follows the entity's own `decimals` and `number_format` settings — no separate config.
+- For **bars**, the font size adapts to the available bar width and shrinks down to a minimum of 7 px before the label is skipped entirely. Use `data_labels_font_size` to pin a specific size if you'd rather control it yourself.
+- For **lines / steps**, labels anchor to the X position of each data point at a default 10 px.
+
+### When to use it
+
+- Bar charts of daily / hourly aggregates where the exact number matters (energy, rain, hours of sunshine)
+- Compact summary cards where hover isn't practical (mobile, kiosk displays)
+- Reports / screenshots where the chart needs to stand alone without tooltip interaction
+
+### When NOT to use it
+
+- High-density line charts — labels will overlap and become illegible
+- When you already use `show_extrema` to highlight just the peaks; the two combined creates visual noise
+
+### Editor
+
+Entity → General → **Data Labels** toggle, sitting next to **Break on Gaps**.
+
+</details>
+
+<details>
+<summary><strong>🎛️ Gauge Display</strong></summary>
+
+Replace the numeric state row with a half-circle gauge arc. Set `show_state: gauge` on any entity.
+
+![Gauge Example](images/gauge-example.png)
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    show_state: gauge
+    color: "#ff4757"
+    lower_bound: 15    # gauge minimum
+    upper_bound: 30    # gauge maximum
+```
+
+The gauge arc sweeps 270° from `lower_bound` to `upper_bound`. The center shows the current value + unit, bottom edges show min/max labels. Multiple gauge entities display side-by-side: 1 entity = large gauge, 2+ = compact.
+
+`color_thresholds` work with gauge — the arc color changes dynamically based on value.
+
+The graph below the gauge continues to show the historical trend as usual.
+
+</details>
+
+<details>
+<summary><strong>✨ Sparkline Mode</strong></summary>
+
+Card-level `sparkline: true` strips all chrome and renders ultra-compact inline graphs. Only available in Timeline mode.
+
+![Sparkline Example](images/sparkline-example.png)
+
+```yaml
+sparkline: true
+entities:
+  - entity: sensor.temperature
+    color: "#ff4757"
+  - entity: sensor.humidity
+    color: "#378ADD"
+grid_options:
+  columns: 12
+  rows: 2
+```
+
+Each entity becomes one row: name + value + trend icon on the left, tiny graph on the right. Removed: header, icon, toolbar, axes, grid, tooltip, legend, annotations. Preserved: entity colors, line smoothing, fill, trend icons, live streaming, color thresholds, and rise/fall colors.
+
+</details>
+
+<details>
+<summary><strong>🔋 Battery Icon</strong></summary>
+
+Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
+
+![Battery Example](images/battery.png)
+
+```yaml
+battery_entity: sensor.temperature_battery
+battery_low_threshold: 20
+```
+
+Color adapts to battery level:
+
+| Level | Color |
+|-------|-------|
+| >50% | Green |
+| 25–50% | Yellow |
+| low–25% | Orange |
+| Below threshold | Red |
+
+The low threshold defaults to 20% and accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). Hover shows the entity friendly name and exact percentage.
+
+The icon and percentage text scale proportionally with the **Header & Battery Size** setting (`card_header_size`). This applies in both header and state row positions.
+
+> **Editor:** General Settings → **Display** tab → *Battery*
+
+</details>
+
+<details>
+<summary><strong>🏷️ Compact Legend</strong></summary>
+
+Card-level `show_legend: true` adds a compact color-coded entity name key below the graph. Just colored dots and names — no values, no stats. Wraps to multiple lines on narrow cards.
+
+```yaml
+show_legend: true
+entities:
+  - entity: sensor.memory
+    name: "Memory"
+    color: "#f39c12"
+    show_state: false
+  - entity: sensor.disk
+    name: "Disk"
+    color: "#85b7eb"
+    show_state: false
+  - entity: sensor.cpu
+    name: "CPU"
+    color: "#00bcd4"
+    show_state: false
+```
+
+This produces: `● Memory  ● Disk  ● CPU` in a centered wrapping row below the graph. Combine with `show_state: false` on entities to maximize graph area while still identifying colors.
+
+For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend** toggle instead — see [Entity Legend Stats](#per-entity-legend-stats).
+
+![tempo](images/temp.gif)
+
+</details>
+
+<details>
+<summary><strong>📊 Per-Entity Legend Stats</strong></summary>
+
+Each entity's Legend toggle (`show_in_legend: true`) lets you choose which statistics to display. Select any combination of Min, Avg, Max, and Last.
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    show_in_legend: true
+    legend_stats:
+      - avg
+      - last
+  - entity: sensor.humidity
+    show_in_legend: true
+    legend_stats:
+      - min
+      - max
+```
+
+
+The editor shows four checkboxes (Min, Avg, Max, Last) inside the Legend section. Default is `[min, avg, max]` for backward compatibility.
+
+</details>
+
+<details>
+<summary><strong>⬇️ State Row Position</strong></summary>
+
+Entity state rows can be placed **below** the graph instead of above. The `align_state` option accepts six positions:
+
+| Value | Position |
+|---|---|
+| `left` *(default)* | Above graph, left-aligned |
+| `center` | Above graph, centered |
+| `right` | Above graph, right-aligned |
+| `bottom-left` | Below graph, left-aligned |
+| `bottom-center` | Below graph, centered |
+| `bottom-right` | Below graph, right-aligned |
+
+```yaml
+entities:
+  - entity: sensor.temperature
+    align_state: bottom-left
+  - entity: sensor.humidity
+    align_state: left         # stays above the graph
+```
+
+
+Mix and match — some entities above, some below. Useful when you want the graph to be the first thing visible, with values underneath.
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>🖱️ Zoom, Export & Tools</strong> &nbsp;&mdash;&nbsp; Brush Zoom | PNG / CSV Export | Annotations | Auto Hide Entities</summary>
+
+<details>
+<summary><strong>🔍 Brush Zoom</strong></summary>
+
+Click and drag on any Timeline mode graph to zoom into a specific time range. No configuration needed — it's always available.
+
+![Brush Zoom Example](images/brush.gif)
+
+### How it works
+
+1. **Click and drag** horizontally — a blue selection overlay appears with formatted timestamps at both edges
+2. **Release** — the graph zooms into the selected range, recalculating Y axis, grid, statistics (Min/Avg/Max), extrema labels, and legend values
+3. **Step back / reset** — double-click the graph to step back one zoom level (see [Zoom History](#zoom-history-new-in-v325)), or click the **"Reset zoom"** button in the top-right corner to restore the full window in one go
+
+**Key details:**
+
+- **Instant zoom** — zooming never re-fetches data from Home Assistant; zoom and reset are immediate.
+- **Progressive zoom** — zoom again within an already-zoomed view to drill deeper into spikes or anomalies
+- **Touch support** — works on mobile: touch and drag to select
+- **Minimum 15px selection** — prevents accidental zoom from regular clicks or taps
+- **Time formatting** — selection labels show time only for ranges under 24H, date + time for longer ranges
+- **Interval picker aware** — changing the time range via the interval picker resets any active zoom and fetches fresh data
+
+
+### Pinch Zoom (touch) *(new in v3.25)*
+
+On touch devices, a **two-finger pinch** zooms the timeline directly — no long press needed:
+
+- **Spread two fingers** to zoom in — the view scales **live** around the midpoint of the gesture while the fingers move
+- **Bring them together** to zoom back out — zooming all the way out returns to the full window
+- **Any pinch angle works** *(improved in v3.26)* — the gesture measures the true 2D distance between the fingers, so vertical and diagonal pinches (thumb below, index above — the most natural grip) zoom just like horizontal ones
+- **Amplified response** *(improved in v3.26)* — zoom follows an amplified (squared) curve, so a small real-world pinch zooms meaningfully instead of barely moving the window; pinching inward zooms out just as strongly
+- **Double-tap** still steps back one zoom level at a time — see [Zoom History](#zoom-history-new-in-v325) below
+- Available whenever the drag brush is — the same gate applies (Timeline mode, brush zoom not disabled)
+- Works with cross-card [Zoom Sync](#-zoom-sync): the final window is broadcast **once at gesture end**, not continuously during the pinch
+
+### Zoom History *(new in v3.25)*
+
+Every committed zoom — a released brush selection or a finished pinch — pushes the previous window onto a **history stack** (up to 20 levels):
+
+- **Double-click** (mouse) or **double-tap** (touch) steps **back one level** at a time
+- With an empty stack, double-click shows the full window
+- The stack resets whenever the data window itself refreshes — date/interval picker changes, the live window sliding forward, or a polling refresh
+
+> **Changed in v3.25:** double-click used to reset the zoom completely in one go. It now steps back level by level, so you can retrace a deep drill-down. The **"Reset zoom"** button still restores the full window in a single click.
+
+No new YAML options — pinch zoom and zoom history are part of the standard brush zoom behavior.
+
+### Mobile Touch Behavior
+
+On phones and tablets, touch gestures separate tooltip exploration from brush zoom:
+
+| Gesture | Action |
+|---|---|
+| **Tap** | Tooltip appears instantly with crosshair and values |
+| **Quick slide** | Tooltip follows finger across the graph |
+| **Hold on bar** | Tooltip + bar highlight stay visible as long as finger is held |
+| **Long press (600ms) + drag** | Brush zoom selection starts |
+| **Two-finger pinch** | Zooms the timeline live around the gesture midpoint — any finger angle, amplified response curve *(improved in v3.26)* |
+| **Double-tap** | Steps back one zoom level; full window once the history is empty *(v3.25)* |
+| **Lift finger** | Tooltip and highlights clear |
+
+Holding still for 600ms prepares zoom but does not activate it — zoom only starts when the finger moves. This prevents the tooltip from disappearing while exploring a single data point.
+
+</details>
+
+<details>
+<summary><strong>📥 PNG / CSV Export</strong></summary>
+
+Card-level `show_export: true` overlays a small download icon on the top-right of the card. Clicking it opens a menu — **Download PNG (Chart)** / **Download PNG (Card)** / **Download CSV** — and the menu closes on any outside click.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Energy Overview
+show_export: true
+entities:
+  - entity: sensor.energy_consumption
+```
+
+
+### PNG
+
+- **Download PNG (Chart)** — a **2× resolution** snapshot of the current plot — crisp on high-DPI displays
+- **Download PNG (Card)** — captures the **entire card** exactly as rendered: header, chart, state row, and legend included
+- Works in **all chart modes**: canvas-rendered modes (Pie, Heatmap, Ranking, …) are copied directly, and the SVG timeline is serialized with the correct axis-label styling and the card background color, so the file looks exactly like the card
+- When the active theme paints the card with an **external background image**, the Card capture falls back to the Chart export — browsers block capturing images that come from another server.
+
+### CSV
+
+- **Wide format** — the first column is `time` (ISO 8601, UTC), followed by one column per **visible** series; series hidden via the legend are excluded
+- **UTF-8 with BOM** and **CRLF** row endings, so the file opens correctly in Excel without an import wizard
+- [Period Comparison](#-period-comparison) ghosts export as their own suffixed columns, with timestamps shifted into the current window so they align with the main series
+- Candlestick series export the bucket value only — no separate OHLC columns
+
+### Behavior
+
+- **Export what you see** — if the chart is zoomed (brush or pinch), both the PNG and the CSV cover exactly the zoomed range
+- Filenames combine the sanitized `card_header` with a timestamp, e.g. `Energy_Overview-20260715-1630.png` / `.csv`
+- Hidden in sparkline mode
+- `show_export` accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates)
+
+### Editor
+
+General Settings → Chart → Visual Options → **Show Export Button**.
 
 </details>
 
@@ -2273,6 +2823,30 @@ annotations:
 </details>
 
 <details>
+<summary><strong>🙈 Auto Hide Entities</strong></summary>
+
+Start the card with every series hidden — ideal for "pick what you want to see" dashboards with many entities.
+
+```yaml
+auto_hide_entities: true
+show_legend: true
+```
+
+
+Click legend items to reveal series. Reveals stick for the session, and entities added later also start hidden.
+
+### Editor
+
+General Settings → Chart → Visual Options → **Auto Hide Entities**.
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>🔗 Multi-Card Sync</strong> &nbsp;&mdash;&nbsp; Tooltip Sync | Zoom Sync | Scroll Sync</summary>
+
+<details>
 <summary><strong>🔗 Tooltip Sync</strong></summary>
 
 Synchronize hover crosshairs across multiple cards on the same dashboard page. When you hover over one card, all synced cards show their tooltip and crosshair at the **same timestamp** — even if they display different entities or different time ranges.
@@ -2331,10 +2905,10 @@ In this setup:
 
 ### How It Works
 
-1. You hover over Card A → a `sgc-tooltip-sync` event is dispatched on `window` containing the hovered timestamp, the sync group name, and the card's unique instance ID
-2. All other cards with Tooltip Sync enabled listen for this event
-3. If the group matches (or either card has no group), the receiving card calls `_showTooltipAtTime(timestamp)` — which positions its crosshair and tooltip at the matching time position
-4. When you move the mouse away, a hide event clears all synced tooltips
+1. You hover over Card A — the card shares the hovered moment (the timestamp) with the rest of the page
+2. Every other card with Tooltip Sync enabled listens for it
+3. If the group matches (or either card has no group), the receiving card moves its own crosshair and tooltip to that same moment
+4. When you move the mouse away, all synced tooltips clear together
 
 Cards with different `hours_to_show` ranges still sync correctly — the shared language is the **timestamp**, not the pixel position. A card showing 24H and a card showing 7D will both jump to 2:35 PM if that's where your mouse is.
 
@@ -2346,6 +2920,7 @@ Timeline mode only.
 <summary><strong>🔍 Zoom Sync</strong></summary>
 
 Synchronize **zoom windows** across multiple cards. When you brush-zoom into a time range on one card — or double-click to reset — every other card in the same group adopts the same window. The exact same `tooltip_sync_group` pattern, just for zoom instead of hover.
+
 
 ### Setup
 
@@ -2378,10 +2953,10 @@ In this setup, brush-zooming Card 1 zooms Card 2 to the same window — Card 3 k
 
 ### How It Works
 
-1. You brush-zoom on Card A — once the zoom completes, a `sgc-zoom-sync` event is dispatched on `window` containing the start/end timestamps, the sync group name, and the card's instance ID
-2. All other cards with Zoom Sync enabled listen for this event
-3. If the group matches (or both cards have no group), the receiving card adopts the same `_viewWindow` and re-renders
-4. Double-clicking on any synced card to reset the zoom broadcasts a null window, clearing every other card in the group
+1. You brush-zoom on Card A — once the zoom completes, the start and end of the new window are shared with the rest of the page
+2. Every other card with Zoom Sync enabled listens for it
+3. If the group matches (or either card has no group), the receiving card adopts the same time window
+4. Resetting the zoom on any synced card clears the zoom on every card in the group
 
 The time window is shared in real time (timestamps, not pixels) so cards with different `hours_to_show` or `points_per_hour` still land on exactly the same zoomed range.
 
@@ -2408,6 +2983,7 @@ Timeline mode only. Requires Brush Zooming to be enabled.
 <summary><strong>↔️ Scroll Sync</strong></summary>
 
 Synchronize **horizontal scrolling** across cards. Most useful with `max_visible_interval` set so the chart is wider than what's visible — scrolling one card slides every other card in the same group to the matching position.
+
 
 ### Setup
 
@@ -2437,13 +3013,13 @@ Now dragging the scrollbar (or wheel-scrolling, depending on `scroll_mode`) on o
 
 ### How It Works
 
-The shared value is a 0–1 ratio (`scrollLeft / (scrollWidth - clientWidth)`), not absolute pixels. That means:
+The shared value is a relative scroll position (0–1), not absolute pixels. That means:
 
 - Cards with identical width and `hours_to_show` stay perfectly aligned
 - Cards with different sizes still land on the same **relative** point — if you're halfway through Card A's scroll range, Card B jumps to halfway through its own range
 - Cards without a scrollable area (`max_visible_interval` not set, or the data isn't wide enough) silently ignore broadcasts
 
-A ping-pong guard avoids feedback loops: when one card moves in response to a sync event, its own scroll handler skips the next broadcast for one frame.
+Cards never enter a feedback loop — a card that moves in response to a sync event does not broadcast that movement back.
 
 ### Combining with Zoom and Tooltip Sync
 
@@ -2453,288 +3029,16 @@ Timeline mode only.
 
 </details>
 
-<details>
-<summary><strong>↔️ Time Offset</strong></summary>
-
-Compare the same sensor across different time periods by adding multiple entity entries with different `offset` values. Each offset shifts that entity's data backward in time while keeping it aligned on the same graph.
-
-```yaml
-hours_to_show: 168
-entities:
-  - entity: sensor.energy_consumption
-    name: "This week"
-    offset: 0
-    color: "#ff4757"
-  - entity: sensor.energy_consumption
-    name: "Last week"
-    offset: 168
-    color: "#378ADD"
-  - entity: sensor.energy_consumption
-    name: "2 weeks ago"
-    offset: 336
-    color: "#2ecc71"
-```
-
-### How it works
-
-- `offset: 168` means "fetch data from 168 hours (7 days) before the current display window"
-- The fetched data is time-shifted forward to align with the current window on the X axis
-- All rendering features work at full quality — line, bar, step, fill, gradient, points, tooltips, stacking, zoom
-- Each entity with an offset gets its own API call with the correct time range
-
-### Common offset values
-
-| Offset | Period |
-|---|---|
-| `24` | Yesterday |
-| `168` | Last week |
-| `336` | 2 weeks ago |
-| `720` | Last month (~30 days) |
-| `8760` | Last year |
-
-### Dynamic Offset via Helper Entity
-
-Instead of a fixed number, you can point `offset` to any HA entity whose state is a number (in hours). The card reads the entity's current state and re-fetches history automatically when it changes.
-
-```yaml
-entities:
-  - entity: sensor.energy_consumption
-    name: "Current"
-  - entity: sensor.energy_consumption
-    name: "Comparison"
-    offset: input_number.comparison_offset
-    color: "#378ADD"
-```
-
-This works with any entity type — `input_number`, template sensors, or any sensor that outputs a numeric state. Combine with HA template sensors for fully dynamic comparisons:
-
-```yaml
-# In HA configuration.yaml
-template:
-  - sensor:
-      - name: "Dynamic Offset"
-        state: "{{ 24 if now().weekday() < 5 else 168 }}"
-        unit_of_measurement: "h"
-```
-
-### Editor
-
-Entity → General → Data Settings → **Offset** (in hours).
-
-### Notes
-
-- Offset entities do not receive live WebSocket updates (they show historical data)
-- The state row, sparkline, and gauge correctly display the last value from the offset time window — not the live entity state
-- Works with all chart modes that support multiple entities
-- Can be combined with `value_transform`, `value_factor`, and all other entity options
-- Each offset generates a separate cache entry, so switching between views is fast
-
 </details>
 
 <details>
-<summary><strong>👥 Period Comparison</strong></summary>
-
-Overlay a faded "ghost" of the same entity from a previous period underneath the main series — today vs yesterday, this week vs last week, this month vs last month — with a single per-entity `compare` option. Unlike a manual [Time Offset](#-time-offset) entry, `compare` needs no duplicate entity: the ghost inherits the main entity's whole configuration and stays in lock-step with it. Since v3.26, `compare` also accepts a **list** of comparisons — one ghost per entry, each reaching further back via `periods_back` — see [Multiple comparisons](#multiple-comparisons-list-form-new-in-v326) below.
-
-### Minimal setup
-
-```yaml
-type: custom:statistics-graph-chart-card
-card_header: Power — Today vs Yesterday
-hours_to_show: 24
-entities:
-  - entity: sensor.power_consumption
-    compare: yesterday
-```
-
-### Short forms
-
-| Value | Ghost shows |
-|---|---|
-| `previous_period` | The window immediately before the visible one (a 24h view compares against the 24h before it) |
-| `yesterday` | Same window, 24 hours earlier |
-| `last_week` | Same window, one week earlier |
-| `last_month` | Same window, one month earlier |
-| `last_year` | Same window, one year earlier |
-| *number* | Same window, that many hours earlier |
-| `true` | Shorthand for `previous_period` |
-
-### Styled example (object form)
-
-For full styling control, use the object form — every sub-option is optional:
-
-```yaml
-type: custom:statistics-graph-chart-card
-card_header: Energy — This Week vs Last Week
-hours_to_show: 168
-group_by: date
-entities:
-  - entity: sensor.energy_daily
-    name: Energy
-    graph_type: bar
-    aggregate_func: change
-    color: "#2ecc71"
-    compare:
-      period: last_week      # which period the ghost shows
-      color: "#9b59b6"       # empty = faded main color
-      opacity: 0.6           # 0.05–1
-      line_style: solid      # dashed (default) | solid | dotted
-      line_width: 1.5        # empty = same as main
-      show_fill: true
-      show_points: false
-      show_in_legend: true   # empty = inherit the main entity's setting
-      show_delta: true       # Δ% next to the main value in the tooltip
-```
-
-| Sub-option | Default | Description |
-|---|---|---|
-| `period` | `previous_period` | Which period the ghost shows — same values as the short forms above (`previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`, or a number of hours). |
-| `periods_back` | `1` | *(new in v3.26)* How many periods back this comparison reaches — an integer ≥ 1, max `520`. `1` = the previous period, `2` = two periods ago, and so on; the value multiplies the shift of `period` (e.g. `period: last_week` + `periods_back: 2` = two weeks ago). Most useful in the [list form](#multiple-comparisons-list-form-new-in-v326) below. |
-| `hide_on_load` | `false` | *(new in v3.26)* This comparison starts hidden when the card loads — click its legend entry to reveal it (the reveal sticks; it is not re-hidden). Note that clicking the **main** series in the legend still toggles the whole comparison group together. Also available as a *Hide on Load* toggle on each editor row. |
-| `color` | `null` | Ghost color. Empty = a faded version of the main entity color. The editor offers the standard color picker for this field, with `{{ }}` template support. |
-| `opacity` | `0.45` | Ghost opacity, `0.05`–`1`. |
-| `line_style` | `dashed` | Ghost line pattern: `dashed`, `solid`, or `dotted`. |
-| `line_width` | `null` | Ghost line thickness in pixels. Empty = same as the main line. |
-| `show_fill` | `false` | Draw the fill area under the ghost line. |
-| `show_points` | `false` | Draw dots at the ghost's data points. |
-| `show_in_legend` | `null` | Show the ghost as its own legend entry. Empty = inherit the main entity's `show_in_legend`; an explicit `false` also hides the ghost from the simple legend. |
-| `show_delta` | `true` | Show a Δ% next to the main value in the tooltip — green for a positive delta, red for a negative one. |
-
-In the tooltip, each comparison row is preceded by a small line showing that ghost value's **actual date and time** (hover *15 Jul, 14:00* and the previous-period row is headed by *14 Jul, 14:00* for `yesterday`), so it is always clear which moment is being compared.
-
-### Multiple comparisons (list form) *(new in v3.26)*
-
-`compare` also accepts a **list** of comparison objects — one ghost series per entry. Each entry takes the full sub-option set above plus `periods_back`, which sets how many periods back that ghost reaches:
-
-```yaml
-type: custom:statistics-graph-chart-card
-card_header: Power — vs the last two periods
-hours_to_show: 24
-entities:
-  - entity: sensor.power_consumption
-    compare:
-      - periods_back: 1        # previous period
-      - periods_back: 2        # two periods ago
-      - periods_back: 3
-        line_style: dotted
-        color: "#9b59b6"
-```
-
-- **Follows the date picker.** With the picker on Week, the entries above show the last three weeks; switch to Year and the same config shows the last three years — calendar-aligned in Month/Year modes, leap years handled.
-- **Each ghost is distinct.** Later entries fade progressively by default (opacity `0.45` → `0.30` → `0.20` …), and legend entries beyond the first read *"Name (previous period ×2)"*, *"… ×3"*, and so on.
-- **Per-ghost tooltip.** Every ghost row is headed by its own date sub-header, and with multiple comparisons each ghost row carries its **own Δ%** against the current value. With a single comparison the tooltip looks exactly as in v3.25 — one date sub-header and the Δ% next to the main value.
-- Every entry still takes the full style set (`period`, `color`, `opacity`, `line_style`, `line_width`, `show_fill`, `show_points`, `show_in_legend`, `show_delta`), and hiding the main series from the legend hides all of its ghosts.
-- Existing single string/object `compare` configs are untouched — the list form is purely additive.
-
-### Behavior
-
-- The ghost is drawn faded and dashed **under** the main series and is named *"&lt;main name&gt; (previous period)"* — the suffix follows the dashboard language.
-- `previous_period` shifts by the current window length. In the date picker's **Month / Year** modes the shift is **calendar-aware**: July compares against June, wall-clock aligned, and month-end dates are clamped (Mar 31 → Feb 28/29).
-- A main entity with its own `offset` compares against the previous period of its **shifted** window.
-- Clicking the entity in the legend or its state row toggles the main series and its ghosts **together**.
-- The ghost never joins stacks and is excluded from the tooltip's grand Total.
-- Ghost values go through **exactly the same aggregation pipeline** as the main entity (`aggregate_func`, `points_per_hour`, `group_by`, transforms) — the comparison is truly like-for-like.
-- Timeline charts only. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities, and in sparkline mode.
-
-### Editor
-
-Per-entity → **Period Comparison** section (shown in Timeline mode). Redesigned as a **list** in v3.26:
-
-- The section starts empty with an **Add Comparison** button; each click adds one comparison row and steps the default *Periods Back* automatically (1, 2, 3 …).
-- Each row holds a period select (labels now read **Previous Period** / **Day Before** / **Week Before** / **Month Before** / **Year Before** — only the labels changed, the YAML values are still `previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`), a **Periods Back** input, line style, color, opacity, a **Show Δ% in tooltip** toggle, and a delete button.
-- Legacy string/object `compare` configs load into the list unchanged, and a one-row list commits back to the legacy short form — your YAML stays as compact as before.
-
-</details>
-
-<details>
-<summary><strong>🔮 Forecast Horizon</strong></summary>
-
-Some sensors expose a **forecast value** — their current state represents what is predicted for **N hours in the future**, not what is happening right now. Typical examples:
-
-- `sensor.solcast_pv_forecast_leistung_in_1_stunde` — PV power expected in 1 hour
-- A template sensor whose state is "temperature in 3 hours"
-- A weather forecast exposed as a numeric future-hour prediction
-
-Plotting these directly is misleading: the line shows each prediction at the time it was recorded, not at the time it is predicting. `forecast_horizon: N` fixes this by **shifting each recorded data point forward by N hours** on the X-axis so every point lands at the moment it is forecasting.
-
-```yaml
-type: custom:statistics-graph-chart-card
-graph_start_hour: now
-show_full_period: true
-entities:
-  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
-    name: "Forecast +1h"
-    forecast_horizon: 1
-```
-
-The result: a line that extends **1 hour into the future** past the "now" marker, representing the forecast for each upcoming moment. The X-axis end is automatically extended by the largest `forecast_horizon` across all entities so shifted points stay visible.
-
-### Matching the horizon to the sensor
-
-The `forecast_horizon` value should match the actual prediction horizon the sensor represents:
-
-| Sensor | `forecast_horizon` |
-|---|---|
-| `solcast_pv_forecast_leistung_in_1_stunde` | `1` |
-| `solcast_pv_forecast_leistung_in_8_stunden` | `8` |
-| Custom "temperature in 30 minutes" | `0.5` |
-
-Setting a value that doesn't match the sensor's real horizon will still shift the line — but the displayed time no longer corresponds to what the sensor is actually predicting.
-
-### Negative horizon — overlay tomorrow's forecast onto today
-
-Some forecast integrations (Solcast PV, EPEX spot prices, weather APIs) expose **future data through entity attributes** — a single sensor whose `attributes` contain an array of timestamped points covering the next 24–48 hours. Combined with `data_attribute`, you can plot this future data directly. But what if you want to see **tomorrow's forecast on today's chart timeline** for an at-a-glance comparison?
-
-A **negative `forecast_horizon`** shifts each point *backward* in time. Setting `-24` moves tomorrow's points 24 hours earlier so they appear at today's clock positions:
-
-```yaml
-type: custom:statistics-graph-chart-card
-show_legend: true
-entities:
-  - entity: sensor.solcast_pv_forecast_tomorrow
-    data_attribute: detailedHourly
-    data_time_field: period_start
-    data_value_field: pv_estimate
-    name: "Tomorrow's forecast (shown today)"
-    forecast_horizon: -24
-```
-
-The X-axis stays anchored to today — only the data slides into view. Combine with the live PV sensor (no horizon) on the same chart to see today's reality next to tomorrow's prediction, both aligned to the same hours.
-
-### Combining with `offset`
-
-`forecast_horizon` and `offset` are **orthogonal**:
-
-- `offset` shifts the fetch window **backward** (for past-period overlay comparison)
-- `forecast_horizon` shifts the display **forward** (positive) **or backward** (negative)
-
-Both can be used on the same entity. Example: overlay yesterday's 1-hour forecast sensor onto today's timeline, shifted 1h forward:
-
-```yaml
-entities:
-  - entity: sensor.solcast_pv_forecast_leistung_in_1_stunde
-    offset: 24            # fetch yesterday's recordings
-    forecast_horizon: 1   # show them shifted 1h forward
-    name: "Yesterday's +1h forecast"
-```
-
-### Editor
-
-Entity → **Advanced** tab → *Forecast Horizon* (in hours, supports decimals — including negative values).
-
-### Notes
-
-- Leave empty (or `0`) to disable — the sensor plots at its recording time as before
-- The fetch window is extended backward by the largest horizon so past recordings can be retrieved and shifted forward into the visible future range
-- Works with live state updates — new recordings appear on the chart at recording time + horizon
-- Multiple entities can use different horizons — the X-axis is extended to cover the largest one
-
-</details>
+<summary><strong>🧩 Templates</strong> &nbsp;&mdash;&nbsp; Template Names | Template Toggles (Boolean Templates)</summary>
 
 <details>
 <summary><strong>🏷️ Template Names</strong></summary>
 
-Entity names support HA-style `{{ }}` templates that resolve dynamically using `hass.states`:
+Entity names support HA-style `{{ }}` templates that resolve dynamically from live entity states:
+
 
 ```yaml
 name: "{{ state_attr('sensor.room', 'friendly_name') }}"
@@ -2786,11 +3090,39 @@ entities:
     show_state: "{{ states('input_boolean.show_state') == 'on' }}"
 ```
 
+
 ### Templatable keys
 
 **Card level:** `show_legend`, `show_grid`, `show_tooltip`, `show_tooltip_total`, `tooltip_stacked_total`, `show_now_line`, `show_x_axis`, `show_y_axis`, `show_y2_axis`, `show_x_ticks`, `show_y_ticks`, `show_y_axis_label`, `stacked`, `period_highlight`, `logarithmic`, `state_timeline_show_labels`, `show_export`.
 
 **Entity level:** `show_state`, `show_in_legend`, `show_graph`, `show_line`, `show_fill`, `show_points`, `smooth`, `gradient`, `show_data_labels`, `show_average`, `show_trend_icon`, `show_color_dot`, `show_timestamp`, `show_range_values`, `show_extrema_min`, `show_extrema_max`, `extrema_show_timestamp`, `state_adaptive_color`.
+
+### The `entity` variable *(new in v3.29)*
+
+Inside **entity-level** templates, the row's own entity id is available as a ready-made `entity` variable — so one generic template can be copy-pasted across every entity unchanged. It works in the display toggles **and** in the entity-level string fields: `color`, `name`, `tooltip_name`, `icon`, `icon_color`, `state_color`:
+
+```yaml
+entities:
+  - entity: sensor.temp_kitchen
+    show_graph: "{{ area_id(entity) == states('input_select.selected_zone') }}"
+  - entity: sensor.temp_livingroom
+    show_graph: "{{ area_id(entity) == states('input_select.selected_zone') }}"   # same text, no edits
+```
+
+Two popular uses — per-entity names and colors from one central place:
+
+```yaml
+entities:
+  # every row shows its DEVICE name instead of the sensor name
+  - entity: sensor.refrigerateur_power
+    name: "{{ device_attr(entity, 'name_by_user') or device_attr(entity, 'name') }}"
+  # every row pulls its color from a central color-registry sensor
+  - entity: sensor.refrigerateur_power
+    color: >-
+      {{ state_attr('sensor.entity_colors', 'entities')[device_attr(entity, 'name')] | default('red') }}
+```
+
+No more `{% set entity = 'sensor.…' %}` boilerplate at the top of every template (templates that still do keep working — their own `set` simply wins). Templates that mention `entity` are evaluated once per entity; templates that don't keep sharing a single subscription as before. Card-level templates (title, axis colors, …) have no single-entity context and do not receive the variable.
 
 ### Accepted template output
 
@@ -2820,243 +3152,6 @@ Data-source and sync booleans are intentionally **not** templatable — e.g. `ca
 
 </details>
 
-<details>
-<summary><strong>🔋 Battery Icon</strong></summary>
-
-Display a battery level indicator on the card. When a header exists (title or icon), the battery appears in the top-right corner. When there's no header, it appears on the right side of the state row.
-
-![Battery Example](images/battery.png)
-
-```yaml
-battery_entity: sensor.temperature_battery
-battery_low_threshold: 20
-```
-
-Color adapts to battery level:
-
-| Level | Color |
-|-------|-------|
-| >50% | Green |
-| 25–50% | Yellow |
-| low–25% | Orange |
-| Below threshold | Red |
-
-The low threshold defaults to 20% and accepts a number, entity ID (`sensor.x`), or entity attribute (`sensor.x.attribute`). Hover shows the entity friendly name and exact percentage.
-
-The icon and percentage text scale proportionally with the **Header & Battery Size** setting (`card_header_size`). This applies in both header and state row positions.
-
-> **Editor:** General Settings → **Display** tab → *Battery*
-
-</details>
-
-<details>
-<summary><strong>📡 Attribute Data Source</strong></summary>
-
-Read chart data directly from an entity attribute instead of history. The attribute must contain an array of objects with time and value fields. The X-axis automatically extends into the future when data contains future timestamps.
-
-Ideal for energy spot prices, weather forecasts, and solar production predictions. No history or statistics API calls are made for these entities.
-
-```yaml
-entities:
-  - entity: sensor.epex_spot_price
-    data_attribute: data
-    data_time_field: start_time
-    data_value_field: price_per_kwh
-    value_factor: 2
-    graph_type: step
-    name: "Electricity Price"
-```
-
-Common configurations:
-
-| Integration | `data_attribute` | `data_time_field` | `data_value_field` |
-|---|---|---|---|
-| EPEX Spot | `data` | `start_time` | `price_per_kwh` |
-| Nordpool | `raw_today` | `start` | `value` |
-| Tibber | `price_info` | `startsAt` | `total` |
-| Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
-
-Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
-
-### Computed Values
-
-Sometimes the value you want isn't a single field — you need to combine several fields from each element, fold in other entities (fees, tax rates, tariffs), and apply a formula. Set `data_value_expression` instead of `data_value_field`: a small arithmetic expression evaluated for every array element, with the element's own fields in scope plus any names you map in `data_vars`.
-
-```yaml
-entities:
-  - entity: sensor.tibber_hourly_cost
-    name: Electricity
-    graph_type: bar
-    data_attribute: nodes
-    data_time_field: from
-    data_time_unit: iso
-    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
-    data_vars:
-      mwst: input_number.vat_rate
-```
-
-`data_vars` maps a name to an entity ID; each resolves to that entity's **numeric state** and is re-evaluated **live** when it changes. Inside the expression you can use:
-
-| In scope | Examples |
-|---|---|
-| Element fields | `unitPrice`, `consumption`, … (any field of the array item) |
-| `data_vars` names | `mwst`, `base`, … |
-| Operators | `+` `-` `*` `/` `%` and parentheses `( )` |
-| Functions | `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow` |
-
-This is **not JavaScript** — there are no other variables, no property access, and no calls beyond those functions, so it can't run arbitrary code. If the expression is empty or fails to parse, the entity falls back to `data_value_field`.
-
-Because each element is evaluated independently, two entities reading the same array with different expressions stack cleanly — e.g. splitting an hourly energy cost into a consumption layer and a fixed-fee layer:
-
-```yaml
-type: custom:statistics-graph-chart-card
-stacked: true
-group_by: hour
-entities:
-  - entity: sensor.tibber_hourly_cost
-    name: Energy
-    graph_type: bar
-    data_attribute: nodes
-    data_time_field: from
-    data_time_unit: iso
-    data_value_expression: "(unitPrice - unitPriceVAT) * 100 * consumption * (1 + mwst)"
-    data_vars: { mwst: input_number.vat_rate }
-  - entity: sensor.tibber_hourly_cost
-    name: Fees
-    graph_type: bar
-    data_attribute: nodes
-    data_time_field: from
-    data_time_unit: iso
-    data_value_expression: "(base/30/24 + grid/24 + meter/24) * (1 + mwst) * 100"
-    data_vars:
-      base: input_number.base_price_month
-      grid: input_number.grid_fee_day
-      meter: input_number.meter_fee_day
-      mwst: input_number.vat_rate
-```
-
-> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Value Expression* field, and *Data Vars* (one `name: entity_id` per line).
-
-### Time Unit
-
-By default, the time field is parsed as an ISO date string. Set `data_time_unit` to interpret it differently — perfect for sensors that expose monthly summaries, hourly profiles, day-of-year datasets, or Unix timestamps without generating artificial timestamps.
-
-| Unit | Range | Behavior |
-|---|---|---|
-| `iso` (default) | string / epoch ms | `new Date(t)` — existing behavior |
-| `epoch_seconds` | number | Unix timestamp in seconds |
-| `epoch_ms` | number | Unix timestamp in milliseconds |
-| `month_of_year` | 1..12 | First day of that month in `data_time_year` (default: current year) |
-| `day_of_year` | 1..366 | That day in `data_time_year` |
-| `week_of_year` | 1..53 | Monday of that ISO week in `data_time_year` |
-| `hour_of_day` | 0..23 | That hour of today |
-
-Example — a sensor exposing monthly yield expectations as `[{Month: 1, Expectation: 320}, {Month: 2, Expectation: 489}, ...]`:
-
-```yaml
-type: custom:statistics-graph-chart-card
-group_by: month
-graph_start: year
-hours_to_show: 8760
-entities:
-  - entity: sensor.sma_month_yield_expectation
-    data_attribute: Expectation
-    data_time_field: Month            # 1..12
-    data_value_field: Expectation
-    data_time_unit: month_of_year     # interpret as Jan..Dec
-    graph_type: bar
-    aggregate_func: max
-```
-
-Renders 12 bars labelled Jan–Dec on the X-axis. Tooltip shows the actual month + value. All other features (date picker, group_by, fill, theming) work normally because the parser converts the numeric category into a real `Date` internally.
-
-> **Editor:** Per-entity → **Data** tab → *Attribute Data Source* → *Time Unit* dropdown and *Reference Year* input
-
-> **Editor:** Per-entity → **Data** tab → *Attribute Data Source*
-
-</details>
-
-<details>
-<summary><strong>🔄 Invert Bars (Butterfly Charts)</strong></summary>
-
-Per-entity `invert: true` draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Combined with `stacked: true`, creates butterfly charts for energy import/export, network in/out, and similar comparisons.
-
-```yaml
-stacked: true
-entities:
-  - entity: sensor.grid_import
-    graph_type: bar
-    aggregate_func: change
-    color: "#f39c12"
-    name: Import
-  - entity: sensor.grid_export
-    graph_type: bar
-    aggregate_func: change
-    invert: true
-    color: "#3498db"
-    name: Export
-```
-
-Inverted entities automatically form their own stacking group — normal bars stack upward from zero, inverted bars stack downward independently. The Y-axis expands symmetrically to accommodate both directions.
-
-When used with **line or area charts** (not just bars), the fill correctly stops at the zero baseline: mirrored lines fill upward to zero, normal lines fill downward to zero, and series that cross zero get a clean positive/negative split.
-
-> **Editor:** Per-entity → **Data** tab → *Invert (Mirror)* checkbox
-
-</details>
-
-<details>
-<summary><strong>🔌 External Statistics</strong></summary>
-
-Display data from imported statistics that don't have a regular entity in Home Assistant. This covers energy data from integrations like Gazpar, Linky, Tibber, and others that import directly into HA's statistics database.
-
-
-### Background
-
-Some HA integrations don't create `sensor.*` entities. Instead, they write data directly into the `statistics` and `statistics_meta` database tables using HA's `async_import_statistics()` API. These statistics have IDs with a colon separator (e.g. `gazpar:gazpar_consumption`) and are visible on the Energy dashboard and the built-in Statistics Graph card, but not in the entity registry.
-
-### Setup
-
-Use `statistic_id` instead of (or alongside) `entity`:
-
-```yaml
-entities:
-  - entity: ""
-    statistic_id: "gazpar:gazpar_consumption"
-    name: "Gas Consumption"
-    color: "#f39c12"
-    aggregate_func: sum
-  - entity: ""
-    statistic_id: "linky:linky_consumption"
-    name: "Electricity"
-    color: "#378ADD"
-    aggregate_func: sum
-  - entity: sensor.indoor_temperature
-    name: "Temperature"
-    color: "#ff4757"
-```
-
-You can mix external statistics with regular entities on the same card.
-
-### How it works
-
-- The card detects external statistics by checking for a `:` in the `statistic_id`
-- Data is fetched via HA's `recorder/statistics_during_period` WebSocket API — the same API the Energy dashboard uses
-- Since there is no live state, the state row displays the last known value from the statistics data
-- All card features work: tooltip, legend, axes, stacking, offset, zoom, color thresholds, etc.
-
-### Editor
-
-Entity → General → **Statistic ID** input field (monospace, below the entity picker). Set the entity picker to empty and fill in the statistic ID.
-
-### Finding your statistic IDs
-
-1. Go to **Developer Tools → Statistics** in HA
-2. Search for the integration name (e.g. "gazpar")
-3. The statistic ID is shown in the list (e.g. `gazpar:gazpar_consumption`)
-
-</details>
-
 </details>
 
 ---
@@ -3079,13 +3174,13 @@ entities:
     icon: mdi:thermometer
 ```
 
+
 ---
 
 ### 🌡️ Multi-Entity with Dual Axes
 
 Combine temperature and humidity on the same card without the scales conflicting.
 
-<!-- IMAGE 3: Card with temperature line (primary) and humidity line (secondary axis) -->
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3125,11 +3220,13 @@ entities:
     group_by: hour
 ```
 
+
 ---
 
 ### 🎯 Period Highlight
 
 On bar charts, hovering a bar shades the background of the entire period under the cursor — a soft band spanning the full bar slot — so it is immediately clear which period a tooltip or value belongs to. It is most useful with several entities drawn side by side, where the thin gaps between adjacent periods otherwise make the boundaries hard to read.
+
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3148,7 +3245,7 @@ entities:
 - The band follows the hovered period, so it lines up exactly with the bar group beneath it.
 - Works whether or not `show_tooltip` is enabled — turn the tooltip off and you still get the period band on hover.
 - In the visual editor it lives in the **Tooltip** section.
-- Timeline mode, bar charts.
+- Available in Timeline mode (bar and line charts).
 
 ---
 
@@ -3164,7 +3261,6 @@ Colorize the graph based on value ranges. Two independent settings control the b
   - `smooth` *(default)* — gradual interpolation between adjacent threshold colors.
   - `hard` — instant color switch exactly at the threshold value.
 
-<!-- IMAGE 4: Temperature graph with gradient color from blue (cold) through green to red (hot) -->
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3212,6 +3308,7 @@ color_thresholds:
 
 Color each graph segment green when rising and red when falling — without needing to define any value thresholds. `trend_period_hours` controls how sensitive the detection is.
 
+
 ```yaml
 type: custom:statistics-graph-chart-card
 entities:
@@ -3230,6 +3327,7 @@ entities:
 ### 🎨 Color Templates
 
 Use Jinja2 templates in any color field to manage colors centrally. Create a single template sensor with all your entity colors, and every card updates when you change it.
+
 
 **Setup: Create a central color sensor**
 
@@ -3270,7 +3368,6 @@ Works with `color`, `point_colors`, `icon_color`, `state_color`, and all card-le
 
 Draw a dashed reference line at the mean value over the visible time window. Useful for spotting trends at a glance.
 
-<!-- IMAGE: Average line shown on a temperature graph as a dashed horizontal line with a value label -->
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3310,13 +3407,15 @@ entities:
     icon: mdi:thermometer
 ```
 
+
 ---
 
 ### 🔀 State Map — Non-Numeric Entities
 
 Use `state_map` to graph entities with string states like `input_boolean`, `binary_sensor`, or `input_select`. States are mapped to numbers in the order they are listed, starting at 0.
 
-**The Y-axis automatically shows the original state names instead of numeric indexes** — so a washing machine graph displays `idle`, `running`, `done` on the axis, not `0`, `1`, `2`. Tooltips and state rows match.
+**The Y-axis automatically shows the original state names instead of numeric indexes** — so a washing machine graph displays `idle`, `running`, `done` on the axis, not `0`, `1`, `2`. The chart tooltip shows the matching entry's label too (nearest entry when values are aggregated) — *improved in v3.29: timeline tooltips previously showed the numeric index.*
+
 
 You can optionally provide friendly display labels with the `label` field — useful when the raw state is technical (`armed_home`) but you want a cleaner axis (`Home`):
 
@@ -3361,9 +3460,56 @@ off, Idle, grey
 on, Running, green
 ```
 
-These colors are used as the **segment color in `state_timeline`** mode (and for the dot/marker elsewhere). Colors set in YAML — `color:` under a `state_map` entry — now also round-trip correctly in the editor instead of being dropped when you re-open the card.
+These colors are used as the **segment color in `state_timeline`** mode (and for the dot/marker elsewhere). Colors set in YAML — `color:` under a `state_map` entry — are preserved when you re-open the card in the editor.
 
 > Auto-detected for `binary_sensor`, `input_boolean`, and any `input_select` entity in step mode — you don't need to define a `state_map` for those, the card detects available states automatically and labels the axis accordingly.
+
+#### Compass axis for wind direction *(v3.29)*
+
+`state_map` also works as a **pure axis-label list for numeric sensors**: entries that never match the state are ignored for data (the numeric value passes through), but the axis and tooltip still use them as labels. Combined with `value_transform`, this turns a wind-direction sensor (0–360°) into a compass chart — no custom formatter functions needed:
+
+```yaml
+type: custom:statistics-graph-chart-card
+title: Daily Wind Direction
+graph_start: day
+group_by: interval
+points_per_hour: 2          # 30-minute buckets
+show_y_axis: true
+y_axis_ticks: 8             # a label every 45° (N, NE, E, …); use 16 for all sectors
+entities:
+  - entity: sensor.wind_direction
+    name: Wind Direction
+    aggregate_func: avg
+    decimals: 0
+    unit: ""
+    value_transform: "return 16 - (((x % 360) + 360) % 360) / 22.5;"
+    state_map:              # axis labels, bottom → top (index 0..16)
+      - value: ""
+      - value: "NNW"
+      - value: "NW"
+      - value: "WNW"
+      - value: "W"
+      - value: "WSW"
+      - value: "SW"
+      - value: "SSW"
+      - value: "S"
+      - value: "SSE"
+      - value: "SE"
+      - value: "ESE"
+      - value: "E"
+      - value: "ENE"
+      - value: "NE"
+      - value: "NNE"
+      - value: "N"
+```
+
+The transform maps 0° (N) to the top of the axis and the tooltip shows the compass name of the hovered value (`SSW`, not `202°`). The empty first entry keeps `N` from being printed twice (0° and 360° are the same direction).
+
+Two honest limitations of the recipe:
+
+- **The last sliver before due north** (≈349°–360°) rounds onto that unlabeled wrap entry, so the tooltip shows a small number there instead of `N`. If northerly winds dominate your site, give the first entry `value: "N"` instead — the tooltip then always reads `N`, at the cost of the axis printing `N` at the bottom rather than the top.
+- **Averaging compass degrees is circular math done linearly**: a bucket whose samples straddle the 0°/360° seam (e.g. 350° and 10°) averages to ~180° and gets labeled `S`. This artifact is inherent to `avg` on wind degrees — the apexcharts setup this recipe replaces has exactly the same behavior.
+
 
 ---
 
@@ -3386,6 +3532,7 @@ entities:
     line_width: 1.5
 ```
 
+
 ---
 
 ### 〰️ Soft Bounds
@@ -3400,6 +3547,7 @@ entities:
     lower_bound: "~0"    # prefer 0 as minimum; expands if data goes below
     upper_bound: "~100"  # prefer 100 as max; expands if data exceeds
 ```
+
 
 ---
 
@@ -3416,11 +3564,13 @@ entities:
     upper_bound: sensor.max_capacity
 ```
 
+
 ---
 
 ### 👆 Tap Actions
 
 Trigger actions when tapping an entity's state row.
+
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3462,6 +3612,7 @@ entities:
 
 Filter data to specific hours each day using sensor values. Ideal for solar panels (sunrise to sunset) or business hours.
 
+
 ```yaml
 type: custom:statistics-graph-chart-card
 graph_start_hour: sensor.sunrise_hour
@@ -3497,6 +3648,7 @@ When viewing multiple days, data outside the specified hours is hidden and lines
 
 For sensors that update infrequently (e.g. weather), use a higher `points_per_hour` with forward-fill. Empty buckets inherit the last known value, producing a clean step-line instead of scattered dots.
 
+
 ```yaml
 type: custom:statistics-graph-chart-card
 points_per_hour: 12
@@ -3513,6 +3665,7 @@ entities:
 ### 🎚️ Interval Picker & Attribute Switcher
 
 Add on-card controls for quick time range switching and live attribute exploration — no need to open the editor.
+
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3561,6 +3714,7 @@ Both controls share a single toolbar row and wrap automatically on narrow cards.
 
 Load a wide time range but show only a portion at a time — scroll to explore.
 
+
 ```yaml
 type: custom:statistics-graph-chart-card
 card_header: Weekly Overview
@@ -3589,6 +3743,7 @@ On mobile/touch devices, swipe always works regardless of the scroll mode settin
 
 Place the header icon on the right side for a different layout feel.
 
+
 ```yaml
 type: custom:statistics-graph-chart-card
 card_header: Living Room
@@ -3605,7 +3760,6 @@ entities:
 
 A complete card showing most features together.
 
-<!-- IMAGE 6: Full-featured card with header, icon, multiple entities, legend, and grid -->
 
 ```yaml
 type: custom:statistics-graph-chart-card
@@ -3990,10 +4144,16 @@ entities:
 | `up_to_hours` | number | *required* | The rule applies when the visible period is up to this many hours. |
 | `group_by` | string | `interval` | Bucketing to use — same values as the main `group_by`: `interval`, `hour`, `2h`, `3h`, `4h`, `6h`, `12h` (any `Nh` works, e.g. `5h`), `date`, `week`, `month`, `year`, `raw`. `day` is accepted as an alias of `date`. |
 | `points_per_hour` | number | `null` | Optional bucket density for this rule — only meaningful with `group_by: interval`. The editor offers the standard divisor-of-60 presets. |
+| `x_axis_interval` | string | `null` | Optional X-axis tick interval **while this rule is active** (same syntax as the card-level option, e.g. `4h`). YAML only. *(v3.29)* |
+| `datetime_format` | string | `null` | Optional date/time format **while this rule is active** (same patterns as the card-level option, e.g. `HH:mm`). YAML only. *(v3.29)* |
+
+**Presentation follows the active rule** *(v3.29)*: while a rule rescales the chart, the card-level `x_axis_interval` and `datetime_format` are suspended — they were tuned for your base scale, and keeping them left a Day view with a near-empty axis and time-less tooltips ([#308](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/308)). Automatic ticks and locale date+time formatting take over, unless the rule provides its own overrides above.
 
 **How the rules resolve:**
 
 - The **smallest matching threshold wins** — with the rules above, a 30-hour view matches the `56` rule, not the `8784` one.
+- **Leave a small buffer above nominal periods** (the examples use `28` for "a day"): a DST fall-back day is 25 hours, and `up_to_hours: 24` would skip your hourly rule exactly that day.
+- A rule that **mirrors your base scale** (same `group_by` as the card, no `points_per_hour` or presentation overrides) doesn't count as a rescale — your explicit axis settings stay in force on those views. *(v3.29)*
 - A period **beyond every threshold** falls back to the built-in auto-scale table above.
 - An **empty or absent** list means pure built-in behavior — exactly as before.
 - **Date-picker aware.** A full month or year selection matches by its **nominal** length even while the period is still running — pick a year in July and the `8784` rule still applies, exactly like the built-in auto scale.
@@ -4103,29 +4263,33 @@ The state row always displays the original string (or label if provided), not th
 The card ships with a full visual editor — no YAML required. Every option in this documentation is reachable from the Lovelace UI. Changes apply immediately without a page reload.
 
 
-### General Settings — Four Tabs
+### General Settings — Six Tabs
 
-The General Settings panel is divided into four tabs to reduce clutter:
-
-| Tab | Contents |
-|-----|----------|
-| **Display** | Chart mode, height, header, icon, graph data (hours, points/hour, group by, update interval, visible window, scroll mode), visual toggles (grid, tooltip, stacked, sparkline, auto scale + custom scale rules, compact legend + position…), battery |
-| **Y Axis** | Visibility (Y-axis, Y2-axis, Y ticks, axis labels toggle, logarithmic), labels (custom axis label text, ticks, decimals, font size, opacity), bounds (min range, lower/upper bounds) |
-| **X Axis** | Visibility (X-axis, X ticks), labels (date format, bar spacing, font size, opacity, X axis interval), time window (graph start hour, show full period) |
-| **Overlay** | Interval Picker, Attribute List, Tooltip Sync, Zoom Sync, Scroll Sync, Energy Date Sync, Date Picker (position + group + visible modes), Annotations |
-
-Settings that depend on a toggle are automatically dimmed when the parent is off — for example, Sync Group is disabled when Tooltip Sync is off, and Interval Position is disabled when Interval Picker is off.
-
-### Entity Configuration — Four Tabs
-
-Each entity panel has four tabs:
+The General Settings panel is divided into six tabs to reduce clutter:
 
 | Tab | Contents |
 |-----|----------|
-| **General** | Entity picker, statistic ID, custom name, custom unit, tap action |
-| **Data** | Y axis, aggregation, attribute, decimals, points/hour, offset, value factor, number format, value transform, fixed value, invert, attribute data source, state map |
-| **Appearance** | Graph toggle, graph type, extrema, average, moving averages, range band, stack group, line, fill, data points, state row (on / gauge / off), trend icon, Y axis range, legend |
-| **Colors** | Base colors (line, icon, state), rise/fall colors, color thresholds with transition mode |
+| **Chart** | Chart mode, graph data (hours to show, points/hour, group by, update interval, visible window, scroll mode) and the visual options (grid, animate, stacked, sparkline, auto scale + custom scale rules, compact legend, auto hide, export button…) |
+| **Card** | Header (title, size, alignment, color), icon (MDI or image, position, size), card styling (height, background, border, radius, padding, background image + blur) and localization (card language, time zone) |
+| **Overlay** | On-card overlays: interval picker, attribute list, tooltip / zoom / scroll sync, energy date sync, battery icon, tooltip settings and annotations |
+| **X Axis** | Labels (date format, font size, opacity, X axis interval), visibility and grid style |
+| **Y Axis** | Labels (custom axis text, ticks, decimals, font), visibility (Y and Y2, logarithmic), grid style and bounds (min range, lower/upper bounds) |
+| **Calendar** | Date navigation (the built-in date picker: modes, position, sync group, presets) and the time window (graph start, show full period) |
+
+Tabs that don't apply to the current chart mode are hidden entirely (see [Dynamic Editor Behavior](#-dynamic-editor-behavior)), and settings that depend on a toggle are automatically dimmed while the parent is off — for example, Sync Group is disabled when Tooltip Sync is off.
+
+### Entity Configuration — Six Tabs
+
+Each entity panel has six tabs in a 3×2 grid:
+
+| Tab | Contents |
+|-----|----------|
+| **General** | Entity picker, statistic ID, custom name, custom unit, icon and tap action |
+| **Basic** | Data settings: Y axis, aggregation, attribute, decimals, points/hour, number format, custom unit handling |
+| **Graph** | Graph type (line / step / bar / candlestick), extrema, average line, moving averages, range band, period comparison, break on gaps, line / fill / data points, Y axis range |
+| **State Row** | State visibility and layout, primary state, trend icon, timestamp and name/state positioning |
+| **Colors** | Base colors (line/fill, point, icon, state), rise/fall colors and color thresholds with transition mode |
+| **Advanced** | Advanced calculations (time offset, value transform, value factor, cost view, forecast horizon), state map and attribute data source |
 
 Entity options also adapt dynamically based on Chart Mode — see [Dynamic Editor Behavior](#-dynamic-editor-behavior).
 
@@ -4139,13 +4303,13 @@ Every configuration field has an info tooltip (ⓘ) with a detailed explanation.
 
 ---
 
----
 
 ### 🔄 Dynamic Editor Behavior
 
 The visual editor adapts in real time based on the current configuration. Options that don't apply are completely removed from the UI — not just disabled, but hidden. This keeps the editor clean regardless of which chart mode or feature combination you choose.
 
-### Chart Mode → General Settings
+
+#### Chart Mode → General Settings
 
 Changing the Chart Mode dropdown instantly reconfigures the entire editor. The card-level settings are organized into six tabs (**Chart**, **Card**, **Overlay**, **X Axis**, **Y Axis**, **Calendar**) — irrelevant tabs disappear entirely based on the chart mode.
 
@@ -4158,7 +4322,7 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor. The c
 | **State Timeline** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone (no Y values). The X Axis tab shows label options only — size, opacity, color, and date color. |
 | **Sparkline mode** | Chart, Card | Everything else gone — sparkline is chrome-free. |
 
-### Chart Mode → Entity Settings
+#### Chart Mode → Entity Settings
 
 Each entity's expanded settings are organized into six tabs in a 3×2 grid: **General**, **Graph**, **Basic** / **State Row**, **Colors**, **Advanced**. Switching the chart mode reshapes the visible options. Fields that have no effect in the current mode are completely hidden — Pie charts don't show Point Color or Color Thresholds, and Heatmap hides Rise/Fall Colors.
 
@@ -4202,7 +4366,7 @@ Available in all chart modes. Always shows: Forecast Horizon, Offset, Value Fact
 | **Color Thresholds** | All modes **except** Pie and Polar Area (single color is meaningful for slices) |
 
 
-### Sparkline → Entire Card
+#### Sparkline → Entire Card
 
 When `sparkline` is enabled (Timeline mode only):
 
@@ -4211,7 +4375,7 @@ When `sparkline` is enabled (Timeline mode only):
 - **X Axis / Y Axis / Calendar tabs**: Hidden entirely
 - The card renders with zero chrome — no toolbar, axes, grid, or legend
 
-### Entity-Level Cascading
+#### Entity-Level Cascading
 
 Within each entity, toggle states cascade downward — disabling a parent hides or disables all its children:
 
@@ -4224,7 +4388,7 @@ Within each entity, toggle states cascade downward — disabling a parent hides 
 | `show_state: gauge` | Same fields disabled (gauge draws its own layout from `lower_bound` / `upper_bound`) |
 | `show_trend_icon: off` | Trend Period, Trend Icon Size — disabled |
 
-### Entity Count Limits
+#### Entity Count Limits
 
 The "Add Entity" button automatically hides when the chart mode's limit is reached:
 
@@ -4238,7 +4402,7 @@ The "Add Entity" button automatically hides when the chart mode's limit is reach
 | Radar | 3+ minimum | Each entity = one spoke of the polygon |
 | Heatmap / Calendar | 1 | Only the first entity is used |
 
-### Option Interactions
+#### Option Interactions
 
 Some options depend on or conflict with each other:
 
@@ -4264,13 +4428,14 @@ Some options depend on or conflict with each other:
 | `chart_mode: radar` | Requires at least 3 entities. Uses `lower_bound` / `upper_bound` per entity for normalization |
 | `energy_date_sync: true` | Card time range follows the Energy dashboard date picker. When viewing today, X axis ends at the current time and live updates continue. When viewing a past date, live updates are paused. Overrides `hours_to_show` while active |
 | `statistic_id` set (with empty `entity`) | Data is fetched from the statistics database only — no History API call. State row shows last statistics value. WebSocket live updates are skipped for this entity |
-| `color: "{{ ... }}"` | Template is evaluated server-side via `render_template` WS subscription. Push-based — no polling. Editor color picker dims automatically. Falls back to the raw template string if resolution fails |
+| `color: "{{ ... }}"` | Template is evaluated by Home Assistant itself and the card updates instantly whenever the result changes — no polling. Editor color picker dims automatically. Falls back to the raw template string if resolution fails |
 | `graph_start: tomorrow` | Window is tomorrow 00:00 → end of day. `show_full_period` is not required. History fetch is skipped (no past data in tomorrow's range). Ideal with `data_attribute` for forecast/spot price data |
 | `y_grid_style` / `x_grid_style` | Only effective when `show_grid: true`. Applies inline SVG styles that override the default CSS class |
 | `decimals` on pie/radial entity | Controls both value precision *and* percentage precision in slice labels, tooltips, and center totals |
 | `compare` set (per entity) | A faded, dashed ghost of the previous period is drawn under the main series and follows the exact same aggregation pipeline — a **list** of comparisons draws one ghost per entry, each reaching further back via `periods_back`. Legend / state-row clicks toggle main + ghosts together. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities and in sparkline mode |
 | `show_legend: "{{ ... }}"` (or any templatable toggle) | Template is resolved server-side like color templates and updates live; the default applies until the first result arrives. The editor locks the checkbox — dimmed, with a `{…}` badge and a tooltip showing the template — and never overwrites it |
 | `aggregate_func: max` (per entity) | A **Damp midnight reset artifacts** checkbox appears under the Aggregation dropdown in the editor — the UI switch for `damp_reset_boundary`, shown only while the aggregate is `max` |
+| `aggregate_func: change` (per entity) | An **Ignore transient zeros** checkbox appears under the Aggregation dropdown — the UI switch for `change_ignore_zero`, shown only while the aggregate is `change` |
 
 </details>
 
