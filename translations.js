@@ -1,4 +1,4 @@
-export const T_VERSION = "3.29-test-release";
+export const T_VERSION = "3.29";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -11,6 +11,9 @@ export const I18N = Object.freeze({
   tr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Bu karşılaştırma kart yüklendiğinde gizli başlar - lejanttaki girdisine tıklayarak gösterebilirsiniz. Not: lejantta ANA seriye tıklamak tüm karşılaştırma grubunu birlikte açıp kapatır.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Nokta Boyutu",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Veri noktası dairelerinin piksel cinsinden yarıçapı. Otomatik boyut için boş bırakın (Çizgi Kalınlığı ile ölçeklenir). Scatter ve radar modlarındaki nokta boyutunu da belirler.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Genişletilmiş Pencere",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Seçili dönemin N katını render eder ve en yeni kısma kaydırılmış açılır: ekran tam seçtiğiniz dönemi gösterir - kaydırmasız haliyle aynı ölçek ve aynı bucket'lar - ve fazladan geçmişe doğru kaydırabilirsiniz. Date picker'ı takip eder: Hafta görünümünde 2 ile mevcut haftanın arkasında bir hafta daha kaydırılabilir olur. 1 veya boş = kapalı. Aktifken Visible Window'u geçersiz kılar.",
@@ -758,6 +761,9 @@ export const I18N = Object.freeze({
   de: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Dieser Vergleich startet beim Laden der Karte ausgeblendet - einblenden per Klick auf seinen Legendeneintrag. Hinweis: Ein Klick auf die HAUPTserie in der Legende schaltet die ganze Vergleichsgruppe gemeinsam um.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Punktgröße",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius der Datenpunktkreise in Pixeln. Leer lassen für automatische Größe basierend auf der Linienbreite. Bestimmt auch die Punktgröße im Scatter- und Radar-Modus.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Erweitertes Fenster",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Rendert das N-fache des gewählten Zeitraums und öffnet zum neuesten Teil gescrollt: Der Bildschirm zeigt genau den gewählten Zeitraum - gleiche Skala und gleiche Buckets wie ohne Scrollen - und Sie können in die zusätzliche Historie zurückscrollen. Folgt dem Date Picker: In der Wochenansicht mit 2 ist hinter der aktuellen Woche eine weitere Woche scrollbar. 1 oder leer = aus. Übersteuert bei Aktivierung das Sichtbare Fenster.",
@@ -1505,6 +1511,9 @@ export const I18N = Object.freeze({
   cs: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Toto porovnání je při načtení karty skryté - zobrazíte jej kliknutím na jeho položku v legendě. Pozn.: kliknutí na HLAVNÍ řadu v legendě přepíná celou skupinu porovnání najednou.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Velikost bodů",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Poloměr kruhů datových bodů v pixelech. Ponechte prázdné pro automatickou velikost podle šířky čáry. Určuje také velikost bodů v režimech scatter a radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Rozšířené okno",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Vykreslí N-násobek zvoleného období a otevře se posunuté na nejnovější část: obrazovka ukazuje přesně zvolené období - stejné měřítko i stejné intervaly jako bez posouvání - a navíc lze rolovat zpět do historie. Řídí se výběrem data: v týdenním zobrazení s hodnotou 2 je za aktuálním týdnem rolovatelný jeden týden navíc. 1 nebo prázdné = vypnuto. Při aktivaci má přednost před Viditelným oknem.",
@@ -2277,6 +2286,9 @@ export const I18N = Object.freeze({
   da: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligning starter skjult, når kortet indlæses - vis den ved at klikke på dens post i signaturforklaringen. Bemærk: et klik på HOVEDserien i signaturforklaringen slår hele sammenligningsgruppen til/fra samlet.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Punktstørrelse",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius af datapunktcirklerne i pixels. Lad stå tomt for automatisk størrelse baseret på linjebredden. Bestemmer også punktstørrelsen i scatter- og radartilstand.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Udvidet vindue",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderer N gange den valgte periode og åbner rullet til den nyeste del: skærmen viser præcis den valgte periode - samme skala og samme intervaller som uden rulning - og du kan rulle tilbage gennem den ekstra historik. Følger datovælgeren: i ugevisning med 2 kan der rulles én ekstra uge bag den aktuelle. 1 eller tom = fra. Tilsidesætter Synligt vindue, når aktiv.",
@@ -3049,6 +3061,9 @@ export const I18N = Object.freeze({
   es: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparación empieza oculta al cargar la tarjeta - revélala haciendo clic en su entrada de la leyenda. Nota: hacer clic en la serie PRINCIPAL de la leyenda alterna todo el grupo de comparación a la vez.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Tamaño de punto",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radio de los círculos de puntos de datos en píxeles. Déjelo vacío para un tamaño automático según el grosor de línea. También define el tamaño de los puntos en los modos scatter y radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Ventana extendida",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderiza N veces el periodo seleccionado y se abre desplazado a la parte más reciente: la pantalla muestra exactamente el periodo elegido - misma escala y mismos intervalos que sin desplazamiento - y puedes desplazarte hacia atrás por el historial extra. Sigue al selector de fechas: en la vista semanal con 2, hay una semana adicional desplazable detrás de la actual. 1 o vacío = desactivado. Anula la Ventana visible mientras está activo.",
@@ -3821,6 +3836,9 @@ export const I18N = Object.freeze({
   fi: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Tämä vertailu on piilotettu kortin latautuessa - näytä se napsauttamalla sen selitemerkintää. Huom: PÄÄsarjan napsautus selitteessä vaihtaa koko vertailuryhmän tilan yhdessä.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Pisteen koko",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Datapisteympyröiden säde pikseleinä. Jätä tyhjäksi automaattista kokoa varten (perustuu viivan leveyteen). Määrittää myös pisteiden koon scatter- ja tutkatiloissa.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Laajennettu ikkuna",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderöi valitun jakson N-kertaisena ja avautuu vieritettynä uusimpaan osaan: näyttö näyttää täsmälleen valitsemasi jakson - sama mittakaava ja samat jaksovälit kuin ilman vieritystä - ja voit vierittää taaksepäin lisähistoriaan. Seuraa päivämäärävalitsinta: viikkonäkymässä arvolla 2 nykyisen viikon takana on vieritettävissä yksi lisäviikko. 1 tai tyhjä = pois. Ohittaa Näkyvän ikkunan ollessaan käytössä.",
@@ -4593,6 +4611,9 @@ export const I18N = Object.freeze({
   fr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Cette comparaison démarre masquée au chargement de la carte - révélez-la en cliquant sur son entrée de légende. Remarque : cliquer sur la série PRINCIPALE dans la légende bascule tout le groupe de comparaison ensemble.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Taille des points",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Rayon des cercles de points de données en pixels. Laissez vide pour une taille automatique basée sur l'épaisseur de ligne. Définit aussi la taille des points dans les modes scatter et radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Fenêtre étendue",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Rend N fois la période sélectionnée et s'ouvre défilé sur la partie la plus récente : l'écran montre exactement la période choisie - même échelle et mêmes intervalles que sans défilement - et vous pouvez remonter dans l'historique supplémentaire. Suit le sélecteur de dates : en vue Semaine avec 2, une semaine supplémentaire est accessible derrière la semaine courante. 1 ou vide = désactivé. Prime sur la Fenêtre visible lorsqu'actif.",
@@ -5365,6 +5386,9 @@ export const I18N = Object.freeze({
   it: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Questo confronto parte nascosto al caricamento della card - rivelalo cliccando la sua voce in legenda. Nota: cliccare la serie PRINCIPALE nella legenda commuta insieme l'intero gruppo di confronto.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Dimensione punti",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Raggio dei cerchi dei punti dati in pixel. Lasciare vuoto per la dimensione automatica basata sullo spessore della linea. Definisce anche la dimensione dei punti nelle modalità scatter e radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Finestra estesa",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderizza N volte il periodo selezionato e si apre scorrendo alla parte più recente: lo schermo mostra esattamente il periodo scelto - stessa scala e stessi intervalli di senza scorrimento - e puoi scorrere indietro nella cronologia extra. Segue il selettore di date: nella vista Settimana con 2, dietro la settimana corrente è scorribile una settimana in più. 1 o vuoto = disattivato. Ha priorità sulla Finestra visibile quando attivo.",
@@ -6137,6 +6161,9 @@ export const I18N = Object.freeze({
   nl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Deze vergelijking start verborgen wanneer de kaart laadt - toon hem door op zijn legenda-item te klikken. Let op: klikken op de HOOFDreeks in de legenda schakelt de hele vergelijkingsgroep samen.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Puntgrootte",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Straal van de datapuntcirkels in pixels. Laat leeg voor automatische grootte op basis van de lijndikte. Bepaalt ook de puntgrootte in scatter- en radarmodus.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Uitgebreid venster",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Rendert N keer de geselecteerde periode en opent gescrold naar het nieuwste deel: het scherm toont precies de gekozen periode - zelfde schaal en zelfde buckets als zonder scrollen - en je kunt terugscrollen door de extra geschiedenis. Volgt de datumkiezer: in de weekweergave met 2 is er één extra week scrollbaar achter de huidige. 1 of leeg = uit. Heeft voorrang op Zichtbaar venster wanneer actief.",
@@ -6909,6 +6936,9 @@ export const I18N = Object.freeze({
   nb: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligningen starter skjult når kortet lastes - vis den ved å klikke på oppføringen i tegnforklaringen. Merk: å klikke på HOVEDserien i tegnforklaringen veksler hele sammenligningsgruppen samlet.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Punktstørrelse",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius for datapunktsirklene i piksler. La stå tom for automatisk størrelse basert på linjebredden. Bestemmer også punktstørrelsen i scatter- og radarmodus.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Utvidet vindu",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Rendrer N ganger den valgte perioden og åpner rullet til den nyeste delen: skjermen viser nøyaktig perioden du valgte - samme skala og samme intervaller som uten rulling - og du kan rulle bakover i den ekstra historikken. Følger datovelgeren: i ukevisning med 2 kan én ekstra uke rulles bak den gjeldende. 1 eller tom = av. Overstyrer Synlig vindu når aktiv.",
@@ -7681,6 +7711,9 @@ export const I18N = Object.freeze({
   pl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "To porównanie startuje ukryte przy ładowaniu karty - pokaż je, klikając jego wpis w legendzie. Uwaga: kliknięcie GŁÓWNEJ serii w legendzie przełącza całą grupę porównań razem.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Rozmiar punktów",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Promień okręgów punktów danych w pikselach. Pozostaw puste dla automatycznego rozmiaru na podstawie szerokości linii. Określa również rozmiar punktów w trybach scatter i radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Rozszerzone okno",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderuje N-krotność wybranego okresu i otwiera się przewinięte do najnowszej części: ekran pokazuje dokładnie wybrany okres - ta sama skala i te same przedziały co bez przewijania - a dodatkową historię można przewijać wstecz. Podąża za wyborem daty: w widoku tygodnia z wartością 2 za bieżącym tygodniem można przewinąć jeszcze jeden. 1 lub puste = wyłączone. Gdy aktywne, ma pierwszeństwo przed Widocznym oknem.",
@@ -8453,6 +8486,9 @@ export const I18N = Object.freeze({
   pt: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparação começa oculta quando o cartão carrega - revele-a clicando na sua entrada da legenda. Nota: clicar na série PRINCIPAL na legenda alterna todo o grupo de comparação em conjunto.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Tamanho do ponto",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Raio dos círculos dos pontos de dados em pixels. Deixe vazio para tamanho automático com base na espessura da linha. Também define o tamanho dos pontos nos modos scatter e radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Janela estendida",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderiza N vezes o período selecionado e abre deslocado para a parte mais recente: o ecrã mostra exatamente o período escolhido - mesma escala e mesmos intervalos que sem deslocamento - e pode recuar pelo histórico extra. Segue o seletor de datas: na vista de Semana com 2, há uma semana extra deslocável atrás da atual. 1 ou vazio = desligado. Sobrepõe-se à Janela visível enquanto ativo.",
@@ -9225,6 +9261,9 @@ export const I18N = Object.freeze({
   ru: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Это сравнение при загрузке карточки скрыто - раскройте его щелчком по его записи в легенде. Примечание: щелчок по ОСНОВНОЙ серии в легенде переключает всю группу сравнения вместе.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Размер точек",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Радиус кружков точек данных в пикселях. Оставьте пустым для автоматического размера на основе толщины линии. Также задаёт размер точек в режимах scatter и radar.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Расширенное окно",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Отрисовывает выбранный период в N-кратном размере и открывается прокрученным к самой свежей части: на экране ровно выбранный период - тот же масштаб и те же интервалы, что и без прокрутки - а дополнительную историю можно листать назад. Следует за выбором даты: в недельном виде со значением 2 за текущей неделей доступна ещё одна. 1 или пусто = выключено. При активации имеет приоритет над Видимым окном.",
@@ -9997,6 +10036,9 @@ export const I18N = Object.freeze({
   sv: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denna jämförelse startar dold när kortet läses in - visa den genom att klicka på dess post i teckenförklaringen. Obs: att klicka på HUVUDserien i teckenförklaringen växlar hela jämförelsegruppen tillsammans.",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "Punktstorlek",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radie för datapunktcirklarna i pixlar. Lämna tomt för automatisk storlek baserat på linjebredden. Bestämmer även punktstorleken i scatter- och radarläge.",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "Utökat fönster",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "Renderar N gånger den valda perioden och öppnas rullad till den senaste delen: skärmen visar exakt den period du valt - samma skala och samma intervall som utan rullning - och du kan rulla bakåt genom den extra historiken. Följer datumväljaren: i veckovyn med 2 kan en extra vecka rullas bakom den aktuella. 1 eller tomt = av. Åsidosätter Synligt fönster när det är aktivt.",
@@ -10769,6 +10811,9 @@ export const I18N = Object.freeze({
   zh: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "此对比在卡片加载时默认隐藏 - 点击其图例条目即可显示。注意：点击图例中的主序列会同时切换整个对比组。",
+    // --- added in 3.29 round 2 (point size)
+    "Point Size": "数据点大小",
+    "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "数据点圆圈的半径（像素）。留空则根据线宽自动调整。同时决定散点图和雷达图模式中的点大小。",
     // --- added in 3.29 round 1 (extended window multiplier)
     "Extended Window": "扩展窗口",
     "Renders N times the selected period and opens scrolled to the newest part: the screen shows exactly the period you picked - same scale and buckets as without scrolling - and you can scroll back through the extra history. Follows the date picker: on a Week view with 2, one extra week is scrollable behind the current one. 1 or empty = off. Overrides Visible Window while active.": "以所选时段的 N 倍进行渲染，并在打开时滚动到最新部分：屏幕上正好显示你选择的时段 - 与不滚动时相同的刻度和分桶 - 并且可以向后滚动查看额外的历史。跟随日期选择器：周视图下设为 2 时，当前周后面还可再滚动一周。1 或留空 = 关闭。启用时优先于可见窗口。",
