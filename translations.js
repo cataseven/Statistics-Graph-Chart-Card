@@ -1,4 +1,4 @@
-export const T_VERSION = "3.29";
+export const T_VERSION = "3.30";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -11,6 +11,9 @@ export const I18N = Object.freeze({
   tr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Bu karşılaştırma kart yüklendiğinde gizli başlar - lejanttaki girdisine tıklayarak gösterebilirsiniz. Not: lejantta ANA seriye tıklamak tüm karşılaştırma grubunu birlikte açıp kapatır.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Etkin",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Kapatınca kart bu entity hiç tanımlanmamış gibi davranır: hiçbir şey çekilmez ve çizilmez, kart genelindeki mantık onu hesaba katmaz. Bazı örneklerinde sensör olmayan ortak kart şablonları (örn. Streamline) için kullanışlıdır. Satır düzenleme için burada kalır ve istediğiniz an yeniden etkinleştirilebilir.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Nokta Boyutu",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Veri noktası dairelerinin piksel cinsinden yarıçapı. Otomatik boyut için boş bırakın (Çizgi Kalınlığı ile ölçeklenir). Scatter ve radar modlarındaki nokta boyutunu da belirler.",
@@ -761,6 +764,9 @@ export const I18N = Object.freeze({
   de: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Dieser Vergleich startet beim Laden der Karte ausgeblendet - einblenden per Klick auf seinen Legendeneintrag. Hinweis: Ein Klick auf die HAUPTserie in der Legende schaltet die ganze Vergleichsgruppe gemeinsam um.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Aktiviert",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Deaktivieren, damit sich die Karte verhält, als wäre diese Entität nie konfiguriert worden: nichts wird abgerufen oder gezeichnet, und keine kartenweite Logik berücksichtigt sie. Praktisch für gemeinsame Kartenvorlagen (z. B. Streamline), bei denen manchen Instanzen ein Sensor fehlt. Die Zeile bleibt hier editierbar und kann jederzeit reaktiviert werden.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Punktgröße",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius der Datenpunktkreise in Pixeln. Leer lassen für automatische Größe basierend auf der Linienbreite. Bestimmt auch die Punktgröße im Scatter- und Radar-Modus.",
@@ -1511,6 +1517,9 @@ export const I18N = Object.freeze({
   cs: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Toto porovnání je při načtení karty skryté - zobrazíte jej kliknutím na jeho položku v legendě. Pozn.: kliknutí na HLAVNÍ řadu v legendě přepíná celou skupinu porovnání najednou.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Povoleno",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Po vypnutí se karta chová, jako by tato entita nikdy nebyla nakonfigurována: nic se nenačítá ani nekreslí a žádná logika karty ji nebere v úvahu. Užitečné pro sdílené šablony karet (např. Streamline), kde některým instancím senzor chybí. Řádek zde zůstává k úpravám a lze jej kdykoli znovu povolit.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Velikost bodů",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Poloměr kruhů datových bodů v pixelech. Ponechte prázdné pro automatickou velikost podle šířky čáry. Určuje také velikost bodů v režimech scatter a radar.",
@@ -2286,6 +2295,9 @@ export const I18N = Object.freeze({
   da: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligning starter skjult, når kortet indlæses - vis den ved at klikke på dens post i signaturforklaringen. Bemærk: et klik på HOVEDserien i signaturforklaringen slår hele sammenligningsgruppen til/fra samlet.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Aktiveret",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Deaktivér for at få kortet til at opføre sig, som om denne enhed aldrig var konfigureret: intet hentes eller tegnes, og ingen kortdækkende logik tager højde for den. Praktisk til delte kortskabeloner (f.eks. Streamline), hvor nogle instanser mangler en sensor. Rækken bliver her til redigering og kan altid genaktiveres.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Punktstørrelse",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius af datapunktcirklerne i pixels. Lad stå tomt for automatisk størrelse baseret på linjebredden. Bestemmer også punktstørrelsen i scatter- og radartilstand.",
@@ -3061,6 +3073,9 @@ export const I18N = Object.freeze({
   es: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparación empieza oculta al cargar la tarjeta - revélala haciendo clic en su entrada de la leyenda. Nota: hacer clic en la serie PRINCIPAL de la leyenda alterna todo el grupo de comparación a la vez.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Habilitado",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Desactívelo para que la tarjeta se comporte como si esta entidad nunca se hubiera configurado: no se obtiene ni se dibuja nada, y ninguna lógica de la tarjeta la tiene en cuenta. Útil para plantillas de tarjetas compartidas (p. ej. Streamline) donde algunas instancias no tienen un sensor. La fila permanece aquí para editarla y puede reactivarse en cualquier momento.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Tamaño de punto",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radio de los círculos de puntos de datos en píxeles. Déjelo vacío para un tamaño automático según el grosor de línea. También define el tamaño de los puntos en los modos scatter y radar.",
@@ -3836,6 +3851,9 @@ export const I18N = Object.freeze({
   fi: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Tämä vertailu on piilotettu kortin latautuessa - näytä se napsauttamalla sen selitemerkintää. Huom: PÄÄsarjan napsautus selitteessä vaihtaa koko vertailuryhmän tilan yhdessä.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Käytössä",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Poista käytöstä, jolloin kortti toimii kuin tätä entiteettiä ei olisi koskaan määritetty: mitään ei haeta eikä piirretä, eikä kortin laajuinen logiikka huomioi sitä. Kätevä jaetuissa korttipohjissa (esim. Streamline), joissa joistakin instansseista puuttuu anturi. Rivi säilyy muokattavana ja sen voi ottaa käyttöön milloin tahansa.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Pisteen koko",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Datapisteympyröiden säde pikseleinä. Jätä tyhjäksi automaattista kokoa varten (perustuu viivan leveyteen). Määrittää myös pisteiden koon scatter- ja tutkatiloissa.",
@@ -4611,6 +4629,9 @@ export const I18N = Object.freeze({
   fr: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Cette comparaison démarre masquée au chargement de la carte - révélez-la en cliquant sur son entrée de légende. Remarque : cliquer sur la série PRINCIPALE dans la légende bascule tout le groupe de comparaison ensemble.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Activé",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Désactivez pour que la carte se comporte comme si cette entité n'avait jamais été configurée : rien n'est récupéré ni dessiné, et aucune logique de la carte n'en tient compte. Pratique pour les modèles de cartes partagés (ex. Streamline) où certaines instances n'ont pas de capteur. La ligne reste ici pour l'édition et peut être réactivée à tout moment.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Taille des points",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Rayon des cercles de points de données en pixels. Laissez vide pour une taille automatique basée sur l'épaisseur de ligne. Définit aussi la taille des points dans les modes scatter et radar.",
@@ -5386,6 +5407,9 @@ export const I18N = Object.freeze({
   it: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Questo confronto parte nascosto al caricamento della card - rivelalo cliccando la sua voce in legenda. Nota: cliccare la serie PRINCIPALE nella legenda commuta insieme l'intero gruppo di confronto.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Abilitato",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Disattivare per far sì che la scheda si comporti come se questa entità non fosse mai stata configurata: nulla viene recuperato o disegnato e nessuna logica della scheda la considera. Utile per modelli di schede condivisi (es. Streamline) in cui ad alcune istanze manca un sensore. La riga resta qui per la modifica e può essere riattivata in qualsiasi momento.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Dimensione punti",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Raggio dei cerchi dei punti dati in pixel. Lasciare vuoto per la dimensione automatica basata sullo spessore della linea. Definisce anche la dimensione dei punti nelle modalità scatter e radar.",
@@ -6161,6 +6185,9 @@ export const I18N = Object.freeze({
   nl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Deze vergelijking start verborgen wanneer de kaart laadt - toon hem door op zijn legenda-item te klikken. Let op: klikken op de HOOFDreeks in de legenda schakelt de hele vergelijkingsgroep samen.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Ingeschakeld",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Schakel uit om de kaart te laten doen alsof deze entiteit nooit is geconfigureerd: er wordt niets opgehaald of getekend en geen kaartbrede logica houdt er rekening mee. Handig voor gedeelde kaartsjablonen (bijv. Streamline) waar sommige instanties een sensor missen. De rij blijft hier bewerkbaar en kan altijd weer worden ingeschakeld.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Puntgrootte",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Straal van de datapuntcirkels in pixels. Laat leeg voor automatische grootte op basis van de lijndikte. Bepaalt ook de puntgrootte in scatter- en radarmodus.",
@@ -6936,6 +6963,9 @@ export const I18N = Object.freeze({
   nb: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligningen starter skjult når kortet lastes - vis den ved å klikke på oppføringen i tegnforklaringen. Merk: å klikke på HOVEDserien i tegnforklaringen veksler hele sammenligningsgruppen samlet.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Aktivert",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Deaktiver for at kortet skal oppføre seg som om denne entiteten aldri ble konfigurert: ingenting hentes eller tegnes, og ingen kortomfattende logikk tar hensyn til den. Praktisk for delte kortmaler (f.eks. Streamline) der noen instanser mangler en sensor. Raden blir værende her for redigering og kan når som helst aktiveres igjen.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Punktstørrelse",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radius for datapunktsirklene i piksler. La stå tom for automatisk størrelse basert på linjebredden. Bestemmer også punktstørrelsen i scatter- og radarmodus.",
@@ -7711,6 +7741,9 @@ export const I18N = Object.freeze({
   pl: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "To porównanie startuje ukryte przy ładowaniu karty - pokaż je, klikając jego wpis w legendzie. Uwaga: kliknięcie GŁÓWNEJ serii w legendzie przełącza całą grupę porównań razem.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Włączone",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Wyłącz, aby karta zachowywała się tak, jakby ta encja nigdy nie została skonfigurowana: nic nie jest pobierane ani rysowane, a żadna logika karty jej nie uwzględnia. Przydatne we współdzielonych szablonach kart (np. Streamline), gdzie niektórym instancjom brakuje czujnika. Wiersz pozostaje tu do edycji i można go w każdej chwili ponownie włączyć.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Rozmiar punktów",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Promień okręgów punktów danych w pikselach. Pozostaw puste dla automatycznego rozmiaru na podstawie szerokości linii. Określa również rozmiar punktów w trybach scatter i radar.",
@@ -8486,6 +8519,9 @@ export const I18N = Object.freeze({
   pt: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparação começa oculta quando o cartão carrega - revele-a clicando na sua entrada da legenda. Nota: clicar na série PRINCIPAL na legenda alterna todo o grupo de comparação em conjunto.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Ativado",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Desative para que o cartão se comporte como se esta entidade nunca tivesse sido configurada: nada é obtido nem desenhado, e nenhuma lógica do cartão a considera. Útil para modelos de cartões partilhados (ex. Streamline) em que algumas instâncias não têm um sensor. A linha permanece aqui para edição e pode ser reativada a qualquer momento.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Tamanho do ponto",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Raio dos círculos dos pontos de dados em pixels. Deixe vazio para tamanho automático com base na espessura da linha. Também define o tamanho dos pontos nos modos scatter e radar.",
@@ -9261,6 +9297,9 @@ export const I18N = Object.freeze({
   ru: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Это сравнение при загрузке карточки скрыто - раскройте его щелчком по его записи в легенде. Примечание: щелчок по ОСНОВНОЙ серии в легенде переключает всю группу сравнения вместе.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Включено",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Отключите, чтобы карточка вела себя так, будто эта сущность никогда не была настроена: ничего не загружается и не рисуется, и никакая логика карточки её не учитывает. Удобно для общих шаблонов карточек (напр. Streamline), где у некоторых экземпляров нет датчика. Строка остаётся здесь для редактирования и может быть включена в любой момент.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Размер точек",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Радиус кружков точек данных в пикселях. Оставьте пустым для автоматического размера на основе толщины линии. Также задаёт размер точек в режимах scatter и radar.",
@@ -10036,6 +10075,9 @@ export const I18N = Object.freeze({
   sv: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denna jämförelse startar dold när kortet läses in - visa den genom att klicka på dess post i teckenförklaringen. Obs: att klicka på HUVUDserien i teckenförklaringen växlar hela jämförelsegruppen tillsammans.",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "Aktiverad",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "Inaktivera för att kortet ska bete sig som om denna entitet aldrig konfigurerats: inget hämtas eller ritas, och ingen kortövergripande logik tar hänsyn till den. Praktiskt för delade kortmallar (t.ex. Streamline) där vissa instanser saknar en sensor. Raden stannar kvar här för redigering och kan när som helst aktiveras igen.",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "Punktstorlek",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "Radie för datapunktcirklarna i pixlar. Lämna tomt för automatisk storlek baserat på linjebredden. Bestämmer även punktstorleken i scatter- och radarläge.",
@@ -10811,6 +10853,9 @@ export const I18N = Object.freeze({
   zh: Object.freeze({
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "此对比在卡片加载时默认隐藏 - 点击其图例条目即可显示。注意：点击图例中的主序列会同时切换整个对比组。",
+    // --- added in 3.30 round 1 (entity enabled)
+    "Enabled": "启用",
+    "Disable to make the card behave as if this entity was never configured: nothing is fetched or drawn, and no card-wide logic considers it. Handy for shared card templates (e.g. Streamline) where some instances lack a sensor. The row stays here for editing and can be re-enabled anytime.": "关闭后，卡片将表现得如同从未配置过该实体：不获取、不绘制任何内容，卡片级逻辑也不会考虑它。适用于共享卡片模板（如 Streamline）中某些实例缺少传感器的情况。该行保留在此处以供编辑，可随时重新启用。",
     // --- added in 3.29 round 2 (point size)
     "Point Size": "数据点大小",
     "Radius of the data point circles in pixels. Leave empty for automatic sizing based on Line Width. Also sets the dot size in scatter and radar modes.": "数据点圆圈的半径（像素）。留空则根据线宽自动调整。同时决定散点图和雷达图模式中的点大小。",
