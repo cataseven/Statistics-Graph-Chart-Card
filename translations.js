@@ -1,4 +1,4 @@
-export const T_VERSION = "3.30";
+export const T_VERSION = "3.30-test-release-v1";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
