@@ -85,6 +85,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
 | 🏷️ | **Custom unit per entity** — override auto-detected units with `unit: kWh` on any entity. Essential for attributes and unitless sensors |
+| 🏠 | **Area on duplicate names** — when several entities share a friendly name (common with Advanced History), `include_area_on_duplicate_names: true` appends each one's area (`Heating Temperature · Lounge`) — only where names actually collide, unique names untouched |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
 | 🕐 | **Dynamic Graph Hours** — filter data to specific hours each day with `graph_start_hour` and `graph_end_hour`. Accepts fixed numbers or sensor entities (e.g. `sensor.sunrise_hour`) for sunrise-to-sunset views that adapt throughout the year |
@@ -348,6 +349,7 @@ These options apply to the whole card.
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
+| `include_area_on_duplicate_names` | boolean | `false` | When two or more entities share the same friendly name (common with integrations like Advanced History), append each one's area to tell them apart in the state row, legend, tooltip and stats — e.g. `Heating Temperature · Lounge`. Only names that actually collide are changed; unique names are left alone. The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` always wins. Comparison ghosts inherit their parent's suffix. See [Area on duplicate names](#-area-on-duplicate-names). |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, Polar Area, and Gauge modes — slices/arcs sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
@@ -407,7 +409,8 @@ Each entry under `entities` supports the following options.
 |--------|------|---------|-------------|
 | `entity` | string | **required** | HA entity ID. Can be left empty when using `statistic_id`. |
 | `statistic_id` | string | `null` | For imported/external statistics that have no regular entity (e.g. `gazpar:gazpar_consumption`). These exist only in the statistics database. Leave empty for normal entities. See [External Statistics](#-external-statistics). |
-| `name` | string | `null` | Custom display name. Leave empty to hide the name entirely — only shown when explicitly set. Supports HA-style templates: `{{ states('sensor.x') }}`, `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters like `capitalize`, `upper`, `replace()`. See [Template Names](#-template-names). |
+| `name` | string | `null` | Custom display name for the state row. **Leave empty to show the entity's `friendly_name`** (the default). To hide the name instead, use `hide_name`. Supports HA-style templates: `{{ states('sensor.x') }}`, `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters like `capitalize`, `upper`, `replace()`. See [Template Names](#-template-names). |
+| `hide_name` | boolean | `false` | Hide this entity's name in the **state row** (the live value row above the graph), leaving just the value. Only affects the state row — the compact legend and tooltip still show the name. Separately, the legacy `name: ""` (empty custom name) still hides the name **everywhere** (state row, legend, and tooltip) and is left untouched. Editor: **State Row** tab → *Hide Name*. |
 | `tooltip_name` | string | `null` | Override the name shown in the hover tooltip independently from `name`. Useful when you want a long, descriptive label in the state row but a short label — or no label at all — in the tooltip. Set to an empty string (`tooltip_name: ""`) to hide the name in the tooltip while keeping the swatch and value visible. When unset, the tooltip falls back to `name` → `friendly_name` → entity id. |
 | `unit` | string | `null` | Custom unit label (e.g. `kWh`, `°C`, `%`). Overrides the auto-detected `unit_of_measurement`. Useful for attributes, unitless sensors, or when you want a different label. Appears in state row, tooltip, chart center, and axis labels. |
 | `y_axis` | string | `"primary"` | `primary` (left), `secondary` (right), or `independent` (hidden, own scale). Independent entities are scaled to their own min/max — ideal for overlaying sensors with different units for trend comparison. See [Independent Y-Axis](#-independent-y-axis). |
@@ -1098,7 +1101,7 @@ date_picker_modes:
 ```
 
 - As **Default Mode** (`date_picker_default_mode`) a rolling window is forced as the starting view on every load.
-- As **Visible Modes** (`date_picker_modes`) the rolling options appear as extra buttons — `24H`, `3D`, `7D`, `15D`, `30D`, `90D`, `180D`, `12M` — next to D/W/M/Y. Calendar modes are on by default; rolling buttons are off until you add them.
+- As **Visible Modes** (`date_picker_modes`) the rolling options appear as extra buttons — `24H`, `3D`, `7D`, `15D`, `30D`, `90D`, `180D`, `12M` — next to D/W/M/Y. Calendar modes are on by default; rolling buttons are off until you add them. In the editor the two families are shown under separate **Calendar periods** / **Rolling windows** headings, and on the picker bar a thin divider separates the D/W/M/Y buttons from the rolling ones so the two aren't mistaken for each other. *(v3.30)*
 - The label reads e.g. *Last 7 days* at the current window, switching to a date range (`May 16 – May 23`) once you navigate back.
 
 ### Window Step
@@ -1144,6 +1147,43 @@ General Settings → Overlays → **Date Picker** toggle. Position and Group opt
 - Date picker state is persisted in `localStorage` and restored on page reload
 - When viewing the current period, the X-axis extends to the end of the period with empty space after the current time
 - Cards with only `date_picker_group` (no `show_date_picker`) use their normal `hours_to_show` until a sync event arrives from a card in the same group
+
+</details>
+
+<details>
+<summary><strong>🏷️ Area on duplicate names</strong></summary>
+
+Some integrations — **Advanced History** is the common one — expose several entities under the *same* friendly name (e.g. three `Heating Temperature` sensors, one per room). On the state row, legend, tooltip and stats they look identical. Set `include_area_on_duplicate_names: true` and the card appends each entity's **area** so you can tell them apart:
+
+```yaml
+type: custom:statistics-graph-chart-card
+include_area_on_duplicate_names: true   # default false
+entities:
+  - entity: sensor.lounge_heating    # friendly_name: "Heating Temperature"
+  - entity: sensor.office_heating    # friendly_name: "Heating Temperature"
+  - entity: sensor.kitchen_temp      # friendly_name: "Kitchen Temp"  (unique)
+```
+
+Legend result:
+
+```
+Heating Temperature · Lounge
+Heating Temperature · Office
+Kitchen Temp                      ← unique name, untouched
+```
+
+### Rules
+
+- Only names that **collide** with another entity's are changed — unique names are always left alone.
+- The area is taken from the entity's own area registry entry; if it has none, the card falls back to the entity's **device** area. If neither resolves, the name is left unchanged.
+- A friendly name that **already contains** its area (e.g. *Lounge Heating Temperature* in the Lounge) isn't doubled up.
+- An explicit `name:` (including template names) always wins and is never modified.
+- Comparison ghosts inherit the parent's suffix — *Heating Temperature · Lounge (previous period)*.
+- Off by default. Resolution is a couple of registry key-lookups per configured entity, so the cost is negligible.
+
+### Editor
+
+General Settings → the **Area on duplicate names** toggle (next to the legend options).
 
 </details>
 
