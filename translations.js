@@ -1,4 +1,4 @@
-export const T_VERSION = "3.31";
+export const T_VERSION = "3.32";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -9,12 +9,18 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Canlı",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Entity'nin şu anki durumu; grafikte gösterilen dönemden bağımsızdır. Diğer değerlerin hepsi gösterilen aralığı anlatır.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Bu karşılaştırma kart yüklendiğinde gizli başlar - lejanttaki girdisine tıklayarak gösterebilirsiniz. Not: lejantta ANA seriye tıklamak tüm karşılaştırma grubunu birlikte açıp kapatır.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Takvim dönemleri",
     "Rolling windows (ending now)": "Kayan pencereler (şimdi biten)",
     "Area names": "Alan adları",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Öznitelik adları",
+    "Attribute names only": "Yalnızca öznitelik adları",
     "Hide Name": "İsmi Gizle",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Etkin",
@@ -770,12 +776,18 @@ export const I18N = Object.freeze({
     "Custom": "Özel",
   }),
   de: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Der aktuelle Zustand der Entität, unabhängig vom im Diagramm angezeigten Zeitraum. Alle anderen Werte beschreiben den dargestellten Bereich.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Dieser Vergleich startet beim Laden der Karte ausgeblendet - einblenden per Klick auf seinen Legendeneintrag. Hinweis: Ein Klick auf die HAUPTserie in der Legende schaltet die ganze Vergleichsgruppe gemeinsam um.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderzeiträume",
     "Rolling windows (ending now)": "Gleitende Zeitfenster (enden jetzt)",
     "Area names": "Bereichsnamen",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attributnamen",
+    "Attribute names only": "Nur Attributnamen",
     "Hide Name": "Name ausblenden",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiviert",
@@ -1531,12 +1543,18 @@ export const I18N = Object.freeze({
     "Custom": "Benutzerdef.",
   }),
   cs: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Živě",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Aktuální stav entity právě teď, nezávisle na období zobrazeném v grafu. Všechny ostatní hodnoty popisují zobrazený rozsah.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Toto porovnání je při načtení karty skryté - zobrazíte jej kliknutím na jeho položku v legendě. Pozn.: kliknutí na HLAVNÍ řadu v legendě přepíná celou skupinu porovnání najednou.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalendářní období",
     "Rolling windows (ending now)": "Klouzavá okna (končící nyní)",
     "Area names": "Názvy oblastí",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Názvy atributů",
+    "Attribute names only": "Pouze názvy atributů",
     "Hide Name": "Skrýt název",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Povoleno",
@@ -2317,12 +2335,18 @@ export const I18N = Object.freeze({
     "Custom": "Vlastní",
   }),
   da: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhedens aktuelle tilstand lige nu, uafhængigt af den periode der vises i grafen. Alle de andre værdier beskriver det viste interval.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligning starter skjult, når kortet indlæses - vis den ved at klikke på dens post i signaturforklaringen. Bemærk: et klik på HOVEDserien i signaturforklaringen slår hele sammenligningsgruppen til/fra samlet.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullende vinduer (slutter nu)",
     "Area names": "Områdenavne",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attributnavne",
+    "Attribute names only": "Kun attributnavne",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiveret",
@@ -3103,12 +3127,18 @@ export const I18N = Object.freeze({
     "Custom": "Tilpasset",
   }),
   es: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "En vivo",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "El estado actual de la entidad en este momento, independientemente del período mostrado en el gráfico. Todos los demás valores describen el rango mostrado.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparación empieza oculta al cargar la tarjeta - revélala haciendo clic en su entrada de la leyenda. Nota: hacer clic en la serie PRINCIPAL de la leyenda alterna todo el grupo de comparación a la vez.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Periodos de calendario",
     "Rolling windows (ending now)": "Ventanas móviles (terminan ahora)",
     "Area names": "Nombres de área",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Nombres de atributo",
+    "Attribute names only": "Solo nombres de atributo",
     "Hide Name": "Ocultar nombre",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Habilitado",
@@ -3889,12 +3919,18 @@ export const I18N = Object.freeze({
     "Custom": "Personalizado",
   }),
   fi: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Entiteetin tämänhetkinen tila, riippumatta kaaviossa näytettävästä jaksosta. Kaikki muut arvot kuvaavat näytettyä aikaväliä.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Tämä vertailu on piilotettu kortin latautuessa - näytä se napsauttamalla sen selitemerkintää. Huom: PÄÄsarjan napsautus selitteessä vaihtaa koko vertailuryhmän tilan yhdessä.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenterijaksot",
     "Rolling windows (ending now)": "Liukuvat ikkunat (päättyvät nyt)",
     "Area names": "Alueiden nimet",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attribuuttien nimet",
+    "Attribute names only": "Vain attribuuttien nimet",
     "Hide Name": "Piilota nimi",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Käytössä",
@@ -4675,12 +4711,18 @@ export const I18N = Object.freeze({
     "Custom": "Mukautettu",
   }),
   fr: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "En direct",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "L'état actuel de l'entité en ce moment, indépendamment de la période affichée sur le graphique. Toutes les autres valeurs décrivent la plage affichée.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Cette comparaison démarre masquée au chargement de la carte - révélez-la en cliquant sur son entrée de légende. Remarque : cliquer sur la série PRINCIPALE dans la légende bascule tout le groupe de comparaison ensemble.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Périodes calendaires",
     "Rolling windows (ending now)": "Fenêtres glissantes (jusqu'à maintenant)",
     "Area names": "Noms de zone",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Noms d'attribut",
+    "Attribute names only": "Noms d'attribut uniquement",
     "Hide Name": "Masquer le nom",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Activé",
@@ -5461,12 +5503,18 @@ export const I18N = Object.freeze({
     "Custom": "Personnalisé",
   }),
   it: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Lo stato attuale dell'entità in questo momento, indipendentemente dal periodo mostrato nel grafico. Tutti gli altri valori descrivono l'intervallo visualizzato.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Questo confronto parte nascosto al caricamento della card - rivelalo cliccando la sua voce in legenda. Nota: cliccare la serie PRINCIPALE nella legenda commuta insieme l'intero gruppo di confronto.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Periodi di calendario",
     "Rolling windows (ending now)": "Finestre mobili (fino ad ora)",
     "Area names": "Nomi area",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Nomi attributo",
+    "Attribute names only": "Solo nomi attributo",
     "Hide Name": "Nascondi nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Abilitato",
@@ -6247,12 +6295,18 @@ export const I18N = Object.freeze({
     "Custom": "Personalizzato",
   }),
   nl: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "De huidige status van de entiteit op dit moment, onafhankelijk van de periode die in de grafiek wordt getoond. Alle andere waarden beschrijven het weergegeven bereik.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Deze vergelijking start verborgen wanneer de kaart laadt - toon hem door op zijn legenda-item te klikken. Let op: klikken op de HOOFDreeks in de legenda schakelt de hele vergelijkingsgroep samen.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioden",
     "Rolling windows (ending now)": "Voortschrijdende vensters (eindigen nu)",
     "Area names": "Gebiedsnamen",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attribuutnamen",
+    "Attribute names only": "Alleen attribuutnamen",
     "Hide Name": "Naam verbergen",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ingeschakeld",
@@ -7033,12 +7087,18 @@ export const I18N = Object.freeze({
     "Custom": "Aangepast",
   }),
   nb: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhetens nåværende tilstand akkurat nå, uavhengig av perioden som vises i grafen. Alle de andre verdiene beskriver det viste området.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denne sammenligningen starter skjult når kortet lastes - vis den ved å klikke på oppføringen i tegnforklaringen. Merk: å klikke på HOVEDserien i tegnforklaringen veksler hele sammenligningsgruppen samlet.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullerende vinduer (slutter nå)",
     "Area names": "Områdenavn",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attributtnavn",
+    "Attribute names only": "Bare attributtnavn",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktivert",
@@ -7819,12 +7879,18 @@ export const I18N = Object.freeze({
     "Custom": "Egendefinert",
   }),
   pl: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Na żywo",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Bieżący stan encji w tej chwili, niezależnie od okresu pokazanego na wykresie. Wszystkie pozostałe wartości opisują wyświetlany zakres.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "To porównanie startuje ukryte przy ładowaniu karty - pokaż je, klikając jego wpis w legendzie. Uwaga: kliknięcie GŁÓWNEJ serii w legendzie przełącza całą grupę porównań razem.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Okresy kalendarzowe",
     "Rolling windows (ending now)": "Okna ruchome (kończące się teraz)",
     "Area names": "Nazwy obszarów",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Nazwy atrybutów",
+    "Attribute names only": "Tylko nazwy atrybutów",
     "Hide Name": "Ukryj nazwę",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Włączone",
@@ -8605,12 +8671,18 @@ export const I18N = Object.freeze({
     "Custom": "Własny",
   }),
   pt: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Ao vivo",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "O estado atual da entidade neste momento, independentemente do período mostrado no gráfico. Todos os outros valores descrevem o intervalo apresentado.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Esta comparação começa oculta quando o cartão carrega - revele-a clicando na sua entrada da legenda. Nota: clicar na série PRINCIPAL na legenda alterna todo o grupo de comparação em conjunto.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Períodos de calendário",
     "Rolling windows (ending now)": "Janelas móveis (terminam agora)",
     "Area names": "Nomes de área",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Nomes de atributo",
+    "Attribute names only": "Apenas nomes de atributo",
     "Hide Name": "Ocultar nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ativado",
@@ -9391,12 +9463,18 @@ export const I18N = Object.freeze({
     "Custom": "Personalizado",
   }),
   ru: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Сейчас",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Текущее состояние объекта прямо сейчас, независимо от периода, показанного на графике. Все остальные значения описывают отображаемый диапазон.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Это сравнение при загрузке карточки скрыто - раскройте его щелчком по его записи в легенде. Примечание: щелчок по ОСНОВНОЙ серии в легенде переключает всю группу сравнения вместе.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Календарные периоды",
     "Rolling windows (ending now)": "Скользящие окна (до сейчас)",
     "Area names": "Названия зон",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Названия атрибутов",
+    "Attribute names only": "Только названия атрибутов",
     "Hide Name": "Скрыть имя",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Включено",
@@ -10177,12 +10255,18 @@ export const I18N = Object.freeze({
     "Custom": "Свой",
   }),
   sv: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "Live",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhetens nuvarande tillstånd just nu, oberoende av perioden som visas i diagrammet. Alla andra värden beskriver det visade intervallet.",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "Denna jämförelse startar dold när kortet läses in - visa den genom att klicka på dess post i teckenförklaringen. Obs: att klicka på HUVUDserien i teckenförklaringen växlar hela jämförelsegruppen tillsammans.",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullande fönster (slutar nu)",
     "Area names": "Områdesnamn",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "Attributnamn",
+    "Attribute names only": "Endast attributnamn",
     "Hide Name": "Dölj namn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiverad",
@@ -10963,12 +11047,18 @@ export const I18N = Object.freeze({
     "Custom": "Anpassad",
   }),
   zh: Object.freeze({
+    // --- added in 3.32 round 1 (live legend stat)
+    "Live": "实时",
+    "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "实体此刻的当前状态，与图表所显示的时间段无关。其他数值描述的都是所显示的范围。",
     // --- added in 3.26 round 3 (compare hide on load)
     "This comparison starts hidden when the card loads - reveal it by clicking its legend entry. Note: clicking the MAIN series in the legend toggles the whole comparison group together.": "此对比在卡片加载时默认隐藏 - 点击其图例条目即可显示。注意：点击图例中的主序列会同时切换整个对比组。",
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "日历周期",
     "Rolling windows (ending now)": "滚动窗口（截至当前）",
     "Area names": "区域名称",
+    // --- added in 3.32 round 2 (attribute names in labels, #327)
+    "Attribute names": "属性名称",
+    "Attribute names only": "仅属性名称",
     "Hide Name": "隐藏名称",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "启用",
