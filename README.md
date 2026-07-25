@@ -85,7 +85,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⏩ | **Trend icon** — a ▲▼⯇⯈ indicator on each state row shows the current direction of change, calculated over a configurable time window (`trend_period_hours`) |
 | 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
 | 🏷️ | **Custom unit per entity** — override auto-detected units with `unit: kWh` on any entity. Essential for attributes and unitless sensors |
-| 🏠 | **Area on duplicate names** — when several entities share a friendly name (common with Advanced History), `include_area_on_duplicate_names: true` appends each one's area (`Heating Temperature · Lounge`) — only where names actually collide, unique names untouched |
+| 🏠 | **Area names** — `include_area_names: true` appends each entity's Home Assistant area to its label (`Heating Temperature · Lounge`) across the state row, legend, tooltip, stats and exports. Indispensable with integrations like Advanced History that give several entities the same friendly name |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
 | 🕐 | **Dynamic Graph Hours** — filter data to specific hours each day with `graph_start_hour` and `graph_end_hour`. Accepts fixed numbers or sensor entities (e.g. `sensor.sunrise_hour`) for sunrise-to-sunset views that adapt throughout the year |
@@ -181,6 +181,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🧲 | **Raw grouping** — `group_by: raw` skips bucketing entirely and draws every recorded sample at its exact timestamp — ideal for step charts of binary/state sensors |
 | 🤏 | **Pinch zoom & zoom history** — two-finger pinch on touch devices zooms the timeline live around the gesture midpoint; any pinch angle works (the gesture measures the true 2D finger distance) and zoom responds on an amplified curve, so small real-world pinches zoom meaningfully — pinching inward zooms out just as strongly, all the way back to the full window. Every committed zoom (brush or pinch) is pushed onto a history stack (up to 20 levels) — double-click / double-tap steps **back one level** at a time instead of resetting fully. Works with cross-card `zoom_sync` |
 | 📥 | **PNG / CSV export** — `show_export: true` overlays a small download icon on the card with a three-item menu: a 2× PNG of the chart, a 2× PNG of the whole card (header, chart, state row and legend), or a wide-format CSV (ISO 8601 UTC `time` column, one column per visible series, Excel-friendly UTF-8 BOM). A zoomed chart exports exactly the zoomed range — export what you see |
+| ➖ | **Two-entity math** — per-entity `ref_entity` + `ref_op` combines a series with a second entity **over time** (`subtract` / `add` / `multiply` / `divide`). Plot indoor − outdoor, production − consumption, or target vs actual with no template sensor; the reference is sampled as a step function so each point is combined with the value valid at that moment |
 | 💶 | **Cost view** — per-entity `price_entity` multiplies a series by the value of another entity **over time** (spot price, tariff sensor). The price is read as a step function from the price entity's own history and applied per consumption slice *before* bucketing, so every bucket is an exact Σ(value × price). Ideal with `aggregate_func: change` on energy counters — set `unit` to your currency and the kWh chart becomes a cost chart |
 | ⚡ | **Custom auto-scale rules** — card-level `auto_scale_rules` teaches Auto Scale *your* thresholds: each rule maps a visible period ("up to N hours") to a Group By and optionally a Points/Hour. The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale |
 
@@ -349,13 +350,14 @@ These options apply to the whole card.
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
-| `include_area_on_duplicate_names` | boolean | `false` | When two or more entities share the same friendly name (common with integrations like Advanced History), append each one's area to tell them apart in the state row, legend, tooltip and stats — e.g. `Heating Temperature · Lounge`. Only names that actually collide are changed; unique names are left alone. The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` always wins. Comparison ghosts inherit their parent's suffix. See [Area on duplicate names](#-area-on-duplicate-names). |
+| `include_area_names` | boolean | `false` | Append each entity's Home Assistant area to its name across the state row, legend, tooltip, stats and exports — e.g. `Heating Temperature · Lounge`. Every entity with an area gets it (no duplicate detection, so the legend doesn't change shape when you add or remove an unrelated entity). The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` is never modified. Comparison ghosts inherit their parent's suffix. See [Area names](#-area-names). |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, Polar Area, and Gauge modes — slices/arcs sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
 | `state_timeline_show_labels` | boolean | `true` | Show the state labels drawn inside state_timeline segments. Set to `false` for clean, label-free color bands — the tooltip still names each state on hover. Labels only render in segments wide enough to fit them anyway. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates). State Timeline mode only. |
+| `state_timeline_label_font_size` | number | `10` | Font size in pixels of the state label drawn inside each state_timeline segment (6–40). The truncation budget scales with it, so a larger font shows fewer characters with an ellipsis rather than overflowing its segment. Only relevant while `state_timeline_show_labels` is on. State Timeline mode only. *(v3.31)* |
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
 | `gauge_columns` | number | `null` | Number of gauge columns in the grid (Gauge mode). Empty / `0` = auto (fits as many dials as the width allows). |
 | `gauge_span` | number | `270` | Arc sweep of each gauge in degrees, `90`–`360`. `180` = top semicircle; `270` = classic open-bottom dial. Gauge mode only. |
@@ -419,6 +421,9 @@ Each entry under `entities` supports the following options.
 | `change_ignore_zero` | boolean | `false` | *(new in v3.28)* For `aggregate_func: change` on counters whose integration reports a literal `0` while the device is off or restarting and then jumps back to the previous total (instead of going `unavailable`). Each such dip is normally counted as a meter reset, so the restored value is re-counted as new consumption — inflating daily/monthly totals massively. Enable to skip zero readings entirely; with long-term statistics the change is recomputed from the `state` column, bypassing the polluted sums. Counters that genuinely reset to zero and keep counting from there still work. Also available as an *Ignore transient zeros* toggle under the Aggregation dropdown. |
 | `price_entity` | string | `null` | Multiply every value of this series by the state of another entity **over time** — the cost view. The price is read as a **step function** from the price entity's own history (long-term statistics with hourly mean on long windows), and the multiplication happens per consumption slice **before** bucketing, so each bucket is an exact Σ(valueᵢ × priceᵢ). Intended for `aggregate_func: change` on energy counters — set `unit` to the currency. State changes of the price entity auto-refresh the card. Not applied to `fixed_value` / `data_attribute` entities. See [Cost View](#-cost-view-price_entity). |
 | `price_attribute` | string | `null` | Read the price from an attribute of `price_entity` instead of its state. Supports dot notation for nested paths (e.g. `raw_today.0.value`). Only used when `price_entity` is set. |
+| `ref_entity` | string | `null` | **Two-entity math.** Combine this entity with a second one over time — the classic case being `indoor − outdoor` without a template sensor. The reference is read as a step function from its own history, so every sample of this entity is combined with the reference value valid at that moment. A gap in the reference produces a gap here rather than an invented value. See [Two-Entity Math](#-two-entity-math). *(v3.31)* |
+| `ref_op` | string | `"subtract"` | How to combine with `ref_entity`: `subtract` (A−B), `add`, `multiply`, `divide` (A÷B), plus `reverse_subtract` (B−A) and `reverse_divide` (B÷A). The reversed forms exist because swapping the two entities is **not** equivalent — the main entity drives the timeline, unit, aggregation and data source, while the reference is only sampled. `subtract`/`add`/`reverse_subtract` combine **levels** and are refused when `aggregate_func` is `change`, `diff`, `sum` or `delta` (those are already per-bucket deltas) — the series renders empty with a console warning. `multiply`/`divide` are allowed with any aggregation. An unrecognised value falls back to `subtract`. *(v3.31)* |
+| `ref_attribute` | string | `null` | Read the reference from an attribute of `ref_entity` instead of its state (dot notation), e.g. `temperature` on a `weather.` entity. *(v3.31)* |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature`. In `state_timeline` mode, pair with `state_map` to plot the attribute's history ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)). |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
@@ -437,7 +442,7 @@ Each entry under `entities` supports the following options.
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
 | `fixed_value` | boolean | `false` | Draw a flat horizontal reference line at the current value instead of history |
-| `invert` | boolean | `false` | Draws bars downward from the zero line. Tooltip, state row, and extrema labels show positive values. Use with `stacked: true` for butterfly charts. See [Invert Bars](#-invert-bars-butterfly-charts). |
+| `invert` | boolean | `false` | Flips the sign of the value (×−1). On Timeline it draws bars downward from the zero line — tooltip, state row and extrema labels still show positive values; use with `stacked: true` for butterfly charts. Because the flip happens in the shared data pipeline it works in **every chart mode** — in Waterfall it makes the entity a subtraction step. Editor: per-entity → **Advanced** tab. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. Each entry takes a `value` plus optional `label` and `color`. See [State Map](#-state-map). |
 | `auto_hide` | boolean | `false` | Start this single entity hidden — the series is invisible until you reveal it from the legend (the reveal sticks for the session). Per-entity alternative to the card-wide `auto_hide_entities`. When `auto_hide_entities` is set, it takes precedence over per-entity values. |
 | `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). When left unset (or set to `none`), tapping the state row instead toggles that entity's visibility on the graph — same as clicking its legend item. Hidden entities dim visually so you can tell what's off at a glance. |
@@ -843,6 +848,8 @@ entities:
 
 **v3.25 addition:**
 - **Segment labels toggle** — card-level `state_timeline_show_labels: false` hides the state labels drawn inside the segments for clean, label-free color bands; the hover tooltip still names each state. Default `true` — and labels only render in segments wide enough to fit them anyway. In the editor the checkbox sits next to *Corner Radius* in state_timeline mode. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates).
+- **Row labels wrap instead of being cropped** — the entity-name column is **measured against the actual text** (not estimated from character counts), so it is exactly as wide as the longest name needs, capped at about a third of the card. A name that still doesn't fit **wraps onto up to three lines**, left-aligned, with the row growing to match — so a long friendly name stays fully readable even on a narrow card, a More Info dialog or a phone, and a short one gives all its space back to the timeline. Only a name too long for three lines is ellipsized, and it keeps the full text as a hover tooltip. The label is also clipped to its own column, so it can never paint past the edge of the card. *(v3.31)*
+- **Segment label size** — `state_timeline_label_font_size` sets that label's font size in pixels (6–40, default 10). The truncation budget follows the font size, so a bigger label shows fewer characters with an ellipsis instead of spilling out of its segment. The editor field appears next to *Show State Labels* while that toggle is on. *(v3.31)*
 
 ### Box Plot *(new in v3.21)*
 
@@ -1151,17 +1158,18 @@ General Settings → Overlays → **Date Picker** toggle. Position and Group opt
 </details>
 
 <details>
-<summary><strong>🏷️ Area on duplicate names</strong></summary>
+<summary><strong>🏷️ Area names</strong></summary>
 
-Some integrations — **Advanced History** is the common one — expose several entities under the *same* friendly name (e.g. three `Heating Temperature` sensors, one per room). On the state row, legend, tooltip and stats they look identical. Set `include_area_on_duplicate_names: true` and the card appends each entity's **area** so you can tell them apart:
+Append each entity's **Home Assistant area** to its label. Handy when a card mixes rooms, and essential with integrations like **Advanced History** that hand several entities the *same* friendly name (three `Heating Temperature` sensors, one per room, otherwise indistinguishable):
 
 ```yaml
 type: custom:statistics-graph-chart-card
-include_area_on_duplicate_names: true   # default false
+include_area_names: true   # default false
 entities:
-  - entity: sensor.lounge_heating    # friendly_name: "Heating Temperature"
-  - entity: sensor.office_heating    # friendly_name: "Heating Temperature"
-  - entity: sensor.kitchen_temp      # friendly_name: "Kitchen Temp"  (unique)
+  - entity: sensor.lounge_heating    # friendly_name: "Heating Temperature"  (area: Lounge)
+  - entity: sensor.office_heating    # friendly_name: "Heating Temperature"  (area: Office)
+  - entity: sensor.fridge            # friendly_name: "Fridge Temp"          (area: Kitchen)
+  - entity: sensor.lounge_lamp       # friendly_name: "Lounge Lamp Power"    (area: Lounge)
 ```
 
 Legend result:
@@ -1169,21 +1177,23 @@ Legend result:
 ```
 Heating Temperature · Lounge
 Heating Temperature · Office
-Kitchen Temp                      ← unique name, untouched
+Fridge Temp · Kitchen
+Lounge Lamp Power              ← already says "Lounge", not doubled up
 ```
 
 ### Rules
 
-- Only names that **collide** with another entity's are changed — unique names are always left alone.
+- Every entity that has an area gets it — there is **no** duplicate detection. A rule that only fired on collisions would make your legend change shape whenever an unrelated entity was added or removed; if you switch this on, you want the areas.
 - The area is taken from the entity's own area registry entry; if it has none, the card falls back to the entity's **device** area. If neither resolves, the name is left unchanged.
 - A friendly name that **already contains** its area (e.g. *Lounge Heating Temperature* in the Lounge) isn't doubled up.
-- An explicit `name:` (including template names) always wins and is never modified.
+- An explicit `name:` (including template names) is your own label and is never modified.
+- Applies to the state row, legend, tooltip, stats, exports and the editor's entity list, so every surface agrees.
 - Comparison ghosts inherit the parent's suffix — *Heating Temperature · Lounge (previous period)*.
 - Off by default. Resolution is a couple of registry key-lookups per configured entity, so the cost is negligible.
 
 ### Editor
 
-General Settings → the **Area on duplicate names** toggle (next to the legend options).
+General Settings → the **Area names** toggle (next to the legend options).
 
 </details>
 
@@ -1704,7 +1714,7 @@ Entity → **Advanced** tab → *Forecast Horizon* (in hours, supports decimals 
 </details>
 
 <details>
-<summary><strong>📊 Data Sources & Math</strong> &nbsp;&mdash;&nbsp; On-Card Pickers (Points/Hour & Group By) | Raw Grouping (group_by: raw) | Value Transform | Cost View (price_entity) | Range Band | Moving Averages | Break on Gaps | Attribute Data Source | External Statistics</summary>
+<summary><strong>📊 Data Sources & Math</strong> &nbsp;&mdash;&nbsp; On-Card Pickers (Points/Hour & Group By) | Raw Grouping (group_by: raw) | Value Transform | Cost View (price_entity) | Two-Entity Math (ref_entity) | Range Band | Moving Averages | Break on Gaps | Attribute Data Source | External Statistics</summary>
 
 <details>
 <summary><strong>🎚️ On-Card Pickers (Points/Hour & Group By)</strong></summary>
@@ -1897,6 +1907,53 @@ Multiplying the period's total consumption by the average price is only correct 
 ### Editor
 
 Entity → Data → **Price Entity** and **Price Attribute** inputs.
+
+</details>
+
+<details>
+<summary><strong>➖ Two-Entity Math (ref_entity)</strong></summary>
+
+Plot the **combination of two entities** — most often their difference — without creating a template sensor. `ref_entity` names the second entity and `ref_op` says how to combine them:
+
+```yaml
+type: custom:statistics-graph-chart-card
+hours_to_show: 24
+entities:
+  # indoor − outdoor, the classic delta. ref_op defaults to subtract,
+  # and with no name: the series is labelled "Indoor − Outdoor" automatically.
+  - entity: sensor.indoor_temperature
+    ref_entity: sensor.outdoor_temperature
+
+  - entity: sensor.solar_production
+    name: Net export
+    ref_entity: sensor.house_consumption
+    ref_op: subtract
+
+  # the reference can come from an attribute (e.g. a weather entity)
+  - entity: sensor.pool_temperature
+    ref_entity: weather.home
+    ref_attribute: temperature
+    ref_op: divide
+```
+
+### How it works
+
+The reference entity's own history is fetched alongside your data and read as a **step function**: every sample of the main entity is combined with the reference value that was valid at that moment. The math runs **before bucketing**, so `avg` over a bucket is the average *of the difference*, and `min`/`max` are the smallest/largest *instantaneous* gap — not `min(A) − min(B)`.
+
+### Rules worth knowing
+
+- **Reversed operators.** `reverse_subtract` gives `B − A` and `reverse_divide` gives `B ÷ A`. This is not the same as swapping the two entity ids: the **main** entity supplies the timeline the reference is sampled onto, plus the unit, aggregation, data source, colour and offset. Keep the better-sampled sensor as `entity:` and flip the arithmetic instead (e.g. `COP = heat ÷ power` while `power` stays the main series).
+- **`subtract` / `add` / `reverse_subtract` combine levels.** They are **refused** when `aggregate_func` is `change`, `diff`, `sum` or `delta` — those are already per-bucket deltas, so subtracting a level from them is meaningless. The series renders empty and logs one console warning. Use a level aggregation (`avg`, `min`, `max`, `last`, `first`, `median`) instead. `multiply` / `divide` are allowed with every aggregation — that is exactly what `price_entity` does.
+- **Carry-forward, but nothing invented.** The reference is held until it next changes — the same rule Home Assistant itself uses for a state, and the same one `price_entity` follows. That is what makes a step-shaped reference (a setpoint, an `input_number`, a mode) work. What the card will *not* do is invent a value **before** the reference's first sample: that stretch is a gap. Since the card carries values across gaps by default, a reference that dies mid-window shows as a flat line — add `break_on_null: true` if you would rather the line break there.
+- **Both operands should share a unit** for `subtract`/`add`; the result keeps the main entity's unit. For `multiply`/`divide` set `unit` yourself.
+- `value_factor` and `invert` apply to the **main entity only**, before the combination.
+- The state row and the trend arrow follow the *combined* series, not the bare main entity.
+- Not available on `data_attribute` (forecast-array) or `fixed_value` rows.
+- Only **one** reference and one operator per entity. For multi-operand formulas (`A − B − C`) you still need a template sensor — a general cross-entity expression is planned for a later release.
+
+> **Note:** `data_value_expression` + `data_vars` do **not** do this. They only apply to an attribute-array data source, and `data_vars` resolves each name to the referenced entity's *current state* — a constant, not a series. Use `ref_entity` for math against another entity over time.
+
+> **Editor:** Entity → **Advanced** → *Reference Entity*, *Operation*, *Reference Attribute*.
 
 </details>
 
@@ -2412,7 +2469,9 @@ Inverted entities automatically form their own stacking group — normal bars st
 
 When used with **line or area charts** (not just bars), the fill correctly stops at the zero baseline: mirrored lines fill upward to zero, normal lines fill downward to zero, and series that cross zero get a clean positive/negative split.
 
-> **Editor:** Per-entity → **Data** tab → *Invert (Mirror)* checkbox
+`invert` flips the sign of the value in the shared data pipeline, so it is **not** timeline-only: in **Waterfall** it turns the entity into a subtraction step (see [Waterfall](#-chart-modes)), and it applies in every other chart mode too.
+
+> **Editor:** Per-entity → **Advanced** tab → *Invert (Mirror)* checkbox (next to *Fixed Value*)
 
 </details>
 
