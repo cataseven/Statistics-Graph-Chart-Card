@@ -86,6 +86,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🌐 | **Locale-aware formatting** — control how numbers are displayed per entity (`number_format`) and how timestamps appear card-wide (`datetime_format`), independent of your HA locale |
 | 🏷️ | **Custom unit per entity** — override auto-detected units with `unit: kWh` on any entity. Essential for attributes and unitless sensors |
 | 🏠 | **Area names** — `include_area_names: true` appends each entity's Home Assistant area to its label (`Heating Temperature · Lounge`) across the state row, legend, tooltip, stats and exports. Indispensable with integrations like Advanced History that give several entities the same friendly name |
+| 🏷️ | **Attribute names** — `include_attribute_name` / `use_only_attribute_name` label a series by the attribute it plots, so two attributes of the same entity stop sharing one name |
 | 🔡 | **Axis label customization** — adjust font size and opacity of Y-axis and X-axis labels independently for a clean, tailored look |
 | 📌 | **Axis tick marks** — optional small tick lines at each label position, controllable independently for X and Y axes |
 | 🕐 | **Dynamic Graph Hours** — filter data to specific hours each day with `graph_start_hour` and `graph_end_hour`. Accepts fixed numbers or sensor entities (e.g. `sensor.sunrise_hour`) for sunrise-to-sunset views that adapt throughout the year |
@@ -119,7 +120,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔍 | **Scrollable graph** — set a visible window smaller than the data range and scroll horizontally through history |
 | ↔️ | **Configurable icon position** — place the header icon on the left or right side of the title |
 | 🏷️ | **Compact Legend** — color-coded entity name key below the graph with configurable position (left, center, right). Click any legend item to temporarily hide that entity from the graph |
-| 📊 | **Per-entity legend stats** — choose any combination of Min, Avg, Max, Last for each entity's legend row. Click to toggle entity visibility |
+| 📊 | **Per-entity legend stats** — choose any combination of Min, Avg, Max, Sum, Last and Live for each entity's legend row. Click to toggle entity visibility |
 | 🏷️ | **Vertical axis labels** — optional vertical unit labels on the left and right edges of the graph. Defaults to the entity's unit of measurement, with custom text override |
 | 🕐 | **Smart X-axis labels** — when the time range spans multiple days, midnight ticks automatically show the date (e.g. "28 Mar") while other ticks show `HH:mm`. Tick density adapts to label width and font size |
 | ⬇️ | **Bottom state rows** — place entity state rows below the graph instead of above with `bottom-left`, `bottom-center`, `bottom-right` alignment |
@@ -351,13 +352,15 @@ These options apply to the whole card.
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `include_area_names` | boolean | `false` | Append each entity's Home Assistant area to its name across the state row, legend, tooltip, stats and exports — e.g. `Heating Temperature · Lounge`. Every entity with an area gets it (no duplicate detection, so the legend doesn't change shape when you add or remove an unrelated entity). The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` is never modified. Comparison ghosts inherit their parent's suffix. See [Area names](#-area-names). |
+| `include_attribute_name` | boolean | `false` | Append the plotted attribute to each entity's name in the same places — e.g. `Lounge Heating · Current temperature` *(v3.32)*. Rows that plot the entity state itself have no attribute and are left alone, as are entities with an explicit `name:`. Uses Home Assistant's own translated attribute name where one exists, otherwise a humanised form of the attribute key. |
+| `use_only_attribute_name` | boolean | `false` | Like `include_attribute_name`, but shows **only** the attribute — `Current temperature` instead of `Lounge Heating · Current temperature` *(v3.32)*. Takes precedence when both are on. Combines with `include_area_names` to give `Current temperature · Lounge`. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, Polar Area, and Gauge modes — slices/arcs sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
 | `state_timeline_show_labels` | boolean | `true` | Show the state labels drawn inside state_timeline segments. Set to `false` for clean, label-free color bands — the tooltip still names each state on hover. Labels only render in segments wide enough to fit them anyway. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates). State Timeline mode only. |
-| `state_timeline_label_font_size` | number | `10` | Font size in pixels of the state label drawn inside each state_timeline segment (6–40). The truncation budget scales with it, so a larger font shows fewer characters with an ellipsis rather than overflowing its segment. Only relevant while `state_timeline_show_labels` is on. State Timeline mode only. *(v3.31)* |
+| `state_timeline_label_font_size` | number | `10` / `11` | Font size in pixels (6–40) of the state label inside each state_timeline segment **and of the entity name in the label column on the left** *(v3.32)*. Defaults differ when unset: 10 inside segments, 11 for entity names. Both budgets scale with it — segments show fewer characters with an ellipsis, entity names wrap onto up to three lines and rows grow to fit. The segment label additionally requires `state_timeline_show_labels`. State Timeline mode only. *(v3.31)* |
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
 | `gauge_columns` | number | `null` | Number of gauge columns in the grid (Gauge mode). Empty / `0` = auto (fits as many dials as the width allows). |
 | `gauge_span` | number | `270` | Arc sweep of each gauge in degrees, `90`–`360`. `180` = top semicircle; `270` = classic open-bottom dial. Gauge mode only. |
@@ -489,7 +492,7 @@ Each entry under `entities` supports the following options.
 | `show_trend_icon` | boolean | `true` | Show ▲▼⯇⯈ trend direction icon next to the state value. The icon indicates direction only — its color is fixed and is **not** affected by `color_thresholds` or `rise_fall_colors`. |
 | `trend_period_hours` | number | `1` | Time window (in hours) for trend direction calculation. Set `0` for full range. |
 | `show_in_legend` | boolean | `false` | Show a statistics row below the graph for this entity. Which stats are shown is controlled by `legend_stats`. |
-| `legend_stats` | list | `["min","avg","max"]` | Which statistics to display in the legend row. Any combination of `min`, `avg`, `max`, `last`, `sum`. Requires `show_in_legend: true`. |
+| `legend_stats` | list | `["min","avg","max"]` | Which statistics to display in the legend row. Any combination of `min`, `avg`, `max`, `last`, `sum`, `live` *(v3.32)*. Requires `show_in_legend: true`. |
 | `lower_bound` | string/number | `null` | Y axis minimum / gauge minimum. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Y axis maximum / gauge maximum. See [Bounds](#-bounds). |
 | `align_state` | string | `"left"` | State row position and alignment. Top variants: `left` / `center` / `right` (above the graph). Bottom variants: `bottom-left` / `bottom-center` / `bottom-right` (below the graph). |
@@ -849,7 +852,7 @@ entities:
 **v3.25 addition:**
 - **Segment labels toggle** — card-level `state_timeline_show_labels: false` hides the state labels drawn inside the segments for clean, label-free color bands; the hover tooltip still names each state. Default `true` — and labels only render in segments wide enough to fit them anyway. In the editor the checkbox sits next to *Corner Radius* in state_timeline mode. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates).
 - **Row labels wrap instead of being cropped** — the entity-name column is **measured against the actual text** (not estimated from character counts), so it is exactly as wide as the longest name needs, capped at about a third of the card. A name that still doesn't fit **wraps onto up to three lines**, left-aligned, with the row growing to match — so a long friendly name stays fully readable even on a narrow card, a More Info dialog or a phone, and a short one gives all its space back to the timeline. Only a name too long for three lines is ellipsized, and it keeps the full text as a hover tooltip. The label is also clipped to its own column, so it can never paint past the edge of the card. *(v3.31)*
-- **Segment label size** — `state_timeline_label_font_size` sets that label's font size in pixels (6–40, default 10). The truncation budget follows the font size, so a bigger label shows fewer characters with an ellipsis instead of spilling out of its segment. The editor field appears next to *Show State Labels* while that toggle is on. *(v3.31)*
+- **Label size** — `state_timeline_label_font_size` sets the font size in pixels (6–40) for **both** the state label inside each segment (default 10) and the entity name in the label column on the left (default 11) *(v3.32)*. Both budgets follow it: a bigger segment label shows fewer characters with an ellipsis instead of spilling out, and a bigger entity name re-wraps across up to three lines with the row growing to fit. The editor field appears next to *Show State Labels* while that toggle is on. *(v3.31)*
 
 ### Box Plot *(new in v3.21)*
 
@@ -1194,6 +1197,48 @@ Lounge Lamp Power              ← already says "Lounge", not doubled up
 ### Editor
 
 General Settings → the **Area names** toggle (next to the legend options).
+
+</details>
+
+<details>
+<summary><strong>🏷️ Attribute names</strong> <em>(v3.32)</em></summary>
+
+When a card plots **two attributes of the same entity**, both series carry that entity's friendly name — so the legend and the tooltip show the same label twice and there is no way to tell which line is which:
+
+```yaml
+entities:
+  - entity: climate.lounge_heating
+    attribute: current_temperature     # legend: "Lounge Heating"
+  - entity: climate.lounge_heating
+    attribute: temperature             # legend: "Lounge Heating"   ← identical
+```
+
+Two card-level options qualify the label with the attribute, everywhere the name appears — state row, legend, tooltip, stats and exports:
+
+```yaml
+include_attribute_name: true      # "Lounge Heating · Current temperature"
+use_only_attribute_name: true     # "Current temperature"
+```
+
+| Options | Label |
+|---|---|
+| neither | `Lounge Heating` |
+| `include_attribute_name` | `Lounge Heating · Current temperature` |
+| `use_only_attribute_name` | `Current temperature` |
+| `use_only_attribute_name` + `include_area_names` | `Current temperature · Lounge` |
+
+Details:
+
+- **Only rows that actually plot an attribute change.** An entity graphed on its own state has no attribute name, so it is left exactly as it was — which means you can turn these on for a whole card without touching its ordinary series.
+- **An explicit `name:` always wins**, as everywhere else in the card.
+- The attribute label comes from **Home Assistant's own translated attribute name** when your HA version provides one, so a German dashboard reads *Zieltemperatur*. Otherwise the attribute key is humanised: `current_temperature` → `Current temperature`.
+- If you switch attributes with the runtime **attribute picker**, the label follows.
+- `use_only_attribute_name` takes precedence when both options are on.
+- It cooperates with `include_area_names`: the "name already contains its area" rule is evaluated against the label you will actually see, so `Lounge Heating` keeps its area suppressed while `Current temperature` correctly gains `· Lounge`.
+
+### Editor
+
+General Settings → the **Attribute names** and **Attribute names only** toggles, next to *Area names*.
 
 </details>
 
@@ -2615,7 +2660,7 @@ entities:
 
 This produces: `● Memory  ● Disk  ● CPU` in a centered wrapping row below the graph. Combine with `show_state: false` on entities to maximize graph area while still identifying colors.
 
-For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend** toggle instead — see [Entity Legend Stats](#per-entity-legend-stats).
+For per-entity statistics (Min, Avg, Max, Sum, Last, Live), use the entity-level **Legend** toggle instead — see [Entity Legend Stats](#per-entity-legend-stats).
 
 ![tempo](images/temp.gif)
 
@@ -2624,7 +2669,7 @@ For per-entity statistics (Min, Avg, Max, Last), use the entity-level **Legend**
 <details>
 <summary><strong>📊 Per-Entity Legend Stats</strong></summary>
 
-Each entity's Legend toggle (`show_in_legend: true`) lets you choose which statistics to display. Select any combination of Min, Avg, Max, and Last.
+Each entity's Legend toggle (`show_in_legend: true`) lets you choose which statistics to display. Select any combination of Min, Avg, Max, Sum, Last and Live.
 
 ```yaml
 entities:
@@ -2640,8 +2685,35 @@ entities:
       - max
 ```
 
+`min`, `avg`, `max` and `sum` describe the **time range currently on screen**, and `last` is the final plotted value in it — so all five move when you change the period or zoom.
 
-The editor shows four checkboxes (Min, Avg, Max, Last) inside the Legend section. Default is `[min, avg, max]` for backward compatibility.
+**`live`** *(v3.32)* is different: for a normal history-backed entity it is the **state right now**, independent of the displayed range.
+
+```yaml
+entities:
+  - entity: sensor.power
+    show_in_legend: true
+    legend_stats:
+      - avg
+      - live      # today's average, next to what the meter reads this second
+```
+
+It goes through the same value pipeline as the state row, so the two agree on what the number *means*:
+
+- an `attribute:` entity shows that attribute, not the entity's own state;
+- a `state_map` entity shows its mapped text label;
+- `invert`, `value_factor` and `value_transform` are applied;
+- with `ref_entity` it shows the **combined** value (the `A − B` your chart draws), and shows `—` rather than a misleading number if the combination has nothing to report;
+- comparison ghost rows never get a Live value — a ghost shares the main entity's ID, so "now" would be printed under a "previous period" heading.
+
+Two deliberate differences from the state row:
+
+- `primary_state_as` (and the legacy `show_state_last`) are **ignored** here. Those pick what the state row displays; the Live chip is always the live reading, so a card with `primary_state_as: max` shows the max in the header and the current value in the legend.
+- Three configurations have no live state to show and fall back to the last value in the fetched window instead: `ref_entity` (the last point of the combined series), a non-zero `offset`, and long-term-statistics rows. For those the value follows the displayed range like the other stats do.
+
+Otherwise the Live value refreshes as soon as the entity changes, without waiting for the next data refresh.
+
+The editor shows six checkboxes (Min, Avg, Max, Last, Sum, Live) inside the Legend section. Default is `[min, avg, max]` for backward compatibility.
 
 </details>
 
@@ -2831,10 +2903,19 @@ annotations:
 
 | Option | Applies to | Description |
 |--------|-----------|-------------|
-| `opacity` | All types | Opacity of the annotation (0–1). Default: 0.15 for bands/spans, 1 for lines/events |
+| `opacity` | All types | Prominence of the annotation (0–1) — fill for bands/spans, stroke for thresholds/events, **and its label** *(v3.32)*. Default: 0.15 for bands/spans, 1 for thresholds/events |
+| `label_opacity` | All types | Opacity of the label only (0–1), overriding whatever `opacity` would give it. Default: none *(v3.32)* |
 | `show_values` | threshold, band | Show numeric values alongside the label. Default: true |
 | `label` | All types | Text label displayed on the annotation |
 | `color` | All types | Color of the annotation line, fill, or marker |
+| `label_color` | All types | Color of the label. Default: the annotation's `color` |
+| `label_font_size` | All types | Label size in px. Default: 10 |
+| `label_position` | threshold, event | `left`/`right` for thresholds (default `right`), `top`/`bottom` for events (default `top`) |
+| `line_width` | threshold, event | Line thickness in px. Default: 1.5 |
+| `line_style` | threshold, event | `solid`, `dashed` or `dotted`. Default: `dashed` for thresholds, `dotted` for events |
+| `y_axis` | threshold, band | Set to `secondary` to position the annotation against the secondary Y axis |
+
+> The editor's annotation rows expose **Type**, **Source/Value**, **Label**, **Color**, **Opacity** and **Show Values**. The remaining options — `label_opacity`, `label_color`, `label_font_size`, `label_position`, `line_width`, `line_style` and `y_axis` — are YAML only.
 
 Threshold and band values accept: `22.5` (number), `sensor.x` (entity state), `sensor.x.attribute` (entity attribute with nested path support).
 
@@ -2890,7 +2971,32 @@ annotations:
     color: "#e74c3c"
 ```
 
-**Opacity** — control the prominence of each annotation with the `opacity` option (0–1). Applies to all types: fill opacity for bands and spans, stroke opacity for threshold lines and event markers:
+**Opacity** — control the prominence of each annotation with the `opacity` option (0–1). Applies to all types: fill opacity for bands and spans, stroke opacity for threshold lines and event markers, **and the annotation's label** *(v3.32)* — so a faded annotation fades as a whole instead of keeping a solid caption on top.
+
+Labels follow `opacity` **relative to that type's own default**, because the defaults differ for a good reason: a band fills a whole region, so it defaults to a light 0.15, while a line and a caption default to fully opaque. In practice:
+
+| You write | Threshold / event label | Band / span label |
+|---|---|---|
+| nothing | fully opaque | fully opaque |
+| `opacity: 0.15` | 15% | fully opaque *(0.15 is the band default — same rect, same label)* |
+| `opacity: 0.5` | 50% | fully opaque |
+| `opacity: 0.075` | 7.5% | 50% *(half the default → half strength)* |
+
+So dimming an annotation **below its normal look** dims its label by the same proportion, and for thresholds and event markers — whose normal look is fully opaque — the label simply uses the value you set.
+
+`label_opacity` overrides all of that when a label needs its own alpha:
+
+```yaml
+annotations:
+  - type: band
+    value: 18
+    value_end: 24
+    label: "Comfort zone"
+    opacity: 0.04          # barely-there fill
+    label_opacity: 0.9     # but a clearly readable caption
+```
+
+Annotations that never set `opacity` are unchanged: their labels stay fully opaque. One consequence worth knowing: `opacity: 0` on **any** annotation used to hide the shape while keeping its caption — that now hides the caption too, so add `label_opacity: 1` if you relied on it.
 
 ```yaml
 annotations:
@@ -4406,8 +4512,11 @@ Every configuration field has an info tooltip (ⓘ) with a detailed explanation.
 
 ### 🔄 Dynamic Editor Behavior
 
-The visual editor adapts in real time based on the current configuration. Options that don't apply are completely removed from the UI — not just disabled, but hidden. This keeps the editor clean regardless of which chart mode or feature combination you choose.
+The visual editor adapts in real time based on the current configuration. Options that don't apply to the current chart mode are hidden — down to the individual toggle, not just whole tabs. A heading disappears once every field under it is hidden, and a tab disappears once all of its headings are; a single surviving field keeps its tab. If the tab you are on disappears after a chart-mode change, the editor moves you to another tab that is still available.
 
+**Hiding never changes your configuration** *(v3.32)*. Anything you set in YAML for a hidden option is kept and reappears as soon as you switch back to a chart mode that uses it.
+
+The rule for hiding is deliberately conservative: an option is hidden only where it provably has no effect. Anything that reaches the shared data pipeline, the legend, the state row or the tooltip counts as in use and stays visible everywhere — which is why `break_on_null`, `points_per_hour`, `invert` and the colour thresholds show in every mode even though they are not all "drawing" options.
 
 #### Chart Mode → General Settings
 
@@ -4416,54 +4525,32 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor. The c
 | When Chart Mode is… | Visible tabs | What's hidden inside |
 |---|---|---|
 | **Timeline** | All six tabs | Nothing — full editor |
-| **Scatter** | Chart, Card, Overlay, X Axis, Y Axis | Calendar tab gone. Stacked / Sparkline / Animate / Logarithmic hidden in Chart. Bar Spacing hidden in Chart. |
-| **Pie / Ranking / Radar / Polar Area / Radial Bar** | Chart, Card, Overlay, (X Axis only for Pie/Ranking/Radar) | Y Axis and Calendar tabs gone. Most Chart options hidden — only mode-relevant ones remain. Overlay shows only Interval Picker and Attribute List. |
-| **Heatmap / Calendar** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone. Bar / line settings hidden. |
+| **Scatter** | Chart, Card, Overlay, X Axis, Y Axis, Calendar | Stacked / Sparkline / Animate / Extended Window hidden in Chart. In X Axis only the label options and Bar Spacing go; in Y Axis the bounds, ticks, grid, number format and Logarithmic go — the label and format options stay. |
+| **Pie / Ranking / Polar Area / Radial Bar / Radar** | Chart, Card, Overlay, Calendar | X Axis and Y Axis tabs gone. Chart keeps only the mode-relevant blocks (Pie block for pie, Ranking's Min Value, …). Overlay keeps the interval picker, attribute list, points/hour picker, group-by picker, tooltip and battery blocks. |
+| **Gauge / Box Plot / Waterfall / Histogram** | Chart, Card, Overlay, Calendar | X Axis and Y Axis tabs gone — these modes read no axis settings at all. Gauge adds its own block in Chart; Histogram its Bins; Waterfall its Total. |
+| **Heatmap / Calendar** | All six tabs | The Y Axis tab keeps only the label and format options — bounds, ticks, grid, number format and Logarithmic go. |
 | **State Timeline** | Chart, Card, Overlay, X Axis, Calendar | Y Axis tab gone (no Y values). The X Axis tab shows label options only — size, opacity, color, and date color. |
-| **Sparkline mode** | Chart, Card | Everything else gone — sparkline is chrome-free. |
+| **Sparkline mode** | Chart, Card | Everything else gone — sparkline is chrome-free. Inside Card, only Card Styling and Localization remain. |
 
 #### Chart Mode → Entity Settings
 
-Each entity's expanded settings are organized into six tabs in a 3×2 grid: **General**, **Graph**, **Basic** / **State Row**, **Colors**, **Advanced**. Switching the chart mode reshapes the visible options. Fields that have no effect in the current mode are completely hidden — Pie charts don't show Point Color or Color Thresholds, and Heatmap hides Rise/Fall Colors.
+Each entity's expanded settings are organized into six tabs in a 3×2 grid: **General**, **Graph**, **Basic**, **State Row**, **Colors**, **Advanced**. Switching the chart mode reshapes the visible options.
 
-**Graph tab**
+Below is the complete list of entity options that are mode-restricted. **Anything not in this table is visible in every chart mode** — including Aggregate Function, Attribute, Points/Hour, Decimals, Number Format, Break on Gaps, Y Axis (Primary/Secondary), Invert, Value Factor, Value Transform, Fixed Value, State Map, Offset, Forecast Horizon, Colour Thresholds, the rest of the State Row block and the whole Legend block.
 
-| When Chart Mode is… | What's visible |
-|---|---|
-| **Timeline** | Graph Type (line / step / bar), Show Extrema, Show Average, Moving Averages, Range Band, Break on Gaps, Line block (with width & Bezier), Fill block (with gradient), Data Points, Y Axis Range |
-| **Scatter** | Show Extrema, Data Points, Y Axis Range (no Graph Type, no Line/Fill, no Average) |
-| **Radar** | Line, Fill, Data Points (no Graph Type, no Extrema/Average) |
-| **All other modes** (Pie, Ranking, Radial Bar, Polar Area, Heatmap, Calendar) | Only Y Axis Range remains |
+| Option | Tab | Visible in… |
+|---|---|---|
+| Graph Type, Line Width, Show Line, Line Style, Bezier (Smooth), Data Points, Point Size, Show Extrema (+ min/max, timestamp, colour, font size, background), Range Band, Show Average, Moving Averages, Data Labels, Z-Index, Rise/Fall Colors, Period Comparison | Graph / Colors | Timeline |
+| Stack Group | Graph | Timeline, and only while the card's **Stacked** toggle is on |
+| Show Fill | Colors | Timeline, Radar |
+| Point Color | Colors | Timeline, Scatter, Radar |
+| Gradient | Colors | Timeline, Ranking, Radar, Gauge |
+| Y Axis Range (Lower / Upper Bound) | Graph | Timeline, Scatter, Radial Bar, Radar, Heatmap, Calendar, Gauge |
+| Tooltip Name | General | Timeline, Pie, Ranking, Radial Bar, Polar Area, Radar, Gauge |
+| Needle Color | Colors | Gauge |
+| Trend Icon (+ period, size, up/down/stable colours) | State Row | All modes **except** State Timeline |
 
-**State Row tab**
-
-Available in all chart modes. Shows the State Row block (primary/secondary value, name position, MDI icon, font sizes, adaptive color) and the Trend Icon block.
-
-**Basic tab**
-
-| Field | Visible in… |
-|---|---|
-| **Y Axis** (Primary / Secondary / Independent) | Timeline, Scatter |
-| Aggregate Function, Attribute, Points/Hour, Decimals, Number Format | All modes (universal) |
-| **Legend** (per-entity stats: Min, Avg, Max, Last, Sum) | All modes |
-
-**Advanced tab**
-
-Available in all chart modes. Always shows: Forecast Horizon, Offset, Value Factor, Value Transform, Fixed Value, State Map, Attribute Data Source.
-
-| Field | Visible in… |
-|---|---|
-| **Invert (Mirror)** | Timeline only |
-
-**Colors tab**
-
-| Field | Visible in… |
-|---|---|
-| Line / Fill Color | All modes (universal). Accepts `{{ }}` Jinja2 templates |
-| Icon Color, State Color | All modes. Accepts `{{ }}` templates |
-| **Point Color** | Timeline, Scatter, Radar |
-| **Rise/Fall Colors** | Timeline only |
-| **Color Thresholds** | All modes **except** Pie and Polar Area (single color is meaningful for slices) |
+> Three corrections landed here in 3.32. **Invert (Mirror)** was documented as Timeline-only; it has always worked in every mode and is now shown in every mode. **Colour Thresholds** used to be hidden in Pie, Box Plot, Waterfall, Histogram and State Timeline even though they colour the legend, the state row and the tooltip there — they are now shown everywhere. **Y Axis** (Primary/Secondary) also stays visible everywhere: besides choosing an axis it selects which of `y_axis_format` / `y2_axis_format` formats that entity's numbers, and that applies in every chart mode.
 
 
 #### Sparkline → Entire Card
@@ -4521,7 +4608,7 @@ Some options depend on or conflict with each other:
 | `show_y_axis: false` | Hides primary (left) axis labels; secondary axis is not affected |
 | `show_y2_axis: false` | Hides secondary (right) axis labels; primary axis is not affected. Right padding shrinks. |
 | `show_legend: true` | Compact Legend appears below graph. Combine with `show_state: false` on entities for maximum graph space |
-| `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last` |
+| `legend_stats` | Only takes effect when entity `show_in_legend` is `true`. Any combination of `min`, `avg`, `max`, `last`, `sum`, `live` |
 | `align_state: bottom-*` | State row renders below the graph instead of above. Can be mixed — some entities top, some bottom |
 | `show_range_band: true` | Only visible in Timeline mode with line/step entities. Band is drawn behind the normal line and fill. Tooltip adds a min → max row |
 | `chart_mode: radialbar` | Uses `lower_bound` / `upper_bound` per entity to define the 0–100% ring fill. Falls back to stats min/max if not set |
