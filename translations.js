@@ -1,4 +1,4 @@
-export const T_VERSION = "v3.30";
+export const T_VERSION = "3.31-test-release";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -14,7 +14,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Takvim dönemleri",
     "Rolling windows (ending now)": "Kayan pencereler (şimdi biten)",
-    "Area on duplicate names": "Yinelenen adlarda alan",
+    "Area names": "Alan adları",
     "Hide Name": "İsmi Gizle",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Etkin",
@@ -311,6 +311,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "PNG indir (Kart)",
     "Price Entity": "Fiyat Entity'si",
     "Price Attribute": "Fiyat \u00d6zniteli\u011fi",
+    "Reference Entity": "Referans Varl\u0131k",
+    "Reference Attribute": "Referans \u00d6zniteli\u011fi",
+    "Operation": "\u0130\u015flem",
     "Damp midnight reset artifacts": "Gece yar\u0131s\u0131 s\u0131f\u0131rlama artefaktlar\u0131n\u0131 bast\u0131r",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "\u00f6nceki d\u00f6nem",
@@ -772,7 +775,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderzeiträume",
     "Rolling windows (ending now)": "Gleitende Zeitfenster (enden jetzt)",
-    "Area on duplicate names": "Bereich bei doppelten Namen",
+    "Area names": "Bereichsnamen",
     "Hide Name": "Name ausblenden",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiviert",
@@ -1069,6 +1072,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "PNG herunterladen (Karte)",
     "Price Entity": "Preis-Entit\u00e4t",
     "Price Attribute": "Preis-Attribut",
+    "Reference Entity": "Referenz-Entität",
+    "Reference Attribute": "Referenz-Attribut",
+    "Operation": "Rechenoperation",
     "Damp midnight reset artifacts": "Mitternachts-Reset-Artefakte d\u00e4mpfen",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "vorherige Periode",
@@ -1530,7 +1536,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalendářní období",
     "Rolling windows (ending now)": "Klouzavá okna (končící nyní)",
-    "Area on duplicate names": "Oblast u duplicitních názvů",
+    "Area names": "Názvy oblastí",
     "Hide Name": "Skrýt název",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Povoleno",
@@ -1827,6 +1833,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "St\u00e1hnout PNG (karta)",
     "Price Entity": "Cenov\u00e1 entita",
     "Price Attribute": "Atribut ceny",
+    "Reference Entity": "Referenční entita",
+    "Reference Attribute": "Referenční atribut",
+    "Operation": "Operace",
     "Damp midnight reset artifacts": "Tlumit artefakty p\u016flno\u010dn\u00edho resetu",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "p\u0159edchoz\u00ed obdob\u00ed",
@@ -2313,7 +2322,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullende vinduer (slutter nu)",
-    "Area on duplicate names": "Område ved dublerede navne",
+    "Area names": "Områdenavne",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiveret",
@@ -2610,6 +2619,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Download PNG (kort)",
     "Price Entity": "Prisenhed",
     "Price Attribute": "Prisattribut",
+    "Reference Entity": "Reference-enhed",
+    "Reference Attribute": "Reference-attribut",
+    "Operation": "Operation",
     "Damp midnight reset artifacts": "D\u00e6mp midnatsnulstillings-artefakter",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "forrige periode",
@@ -3096,7 +3108,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Periodos de calendario",
     "Rolling windows (ending now)": "Ventanas móviles (terminan ahora)",
-    "Area on duplicate names": "Área en nombres duplicados",
+    "Area names": "Nombres de área",
     "Hide Name": "Ocultar nombre",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Habilitado",
@@ -3393,6 +3405,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Descargar PNG (tarjeta)",
     "Price Entity": "Entidad de precio",
     "Price Attribute": "Atributo de precio",
+    "Reference Entity": "Entidad de referencia",
+    "Reference Attribute": "Atributo de referencia",
+    "Operation": "Operación",
     "Damp midnight reset artifacts": "Atenuar artefactos de reinicio de medianoche",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "per\u00edodo anterior",
@@ -3879,7 +3894,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenterijaksot",
     "Rolling windows (ending now)": "Liukuvat ikkunat (päättyvät nyt)",
-    "Area on duplicate names": "Alue päällekkäisissä nimissä",
+    "Area names": "Alueiden nimet",
     "Hide Name": "Piilota nimi",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Käytössä",
@@ -4176,6 +4191,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Lataa PNG (kortti)",
     "Price Entity": "Hintaentiteetti",
     "Price Attribute": "Hinta-attribuutti",
+    "Reference Entity": "Viite-entiteetti",
+    "Reference Attribute": "Viiteattribuutti",
+    "Operation": "Laskutoimitus",
     "Damp midnight reset artifacts": "Vaimenna keskiy\u00f6n nollausartefaktit",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "edellinen jakso",
@@ -4662,7 +4680,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Périodes calendaires",
     "Rolling windows (ending now)": "Fenêtres glissantes (jusqu'à maintenant)",
-    "Area on duplicate names": "Zone pour les noms en double",
+    "Area names": "Noms de zone",
     "Hide Name": "Masquer le nom",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Activé",
@@ -4959,6 +4977,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "T\u00e9l\u00e9charger PNG (carte)",
     "Price Entity": "Entit\u00e9 de prix",
     "Price Attribute": "Attribut de prix",
+    "Reference Entity": "Entité de référence",
+    "Reference Attribute": "Attribut de référence",
+    "Operation": "Opération",
     "Damp midnight reset artifacts": "Att\u00e9nuer les artefacts de remise \u00e0 z\u00e9ro de minuit",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "p\u00e9riode pr\u00e9c\u00e9dente",
@@ -5445,7 +5466,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Periodi di calendario",
     "Rolling windows (ending now)": "Finestre mobili (fino ad ora)",
-    "Area on duplicate names": "Area sui nomi duplicati",
+    "Area names": "Nomi area",
     "Hide Name": "Nascondi nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Abilitato",
@@ -5742,6 +5763,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Scarica PNG (scheda)",
     "Price Entity": "Entit\u00e0 prezzo",
     "Price Attribute": "Attributo prezzo",
+    "Reference Entity": "Entità di riferimento",
+    "Reference Attribute": "Attributo di riferimento",
+    "Operation": "Operazione",
     "Damp midnight reset artifacts": "Attenua artefatti di reset di mezzanotte",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "periodo precedente",
@@ -6228,7 +6252,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioden",
     "Rolling windows (ending now)": "Voortschrijdende vensters (eindigen nu)",
-    "Area on duplicate names": "Gebied bij dubbele namen",
+    "Area names": "Gebiedsnamen",
     "Hide Name": "Naam verbergen",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ingeschakeld",
@@ -6525,6 +6549,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "PNG downloaden (kaart)",
     "Price Entity": "Prijs-entiteit",
     "Price Attribute": "Prijsattribuut",
+    "Reference Entity": "Referentie-entiteit",
+    "Reference Attribute": "Referentieattribuut",
+    "Operation": "Bewerking",
     "Damp midnight reset artifacts": "Middernacht-reset-artefacten dempen",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "vorige periode",
@@ -7011,7 +7038,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullerende vinduer (slutter nå)",
-    "Area on duplicate names": "Område ved dupliserte navn",
+    "Area names": "Områdenavn",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktivert",
@@ -7308,6 +7335,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Last ned PNG (kort)",
     "Price Entity": "Prisentitet",
     "Price Attribute": "Prisattributt",
+    "Reference Entity": "Referanseentitet",
+    "Reference Attribute": "Referanseattributt",
+    "Operation": "Operasjon",
     "Damp midnight reset artifacts": "Demp midnattsnullstillings-artefakter",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "forrige periode",
@@ -7794,7 +7824,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Okresy kalendarzowe",
     "Rolling windows (ending now)": "Okna ruchome (kończące się teraz)",
-    "Area on duplicate names": "Obszar przy zduplikowanych nazwach",
+    "Area names": "Nazwy obszarów",
     "Hide Name": "Ukryj nazwę",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Włączone",
@@ -8091,6 +8121,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Pobierz PNG (karta)",
     "Price Entity": "Encja ceny",
     "Price Attribute": "Atrybut ceny",
+    "Reference Entity": "Encja referencyjna",
+    "Reference Attribute": "Atrybut referencyjny",
+    "Operation": "Operacja",
     "Damp midnight reset artifacts": "T\u0142um artefakty p\u00f3\u0142nocnego resetu",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "poprzedni okres",
@@ -8577,7 +8610,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Períodos de calendário",
     "Rolling windows (ending now)": "Janelas móveis (terminam agora)",
-    "Area on duplicate names": "Área em nomes duplicados",
+    "Area names": "Nomes de área",
     "Hide Name": "Ocultar nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ativado",
@@ -8874,6 +8907,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Transferir PNG (cart\u00e3o)",
     "Price Entity": "Entidade de pre\u00e7o",
     "Price Attribute": "Atributo de pre\u00e7o",
+    "Reference Entity": "Entidade de refer\u00eancia",
+    "Reference Attribute": "Atributo de refer\u00eancia",
+    "Operation": "Opera\u00e7\u00e3o",
     "Damp midnight reset artifacts": "Atenuar artefactos de reposi\u00e7\u00e3o da meia-noite",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "per\u00edodo anterior",
@@ -9360,7 +9396,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Календарные периоды",
     "Rolling windows (ending now)": "Скользящие окна (до сейчас)",
-    "Area on duplicate names": "Зона при одинаковых именах",
+    "Area names": "Названия зон",
     "Hide Name": "Скрыть имя",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Включено",
@@ -9657,6 +9693,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "\u0421\u043a\u0430\u0447\u0430\u0442\u044c PNG (\u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430)",
     "Price Entity": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0446\u0435\u043d\u044b",
     "Price Attribute": "\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0446\u0435\u043d\u044b",
+    "Reference Entity": "\u041e\u043f\u043e\u0440\u043d\u0430\u044f \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044c",
+    "Reference Attribute": "\u041e\u043f\u043e\u0440\u043d\u044b\u0439 \u0430\u0442\u0440\u0438\u0431\u0443\u0442",
+    "Operation": "\u041e\u043f\u0435\u0440\u0430\u0446\u0438\u044f",
     "Damp midnight reset artifacts": "\u041f\u043e\u0434\u0430\u0432\u043b\u044f\u0442\u044c \u0430\u0440\u0442\u0435\u0444\u0430\u043a\u0442\u044b \u043f\u043e\u043b\u0443\u043d\u043e\u0447\u043d\u043e\u0433\u043e \u0441\u0431\u0440\u043e\u0441\u0430",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "\u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0438\u0439 \u043f\u0435\u0440\u0438\u043e\u0434",
@@ -10143,7 +10182,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "Kalenderperioder",
     "Rolling windows (ending now)": "Rullande fönster (slutar nu)",
-    "Area on duplicate names": "Område vid dubbletter",
+    "Area names": "Områdesnamn",
     "Hide Name": "Dölj namn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiverad",
@@ -10440,6 +10479,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "Ladda ner PNG (kort)",
     "Price Entity": "Prisentitet",
     "Price Attribute": "Prisattribut",
+    "Reference Entity": "Referensentitet",
+    "Reference Attribute": "Referensattribut",
+    "Operation": "Operation",
     "Damp midnight reset artifacts": "D\u00e4mpa midnatts\u00e5terst\u00e4llnings-artefakter",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "f\u00f6reg\u00e5ende period",
@@ -10926,7 +10968,7 @@ export const I18N = Object.freeze({
     // --- added in 3.30 round 2 (date picker mode groups)
     "Calendar periods": "日历周期",
     "Rolling windows (ending now)": "滚动窗口（截至当前）",
-    "Area on duplicate names": "重名时附加区域",
+    "Area names": "区域名称",
     "Hide Name": "隐藏名称",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "启用",
@@ -11223,6 +11265,9 @@ export const I18N = Object.freeze({
     "Download PNG (Card)": "\u4e0b\u8f7d PNG\uff08\u5361\u7247\uff09",
     "Price Entity": "\u4ef7\u683c\u5b9e\u4f53",
     "Price Attribute": "\u4ef7\u683c\u5c5e\u6027",
+    "Reference Entity": "\u53c2\u8003\u5b9e\u4f53",
+    "Reference Attribute": "\u53c2\u8003\u5c5e\u6027",
+    "Operation": "\u8fd0\u7b97",
     "Damp midnight reset artifacts": "\u6291\u5236\u5348\u591c\u91cd\u7f6e\u4f2a\u5f71",
     // --- added in 3.25 (compare / export / template toggles / raw / state labels)
     "previous period": "\u4e0a\u4e00\u5468\u671f",
