@@ -18,6 +18,9 @@ If you like this card, feel free to ⭐ star the project on GitHub and share it 
 
 An awesome feature-rich custom card for [Home Assistant](https://www.home-assistant.io/) that combines a time-series graph with live state rows — all in a single card. Built with no external dependencies, fully configurable via the visual editor or YAML.
 
+> [!NOTE]
+> **Source availability** — this card is distributed as a **minified/protected bundle**. The readable source code is not published, so the repository is not set up for external code review or pull requests. Bug reports and feature requests are very welcome in [Issues](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues) — that is how every feature in this card has been shaped so far. Please factor this in when deciding whether to install.
+
 ---
 
 ## 🖼️ Preview
@@ -353,7 +356,7 @@ These options apply to the whole card.
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
 | `include_area_names` | boolean | `false` | Append each entity's Home Assistant area to its name across the state row, legend, tooltip, stats and exports — e.g. `Heating Temperature · Lounge`. Every entity with an area gets it (no duplicate detection, so the legend doesn't change shape when you add or remove an unrelated entity). The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` is never modified. Comparison ghosts inherit their parent's suffix. See [Area names](#-area-names). |
 | `include_attribute_name` | boolean | `false` | Append the plotted attribute to each entity's name in the same places — e.g. `Lounge Heating · Current temperature` *(v3.32)*. Rows that plot the entity state itself have no attribute and are left alone, as are entities with an explicit `name:`. Uses Home Assistant's own translated attribute name where one exists, otherwise a humanised form of the attribute key. |
-| `use_only_attribute_name` | boolean | `false` | Like `include_attribute_name`, but shows **only** the attribute — `Current temperature` instead of `Lounge Heating · Current temperature` *(v3.32)*. Takes precedence when both are on. Combines with `include_area_names` to give `Current temperature · Lounge`. |
+| `use_only_attribute_name` | boolean | `false` | Like `include_attribute_name`, but shows **only** the attribute — `Current temperature` instead of `Lounge Heating · Current temperature` *(v3.32)*. The two are alternatives: the visual editor turns one off when you switch the other on, and in YAML this one wins if both are set. Combines with `include_area_names` to give `Current temperature · Lounge`. |
 | `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a slice-grow animation on every data refresh for Pie, Radial Bar, Polar Area, and Gauge modes — slices/arcs sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
@@ -1231,9 +1234,11 @@ Details:
 
 - **Only rows that actually plot an attribute change.** An entity graphed on its own state has no attribute name, so it is left exactly as it was — which means you can turn these on for a whole card without touching its ordinary series.
 - **An explicit `name:` always wins**, as everywhere else in the card.
-- The attribute label comes from **Home Assistant's own translated attribute name** when your HA version provides one, so a German dashboard reads *Zieltemperatur*. Otherwise the attribute key is humanised: `current_temperature` → `Current temperature`.
+- The attribute label comes from **Home Assistant's own translated attribute name** when your HA version provides one, so a German dashboard reads *Zieltemperatur*. Otherwise the attribute key is humanised: `current_temperature` → `Current Temperature`. The runtime attribute picker uses the same label, so the dropdown and the chart always name an attribute the same way *(v3.32)*.
+- With `ref_entity`, both halves of the combined name are qualified — `Current Temperature - Target Temperature` rather than one attribute minus a bare entity name.
+- Rows using `data_attribute` (an attribute *array* such as a forecast) are never renamed after `attribute:`, since that is not what they plot.
 - If you switch attributes with the runtime **attribute picker**, the label follows.
-- `use_only_attribute_name` takes precedence when both options are on.
+- The two options are **alternatives**, not a stack. In the visual editor, switching one on turns the other off; in YAML, `use_only_attribute_name` wins if you set both.
 - It cooperates with `include_area_names`: the "name already contains its area" rule is evaluated against the label you will actually see, so `Lounge Heating` keeps its area suppressed while `Current temperature` correctly gains `· Lounge`.
 
 ### Editor
@@ -4022,6 +4027,8 @@ entities:
 ## 🎨 CSS Styling with `card_mod`
 
 For users who want to go beyond the built-in styling options, the card exposes a rich set of CSS class names that can be targeted with [`card-mod`](https://github.com/thomasloven/lovelace-card-mod). This is useful for theme integration, per-card overrides, or visual tweaks that aren't available as configuration options (e.g. animated transitions, custom shadows, gradient backgrounds, repeating-pattern overlays).
+
+> **Reliability note** *(v3.32)*: card-mod styles used to disappear on a page reload (F5) or app restart and only come back after re-saving the card — a race between card-mod's style injection and the card's first build ([#268](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/268)). Fixed: injected styles now survive the card's initial build and every later re-render. If you style the same property both ways — e.g. `card_background_color:` in the config **and** an `ha-card { background: ... }` in card-mod — the built-in option wins, because it is applied as an inline style; pick one, or add `!important` to the card-mod rule.
 
 <details>
 <summary>Show CSS class reference and examples</summary>
