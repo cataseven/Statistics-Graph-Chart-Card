@@ -21,6 +21,10 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 > [!NOTE]
 > **Source availability** — this card is distributed as a **minified/protected bundle**. The readable source code is not published, so the repository is not set up for external code review or pull requests. Bug reports and feature requests are very welcome in [Issues](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues) — that is how every feature in this card has been shaped so far. Please factor this in when deciding whether to install.
 
+> [!NOTE]
+> **Wiki Page** was originally created by [@andyblac](https://github.com/andyblac) and is maintained here with his permission. Many thanks to him for this great contribution. [Wiki Page](https://github.com/cataseven/Statistics-Graph-Chart-Card/wiki)
+
+
 ---
 
 ## 🖼️ Preview
