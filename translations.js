@@ -21,6 +21,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Öznitelik adları",
     "Attribute names only": "Yalnızca öznitelik adları",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Çizilen özniteliği her entity'nin adına ekler - durum satırı, lejant, ipuçları, istatistikler, dışa aktarımlar ve bu liste. Olmadan, aynı entity'nin iki özniteliği iki özdeş etiket üretir. Entity'nin kendi durumunu çizen satırlar ve Özel Ad verdikleriniz etkilenmez.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Entity adı + öznitelik yerine YALNIZCA öznitelik adını gösterir. Alan adları ile birlikte 'Hedef sıcaklık · Salon' gibi etiketler verir. Bu ve Öznitelik adları birbirinin alternatifidir - birini açmak diğerini kapatır.",
     "Hide Name": "İsmi Gizle",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Etkin",
@@ -429,6 +431,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Kutu Grafiği",
     "Break on Gaps": "Boşluklarda Kes",
     "Brush Zooming": "Fırça Yakınlaştırma",
+    "Drill Down": "Detaya İnme",
     "Calendar": "Takvim",
     "Card": "Kart",
     "Card Border": "Kart Kenarlığı",
@@ -788,6 +791,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attributnamen",
     "Attribute names only": "Nur Attributnamen",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Hängt das dargestellte Attribut an den Namen jeder Entität an - in Statuszeile, Legende, Tooltips, Statistiken, Exporten und dieser Liste. Ohne dies erzeugen zwei Attribute derselben Entität zwei identische Bezeichnungen. Zeilen, die den Zustand der Entität selbst darstellen, bleiben unberührt, ebenso Entitäten mit eigenem Namen.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Zeigt NUR den Attributnamen statt Entitätsname plus Attribut. Zusammen mit Bereichsnamen ergibt das Bezeichnungen wie 'Zieltemperatur · Wohnzimmer'. Dies und Attributnamen sind Alternativen - eines einzuschalten schaltet das andere aus.",
     "Hide Name": "Name ausblenden",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiviert",
@@ -1196,6 +1201,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Boxplot",
     "Break on Gaps": "Bei Lücken unterbrechen",
     "Brush Zooming": "Brush-Zoom",
+    "Drill Down": "Detailansicht",
     "Calendar": "Kalender",
     "Card": "Karte",
     "Card Border": "Kartenrahmen",
@@ -1555,6 +1561,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Názvy atributů",
     "Attribute names only": "Pouze názvy atributů",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Připojí vykreslovaný atribut k názvu každé entity - ve stavovém řádku, legendě, popiscích, statistikách, exportech i v tomto seznamu. Bez toho dva atributy téže entity vytvoří dva shodné popisky. Řádky vykreslující samotný stav entity zůstanou nedotčeny, stejně jako entity s vlastním názvem.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Zobrazí POUZE název atributu místo názvu entity s atributem. Spolu s Názvy oblastí dává popisky jako 'Cílová teplota · Obývák'. Toto a Názvy atributů jsou alternativy - zapnutím jednoho se druhé vypne.",
     "Hide Name": "Skrýt název",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Povoleno",
@@ -1988,6 +1996,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Krabicový graf",
     "Break on Gaps": "Přerušit na mezerách",
     "Brush Zooming": "Přiblížení výběrem",
+    "Drill Down": "Podrobný rozpad",
     "Calendar": "Kalendář",
     "Card": "Karta",
     "Card Border": "Ohraničení karty",
@@ -2347,6 +2356,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attributnavne",
     "Attribute names only": "Kun attributnavne",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Tilføjer den viste attribut til hver enheds navn - i statusrækken, signaturforklaringen, værktøjstips, statistik, eksport og denne liste. Uden dette giver to attributter fra samme enhed to identiske etiketter. Rækker der viser enhedens egen tilstand berøres ikke, og heller ikke enheder med et brugerdefineret navn.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Vis KUN attributnavnet i stedet for enhedsnavn plus attribut. Sammen med Områdenavne giver det etiketter som 'Måltemperatur · Stue'. Denne og Attributnavne er alternativer - slår du den ene til, slås den anden fra.",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiveret",
@@ -2780,6 +2791,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Boksplot",
     "Break on Gaps": "Afbryd ved huller",
     "Brush Zooming": "Markeringszoom",
+    "Drill Down": "Detaljevisning",
     "Calendar": "Kalender",
     "Card": "Kort",
     "Card Border": "Kortramme",
@@ -3139,6 +3151,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Nombres de atributo",
     "Attribute names only": "Solo nombres de atributo",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Añade el atributo representado al nombre de cada entidad: en la fila de estado, la leyenda, las descripciones emergentes, las estadísticas, las exportaciones y esta lista. Sin esto, dos atributos de la misma entidad producen dos etiquetas idénticas. Las filas que representan el estado de la entidad no se ven afectadas, ni las entidades con un nombre personalizado.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Muestra SOLO el nombre del atributo en lugar del nombre de la entidad más el atributo. Junto con Nombres de área da etiquetas como 'Temperatura objetivo · Salón'. Esta opción y Nombres de atributo son alternativas: activar una desactiva la otra.",
     "Hide Name": "Ocultar nombre",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Habilitado",
@@ -3572,6 +3586,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Diagrama de caja",
     "Break on Gaps": "Cortar en huecos",
     "Brush Zooming": "Zoom por selección",
+    "Drill Down": "Desglose",
     "Calendar": "Calendario",
     "Card": "Tarjeta",
     "Card Border": "Borde de la tarjeta",
@@ -3931,6 +3946,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attribuuttien nimet",
     "Attribute names only": "Vain attribuuttien nimet",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Lisää piirretyn attribuutin kunkin entiteetin nimeen - tilariviin, selitteeseen, työkaluvihjeisiin, tilastoihin, vienteihin ja tähän luetteloon. Ilman tätä saman entiteetin kaksi attribuuttia tuottavat kaksi samanlaista nimeä. Rivit, jotka piirtävät entiteetin oman tilan, eivät muutu, eivätkä mukautetun nimen saaneet entiteetit.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Näyttää VAIN attribuutin nimen entiteetin nimen ja attribuutin sijaan. Yhdessä Alueiden nimien kanssa tuloksena on nimiä kuten 'Tavoitelämpötila · Olohuone'. Tämä ja Attribuuttien nimet ovat vaihtoehtoja - toisen käyttöönotto poistaa toisen käytöstä.",
     "Hide Name": "Piilota nimi",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Käytössä",
@@ -4364,6 +4381,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Laatikkokuvio",
     "Break on Gaps": "Katkaise aukkojen kohdalla",
     "Brush Zooming": "Valintazoomaus",
+    "Drill Down": "Porautuminen",
     "Calendar": "Kalenteri",
     "Card": "Kortti",
     "Card Border": "Kortin reunus",
@@ -4723,6 +4741,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Noms d'attribut",
     "Attribute names only": "Noms d'attribut uniquement",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Ajoute l'attribut tracé au nom de chaque entité - dans la ligne d'état, la légende, les info-bulles, les statistiques, les exports et cette liste. Sans cela, deux attributs d'une même entité produisent deux libellés identiques. Les lignes qui tracent l'état de l'entité ne sont pas modifiées, ni les entités auxquelles vous avez donné un nom personnalisé.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Affiche UNIQUEMENT le nom de l'attribut au lieu du nom de l'entité suivi de l'attribut. Combiné aux Noms de zone, cela donne des libellés comme 'Température cible · Salon'. Cette option et Noms d'attribut sont des alternatives - activer l'une désactive l'autre.",
     "Hide Name": "Masquer le nom",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Activé",
@@ -5156,6 +5176,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Boîte à moustaches",
     "Break on Gaps": "Couper aux trous",
     "Brush Zooming": "Zoom par sélection",
+    "Drill Down": "Exploration",
     "Calendar": "Calendrier",
     "Card": "Carte",
     "Card Border": "Bordure de la carte",
@@ -5515,6 +5536,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Nomi attributo",
     "Attribute names only": "Solo nomi attributo",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Aggiunge l'attributo tracciato al nome di ogni entità - nella riga di stato, nella legenda, nei suggerimenti, nelle statistiche, nelle esportazioni e in questo elenco. Senza, due attributi della stessa entità producono due etichette identiche. Le righe che tracciano lo stato dell'entità non vengono toccate, né le entità con un nome personalizzato.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Mostra SOLO il nome dell'attributo invece del nome dell'entità più l'attributo. Insieme a Nomi area produce etichette come 'Temperatura target · Soggiorno'. Questa opzione e Nomi attributo sono alternative: attivandone una si disattiva l'altra.",
     "Hide Name": "Nascondi nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Abilitato",
@@ -5948,6 +5971,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Box plot",
     "Break on Gaps": "Interrompi sui vuoti",
     "Brush Zooming": "Zoom a selezione",
+    "Drill Down": "Approfondimento",
     "Calendar": "Calendario",
     "Card": "Card",
     "Card Border": "Bordo card",
@@ -6307,6 +6331,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attribuutnamen",
     "Attribute names only": "Alleen attribuutnamen",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Voegt het weergegeven attribuut toe aan de naam van elke entiteit - in de statusregel, legenda, tooltips, statistieken, exports en deze lijst. Zonder dit leveren twee attributen van dezelfde entiteit twee identieke labels op. Rijen die de status van de entiteit zelf tonen blijven ongewijzigd, net als entiteiten met een eigen naam.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Toont ALLEEN de attribuutnaam in plaats van de entiteitsnaam plus het attribuut. Samen met Gebiedsnamen geeft dit labels als 'Doeltemperatuur · Woonkamer'. Deze en Attribuutnamen zijn alternatieven - de een inschakelen schakelt de ander uit.",
     "Hide Name": "Naam verbergen",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ingeschakeld",
@@ -6740,6 +6766,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Boxplot",
     "Break on Gaps": "Onderbreken bij gaten",
     "Brush Zooming": "Selectiezoom",
+    "Drill Down": "Inzoomen op periode",
     "Calendar": "Kalender",
     "Card": "Kaart",
     "Card Border": "Kaartrand",
@@ -7099,6 +7126,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attributtnavn",
     "Attribute names only": "Bare attributtnavn",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Legger det viste attributtet til navnet på hver enhet - i statusraden, forklaringen, verktøytips, statistikk, eksporter og denne listen. Uten dette gir to attributter fra samme enhet to identiske etiketter. Rader som viser enhetens egen tilstand berøres ikke, og heller ikke enheter du har gitt et eget navn.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Viser BARE attributtnavnet i stedet for enhetsnavn pluss attributt. Sammen med Områdenavn gir det etiketter som 'Måltemperatur · Stue'. Dette og Attributtnavn er alternativer - slår du på det ene, slås det andre av.",
     "Hide Name": "Skjul navn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktivert",
@@ -7532,6 +7561,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Boksplott",
     "Break on Gaps": "Bryt ved hull",
     "Brush Zooming": "Markeringszoom",
+    "Drill Down": "Detaljvisning",
     "Calendar": "Kalender",
     "Card": "Kort",
     "Card Border": "Kortramme",
@@ -7891,6 +7921,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Nazwy atrybutów",
     "Attribute names only": "Tylko nazwy atrybutów",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Dodaje rysowany atrybut do nazwy każdej encji - w wierszu stanu, legendzie, podpowiedziach, statystykach, eksportach i na tej liście. Bez tego dwa atrybuty tej samej encji dają dwie identyczne etykiety. Wiersze rysujące sam stan encji pozostają bez zmian, podobnie jak encje z własną nazwą.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Pokazuje TYLKO nazwę atrybutu zamiast nazwy encji z atrybutem. Razem z Nazwami obszarów daje etykiety typu 'Temperatura zadana · Salon'. Ta opcja i Nazwy atrybutów są alternatywami - włączenie jednej wyłącza drugą.",
     "Hide Name": "Ukryj nazwę",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Włączone",
@@ -8324,6 +8356,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Wykres pudełkowy",
     "Break on Gaps": "Przerywaj na lukach",
     "Brush Zooming": "Przybliżanie zaznaczeniem",
+    "Drill Down": "Szczegóły okresu",
     "Calendar": "Kalendarz",
     "Card": "Karta",
     "Card Border": "Obramowanie karty",
@@ -8683,6 +8716,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Nomes de atributo",
     "Attribute names only": "Apenas nomes de atributo",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Acrescenta o atributo representado ao nome de cada entidade - na linha de estado, legenda, dicas, estatísticas, exportações e nesta lista. Sem isto, dois atributos da mesma entidade produzem duas etiquetas idênticas. As linhas que representam o estado da própria entidade não são alteradas, nem as entidades com nome personalizado.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Mostra APENAS o nome do atributo em vez do nome da entidade mais o atributo. Combinado com Nomes de área dá etiquetas como 'Temperatura alvo · Sala'. Esta opção e Nomes de atributo são alternativas - ativar uma desativa a outra.",
     "Hide Name": "Ocultar nome",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Ativado",
@@ -9116,6 +9151,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Diagrama de caixa",
     "Break on Gaps": "Interromper em lacunas",
     "Brush Zooming": "Zoom por seleção",
+    "Drill Down": "Detalhamento",
     "Calendar": "Calendário",
     "Card": "Cartão",
     "Card Border": "Borda do cartão",
@@ -9475,6 +9511,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Названия атрибутов",
     "Attribute names only": "Только названия атрибутов",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Добавляет отображаемый атрибут к имени каждого объекта - в строке состояния, легенде, подсказках, статистике, экспорте и в этом списке. Без этого два атрибута одного объекта дают две одинаковые подписи. Строки, отображающие само состояние объекта, не меняются, как и объекты с заданным вами именем.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Показывает ТОЛЬКО название атрибута вместо имени объекта с атрибутом. Вместе с «Названия зон» даёт подписи вида «Целевая температура · Гостиная». Этот параметр и «Названия атрибутов» — альтернативы: включение одного выключает другой.",
     "Hide Name": "Скрыть имя",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Включено",
@@ -9908,6 +9946,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Ящик с усами",
     "Break on Gaps": "Разрывать на пропусках",
     "Brush Zooming": "Масштаб выделением",
+    "Drill Down": "Детализация",
     "Calendar": "Календарь",
     "Card": "Карточка",
     "Card Border": "Рамка карточки",
@@ -10267,6 +10306,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "Attributnamn",
     "Attribute names only": "Endast attributnamn",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "Lägger till det ritade attributet i varje enhets namn - i statusraden, förklaringen, verktygstips, statistik, exporter och den här listan. Utan detta ger två attribut från samma enhet två identiska etiketter. Rader som visar enhetens eget tillstånd påverkas inte, inte heller enheter du gett ett eget namn.",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "Visar ENDAST attributnamnet i stället för enhetsnamn plus attribut. Tillsammans med Områdesnamn ger det etiketter som 'Måltemperatur · Vardagsrum'. Detta och Attributnamn är alternativ - slår du på det ena stängs det andra av.",
     "Hide Name": "Dölj namn",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "Aktiverad",
@@ -10700,6 +10741,7 @@ export const I18N = Object.freeze({
     "Box Plot": "Lådagram",
     "Break on Gaps": "Bryt vid luckor",
     "Brush Zooming": "Markeringszoom",
+    "Drill Down": "Detaljvy",
     "Calendar": "Kalender",
     "Card": "Kort",
     "Card Border": "Kortram",
@@ -11059,6 +11101,8 @@ export const I18N = Object.freeze({
     // --- added in 3.32 round 2 (attribute names in labels, #327)
     "Attribute names": "属性名称",
     "Attribute names only": "仅属性名称",
+    "Append the plotted attribute to each entity's name - in the state row, legend, tooltips, stats, exports and this list. Without it, two attributes of the same entity produce two identical labels. Rows that plot the entity state itself are untouched, as are entities you gave a Custom Name.": "将所绘制的属性附加到每个实体的名称后 — 状态行、图例、提示框、统计、导出以及本列表中均生效。若不启用，同一实体的两个属性会产生两个完全相同的标签。绘制实体自身状态的行不受影响，您自定义了名称的实体也不受影响。",
+    "Show ONLY the attribute name instead of the entity name plus the attribute. Combined with Area names this gives labels like 'Target temperature · Lounge'. This and Attribute names are alternatives - switching one on turns the other off.": "仅显示属性名称，而不是实体名称加属性。与区域名称同时启用时可得到「目标温度 · 客厅」这样的标签。本项与属性名称互为替代 — 开启其一会关闭另一项。",
     "Hide Name": "隐藏名称",
     // --- added in 3.30 round 1 (entity enabled)
     "Enabled": "启用",
@@ -11492,6 +11536,7 @@ export const I18N = Object.freeze({
     "Box Plot": "箱线图",
     "Break on Gaps": "数据缺口断开",
     "Brush Zooming": "框选缩放",
+    "Drill Down": "下钻查看",
     "Calendar": "日历",
     "Card": "卡片",
     "Card Border": "卡片边框",
