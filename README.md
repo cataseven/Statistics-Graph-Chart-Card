@@ -57,7 +57,9 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 
 ![image6](images/scroll.gif)
 
-![image4](images/editor21.png)
+![image4](images/editor22.png)
+
+![image4](images/editor23.png)
 
 ![image5](images/editor3.png)
 
