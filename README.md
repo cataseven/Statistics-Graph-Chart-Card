@@ -316,6 +316,7 @@ These options apply to the whole card.
 | `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Pie mode only. |
 | `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
+| `x_axis_datetime_format` | string | `null` | Custom pattern for the X-axis tick labels, independent of `datetime_format` (which drives the tooltip). Same tokens: `YYYY` `YY` `MMMM` `MMM` `MM` `DD` `dddd` `ddd` `HH` `hh` `mm` `ss` `A` `a`. Examples: `MMM` → *Jan, Feb…*; `ddd DD` → *Mon 27, Tue 28…*. Also available per rule inside `auto_scale_rules`. YAML only. *(v3.34)* |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
 | `y_grid_style` | string | `"dashed"` | Line pattern for horizontal (Y-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. Also accepts a custom SVG stroke-dasharray like `6 2 2 2`. |
@@ -436,7 +437,7 @@ Each entry under `entities` supports the following options.
 | `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature`. In `state_timeline` mode, pair with `state_map` to plot the attribute's history ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)). |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position). Applied after `value_factor`. Example: `return x - first`. See [Value Transform](#-value-transform). |
-| `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). See [Attribute Data Source](#-attribute-data-source). |
+| `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). Calendar `group_by` modes (`hour`, `date`, `week`, `month`, `year`) regroup the array with `aggregate_func` when it is finer than the requested cell — quarter-hourly prices become hourly bars with `group_by: hour` *(v3.34)*. See [Attribute Data Source](#-attribute-data-source). |
 | `data_time_field` | string | `"start_time"` | Name of the time field in each array item when using `data_attribute`. |
 | `data_value_field` | string | `"price_per_kwh"` | Name of the value field in each array item when using `data_attribute`. |
 | `data_value_expression` | string | `null` | Compute each point's value with a safe arithmetic expression instead of reading a single `data_value_field`. The array element's own fields and any `data_vars` are in scope. Operators `+ - * / %`, parentheses, and the functions `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow`. **Not JavaScript** — no other variables, property access, or calls. Falls back to `data_value_field` when empty or invalid. See [Attribute Data Source → Computed Values](#-attribute-data-source). |
@@ -2184,7 +2185,7 @@ Common configurations:
 | Tibber | `price_info` | `startsAt` | `total` |
 | Forecast.Solar | `detailedForecasts` | `period_start` | `pv_estimate` |
 
-Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature`).
+Compatible with existing `value_factor`, `value_transform`, `aggregate_func`, and `group_by`. The calendar `group_by` modes (`hour`, `date`, `week`, `month`, `year`) regroup the array when the requested cell is coarser than its native spacing — 96 quarter-hourly prices under `group_by: hour` become 24 hourly values combined with `aggregate_func` — and pass it through untouched otherwise, so an already-hourly array stays as published. `interval` (the default) and `raw` never regroup; the fixed `2h`–`12h` modes are not supported for attribute arrays. `points_per_hour` does not apply — it controls fetching, and an attribute source fetches nothing. The time and value field names support nested paths via dot notation (e.g. `forecast.0.temperature` or `integrated.0.value`).
 
 ### Computed Values
 
@@ -4371,6 +4372,7 @@ entities:
 | `group_by` | string | `interval` | Bucketing to use — same values as the main `group_by`: `interval`, `hour`, `2h`, `3h`, `4h`, `6h`, `12h` (any `Nh` works, e.g. `5h`), `date`, `week`, `month`, `year`, `raw`. `day` is accepted as an alias of `date`. |
 | `points_per_hour` | number | `null` | Optional bucket density for this rule — only meaningful with `group_by: interval`. The editor offers the standard divisor-of-60 presets. |
 | `x_axis_interval` | string | `null` | Optional X-axis tick interval **while this rule is active** (same syntax as the card-level option, e.g. `4h`). YAML only. *(v3.29)* |
+| `x_axis_datetime_format` | string | `null` | Optional X-axis label pattern **while this rule is active** (same tokens as the card-level option, e.g. `MMM` on the month rule, `ddd DD` on the day rule). YAML only. *(v3.34)* |
 | `datetime_format` | string | `null` | Optional date/time format **while this rule is active** (same patterns as the card-level option, e.g. `HH:mm`). YAML only. *(v3.29)* |
 
 **Presentation follows the active rule** *(v3.29)*: while a rule rescales the chart, the card-level `x_axis_interval` and `datetime_format` are suspended — they were tuned for your base scale, and keeping them left a Day view with a near-empty axis and time-less tooltips ([#308](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/308)). Automatic ticks and locale date+time formatting take over, unless the rule provides its own overrides above.
