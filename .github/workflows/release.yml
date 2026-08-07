@@ -9,9 +9,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: Build release zip
+        run: zip -r statistics-graph-chart-card.zip statistics-graph-chart-card.js translations
       - uses: softprops/action-gh-release@v2
         with:
           files: |
+            statistics-graph-chart-card.zip
             statistics-graph-chart-card.js
-            translations.js
           fail_on_unmatched_files: true
