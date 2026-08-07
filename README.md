@@ -321,6 +321,7 @@ These options apply to the whole card.
 | `x_axis_datetime_format` | string | `null` | Custom pattern for the X-axis tick labels, independent of `datetime_format` (which drives the tooltip). Same tokens: `YYYY` `YY` `MMMM` `MMM` `MM` `DD` `dddd` `ddd` `HH` `hh` `mm` `ss` `A` `a`. Examples: `MMM` → *Jan, Feb…*; `ddd DD` → *Mon 27, Tue 28…*. Also available per rule inside `auto_scale_rules`. YAML only. *(v3.34)* |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
 | `show_grid` | boolean | `true` | Show grid lines. Available in Timeline and Scatter modes. |
+| `show_cell_values` | boolean | `true` | Print each cell's value inside the Heatmap / Calendar boxes. Turn off for a clean colour-only grid — exact values stay available in the hover tooltip. The editor toggle sits next to *Grid* in the Chart tab. *(v3.34)* |
 | `y_grid_style` | string | `"dashed"` | Line pattern for horizontal (Y-axis) grid lines: `dashed`, `solid`, `dotted`, or `long-dash`. Also accepts a custom SVG stroke-dasharray like `6 2 2 2`. |
 | `y_grid_width` | number | `1` | Thickness of horizontal grid lines in pixels. Accepts decimals like `0.5`. |
 | `y_grid_color` | string | `null` | Color of horizontal grid lines. Accepts any CSS color, variable, or `{{ }}` template. Leave empty for theme default. |
