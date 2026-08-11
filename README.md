@@ -182,7 +182,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📊 | **Show Range** — `show_range_values: true` displays the visible window's min and max as a subdued `(min → max)` suffix next to the primary value. Perfect for compact "records" cards (`show_graph: false` + `primary_state_as: min`/`max`) where the range previously was only reachable via the graph tooltip |
 | 📑 | **Stacked name layout** — `name_position: below` places the entity name centered below the primary value (ApexCharts-style), great for mobile and header-only entities |
 | 🎨 | **Card shadow & border toggles** — `card_shadow: false` and `card_border: false` allow a flat borderless look or blending with decorated backgrounds |
-| 👥 | **Period Comparison** — per-entity `compare` overlays a faded, dashed ghost of the same sensor from a previous period (yesterday, last week, last month, last year, or any number of hours) underneath the main series. Also accepts a **list** of comparisons — one ghost per entry, each reaching further back via `periods_back` (previous period, two periods ago, …). Calendar-aware shifting in the date picker's Month/Year modes, a Δ% delta in the tooltip, and legend clicks that toggle main + ghosts together |
+| 👥 | **Period Comparison** — per-entity `compare` overlays a faded, dashed ghost of the same sensor from a previous period (yesterday, last week, last month, last year, or any number of hours) underneath the main series. Also accepts a **list** of comparisons — one ghost per entry, each reaching further back via `periods_back` (previous period, two periods ago, …). Calendar-aware shifting in the date picker's Month/Year modes, a Δ% delta in the tooltip, and legend clicks that toggle main + ghosts together. On **State Timeline** charts each comparison renders as its own time-aligned row under the main entity *(v4.02)*, and `layout: sequential` draws the previous period at its real position before the live data on a backward-extended axis *(v4.02)* |
 | 🧩 | **Boolean template toggles** — display toggles like `show_legend`, `stacked`, `show_points`, or `show_state` accept Jinja2 `{{ }}` templates as well as plain booleans, resolved live server-side — drive card chrome from an `input_boolean` without editing YAML |
 | 🏷️ | **State timeline labels toggle** — `state_timeline_show_labels: false` hides the state labels drawn inside state_timeline segments for clean, label-free color bands |
 | 🧲 | **Raw grouping** — `group_by: raw` skips bucketing entirely and draws every recorded sample at its exact timestamp — ideal for step charts of binary/state sensors |
@@ -1303,11 +1303,12 @@ Place the card on the same dashboard as an Energy date picker. When the user sel
 
 ### Editor
 
-General Settings → **Calendar** tab → *Date Navigation* → **Energy Date Sync** toggle.
+Chart Settings → **Calendar** tab → *Date Navigation* → **Energy Date Sync** toggle, with the **Key** input next to it for `energy_collection_key` *(v4.02)*.
 
 ### Notes
 
 - When `energy_date_sync` is active, it overrides `hours_to_show` and the interval picker selection
+- Running several dashboards with separate `energy-date-selection` cards? Bind each card to its own picker with `energy_collection_key` — same key as that dashboard's selection card (HA requires the key to start with `energy_`) *(v4.02)*
 - Period changes made in the Energy dashboard are picked up instantly — no polling, no refresh delay
 - If the Energy panel hasn't loaded yet, the card retries every 2 seconds for up to 60 seconds
 
@@ -1703,7 +1704,7 @@ entities:
 Per-entity → **Graph** tab → **Period Comparison** section (shown in Timeline and State Timeline modes). Redesigned as a **list** in v3.26:
 
 - The section starts empty with an **Add Comparison** button; each click adds one comparison row and steps the default *Periods Back* automatically (1, 2, 3 …).
-- Each row holds a period select (labels now read **Previous Period** / **Day Before** / **Week Before** / **Month Before** / **Year Before** — only the labels changed, the YAML values are still `previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`), a **Periods Back** input, line style, color, opacity, a **Show Δ% in tooltip** toggle, and a delete button.
+- Each row holds a period select (labels now read **Previous Period** / **Day Before** / **Week Before** / **Month Before** / **Year Before** — only the labels changed, the YAML values are still `previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`), a **Periods Back** input, line style, color, opacity, a **Layout** dropdown (Overlay | Sequential — enabled while the period is **Previous Period**, v4.02), a **Show Δ% in tooltip** toggle, and a delete button.
 - Legacy string/object `compare` configs load into the list unchanged, and a one-row list commits back to the legacy short form — your YAML stays as compact as before.
 
 </details>
@@ -4607,7 +4608,7 @@ Below is the complete list of entity options that are mode-restricted. **Anythin
 
 When `sparkline` is enabled (Timeline mode only):
 
-- **Card tab**: Header and Icon sections disappear; Card Styling and Localization remain
+- **Card Settings panel**: the Header & Icon tab disappears; Card Styling and Localization remain
 - **Overlay tab**: Hidden entirely — overlays don't render in sparkline mode
 - **X Axis / Y Axis / Calendar tabs**: Hidden entirely
 - The card renders with zero chrome — no toolbar, axes, grid, or legend
@@ -4668,7 +4669,7 @@ Some options depend on or conflict with each other:
 | `graph_start: tomorrow` | Window is tomorrow 00:00 → end of day. `show_full_period` is not required. History fetch is skipped (no past data in tomorrow's range). Ideal with `data_attribute` for forecast/spot price data |
 | `y_grid_style` / `x_grid_style` | Only effective when `show_grid: true`. Applies inline SVG styles that override the default CSS class |
 | `decimals` on pie/radial entity | Controls both value precision *and* percentage precision in slice labels, tooltips, and center totals |
-| `compare` set (per entity) | A faded, dashed ghost of the previous period is drawn under the main series and follows the exact same aggregation pipeline — a **list** of comparisons draws one ghost per entry, each reaching further back via `periods_back`. Legend / state-row clicks toggle main + ghosts together. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities and in sparkline mode |
+| `compare` set (per entity) | A faded, dashed ghost of the previous period is drawn under the main series and follows the exact same aggregation pipeline — a **list** of comparisons draws one ghost per entry, each reaching further back via `periods_back`. On **State Timeline** charts each comparison renders as its own labelled row under the main entity *(v4.02)*, and `layout: sequential` draws a `previous_period` ghost at its real position on a backward-extended axis *(v4.02)*. Legend / state-row clicks toggle main + ghosts together. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities and in sparkline mode |
 | `show_legend: "{{ ... }}"` (or any templatable toggle) | Template is resolved server-side like color templates and updates live; the default applies until the first result arrives. The editor locks the checkbox — dimmed, with a `{…}` badge and a tooltip showing the template — and never overwrites it |
 | `aggregate_func: max` (per entity) | A **Damp midnight reset artifacts** checkbox appears under the Aggregation dropdown in the editor — the UI switch for `damp_reset_boundary`, shown only while the aggregate is `max` |
 | `aggregate_func: change` (per entity) | An **Ignore transient zeros** checkbox appears under the Aggregation dropdown — the UI switch for `change_ignore_zero`, shown only while the aggregate is `change` |
