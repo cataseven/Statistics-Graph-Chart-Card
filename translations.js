@@ -1,4 +1,4 @@
-export const T_VERSION = "4.02";
+export const T_VERSION = "4.03";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -709,6 +709,52 @@ export const I18N = Object.freeze({
     "Always": "Her zaman",
     "Bar": "Çubuk",
     "Basic": "Temel",
+    "State Strip": "Durum Şeridi",
+
+    "Crosshair Pins": "Crosshair Pinleri",
+
+    "Pins": "Pin sayısı",
+
+    "Pin Delta": "Pin Farkı",
+
+    "Pins in Legend": "Pinler Göstergede",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Grafiğe dokunun veya tıklayın: o noktaya bir crosshair sabitlenir, tooltip ekranda kalır ve pin sürüklenebilir. Tekrar dokununca kaldırılır. Bu açıkken dokunma, detaya inmek yerine pin koyar.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "İki pin varken her seri için A'dan B'ye değişimi değer ve yüzde olarak gösteren bir Δ satırı ekler.",
+
+    "Also show the pinned values next to each legend entry.": "Sabitlenen değerleri gösterge girişlerinin yanında da gösterir.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Kaç pin konulabileceği: bir, ya da iki zaman noktasını karşılaştırmak için iki.",
+
+    "Last 1 hour": "Son 1 saat",
+
+    "Last 6 hours": "Son 6 saat",
+
+    "Last 12 hours": "Son 12 saat",
+
+    "Last 1H": "Son 1sa",
+
+    "Last 6H": "Son 6sa",
+
+    "Last 12H": "Son 12sa",
+
+    "Controller": "Kontrolcü",
+
+    "Reset": "Sıfırla",
+
+    "Reset Button": "Sıfırla Düğmesi",
+
+    "Sync Group": "Senkron Grubu",
+
+    "Picker Sync": "Seçici Senkronu",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Bu karttaki tüm senkron seçiciler için tek grup adı. Boş bırakılan Tarih Seçici, Aralık, Çözünürlük ve Gruplama gruplarını doldurur; böylece bir Kontrolcü kartı ve yönettiği grafik kartları yalnız bu adı ister.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Tarih seçici çubuğuna varsayılan döneme (Varsayılan Mod ya da ilk görünür mod) dönen ve özel aralığı temizleyen bir düğme ekler. Kontrolcü kartında varsayılan olarak gösterilir.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "İsteğe bağlı. Varlığın durumu yerine bir özniteliğini eşleştirir: öznitelik adını buraya (örn. percentage), eşleşecek değeri Durum alanına (örn. 100) yazın. İç içe öznitelikler için nokta kullanın.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Çubukların köşe yarıçapı (piksel). Otomatik için boş bırakın (en fazla 5 px, çubuğun izin verdiğinden fazla olmaz). 0 = keskin köşeler. Yığılmış grafiklerde yalnız her yığının dış ucu yuvarlanır.",
     "Candlestick": "Mum",
     "Color Thresholds": "Renk Eşikleri",
     "Colors": "Renkler",
@@ -1491,6 +1537,52 @@ export const I18N = Object.freeze({
     "Always": "Immer",
     "Bar": "Balken",
     "Basic": "Basis",
+    "State Strip": "Statusleiste",
+
+    "Crosshair Pins": "Fadenkreuz-Pins",
+
+    "Pins": "Pins",
+
+    "Pin Delta": "Pin-Differenz",
+
+    "Pins in Legend": "Pins in der Legende",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Tippen oder klicken Sie in das Diagramm, um dort ein Fadenkreuz zu fixieren: der Tooltip bleibt sichtbar und der Pin lässt sich ziehen. Erneutes Tippen entfernt ihn. Solange dies aktiv ist, setzt ein Tipp einen Pin statt eines Drill-downs.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Bei zwei Pins wird pro Serie eine Δ-Zeile mit der Änderung von A nach B als Wert und Prozent ergänzt.",
+
+    "Also show the pinned values next to each legend entry.": "Zeigt die fixierten Werte zusätzlich neben jedem Legendeneintrag.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Wie viele Pins gesetzt werden können: einer, oder zwei zum Vergleich zweier Zeitpunkte.",
+
+    "Last 1 hour": "Letzte 1 Stunde",
+
+    "Last 6 hours": "Letzte 6 Stunden",
+
+    "Last 12 hours": "Letzte 12 Stunden",
+
+    "Last 1H": "Letzte 1H",
+
+    "Last 6H": "Letzte 6H",
+
+    "Last 12H": "Letzte 12H",
+
+    "Controller": "Steuerung",
+
+    "Reset": "Zurücksetzen",
+
+    "Reset Button": "Zurücksetzen-Schaltfläche",
+
+    "Sync Group": "Sync-Gruppe",
+
+    "Picker Sync": "Picker-Synchronisierung",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Ein Gruppenname für alle synchronisierten Picker dieser Karte. Er füllt die leer gelassenen Gruppen für Datumsauswahl, Intervall, Auflösung und Gruppierung, sodass eine Steuerungskarte und die von ihr gesteuerten Diagrammkarten nur diesen einen Namen brauchen.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Fügt der Datumsauswahl-Leiste eine Schaltfläche hinzu, die zum Standardzeitraum (Standardmodus oder erster sichtbarer Modus) zurückkehrt und einen benutzerdefinierten Bereich löscht. Eine Steuerungskarte zeigt sie standardmäßig an.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Optional. Statt des Zustands wird ein Attribut der Entität abgeglichen: hier den Attributnamen eintragen (z. B. percentage) und unter Zustand den Vergleichswert (z. B. 100). Punkte erreichen verschachtelte Attribute.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Eckenradius der Balken in Pixeln. Leer lassen für automatisch (bis 5 px, nie mehr als der Balken zulässt). 0 = eckige Ecken. Bei gestapelten Diagrammen wird nur das äußere Ende jedes Stapels abgerundet.",
     "Candlestick": "Kerzen",
     "Color Thresholds": "Farbschwellen",
     "Colors": "Farben",
@@ -2298,6 +2390,52 @@ export const I18N = Object.freeze({
     "Always": "Vždy",
     "Bar": "Sloupce",
     "Basic": "Základní",
+    "State Strip": "Pruh stavů",
+
+    "Crosshair Pins": "Špendlíky nitkového kříže",
+
+    "Pins": "Špendlíky",
+
+    "Pin Delta": "Rozdíl mezi špendlíky",
+
+    "Pins in Legend": "Špendlíky v legendě",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Klepnutím nebo kliknutím do grafu tam připnete nitkový kříž: popisek zůstane na obrazovce a špendlík lze táhnout. Dalším klepnutím ho odstraníte. Když je to zapnuté, klepnutí umístí špendlík místo procházení do detailu.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Se dvěma špendlíky přidá ke každé řadě řádek Δ se změnou z A do B jako hodnotu a procento.",
+
+    "Also show the pinned values next to each legend entry.": "Zobrazí připnuté hodnoty také vedle každé položky legendy.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Kolik špendlíků lze umístit: jeden, nebo dva pro porovnání dvou okamžiků.",
+
+    "Last 1 hour": "Poslední 1 hodina",
+
+    "Last 6 hours": "Posledních 6 hodin",
+
+    "Last 12 hours": "Posledních 12 hodin",
+
+    "Last 1H": "Poslední 1H",
+
+    "Last 6H": "Posledních 6H",
+
+    "Last 12H": "Posledních 12H",
+
+    "Controller": "Ovladač",
+
+    "Reset": "Obnovit",
+
+    "Reset Button": "Tlačítko Obnovit",
+
+    "Sync Group": "Skupina synchronizace",
+
+    "Picker Sync": "Synchronizace voličů",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Jeden název skupiny pro všechny synchronizované voliče na této kartě. Vyplní prázdné skupiny pro výběr data, interval, rozlišení a seskupení, takže karta ovladače a karty grafů, které řídí, potřebují jen tento jeden název.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Přidá do lišty výběru data tlačítko, které se vrátí k výchozímu období (výchozí režim nebo první viditelný režim) a vymaže vlastní rozsah. Karta ovladače ho zobrazuje ve výchozím nastavení.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Volitelné. Místo stavu se porovnává atribut entity: sem zadejte název atributu (např. percentage) a do pole Stav hodnotu, která má odpovídat (např. 100). Tečky vedou k vnořeným atributům.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Poloměr rohů sloupců v pixelech. Ponechte prázdné pro automatiku (až 5 px, nikdy víc, než sloupec dovolí). 0 = ostré rohy. U skládaných grafů se zaobluje jen vnější konec každého sloupce.",
     "Candlestick": "Svíčky",
     "Color Thresholds": "Barevné prahy",
     "Colors": "Barvy",
@@ -3105,6 +3243,52 @@ export const I18N = Object.freeze({
     "Always": "Altid",
     "Bar": "Søjler",
     "Basic": "Grundlæggende",
+    "State Strip": "Statusstribe",
+
+    "Crosshair Pins": "Trådkors-pins",
+
+    "Pins": "Pins",
+
+    "Pin Delta": "Pin-forskel",
+
+    "Pins in Legend": "Pins i forklaring",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Tryk eller klik i grafen for at fastgøre et trådkors der: tooltippet bliver på skærmen, og pinnen kan trækkes. Tryk igen for at fjerne den. Mens dette er slået til, sætter et tryk en pin i stedet for at bore ned.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Med to pins tilføjes en Δ-række pr. serie, der viser ændringen fra A til B som værdi og procent.",
+
+    "Also show the pinned values next to each legend entry.": "Viser også de fastgjorte værdier ved siden af hver post i forklaringen.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Hvor mange pins der kan sættes: én, eller to for at sammenligne to tidspunkter.",
+
+    "Last 1 hour": "Seneste 1 time",
+
+    "Last 6 hours": "Seneste 6 timer",
+
+    "Last 12 hours": "Seneste 12 timer",
+
+    "Last 1H": "Seneste 1T",
+
+    "Last 6H": "Seneste 6T",
+
+    "Last 12H": "Seneste 12T",
+
+    "Controller": "Kontrolpanel",
+
+    "Reset": "Nulstil",
+
+    "Reset Button": "Nulstil-knap",
+
+    "Sync Group": "Synkroniseringsgruppe",
+
+    "Picker Sync": "Vælger-synkronisering",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Ét gruppenavn for alle synkroniserede vælgere på dette kort. Det udfylder de tomme grupper for datovælger, interval, opløsning og gruppering, så et kontrolpanel-kort og de diagramkort, det styrer, kun behøver dette ene navn.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Tilføjer en knap i datovælgerlinjen, der vender tilbage til standardperioden (standardtilstand eller den første synlige tilstand) og rydder et brugerdefineret interval. Et kontrolpanel-kort viser den som standard.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Valgfrit. Matcher en af enhedens attributter i stedet for dens tilstand: skriv attributnavnet her (f.eks. percentage) og værdien, der skal matche, under Tilstand (f.eks. 100). Punktummer når indlejrede attributter.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Hjørneradius for søjler i pixels. Lad feltet stå tomt for automatisk (op til 5 px, aldrig mere end søjlen tillader). 0 = skarpe hjørner. I stablede diagrammer afrundes kun den yderste ende af hver stabel.",
     "Candlestick": "Candlestick",
     "Color Thresholds": "Farvetærskler",
     "Colors": "Farver",
@@ -3912,6 +4096,52 @@ export const I18N = Object.freeze({
     "Always": "Siempre",
     "Bar": "Barras",
     "Basic": "Básico",
+    "State Strip": "Franja de estados",
+
+    "Crosshair Pins": "Pines de cursor",
+
+    "Pins": "Pines",
+
+    "Pin Delta": "Diferencia entre pines",
+
+    "Pins in Legend": "Pines en la leyenda",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Toca o haz clic en el gráfico para fijar allí un cursor: la información emergente se mantiene en pantalla y el pin se puede arrastrar. Vuelve a tocar para quitarlo. Mientras está activo, un toque coloca un pin en lugar de profundizar.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Con dos pines, añade una fila Δ por serie que muestra el cambio de A a B como valor y porcentaje.",
+
+    "Also show the pinned values next to each legend entry.": "Muestra también los valores fijados junto a cada entrada de la leyenda.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Cuántos pines se pueden colocar: uno, o dos para comparar dos momentos.",
+
+    "Last 1 hour": "Última 1 hora",
+
+    "Last 6 hours": "Últimas 6 horas",
+
+    "Last 12 hours": "Últimas 12 horas",
+
+    "Last 1H": "Última 1H",
+
+    "Last 6H": "Últimas 6H",
+
+    "Last 12H": "Últimas 12H",
+
+    "Controller": "Controlador",
+
+    "Reset": "Restablecer",
+
+    "Reset Button": "Botón Restablecer",
+
+    "Sync Group": "Grupo de sincronización",
+
+    "Picker Sync": "Sincronización de selectores",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Un solo nombre de grupo para todos los selectores sincronizados de esta tarjeta. Rellena los grupos de selector de fecha, intervalo, resolución y agrupación que se dejen vacíos, de modo que una tarjeta controladora y las tarjetas de gráfico que controla solo necesitan este nombre.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Añade a la barra del selector de fecha un botón que vuelve al periodo predeterminado (Modo predeterminado o el primer modo visible) y borra cualquier rango personalizado. Una tarjeta controladora lo muestra de forma predeterminada.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Opcional. Compara un atributo de la entidad en lugar de su estado: escribe aquí el nombre del atributo (p. ej. percentage) y el valor a igualar en Estado (p. ej. 100). Los puntos alcanzan atributos anidados.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Radio de las esquinas de las barras en píxeles. Déjalo vacío para automático (hasta 5 px, nunca más de lo que permite la barra). 0 = esquinas rectas. En gráficos apilados solo se redondea el extremo exterior de cada pila.",
     "Candlestick": "Velas",
     "Color Thresholds": "Umbrales de color",
     "Colors": "Colores",
@@ -4719,6 +4949,52 @@ export const I18N = Object.freeze({
     "Always": "Aina",
     "Bar": "Palkit",
     "Basic": "Perus",
+    "State Strip": "Tilanauha",
+
+    "Crosshair Pins": "Hiusristikon pinnit",
+
+    "Pins": "Pinnit",
+
+    "Pin Delta": "Pinnien erotus",
+
+    "Pins in Legend": "Pinnit selitteessä",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Napauta tai napsauta kaaviota kiinnittääksesi hiusristikon siihen: työkaluvihje pysyy näkyvissä ja pinniä voi vetää. Napauta uudelleen poistaaksesi sen. Kun tämä on päällä, napautus asettaa pinnin porautumisen sijaan.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Kahdella pinnillä lisää joka sarjalle Δ-rivin, joka näyttää muutoksen A:sta B:hen arvona ja prosentteina.",
+
+    "Also show the pinned values next to each legend entry.": "Näyttää kiinnitetyt arvot myös jokaisen selitteen kohdan vieressä.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Montako pinniä voi asettaa: yhden, tai kaksi kahden ajankohdan vertailuun.",
+
+    "Last 1 hour": "Viimeisin 1 tunti",
+
+    "Last 6 hours": "Viimeiset 6 tuntia",
+
+    "Last 12 hours": "Viimeiset 12 tuntia",
+
+    "Last 1H": "Viimeisin 1H",
+
+    "Last 6H": "Viimeiset 6H",
+
+    "Last 12H": "Viimeiset 12H",
+
+    "Controller": "Ohjain",
+
+    "Reset": "Palauta",
+
+    "Reset Button": "Palauta-painike",
+
+    "Sync Group": "Synkronointiryhmä",
+
+    "Picker Sync": "Valitsinten synkronointi",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Yksi ryhmänimi kortin kaikille synkronoiduille valitsimille. Se täyttää tyhjiksi jätetyt päivämäärä-, aikaväli-, tarkkuus- ja ryhmittelyryhmät, joten ohjainkortti ja sen ohjaamat kaaviokortit tarvitsevat vain tämän yhden nimen.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Lisää päivämäärävalitsimen palkkiin painikkeen, joka palaa oletusjaksoon (oletustila tai ensimmäinen näkyvä tila) ja tyhjentää mukautetun alueen. Ohjainkortti näyttää sen oletuksena.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Valinnainen. Vertaa entiteetin attribuuttia sen tilan sijaan: kirjoita attribuutin nimi tähän (esim. percentage) ja täsmäävä arvo Tila-kenttään (esim. 100). Pisteillä pääsee sisäkkäisiin attribuutteihin.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Palkkien kulmien pyöristys pikseleinä. Jätä tyhjäksi automaattista varten (enintään 5 px, ei koskaan enempää kuin palkki sallii). 0 = terävät kulmat. Pinotuissa kaavioissa pyöristetään vain kunkin pinon ulkopää.",
     "Candlestick": "Kynttilät",
     "Color Thresholds": "Värikynnykset",
     "Colors": "Värit",
@@ -5526,6 +5802,52 @@ export const I18N = Object.freeze({
     "Always": "Toujours",
     "Bar": "Barres",
     "Basic": "Base",
+    "State Strip": "Bande d'état",
+
+    "Crosshair Pins": "Épingles du réticule",
+
+    "Pins": "Épingles",
+
+    "Pin Delta": "Écart entre épingles",
+
+    "Pins in Legend": "Épingles dans la légende",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Touchez ou cliquez le graphique pour y épingler un réticule : l'infobulle reste affichée et l'épingle peut être déplacée. Touchez à nouveau pour la retirer. Tant que c'est actif, un toucher pose une épingle au lieu de descendre dans le détail.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Avec deux épingles, ajoute une ligne Δ par série montrant la variation de A à B en valeur et en pourcentage.",
+
+    "Also show the pinned values next to each legend entry.": "Affiche aussi les valeurs épinglées à côté de chaque entrée de la légende.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Nombre d'épingles possibles : une, ou deux pour comparer deux instants.",
+
+    "Last 1 hour": "Dernière heure",
+
+    "Last 6 hours": "6 dernières heures",
+
+    "Last 12 hours": "12 dernières heures",
+
+    "Last 1H": "Dernière 1H",
+
+    "Last 6H": "Dernières 6H",
+
+    "Last 12H": "Dernières 12H",
+
+    "Controller": "Contrôleur",
+
+    "Reset": "Réinitialiser",
+
+    "Reset Button": "Bouton Réinitialiser",
+
+    "Sync Group": "Groupe de synchronisation",
+
+    "Picker Sync": "Synchronisation des sélecteurs",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Un seul nom de groupe pour tous les sélecteurs synchronisés de cette carte. Il remplit les groupes Sélecteur de date, Intervalle, Résolution et Regroupement laissés vides ; une carte Contrôleur et les cartes graphiques qu'elle pilote n'ont donc besoin que de ce nom.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Ajoute à la barre du sélecteur de date un bouton qui revient à la période par défaut (Mode par défaut ou premier mode visible) et efface toute plage personnalisée. Une carte Contrôleur l'affiche par défaut.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Facultatif. Compare un attribut de l'entité au lieu de son état : saisissez ici le nom de l'attribut (p. ex. percentage) et la valeur à faire correspondre dans État (p. ex. 100). Les points atteignent les attributs imbriqués.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Rayon des coins des barres en pixels. Laissez vide pour automatique (jusqu'à 5 px, jamais plus que la barre ne le permet). 0 = coins droits. Dans les graphiques empilés, seule l'extrémité extérieure de chaque pile est arrondie.",
     "Candlestick": "Chandeliers",
     "Color Thresholds": "Seuils de couleur",
     "Colors": "Couleurs",
@@ -6333,6 +6655,52 @@ export const I18N = Object.freeze({
     "Always": "Sempre",
     "Bar": "Barre",
     "Basic": "Base",
+    "State Strip": "Barra di stato",
+
+    "Crosshair Pins": "Pin del mirino",
+
+    "Pins": "Pin",
+
+    "Pin Delta": "Differenza tra pin",
+
+    "Pins in Legend": "Pin nella legenda",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Tocca o fai clic sul grafico per fissare lì un mirino: il tooltip resta visibile e il pin può essere trascinato. Tocca di nuovo per rimuoverlo. Finché è attivo, un tocco posiziona un pin invece di approfondire.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Con due pin aggiunge una riga Δ per serie con la variazione da A a B come valore e percentuale.",
+
+    "Also show the pinned values next to each legend entry.": "Mostra i valori fissati anche accanto a ogni voce della legenda.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Quanti pin si possono posizionare: uno, oppure due per confrontare due istanti.",
+
+    "Last 1 hour": "Ultima 1 ora",
+
+    "Last 6 hours": "Ultime 6 ore",
+
+    "Last 12 hours": "Ultime 12 ore",
+
+    "Last 1H": "Ultima 1H",
+
+    "Last 6H": "Ultime 6H",
+
+    "Last 12H": "Ultime 12H",
+
+    "Controller": "Controller",
+
+    "Reset": "Ripristina",
+
+    "Reset Button": "Pulsante Ripristina",
+
+    "Sync Group": "Gruppo di sincronizzazione",
+
+    "Picker Sync": "Sincronizzazione selettori",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Un solo nome di gruppo per tutti i selettori sincronizzati di questa scheda. Riempie i gruppi Selettore data, Intervallo, Risoluzione e Raggruppamento lasciati vuoti, così una scheda Controller e le schede grafico che comanda hanno bisogno solo di questo nome.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Aggiunge alla barra del selettore data un pulsante che torna al periodo predefinito (Modalità predefinita o la prima modalità visibile) e cancella l'intervallo personalizzato. Una scheda Controller lo mostra per impostazione predefinita.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Facoltativo. Confronta un attributo dell'entità invece del suo stato: inserisci qui il nome dell'attributo (es. percentage) e il valore da far corrispondere in Stato (es. 100). I punti raggiungono gli attributi annidati.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Raggio degli angoli delle barre in pixel. Lascia vuoto per automatico (fino a 5 px, mai più di quanto consenta la barra). 0 = angoli squadrati. Nei grafici impilati viene arrotondata solo l'estremità esterna di ogni pila.",
     "Candlestick": "Candele",
     "Color Thresholds": "Soglie colore",
     "Colors": "Colori",
@@ -7140,6 +7508,52 @@ export const I18N = Object.freeze({
     "Always": "Altijd",
     "Bar": "Balken",
     "Basic": "Basis",
+    "State Strip": "Statusbalk",
+
+    "Crosshair Pins": "Dradenkruis-pins",
+
+    "Pins": "Pins",
+
+    "Pin Delta": "Pin-verschil",
+
+    "Pins in Legend": "Pins in legenda",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Tik of klik in de grafiek om daar een dradenkruis vast te zetten: de tooltip blijft in beeld en de pin kan worden gesleept. Tik opnieuw om hem te verwijderen. Zolang dit aan staat, plaatst een tik een pin in plaats van in te zoomen op detail.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Met twee pins wordt per reeks een Δ-rij toegevoegd met de verandering van A naar B als waarde en percentage.",
+
+    "Also show the pinned values next to each legend entry.": "Toont de vastgezette waarden ook naast elk legenda-item.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Hoeveel pins er geplaatst kunnen worden: één, of twee om twee tijdstippen te vergelijken.",
+
+    "Last 1 hour": "Laatste 1 uur",
+
+    "Last 6 hours": "Laatste 6 uur",
+
+    "Last 12 hours": "Laatste 12 uur",
+
+    "Last 1H": "Laatste 1U",
+
+    "Last 6H": "Laatste 6U",
+
+    "Last 12H": "Laatste 12U",
+
+    "Controller": "Bediening",
+
+    "Reset": "Herstellen",
+
+    "Reset Button": "Herstelknop",
+
+    "Sync Group": "Synchronisatiegroep",
+
+    "Picker Sync": "Kiezer-synchronisatie",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Eén groepsnaam voor alle gesynchroniseerde kiezers op deze kaart. Het vult de leeg gelaten groepen voor datumkiezer, interval, resolutie en groepering, zodat een bedieningskaart en de grafiekkaarten die ze aanstuurt alleen deze naam nodig hebben.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Voegt een knop toe aan de datumkiezerbalk die terugkeert naar de standaardperiode (standaardmodus of de eerste zichtbare modus) en een aangepast bereik wist. Een bedieningskaart toont hem standaard.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Optioneel. Vergelijkt een attribuut van de entiteit in plaats van de toestand: typ hier de attribuutnaam (bijv. percentage) en de te matchen waarde bij Toestand (bijv. 100). Punten bereiken geneste attributen.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Hoekradius van de balken in pixels. Laat leeg voor automatisch (tot 5 px, nooit meer dan de balk toelaat). 0 = rechte hoeken. Bij gestapelde grafieken wordt alleen het buitenste uiteinde van elke stapel afgerond.",
     "Candlestick": "Kaarsen",
     "Color Thresholds": "Kleurdrempels",
     "Colors": "Kleuren",
@@ -7947,6 +8361,52 @@ export const I18N = Object.freeze({
     "Always": "Alltid",
     "Bar": "Søyler",
     "Basic": "Grunnleggende",
+    "State Strip": "Statusstripe",
+
+    "Crosshair Pins": "Trådkors-pinner",
+
+    "Pins": "Pinner",
+
+    "Pin Delta": "Pin-differanse",
+
+    "Pins in Legend": "Pinner i forklaring",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Trykk eller klikk i grafen for å feste et trådkors der: verktøytipset blir på skjermen og pinnen kan dras. Trykk igjen for å fjerne den. Mens dette er på, setter et trykk en pinne i stedet for å bore ned.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Med to pinner legges det til en Δ-rad per serie som viser endringen fra A til B som verdi og prosent.",
+
+    "Also show the pinned values next to each legend entry.": "Viser også de festede verdiene ved siden av hver oppføring i forklaringen.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Hvor mange pinner som kan settes: én, eller to for å sammenligne to tidspunkter.",
+
+    "Last 1 hour": "Siste 1 time",
+
+    "Last 6 hours": "Siste 6 timer",
+
+    "Last 12 hours": "Siste 12 timer",
+
+    "Last 1H": "Siste 1T",
+
+    "Last 6H": "Siste 6T",
+
+    "Last 12H": "Siste 12T",
+
+    "Controller": "Kontroller",
+
+    "Reset": "Tilbakestill",
+
+    "Reset Button": "Tilbakestill-knapp",
+
+    "Sync Group": "Synkroniseringsgruppe",
+
+    "Picker Sync": "Velger-synkronisering",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Ett gruppenavn for alle synkroniserte velgere på dette kortet. Det fyller inn de tomme gruppene for datovelger, intervall, oppløsning og gruppering, slik at et kontrollerkort og diagramkortene det styrer bare trenger dette ene navnet.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Legger til en knapp i datovelgerlinjen som går tilbake til standardperioden (standardmodus eller den første synlige modusen) og fjerner et egendefinert område. Et kontrollerkort viser den som standard.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Valgfritt. Sammenligner en av entitetens attributter i stedet for tilstanden: skriv attributtnavnet her (f.eks. percentage) og verdien som skal matche under Tilstand (f.eks. 100). Punktum når nestede attributter.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Hjørneradius for søyler i piksler. La stå tomt for automatisk (opptil 5 px, aldri mer enn søylen tillater). 0 = skarpe hjørner. I stablede diagrammer avrundes bare den ytterste enden av hver stabel.",
     "Candlestick": "Candlestick",
     "Color Thresholds": "Fargeterskler",
     "Colors": "Farger",
@@ -8754,6 +9214,52 @@ export const I18N = Object.freeze({
     "Always": "Zawsze",
     "Bar": "Słupki",
     "Basic": "Podstawowe",
+    "State Strip": "Pasek stanów",
+
+    "Crosshair Pins": "Pinezki celownika",
+
+    "Pins": "Pinezki",
+
+    "Pin Delta": "Różnica pinezek",
+
+    "Pins in Legend": "Pinezki w legendzie",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Dotknij lub kliknij wykres, aby przypiąć tam celownik: podpowiedź pozostaje na ekranie, a pinezkę można przeciągać. Dotknij ponownie, aby ją usunąć. Gdy to jest włączone, dotknięcie stawia pinezkę zamiast drążyć w głąb.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Przy dwóch pinezkach dodaje dla każdej serii wiersz Δ pokazujący zmianę od A do B jako wartość i procent.",
+
+    "Also show the pinned values next to each legend entry.": "Pokazuje przypięte wartości także obok każdej pozycji legendy.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Ile pinezek można ustawić: jedną lub dwie, aby porównać dwa punkty w czasie.",
+
+    "Last 1 hour": "Ostatnia 1 godzina",
+
+    "Last 6 hours": "Ostatnie 6 godzin",
+
+    "Last 12 hours": "Ostatnie 12 godzin",
+
+    "Last 1H": "Ostatnia 1G",
+
+    "Last 6H": "Ostatnie 6G",
+
+    "Last 12H": "Ostatnie 12G",
+
+    "Controller": "Kontroler",
+
+    "Reset": "Resetuj",
+
+    "Reset Button": "Przycisk Resetuj",
+
+    "Sync Group": "Grupa synchronizacji",
+
+    "Picker Sync": "Synchronizacja wyborów",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Jedna nazwa grupy dla wszystkich synchronizowanych wyborów na tej karcie. Wypełnia puste grupy wyboru daty, interwału, rozdzielczości i grupowania, więc karta kontrolera i sterowane przez nią karty wykresów potrzebują tylko tej jednej nazwy.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Dodaje do paska wyboru daty przycisk, który wraca do domyślnego okresu (tryb domyślny lub pierwszy widoczny tryb) i czyści zakres niestandardowy. Karta kontrolera pokazuje go domyślnie.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Opcjonalne. Dopasowuje atrybut encji zamiast jej stanu: wpisz tu nazwę atrybutu (np. percentage), a w polu Stan wartość do dopasowania (np. 100). Kropki sięgają atrybutów zagnieżdżonych.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Promień zaokrąglenia rogów słupków w pikselach. Pozostaw puste dla trybu automatycznego (do 5 px, nigdy więcej niż pozwala słupek). 0 = ostre rogi. W wykresach skumulowanych zaokrąglany jest tylko zewnętrzny koniec każdego stosu.",
     "Candlestick": "Świece",
     "Color Thresholds": "Progi kolorów",
     "Colors": "Kolory",
@@ -9561,6 +10067,52 @@ export const I18N = Object.freeze({
     "Always": "Sempre",
     "Bar": "Barras",
     "Basic": "Básico",
+    "State Strip": "Faixa de estados",
+
+    "Crosshair Pins": "Pinos do cursor",
+
+    "Pins": "Pinos",
+
+    "Pin Delta": "Diferença entre pinos",
+
+    "Pins in Legend": "Pinos na legenda",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Toque ou clique no gráfico para fixar aí um cursor: a dica permanece no ecrã e o pino pode ser arrastado. Toque novamente para o remover. Enquanto isto estiver ativo, um toque coloca um pino em vez de aprofundar.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Com dois pinos, adiciona uma linha Δ por série que mostra a variação de A para B em valor e percentagem.",
+
+    "Also show the pinned values next to each legend entry.": "Mostra também os valores fixados junto a cada entrada da legenda.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Quantos pinos podem ser colocados: um, ou dois para comparar dois instantes.",
+
+    "Last 1 hour": "Última 1 hora",
+
+    "Last 6 hours": "Últimas 6 horas",
+
+    "Last 12 hours": "Últimas 12 horas",
+
+    "Last 1H": "Última 1H",
+
+    "Last 6H": "Últimas 6H",
+
+    "Last 12H": "Últimas 12H",
+
+    "Controller": "Controlador",
+
+    "Reset": "Repor",
+
+    "Reset Button": "Botão Repor",
+
+    "Sync Group": "Grupo de sincronização",
+
+    "Picker Sync": "Sincronização de seletores",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Um único nome de grupo para todos os seletores sincronizados deste cartão. Preenche os grupos de seletor de data, intervalo, resolução e agrupamento deixados vazios, pelo que um cartão controlador e os cartões de gráfico que controla só precisam deste nome.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Adiciona à barra do seletor de data um botão que regressa ao período predefinido (Modo predefinido ou o primeiro modo visível) e limpa qualquer intervalo personalizado. Um cartão controlador mostra-o por predefinição.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Opcional. Compara um atributo da entidade em vez do seu estado: escreva aqui o nome do atributo (p. ex. percentage) e o valor a corresponder em Estado (p. ex. 100). Os pontos alcançam atributos aninhados.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Raio dos cantos das barras em pixels. Deixe vazio para automático (até 5 px, nunca mais do que a barra permite). 0 = cantos retos. Em gráficos empilhados apenas a extremidade exterior de cada pilha é arredondada.",
     "Candlestick": "Velas",
     "Color Thresholds": "Limites de cor",
     "Colors": "Cores",
@@ -10368,6 +10920,52 @@ export const I18N = Object.freeze({
     "Always": "Всегда",
     "Bar": "Столбцы",
     "Basic": "Базовые",
+    "State Strip": "Полоса состояний",
+
+    "Crosshair Pins": "Булавки перекрестия",
+
+    "Pins": "Булавки",
+
+    "Pin Delta": "Разница булавок",
+
+    "Pins in Legend": "Булавки в легенде",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Коснитесь или щёлкните график, чтобы закрепить там перекрестие: подсказка остаётся на экране, а булавку можно перетаскивать. Повторное касание убирает её. Пока это включено, касание ставит булавку вместо детализации.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "При двух булавках добавляет для каждого ряда строку Δ с изменением от A к B в виде значения и процента.",
+
+    "Also show the pinned values next to each legend entry.": "Также показывает закреплённые значения рядом с каждым пунктом легенды.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Сколько булавок можно поставить: одну или две для сравнения двух моментов времени.",
+
+    "Last 1 hour": "Последний 1 час",
+
+    "Last 6 hours": "Последние 6 часов",
+
+    "Last 12 hours": "Последние 12 часов",
+
+    "Last 1H": "Последний 1Ч",
+
+    "Last 6H": "Последние 6Ч",
+
+    "Last 12H": "Последние 12Ч",
+
+    "Controller": "Контроллер",
+
+    "Reset": "Сбросить",
+
+    "Reset Button": "Кнопка «Сбросить»",
+
+    "Sync Group": "Группа синхронизации",
+
+    "Picker Sync": "Синхронизация выбора",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Одно имя группы для всех синхронизируемых переключателей этой карточки. Оно заполняет пустые группы выбора даты, интервала, разрешения и группировки, поэтому карточке-контроллеру и управляемым ею карточкам графиков нужно только это имя.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Добавляет в панель выбора даты кнопку, возвращающую к периоду по умолчанию (режим по умолчанию или первый видимый режим) и очищающую произвольный диапазон. Карточка-контроллер показывает её по умолчанию.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Необязательно. Сравнивает атрибут сущности вместо её состояния: введите здесь имя атрибута (напр. percentage), а в поле Состояние — значение для совпадения (напр. 100). Точки ведут к вложенным атрибутам.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Радиус скругления углов столбцов в пикселях. Оставьте пустым для автоматического режима (до 5 px, не больше, чем позволяет столбец). 0 = острые углы. В составных диаграммах скругляется только внешний край каждого столбца.",
     "Candlestick": "Свечи",
     "Color Thresholds": "Цветовые пороги",
     "Colors": "Цвета",
@@ -11175,6 +11773,52 @@ export const I18N = Object.freeze({
     "Always": "Alltid",
     "Bar": "Staplar",
     "Basic": "Grundläggande",
+    "State Strip": "Tillståndsrad",
+
+    "Crosshair Pins": "Hårkors-nålar",
+
+    "Pins": "Nålar",
+
+    "Pin Delta": "Nålskillnad",
+
+    "Pins in Legend": "Nålar i förklaringen",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "Tryck eller klicka i diagrammet för att fästa ett hårkors där: verktygstipset stannar på skärmen och nålen kan dras. Tryck igen för att ta bort den. När detta är på sätter ett tryck en nål i stället för att borra ner.",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "Med två nålar läggs en Δ-rad till per serie som visar förändringen från A till B som värde och procent.",
+
+    "Also show the pinned values next to each legend entry.": "Visar även de fästa värdena bredvid varje post i förklaringen.",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "Hur många nålar som kan sättas: en, eller två för att jämföra två tidpunkter.",
+
+    "Last 1 hour": "Senaste 1 timmen",
+
+    "Last 6 hours": "Senaste 6 timmarna",
+
+    "Last 12 hours": "Senaste 12 timmarna",
+
+    "Last 1H": "Senaste 1T",
+
+    "Last 6H": "Senaste 6T",
+
+    "Last 12H": "Senaste 12T",
+
+    "Controller": "Kontroll",
+
+    "Reset": "Återställ",
+
+    "Reset Button": "Återställningsknapp",
+
+    "Sync Group": "Synkgrupp",
+
+    "Picker Sync": "Väljarsynk",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "Ett gruppnamn för alla synkade väljare på det här kortet. Det fyller i de tomma grupperna för datumväljare, intervall, upplösning och gruppering, så ett kontrollkort och diagramkorten det styr behöver bara detta namn.",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "Lägger till en knapp i datumväljarens rad som återgår till standardperioden (standardläge eller det första synliga läget) och rensar ett anpassat intervall. Ett kontrollkort visar den som standard.",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "Valfritt. Matchar ett av entitetens attribut i stället för dess tillstånd: skriv attributnamnet här (t.ex. percentage) och värdet som ska matcha under Tillstånd (t.ex. 100). Punkter når nästlade attribut.",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "Hörnradie för staplar i pixlar. Lämna tomt för automatiskt (upp till 5 px, aldrig mer än stapeln tillåter). 0 = raka hörn. I staplade diagram rundas bara den yttersta änden av varje stapel.",
     "Candlestick": "Ljusstakar",
     "Color Thresholds": "Färgtrösklar",
     "Colors": "Färger",
@@ -11982,6 +12626,52 @@ export const I18N = Object.freeze({
     "Always": "始终",
     "Bar": "柱状",
     "Basic": "基础",
+    "State Strip": "状态条",
+
+    "Crosshair Pins": "十字线固定",
+
+    "Pins": "固定点数",
+
+    "Pin Delta": "固定点差值",
+
+    "Pins in Legend": "图例中显示固定值",
+
+    "Tap or click the graph to pin a crosshair there: the tooltip stays on screen and the pin can be dragged. Tap again to remove it. While this is on, a tap places a pin instead of drilling down.": "点按或点击图表即可在该处固定十字线：提示框保持显示，固定点可拖动。再次点按即可移除。开启时，点按会放置固定点而不是下钻。",
+
+    "With two pins, add a Δ row per series showing the change from A to B as a value and a percentage.": "有两个固定点时，为每个序列添加一行 Δ，以数值和百分比显示从 A 到 B 的变化。",
+
+    "Also show the pinned values next to each legend entry.": "同时在每个图例项旁显示固定值。",
+
+    "How many pins can be placed: one, or two to compare two points in time.": "可放置的固定点数量：一个，或两个用于比较两个时间点。",
+
+    "Last 1 hour": "最近 1 小时",
+
+    "Last 6 hours": "最近 6 小时",
+
+    "Last 12 hours": "最近 12 小时",
+
+    "Last 1H": "最近 1小时",
+
+    "Last 6H": "最近 6小时",
+
+    "Last 12H": "最近 12小时",
+
+    "Controller": "控制器",
+
+    "Reset": "重置",
+
+    "Reset Button": "重置按钮",
+
+    "Sync Group": "同步组",
+
+    "Picker Sync": "选择器同步",
+
+    "One group name for every synced picker on this card. It fills the Date Picker, Interval, Resolution and Group By groups that are left empty, so a Controller card and the chart cards it drives only need this one name.": "本卡片上所有同步选择器共用一个组名。它会填充留空的日期选择、间隔、分辨率和分组的组，因此控制器卡片和它驱动的图表卡片只需这一个名称。",
+
+    "Adds a button to the date picker bar that returns to the default period (Default Mode, or the first visible mode) and clears any custom range. A Controller card shows it by default.": "在日期选择栏中添加一个按钮，返回默认时段（默认模式或第一个可见模式）并清除自定义范围。控制器卡片默认显示该按钮。",
+
+    "Optional. Match one of the entity's attributes instead of its state: type the attribute name here (e.g. percentage) and the value to match in State (e.g. 100). Dots reach nested attributes.": "可选。改为匹配实体的某个属性而非其状态：在此填写属性名（如 percentage），在“状态”中填写要匹配的值（如 100）。用点号访问嵌套属性。",
+    "Corner radius of bars in pixels. Leave empty for automatic (up to 5 px, never more than the bar allows). 0 = square corners. In stacked charts only the outer end of each stack is rounded.": "柱形圆角半径（像素）。留空为自动（最多 5 px，且不会超过柱形允许的范围）。0 = 直角。堆叠图中仅圆化每个堆叠的外端。",
     "Candlestick": "K线",
     "Color Thresholds": "颜色阈值",
     "Colors": "颜色",
