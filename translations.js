@@ -835,6 +835,13 @@ export const I18N = Object.freeze({
     "White": "Beyaz",
     "Yellow": "Sarı",
     "Custom": "Özel",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Eksen Stili",
+    "Subtle (card default)": "Sade (kart varsayılanı)",
+    "Native (Home Assistant)": "Yerel (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Sade, kartın kendi görünümüdür: soluk etiketler ve silik bir ızgara. Yerel, Home Assistant'ın yerleşik grafikleriyle aynı tema renklerini ve boyutlarını kullanır (etiketler için 12 px ana metin rengi, ızgara için temanın ayırıcı rengi); böylece kart açık ve koyu temayla birlikte değişir. X Ekseni ve Y Ekseni sekmelerinde doldurduğunuz eksen veya ızgara ayarları yine önceliklidir.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Eksen Stili Yerel olduğundan boş bırakılan alan, yer tutucuda gösterilen Home Assistant varsayılanını kullanır.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -1663,6 +1670,13 @@ export const I18N = Object.freeze({
     "White": "Weiß",
     "Yellow": "Gelb",
     "Custom": "Benutzerdef.",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Achsenstil",
+    "Subtle (card default)": "Dezent (Kartenstandard)",
+    "Native (Home Assistant)": "Nativ (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Dezent ist das eigene Erscheinungsbild der Karte: gedämpfte Beschriftungen und ein blasses Raster. Nativ verwendet dieselben Themenfarben und Größen wie die eingebauten Diagramme von Home Assistant (primäre Textfarbe mit 12 px für die Beschriftungen, Trennlinienfarbe des Themes für das Raster), sodass die Karte mit hellem und dunklem Theme umschaltet. In den Tabs X-Achse und Y-Achse eingetragene Achsen- oder Rastereinstellungen haben weiterhin Vorrang.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Der Achsenstil ist Nativ, daher verwendet ein leeres Feld den im Platzhalter angezeigten Home-Assistant-Standard.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -2516,6 +2530,13 @@ export const I18N = Object.freeze({
     "White": "Bílá",
     "Yellow": "Žlutá",
     "Custom": "Vlastní",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Styl os",
+    "Subtle (card default)": "Jemný (výchozí pro kartu)",
+    "Native (Home Assistant)": "Nativní (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Jemný je vlastní vzhled karty: tlumené popisky a slabá mřížka. Nativní používá stejné barvy a velikosti motivu jako vestavěné grafy Home Assistantu (primární barva textu o velikosti 12 px pro popisky, barva oddělovače motivu pro mřížku), takže se karta přepíná spolu se světlým a tmavým motivem. Nastavení os nebo mřížky vyplněná na kartách Osa X a Osa Y mají stále přednost.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Styl os je Nativní, takže prázdné pole použije výchozí hodnotu Home Assistantu zobrazenou v zástupném textu.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -3369,6 +3390,13 @@ export const I18N = Object.freeze({
     "White": "Hvid",
     "Yellow": "Gul",
     "Custom": "Tilpasset",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Aksestil",
+    "Subtle (card default)": "Diskret (kortets standard)",
+    "Native (Home Assistant)": "Indbygget (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Diskret er kortets eget udseende: dæmpede etiketter og et svagt gitter. Indbygget bruger de samme temafarver og størrelser som Home Assistants egne diagrammer (primær tekstfarve i 12 px til etiketterne, temaets skillelinjefarve til gitteret), så kortet skifter sammen med lyst og mørkt tema. Akse- eller gitterindstillinger, du udfylder under fanerne X-akse og Y-akse, vinder stadig.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Aksestilen er Indbygget, så et tomt felt bruger Home Assistant-standarden, der vises som pladsholder.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -4222,6 +4250,13 @@ export const I18N = Object.freeze({
     "White": "Blanco",
     "Yellow": "Amarillo",
     "Custom": "Personalizado",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Estilo de ejes",
+    "Subtle (card default)": "Sutil (predeterminado de la tarjeta)",
+    "Native (Home Assistant)": "Nativo (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Sutil es el aspecto propio de la tarjeta: etiquetas atenuadas y una cuadrícula tenue. Nativo usa los mismos colores y tamaños del tema que los gráficos integrados de Home Assistant (color de texto primario a 12 px para las etiquetas, color divisor del tema para la cuadrícula), de modo que la tarjeta cambia junto con el tema claro y oscuro. Cualquier ajuste de eje o cuadrícula que rellenes en las pestañas Eje X y Eje Y sigue teniendo prioridad.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "El estilo de ejes es Nativo, así que un campo vacío usa el valor predeterminado de Home Assistant mostrado en el marcador de posición.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -5075,6 +5110,13 @@ export const I18N = Object.freeze({
     "White": "Valkoinen",
     "Yellow": "Keltainen",
     "Custom": "Mukautettu",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Akselityyli",
+    "Subtle (card default)": "Hillitty (kortin oletus)",
+    "Native (Home Assistant)": "Natiivi (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Hillitty on kortin oma ulkoasu: vaimeat selitteet ja haalea ruudukko. Natiivi käyttää samoja teeman värejä ja kokoja kuin Home Assistantin omat kaaviot (ensisijainen tekstiväri 12 px:n koossa selitteille, teeman jakoviivan väri ruudukolle), joten kortti vaihtuu vaalean ja tumman teeman mukana. X-akseli- ja Y-akseli-välilehdillä täyttämäsi akseli- tai ruudukkoasetukset ovat silti etusijalla.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Akselityyli on Natiivi, joten tyhjä kenttä käyttää paikkamerkissä näytettyä Home Assistantin oletusarvoa.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -5928,6 +5970,13 @@ export const I18N = Object.freeze({
     "White": "Blanc",
     "Yellow": "Jaune",
     "Custom": "Personnalisé",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Style des axes",
+    "Subtle (card default)": "Discret (défaut de la carte)",
+    "Native (Home Assistant)": "Natif (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Discret est l'apparence propre à la carte : étiquettes atténuées et grille légère. Natif utilise les mêmes couleurs et tailles de thème que les graphiques intégrés de Home Assistant (couleur de texte principale à 12 px pour les étiquettes, couleur de séparateur du thème pour la grille), de sorte que la carte bascule avec les thèmes clair et sombre. Tout réglage d'axe ou de grille renseigné dans les onglets Axe X et Axe Y reste prioritaire.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Le style des axes est Natif : un champ vide utilise donc la valeur par défaut de Home Assistant affichée en espace réservé.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -6781,6 +6830,13 @@ export const I18N = Object.freeze({
     "White": "Bianco",
     "Yellow": "Giallo",
     "Custom": "Personalizzato",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Stile assi",
+    "Subtle (card default)": "Discreto (predefinito della scheda)",
+    "Native (Home Assistant)": "Nativo (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Discreto è l'aspetto proprio della scheda: etichette attenuate e griglia leggera. Nativo usa gli stessi colori e dimensioni del tema dei grafici integrati di Home Assistant (colore del testo primario a 12 px per le etichette, colore divisore del tema per la griglia), così la scheda cambia insieme al tema chiaro e scuro. Le impostazioni di asse o griglia compilate nelle schede Asse X e Asse Y hanno comunque la precedenza.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Lo stile assi è Nativo, quindi un campo vuoto usa il valore predefinito di Home Assistant mostrato nel segnaposto.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -7634,6 +7690,13 @@ export const I18N = Object.freeze({
     "White": "Wit",
     "Yellow": "Geel",
     "Custom": "Aangepast",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Asstijl",
+    "Subtle (card default)": "Subtiel (kaartstandaard)",
+    "Native (Home Assistant)": "Native (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Subtiel is het eigen uiterlijk van de kaart: gedempte labels en een vaag raster. Native gebruikt dezelfde themakleuren en -groottes als de ingebouwde grafieken van Home Assistant (primaire tekstkleur op 12 px voor de labels, de scheidingslijnkleur van het thema voor het raster), zodat de kaart mee wisselt met het lichte en donkere thema. As- of rasterinstellingen die je op de tabbladen X-as en Y-as invult, gaan nog steeds voor.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "De asstijl is Native, dus een leeg veld gebruikt de Home Assistant-standaard die als plaatsaanduiding wordt getoond.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -8487,6 +8550,13 @@ export const I18N = Object.freeze({
     "White": "Hvit",
     "Yellow": "Gul",
     "Custom": "Egendefinert",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Aksestil",
+    "Subtle (card default)": "Diskret (kortets standard)",
+    "Native (Home Assistant)": "Innebygd (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Diskret er kortets eget utseende: dempede etiketter og et svakt rutenett. Innebygd bruker de samme temafargene og størrelsene som Home Assistants egne diagrammer (primær tekstfarge i 12 px for etikettene, temaets skillelinjefarge for rutenettet), slik at kortet bytter sammen med lyst og mørkt tema. Akse- eller rutenettinnstillinger du fyller ut under fanene X-akse og Y-akse, vinner fortsatt.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Aksestilen er Innebygd, så et tomt felt bruker Home Assistant-standarden som vises som plassholder.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -9340,6 +9410,13 @@ export const I18N = Object.freeze({
     "White": "Biały",
     "Yellow": "Żółty",
     "Custom": "Własny",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Styl osi",
+    "Subtle (card default)": "Subtelny (domyślny karty)",
+    "Native (Home Assistant)": "Natywny (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Subtelny to własny wygląd karty: stonowane etykiety i delikatna siatka. Natywny używa tych samych kolorów i rozmiarów motywu co wbudowane wykresy Home Assistanta (podstawowy kolor tekstu o rozmiarze 12 px dla etykiet, kolor separatora motywu dla siatki), dzięki czemu karta przełącza się razem z jasnym i ciemnym motywem. Ustawienia osi lub siatki wpisane w zakładkach Oś X i Oś Y nadal mają pierwszeństwo.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Styl osi jest Natywny, więc puste pole używa domyślnej wartości Home Assistanta pokazanej w podpowiedzi pola.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -10193,6 +10270,13 @@ export const I18N = Object.freeze({
     "White": "Branco",
     "Yellow": "Amarelo",
     "Custom": "Personalizado",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Estilo dos eixos",
+    "Subtle (card default)": "Sutil (padrão do cartão)",
+    "Native (Home Assistant)": "Nativo (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Sutil é a aparência própria do cartão: rótulos atenuados e uma grade tênue. Nativo usa as mesmas cores e tamanhos do tema que os gráficos integrados do Home Assistant (cor de texto primária a 12 px para os rótulos, cor de divisória do tema para a grade), para que o cartão mude junto com o tema claro e escuro. Qualquer configuração de eixo ou grade preenchida nas abas Eixo X e Eixo Y continua tendo prioridade.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "O estilo dos eixos é Nativo, então um campo vazio usa o padrão do Home Assistant mostrado no texto de exemplo.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -11046,6 +11130,13 @@ export const I18N = Object.freeze({
     "White": "Белый",
     "Yellow": "Жёлтый",
     "Custom": "Свой",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Стиль осей",
+    "Subtle (card default)": "Приглушённый (по умолчанию для карточки)",
+    "Native (Home Assistant)": "Родной (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Приглушённый — собственный вид карточки: неяркие подписи и едва заметная сетка. Родной использует те же цвета и размеры темы, что и встроенные графики Home Assistant (основной цвет текста 12 px для подписей, цвет разделителя темы для сетки), поэтому карточка переключается вместе со светлой и тёмной темой. Настройки осей или сетки, заполненные на вкладках «Ось X» и «Ось Y», по-прежнему имеют приоритет.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Стиль осей — Родной, поэтому пустое поле использует значение Home Assistant по умолчанию, показанное в подсказке поля.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -11899,6 +11990,13 @@ export const I18N = Object.freeze({
     "White": "Vit",
     "Yellow": "Gul",
     "Custom": "Anpassad",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "Axelstil",
+    "Subtle (card default)": "Diskret (kortets standard)",
+    "Native (Home Assistant)": "Inbyggd (Home Assistant)",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "Diskret är kortets eget utseende: dämpade etiketter och ett svagt rutnät. Inbyggd använder samma temafärger och storlekar som Home Assistants egna diagram (primär textfärg i 12 px för etiketterna, temats avdelarfärg för rutnätet), så att kortet växlar tillsammans med ljust och mörkt tema. Axel- eller rutnätsinställningar du fyller i under flikarna X-axel och Y-axel gäller fortfarande.",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "Axelstilen är Inbyggd, så ett tomt fält använder Home Assistant-standarden som visas som platshållare.",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
     // --- added in 3.32 round 1 (live legend stat)
@@ -12752,5 +12850,12 @@ export const I18N = Object.freeze({
     "White": "白色",
     "Yellow": "黄色",
     "Custom": "自定义",
+    // --- added in 4.03 round 12 (axis style)
+    "Axis Style": "坐标轴样式",
+    "Subtle (card default)": "柔和（卡片默认）",
+    "Native (Home Assistant)": "原生（Home Assistant）",
+    "Subtle is the card's own look: muted labels and a faint grid. Native uses the same theme colours and sizes as Home Assistant's built-in charts (primary text colour at 12 px for the labels, the theme's divider colour for the grid), so the card switches with light and dark themes. Any axis or grid setting you fill in on the X Axis and Y Axis tabs still wins.": "柔和是卡片自身的外观：淡化的标签和浅色网格。原生使用与 Home Assistant 内置图表相同的主题颜色和尺寸（标签使用 12 px 的主文本颜色，网格使用主题的分隔线颜色），因此卡片会随浅色和深色主题一起切换。在“X 轴”和“Y 轴”选项卡中填写的任何坐标轴或网格设置仍然优先。",
+    "Axis Style is Native, so an empty field uses the Home Assistant default shown in the placeholder.": "坐标轴样式为原生，因此留空的字段将使用占位符中显示的 Home Assistant 默认值。",
+    "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "坐标轴样式为原生，因此留空的字段将采用 Home Assistant 的主题颜色。",
   }),
 });
