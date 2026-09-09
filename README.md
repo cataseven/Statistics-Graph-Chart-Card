@@ -109,7 +109,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📉 | Logarithmic scale |
 | 🔍 | **Zoom brush** — click and drag on the graph to zoom into a time range; double-click steps back one zoom level, and repeated double-clicks unwind the way back to the full window |
 | 🔽 | **Drill down** — click a single bucket to reload the card for just that period, then click again to go deeper. Double-click steps back out one level. Unlike zooming, this refetches history at the finer resolution the shorter window allows, so it shows detail the original chart did not contain. Picking a new period from the date or interval picker returns you to it |
-| 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph. Entity-driven or manual timestamps, with per-annotation opacity and Jinja2 template support |
+| 📌 | **Annotations** — add threshold lines, event markers, time span highlights, and comfort zone bands to the graph. Entity-driven or manual timestamps, with per-annotation opacity and Jinja2 template support. Entity-driven spans and events can also match an entity's `attribute` instead of its state *(v4.03)* |
 | 🔄 | **Tooltip sync** — hover one card and see crosshairs on all synced cards, with optional named groups |
 | 🔍 | **Zoom sync** — brush-zoom on one card and every other card in the group jumps to the same time window (double-click anywhere to reset them all) |
 | ↔️ | **Scroll sync** — horizontal scrolling stays in lock-step across all cards in the same group, even when their `hours_to_show` differ |
@@ -157,7 +157,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🎚️ | **On-card Points/Hour & Group By pickers** — change data resolution and bucketing right on the card; selections persist, take priority over Auto Scale, and "Auto" returns to the configured value |
 | 🕐 | **Multi-hour buckets** — `group_by: 2h / 3h / 4h / 6h / 12h` (any `Nh`) for clean multi-hour bars between `hour` and `date` |
 | 🕒 | **Y-axis label formats** — show durations (`h:mm`, `mm:ss`, `d h:mm`) or custom `{expression}` labels per axis; tooltips, data labels, state row and the average label follow automatically |
-| 🔗 | **Picker group sync** — `interval_picker_group`, `pph_picker_group`, `group_by_picker_group`: one visible picker drives every card sharing the group; receivers don't need a picker at all |
+| 🔗 | **Picker group sync** — `interval_picker_group`, `pph_picker_group`, `group_by_picker_group`: one visible picker drives every card sharing the group; receivers don't need a picker at all. `sync_group` sets all four group keys at once *(v4.03)* |
 | 🙈 | **Auto Hide Entities** — start with every series hidden and reveal only what you need from the legend |
 | 📍 | **Date picker layout** — place the ‹ date › navigator and the D/W/M/Y shortcuts left / center / right, independently |
 | 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit. Customize slice and center label fonts/colors with `pie_label_font_size`, `pie_label_color`, `pie_center_font_size`, and `pie_center_color` — all accept theme variables |
@@ -165,7 +165,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔤 | **Theme-aware fonts** — every canvas-rendered chart (Pie, Heatmap, Calendar, Ranking, Radial Bar, Polar Area, Radar, Gauge, axis labels) uses your active HA font (`--primary-font-family`) instead of generic sans-serif |
 | 🧹 | **Clean YAML output** — the visual editor only writes fields you've actually customized. New cards start with 5 lines, not 80. Toggle a setting and it appears in YAML; revert to default and it disappears. Explicit overrides are always preserved |
 | 🏷️ | **Y-axis state names** — when graphing entities with `state_map` (washing machines, alarm panels, media players), the Y-axis automatically shows the original state names (`idle`, `running`, `done`) instead of `0`, `1`, `2`. Optional friendly labels supported via `value, label` in the editor |
-| 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme |
+| 🎨 | **Custom axis colors** — `y_axis_color`, `x_axis_color`, and `x_axis_date_color` let you color-match the axis labels and tick marks to your dashboard theme; `axis_style: native` makes the axes and grid look exactly like Home Assistant's own charts *(v4.03)* |
 | ✨ | **Bar hover highlight** — bars brighten on mouse hover so it's obvious which bar a tooltip refers to, especially in stacked or multi-entity charts. On mobile, the highlight persists while the finger is held down via a JS-managed class (CSS `:hover` is unreliable on touch devices) |
 | ✨ | **Period highlight** — on bar charts, hovering a bar shades the background band of that whole period so it's clear where each period starts and ends, even with several entities side by side. Toggle with `period_highlight` and recolor with `period_highlight_color`; works with or without the tooltip |
 | 🎨 | **Color templates** — all color fields (`color`, `icon_color`, `state_color`, `point_colors`, axis/grid colors) accept Jinja2 `{{ }}` templates evaluated server-side by HA via `render_template` WebSocket subscriptions. Use a central `sensor.entity_colors` to manage all entity colors from one place. In the editor, the color picker automatically dims when a template is detected |
@@ -191,6 +191,9 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ➖ | **Two-entity math** — per-entity `ref_entity` + `ref_op` combines a series with a second entity **over time** (`subtract` / `add` / `multiply` / `divide`). Plot indoor − outdoor, production − consumption, or target vs actual with no template sensor; the reference is sampled as a step function so each point is combined with the value valid at that moment |
 | 💶 | **Cost view** — per-entity `price_entity` multiplies a series by the value of another entity **over time** (spot price, tariff sensor). The price is read as a step function from the price entity's own history and applied per consumption slice *before* bucketing, so every bucket is an exact Σ(value × price). Ideal with `aggregate_func: change` on energy counters — set `unit` to your currency and the kWh chart becomes a cost chart |
 | ⚡ | **Custom auto-scale rules** — card-level `auto_scale_rules` teaches Auto Scale *your* thresholds: each rule maps a visible period ("up to N hours") to a Group By and optionally a Points/Hour. The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale |
+| 📊 | **State strips** *(v4.03)* — `graph_type: state_strip` on an entity draws its states as coloured bands under the X axis of a Timeline card, so device activity reads against the curves above it. Colours and names come from `state_map`; `state_strip_height` and `state_strip_labels` control the look |
+| 🎛️ | **Controller card** *(v4.03)* — `custom:statistics-graph-chart-controller` is a chart-less one-row card holding only the date-picker bar: calendar periods, rolling windows (1H … 12M) and a Reset button that drive every chart sharing its `sync_group` |
+| 📍 | **Crosshair pins** *(v4.03)* — with `crosshair: true` a tap or click pins the tooltip in place, and `crosshair_pins: 2` compares two points in time with a per-series Δ and percentage. Zoomed charts also pan with one finger |
 
 ---
 
@@ -305,6 +308,7 @@ These options apply to the whole card.
 | `y_axis_format` | string | `null` | Custom label format for the primary axis: a duration shorthand (`h:mm`, `h:mm:ss`, `mm:ss`, `d h:mm`) or a safe `{expression}` template (e.g. `{fixed(value/1000,1)} kW`). Also drives tooltips, data labels, the state row and the average-line label for entities on this axis. See [Y-Axis Label Formats](#-y-axis-label-formats). |
 | `y2_axis_format` | string | `null` | Same as `y_axis_format`, for the secondary (right) axis and the entities plotted on it. |
 | `duration_unit` | string | `"s"` | Unit of the raw sensor value when a duration shorthand is used: `s` / `ms` / `min` / `h` — e.g. `5400` with `h:mm` shows `1:30`. Ignored by `{expression}` templates. |
+| `axis_style` | string | `"subtle"` | How the axes and grid are drawn. `subtle` (default) is the card's own look: labels in the theme's secondary text colour with reduced opacity and a faint neutral grid. `native` matches Home Assistant's built-in charts: labels and date markers in `--primary-text-color` at 12 px, grid lines in `--divider-color` at full opacity, so the card follows light, dark and custom themes exactly like the core statistics-graph card. Any axis or grid option you set explicitly still wins. Applies wherever the X Axis tab is available (Timeline, State Timeline, Scatter, Heatmap, Calendar). *(v4.03)* |
 | `y_axis_font_size` | number | `null` | Font size of Y-axis numeric labels in pixels. Default is 10. |
 | `y_axis_font_opacity` | number | `null` | Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65. |
 | `y_axis_color` | string | `null` | Custom color for Y-axis labels and tick marks. Accepts any CSS color (hex, rgba, color name) or a CSS variable like `var(--my-color)`. Leave empty for theme default. |
@@ -1503,6 +1507,18 @@ x_axis_interval: 1M    # Monthly (1st of month)
 Available presets in the editor: Auto, 1H–12H, 1D, 2D, 7D, 1W, 2W, 1M, 3M.
 
 > **Editor:** General Settings → X-Axis → *X Axis Interval*
+
+### Axis Style: matching Home Assistant's own charts *(v4.03)*
+
+By default the card draws its axes and grid deliberately subtler than Home Assistant's built-in charts: labels use the theme's secondary text colour with some transparency, and the grid is a faint neutral grey. If you would rather have the card look exactly like the core `statistics-graph` card next to it, switch the axis style:
+
+```yaml
+axis_style: native
+```
+
+`native` takes the label colour, size and grid colour from the same theme variables Home Assistant's charts use (`--primary-text-color` at 12 px for the labels and date markers, `--divider-color` for the grid), so the card follows light, dark and custom themes without any fixed colours in your YAML. Options you set explicitly (`x_axis_color`, `x_grid_opacity`, …) still override the preset, and the editor placeholders show which value applies.
+
+> **Editor:** Card Settings → Card Styling → *Axis Style*
 
 ### Grid Customization
 
