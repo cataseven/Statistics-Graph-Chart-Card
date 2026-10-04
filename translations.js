@@ -1,4 +1,4 @@
-export const T_VERSION = "4.03";
+export const T_VERSION = "4.04";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -9,6 +9,30 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native ayrıca per-entity legend'ı da hizaya getirir: isimleri ve değerleri kartın daha sönük, küçük görünümü yerine temanın ana metin rengini tam güçte kullanır.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Varsayılan Aralık",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Seçicinin hangi aralık düğmesiyle açılacağı. Auto = bu kartta kullanıcının en son bastığı düğmeyi hatırla (yeniden yüklemelerde korunur); birini seçersen her zaman ondan başlar ve hatırlanan değeri yok sayar. Seçici kapalıyken grafik yine Gösterilecek Saat değerine döner.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Yakınlaştır",
+    "Zoom Out": "Uzaklaştır",
+    "Reset Zoom": "Yakınlaştırmayı Sıfırla",
+    "Zoom Buttons": "Yakınlaştırma Düğmeleri",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Grafiğin sağ üstüne küçük yakınlaştır, uzaklaştır ve sıfırla düğmeleri ekler. Her tıklama görünen aralığı merkezine göre yarıya indirir veya iki katına çıkarır; sıfırlama düğmesi yalnızca yakınlaştırdıktan veya detaya indikten sonra görünür ve grafiği tam penceresine döndürür. Sürükleyerek ve çift tıklayarak yakınlaştırmayla birlikte çalışır, sürüklemenin uzun basma gerektirdiği dokunmatik ekranlarda işe yarar.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Son 2 yıl",
+    "Last 3 years": "Son 3 yıl",
+    "Last 5 years": "Son 5 yıl",
+    "2Y": "2Y",
+    "3Y": "3Y",
+    "5Y": "5Y",
+    "Last 2Y": "Son 2Y",
+    "Last 3Y": "Son 3Y",
+    "Last 5Y": "Son 5Y",
+    "Last 2 Years": "Son 2 Yıl",
+    "Last 3 Years": "Son 3 Yıl",
+    "Last 5 Years": "Son 5 Yıl",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Canlı",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Entity'nin şu anki durumu; grafikte gösterilen dönemden bağımsızdır. Diğer değerlerin hepsi gösterilen aralığı anlatır.",
@@ -212,7 +236,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Çizilen veriyi X ekseni boyunca zamanda kaydırır. Pozitif (örn. 24) veriyi ileri kaydırır - durumu T+N saat sonrasını temsil eden tahmin sensörleri için. Negatif (örn. -24) veriyi geriye kaydırır - öznitelik tabanlı tahmin verisiyle yarının tahminini bugünün üzerine bindirmek için kullanışlıdır. Devre dışı bırakmak için boş (veya 0) bırakın. Ofset ayarından bağımsızdır - ikisi birlikte kullanılabilir.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Bu varlığı verilen saat sayısı kadar zamanda geriye kaydırır. Aynı sensörün farklı dönemlerini tek grafikte üst üste bindirmek için kullanın. 24 = dün, 168 = geçen hafta, 720 = geçen ay. Dinamik ofset için bir yardımcı varlık kimliği de (örn. input_number.my_offset) kabul eder.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Değeri 10 üzeri bu kuvvetle çarpar. 0 = değişiklik yok. -3 = ÷1000 (mili birimleri dönüştürür). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Her veri değerini dönüştüren bir JavaScript ifadesi. Kullanılabilir değişkenler: x (geçerli değer), first (penceredeki ilk değer), last, min, max, avg (seri istatistikleri), index (nokta konumu). Değer Çarpanı'ndan sonra uygulanır. Örnekler: return x - first (sıfıra normalize eder); dışa aktarımı ayıklamak için x pozitifken -x, değilse 0 döndüren koşullu bir ifade.",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Her veri değerini dönüştürmek için bir JavaScript ifadesi. Kullanılabilir değişkenler: x (mevcut değer), first (penceredeki ilk değer), last, min, max, avg (seri istatistikleri), index (nokta sırası), t (bu noktanın zamanı, ms), now (şu anki zaman, ms), hour (yerel saat, 0-23.99), weekday (1 = Pazartesi ... 7 = Pazar). O noktada boşluk bırakmak için null döndürün. Değer Katsayısından sonra uygulanır. Örnekler: return x - first (sıfıra normalize et), return x > 8 ? x : null (yalnızca 8 üstü), return t <= now ? null : x (yalnızca tahmin).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Geçmiş veri yerine varlığın anlık durum değerinde düz yatay bir referans çizgisi çizer.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Çubukları sıfır çizgisinden aşağı doğru çizer. Kelebek grafikler oluşturmak için yığılmış modla birlikte kullanın.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Grafik verisini geçmiş yerine bir varlık özniteliğinden okur. Tahmin verileri için kullanılır (EPEX spot fiyatları, hava durumu tahmini, güneş üretim tahmini). Öznitelik, time ve value alanları içeren bir nesne dizisi içermelidir.",
@@ -844,6 +868,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native bringt auch die Legende je Entität in Einklang: Namen und Werte verwenden die Haupttextfarbe des Themes in voller Stärke statt der blasseren, kleineren Kartendarstellung.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Standardintervall",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Mit welcher Intervall-Schaltfläche die Auswahl öffnet. Auto = die zuletzt auf dieser Karte gedrückte Schaltfläche merken (bleibt über Neuladen erhalten); wähle eine, um immer dort zu starten und den gemerkten Wert zu ignorieren. Bei ausgeschalteter Auswahl greift weiterhin Anzuzeigende Stunden.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Vergrößern",
+    "Zoom Out": "Verkleinern",
+    "Reset Zoom": "Zoom zurücksetzen",
+    "Zoom Buttons": "Zoom-Schaltflächen",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Fügt oben rechts im Diagramm kleine Schaltflächen zum Vergrößern, Verkleinern und Zurücksetzen hinzu. Jeder Klick halbiert oder verdoppelt den sichtbaren Bereich um dessen Mitte; die Zurücksetzen-Schaltfläche erscheint erst, wenn Sie vergrößert oder in die Detailansicht gewechselt haben, und stellt das volle Fenster wieder her. Funktioniert zusammen mit Ziehen und Doppelklick und ist auf Touchscreens praktisch, wo Ziehen ein langes Drücken erfordert.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Letzte 2 Jahre",
+    "Last 3 years": "Letzte 3 Jahre",
+    "Last 5 years": "Letzte 5 Jahre",
+    "2Y": "2J",
+    "3Y": "3J",
+    "5Y": "5J",
+    "Last 2Y": "Letzte 2J",
+    "Last 3Y": "Letzte 3J",
+    "Last 5Y": "Letzte 5J",
+    "Last 2 Years": "Letzte 2 Jahre",
+    "Last 3 Years": "Letzte 3 Jahre",
+    "Last 5 Years": "Letzte 5 Jahre",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Der aktuelle Zustand der Entität, unabhängig vom im Diagramm angezeigten Zeitraum. Alle anderen Werte beschreiben den dargestellten Bereich.",
@@ -1047,7 +1095,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Verschiebt die gezeichneten Daten zeitlich entlang der X-Achse. Positiv (z. B. 24) verschiebt nach vorn — für Prognosesensoren, deren Status T+N Stunden voraus abbildet. Negativ (z. B. -24) verschiebt zurück — nützlich bei attributbasierten Prognosedaten, um die morgige Prognose über heute zu legen. Leer lassen (oder 0) zum Deaktivieren. Unabhängig vom Offset — beides kombinierbar.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Verschiebt diese Entität um die angegebene Stundenzahl zeitlich nach hinten. Damit lässt sich derselbe Sensor aus verschiedenen Zeiträumen in einem Diagramm überlagern. 24 = gestern, 168 = letzte Woche, 720 = letzter Monat. Akzeptiert auch eine Helfer-Entitäts-ID (z. B. input_number.my_offset) für dynamischen Offset.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multipliziert den Wert mit 10 hoch dieser Potenz. 0 = keine Änderung. -3 = ÷1000 (Milli-Einheiten umrechnen). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Ein JavaScript-Ausdruck zur Transformation jedes Datenwerts. Verfügbare Variablen: x (aktueller Wert), first (erster Wert im Fenster), last, min, max, avg (Reihenstatistiken), index (Punktposition). Wird nach dem Wertfaktor angewendet. Beispiele: return x - first (auf Null normieren); für die Export-Extraktion positive x negiert und andernfalls 0 zurückgeben.",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Ein JavaScript-Ausdruck zur Umrechnung jedes Datenwerts. Verfügbare Variablen: x (aktueller Wert), first (erster Wert im Fenster), last, min, max, avg (Serienstatistik), index (Position des Punkts), t (Zeit dieses Punkts in ms), now (aktuelle Zeit in ms), hour (lokale Stunde, 0-23.99), weekday (1 = Montag bis 7 = Sonntag). Gib null zurück, um an dieser Stelle eine Lücke zu lassen. Wird nach dem Wertfaktor angewendet. Beispiele: return x - first (auf null normieren), return x > 8 ? x : null (nur über 8), return t <= now ? null : x (nur Prognose).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Zeichnet statt Verlaufsdaten eine flache horizontale Referenzlinie am aktuellen Statuswert der Entität.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Zeichnet Balken von der Nulllinie nach unten. Zusammen mit dem Stapelmodus entstehen Butterfly-Diagramme.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Liest Diagrammdaten aus einem Entitätsattribut statt aus dem Verlauf. Für Prognosedaten (EPEX-Spotpreise, Wettervorhersage, Solarprognose). Das Attribut muss ein Array von Objekten mit Zeit- und Wertfeldern enthalten.",
@@ -1679,6 +1727,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native sjednotí i legendu jednotlivých entit: názvy a hodnoty používají hlavní barvu textu motivu v plné sytosti místo tlumenějšího a menšího vzhledu karty.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Výchozí interval",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Kterým tlačítkem intervalu se výběr otevře. Auto = zapamatovat si poslední tlačítko stisknuté na této kartě (zachová se i po načtení); vyberte jedno, aby se vždy začínalo tam a zapamatovaná hodnota se ignorovala. Když je výběr vypnutý, graf se stále řídí hodnotou Hodin k zobrazení.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Přiblížit",
+    "Zoom Out": "Oddálit",
+    "Reset Zoom": "Obnovit přiblížení",
+    "Zoom Buttons": "Tlačítka přiblížení",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Přidá do pravého horního rohu grafu malá tlačítka pro přiblížení, oddálení a obnovení. Každé kliknutí zmenší nebo zvětší viditelný rozsah na polovinu či dvojnásobek kolem jeho středu; tlačítko obnovení se objeví až po přiblížení nebo detailním zobrazení a vrátí graf na celé okno. Funguje spolu s přiblížením tažením a dvojklikem a hodí se na dotykových obrazovkách, kde tažení vyžaduje dlouhé podržení.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Poslední 2 roky",
+    "Last 3 years": "Poslední 3 roky",
+    "Last 5 years": "Posledních 5 let",
+    "2Y": "2R",
+    "3Y": "3R",
+    "5Y": "5R",
+    "Last 2Y": "Poslední 2R",
+    "Last 3Y": "Poslední 3R",
+    "Last 5Y": "Posledních 5R",
+    "Last 2 Years": "Poslední 2 roky",
+    "Last 3 Years": "Poslední 3 roky",
+    "Last 5 Years": "Posledních 5 let",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Živě",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Aktuální stav entity právě teď, nezávisle na období zobrazeném v grafu. Všechny ostatní hodnoty popisují zobrazený rozsah.",
@@ -1882,7 +1954,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Časově posune vykreslená data podél osy X. Kladné (např. 24) posune data vpřed — pro předpovědní senzory, jejichž stav představuje T+N hodin dopředu. Záporné (např. -24) posune data zpět — vhodné s předpovědními daty z atributů pro překrytí zítřejší předpovědi na dnešek. Ponechte prázdné (nebo 0) pro vypnutí. Nezávislé na volbě Offset — obojí lze kombinovat.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Posune tuto entitu zpět v čase o zadaný počet hodin. Slouží k překrytí téhož senzoru z různých období v jednom grafu. 24 = včera, 168 = minulý týden, 720 = minulý měsíc. Přijímá také ID pomocné entity (např. input_number.my_offset) pro dynamický offset.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Násobí hodnotu 10 umocněnou na tento exponent. 0 = beze změny. -3 = ÷1000 (převod mili-jednotek). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "JavaScriptový výraz pro transformaci každé datové hodnoty. Dostupné proměnné: x (aktuální hodnota), first (první hodnota v okně), last, min, max, avg (statistiky řady), index (pozice bodu). Aplikuje se po Faktoru hodnoty. Příklady: return x - first (normalizace na nulu); podmíněný výraz vracející -x pro kladná x, jinak 0 (extrakce exportu).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "JavaScriptový výraz pro převod každé hodnoty. Dostupné proměnné: x (aktuální hodnota), first (první hodnota v okně), last, min, max, avg (statistiky řady), index (pozice bodu), t (čas tohoto bodu v ms), now (aktuální čas v ms), hour (místní hodina, 0-23.99), weekday (1 = pondělí až 7 = neděle). Vrácením null ponecháte v tomto místě mezeru. Použije se po činiteli hodnoty. Příklady: return x - first (normalizace na nulu), return x > 8 ? x : null (jen nad 8), return t <= now ? null : x (jen předpověď).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Vykreslí plochou vodorovnou referenční čáru na aktuální stavové hodnotě entity místo historických dat.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Kreslí sloupce směrem dolů od nulové čáry. V kombinaci se skládaným režimem vytvoří motýlkové grafy.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Čte data grafu z atributu entity místo historie. Používá se pro předpovědní data (spotové ceny EPEX, předpověď počasí, solární predikce). Atribut musí obsahovat pole objektů s poli času a hodnoty.",
@@ -2539,6 +2611,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native bringer også legenden pr. entitet i tråd: navne og værdier bruger temaets primære tekstfarve i fuld styrke i stedet for kortets svagere og mindre udseende.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Standardinterval",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Hvilken intervalknap vælgeren åbner på. Auto = husk den seneste knap, brugeren trykkede på dette kort (bevares på tværs af genindlæsninger); vælg en for altid at starte der og ignorere den huskede værdi. Når vælgeren er slået fra, falder diagrammet stadig tilbage til Timer der vises.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Zoom ind",
+    "Zoom Out": "Zoom ud",
+    "Reset Zoom": "Nulstil zoom",
+    "Zoom Buttons": "Zoomknapper",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Tilføjer små knapper til at zoome ind, zoome ud og nulstille øverst til højre i diagrammet. Hvert klik halverer eller fordobler det synlige område omkring midten; nulstillingsknappen vises først, når du har zoomet eller boret ned, og fører diagrammet tilbage til hele vinduet. Fungerer sammen med zoom ved træk og dobbeltklik og er praktisk på touchskærme, hvor træk kræver et langt tryk.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Seneste 2 år",
+    "Last 3 years": "Seneste 3 år",
+    "Last 5 years": "Seneste 5 år",
+    "2Y": "2Å",
+    "3Y": "3Å",
+    "5Y": "5Å",
+    "Last 2Y": "Seneste 2Å",
+    "Last 3Y": "Seneste 3Å",
+    "Last 5Y": "Seneste 5Å",
+    "Last 2 Years": "Seneste 2 år",
+    "Last 3 Years": "Seneste 3 år",
+    "Last 5 Years": "Seneste 5 år",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhedens aktuelle tilstand lige nu, uafhængigt af den periode der vises i grafen. Alle de andre værdier beskriver det viste interval.",
@@ -2742,7 +2838,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Tidsforskyd de tegnede data langs X-aksen. Positiv (f.eks. 24) forskyder data fremad — til prognosesensorer, hvis tilstand repræsenterer T+N timer frem. Negativ (f.eks. -24) forskyder data bagud — nyttigt med attributbaserede prognosedata til at lægge morgendagens prognose oven på i dag. Lad feltet stå tomt (eller 0) for at deaktivere. Uafhængig af Forskydning — begge kan kombineres.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Forskyder denne entitet bagud i tid med det angivne antal timer. Bruges til at lægge den samme sensor fra forskellige perioder oven på hinanden i én graf. 24 = i går, 168 = sidste uge, 720 = sidste måned. Accepterer også et hjælper-entitets-ID (f.eks. input_number.my_offset) til dynamisk forskydning.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Ganger værdien med 10 opløftet i denne potens. 0 = ingen ændring. -3 = ÷1000 (konverter milli-enheder). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Et JavaScript-udtryk der transformerer hver dataværdi. Tilgængelige variabler: x (aktuel værdi), first (første værdi i vinduet), last, min, max, avg (seriestatistik), index (punktposition). Anvendes efter Værdifaktor. Eksempler: return x - first (normalisér til nul), eller et betinget udtryk hvor x større end 0 giver -x, ellers 0 (udtræk eksport).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Et JavaScript-udtryk, der omregner hver dataværdi. Tilgængelige variabler: x (aktuel værdi), first (første værdi i vinduet), last, min, max, avg (seriestatistik), index (punktets placering), t (dette punkts tid i ms), now (nuværende tid i ms), hour (lokal time, 0-23.99), weekday (1 = mandag til 7 = søndag). Returnér null for at efterlade et hul netop der. Anvendes efter Værdifaktor. Eksempler: return x - first (normalisér til nul), return x > 8 ? x : null (kun over 8), return t <= now ? null : x (kun prognose).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Tegner en flad vandret referencelinje ved entitetens aktuelle tilstandsværdi i stedet for historiske data.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Tegner søjler nedad fra nullinjen. Brug sammen med stablet tilstand for at skabe sommerfuglediagrammer.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Læs grafdata fra en entitetsattribut i stedet for historik. Bruges til prognosedata (EPEX-spotpriser, vejrudsigt, solprognose). Attributten skal indeholde et array af objekter med tids- og værdifelter.",
@@ -3399,6 +3495,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native también alinea la leyenda por entidad: sus nombres y valores usan el color de texto principal del tema a plena intensidad, en lugar del aspecto más tenue y pequeño de la tarjeta.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Intervalo predeterminado",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Con qué botón de intervalo se abre el selector. Auto = recordar el último botón pulsado en esta tarjeta (se conserva entre recargas); elige uno para empezar siempre ahí e ignorar el valor recordado. Con el selector desactivado, el gráfico sigue usando Horas a mostrar.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Acercar",
+    "Zoom Out": "Alejar",
+    "Reset Zoom": "Restablecer zoom",
+    "Zoom Buttons": "Botones de zoom",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Añade pequeños botones de acercar, alejar y restablecer en la parte superior derecha del gráfico. Cada clic reduce a la mitad o duplica el rango visible alrededor de su centro; el botón de restablecer solo aparece cuando has ampliado o profundizado, y devuelve el gráfico a su ventana completa. Funciona junto con el zoom por arrastre y doble clic, y resulta útil en pantallas táctiles donde arrastrar requiere una pulsación larga.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Últimos 2 años",
+    "Last 3 years": "Últimos 3 años",
+    "Last 5 years": "Últimos 5 años",
+    "2Y": "2A",
+    "3Y": "3A",
+    "5Y": "5A",
+    "Last 2Y": "Últimos 2A",
+    "Last 3Y": "Últimos 3A",
+    "Last 5Y": "Últimos 5A",
+    "Last 2 Years": "Últimos 2 años",
+    "Last 3 Years": "Últimos 3 años",
+    "Last 5 Years": "Últimos 5 años",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "En vivo",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "El estado actual de la entidad en este momento, independientemente del período mostrado en el gráfico. Todos los demás valores describen el rango mostrado.",
@@ -3602,7 +3722,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Desplaza temporalmente los datos trazados a lo largo del eje X. Positivo (p. ej. 24) desplaza los datos hacia adelante — para sensores de pronóstico cuyo estado representa T+N horas por delante. Negativo (p. ej. -24) desplaza los datos hacia atrás — útil con datos de pronóstico basados en atributos para superponer el pronóstico de mañana sobre hoy. Déjelo vacío (o 0) para desactivar. Independiente de Offset — ambos pueden combinarse.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Desplaza esta entidad hacia atrás en el tiempo el número de horas indicado. Úselo para superponer el mismo sensor de distintos períodos en un solo gráfico. 24 = ayer, 168 = la semana pasada, 720 = el mes pasado. También acepta un ID de entidad auxiliar (p. ej. input_number.my_offset) para un desplazamiento dinámico.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multiplica el valor por 10 elevado a esta potencia. 0 = sin cambio. -3 = ÷1000 (convertir miliunidades). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Una expresión JavaScript para transformar cada valor de datos. Variables disponibles: x (valor actual), first (primer valor de la ventana), last, min, max, avg (estadísticas de la serie), index (posición del punto). Se aplica después de Factor de Valor. Ejemplos: return x - first (normalizar a cero); o devolver -x cuando x sea positivo y 0 en caso contrario (extraer exportación).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Una expresión JavaScript para transformar cada valor. Variables disponibles: x (valor actual), first (primer valor de la ventana), last, min, max, avg (estadísticas de la serie), index (posición del punto), t (hora de este punto en ms), now (hora actual en ms), hour (hora local, 0-23.99), weekday (1 = lunes a 7 = domingo). Devuelve null para dejar un hueco en ese punto. Se aplica después del Factor de valor. Ejemplos: return x - first (normalizar a cero), return x > 8 ? x : null (solo por encima de 8), return t <= now ? null : x (solo previsión).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Dibuja una línea de referencia horizontal plana en el valor de estado actual de la entidad en lugar de los datos históricos.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Dibuja las barras hacia abajo desde la línea cero. Úselo con el modo apilado para crear gráficos de mariposa.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Lee los datos del gráfico desde un atributo de entidad en lugar del historial. Se usa para datos de pronóstico (precios spot EPEX, pronóstico meteorológico, predicción solar). El atributo debe contener un array de objetos con campos de tiempo y valor.",
@@ -4259,6 +4379,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native yhtenäistää myös entiteettikohtaisen selitteen: sen nimet ja arvot käyttävät teeman pääsävyistä tekstiväriä täydellä voimakkuudella kortin himmeämmän ja pienemmän ulkoasun sijaan.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Oletusväli",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Millä välipainikkeella valitsin avautuu. Auto = muista tässä kortissa viimeksi painettu painike (säilyy uudelleenlatauksissa); valitse yksi, niin aloitus on aina siitä ja muistettu arvo ohitetaan. Kun valitsin on pois päältä, kaavio käyttää edelleen Näytettävät tunnit -arvoa.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Lähennä",
+    "Zoom Out": "Loitonna",
+    "Reset Zoom": "Palauta zoomaus",
+    "Zoom Buttons": "Zoomauspainikkeet",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Lisää kaavion oikeaan yläkulmaan pienet lähennys-, loitonnus- ja palautuspainikkeet. Jokainen napsautus puolittaa tai kaksinkertaistaa näkyvän alueen sen keskikohdan ympärillä; palautuspainike ilmestyy vasta, kun olet lähentänyt tai porautunut, ja palauttaa kaavion koko ikkunaan. Toimii yhdessä vetämällä ja kaksoisnapsauttamalla tehtävän zoomauksen kanssa ja on kätevä kosketusnäytöillä, joissa vetäminen vaatii pitkän painalluksen.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Viimeiset 2 vuotta",
+    "Last 3 years": "Viimeiset 3 vuotta",
+    "Last 5 years": "Viimeiset 5 vuotta",
+    "2Y": "2v",
+    "3Y": "3v",
+    "5Y": "5v",
+    "Last 2Y": "Viimeiset 2v",
+    "Last 3Y": "Viimeiset 3v",
+    "Last 5Y": "Viimeiset 5v",
+    "Last 2 Years": "Viimeiset 2 vuotta",
+    "Last 3 Years": "Viimeiset 3 vuotta",
+    "Last 5 Years": "Viimeiset 5 vuotta",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Entiteetin tämänhetkinen tila, riippumatta kaaviossa näytettävästä jaksosta. Kaikki muut arvot kuvaavat näytettyä aikaväliä.",
@@ -4462,7 +4606,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Siirtää piirrettyä dataa ajassa X-akselia pitkin. Positiivinen (esim. 24) siirtää dataa eteenpäin — ennusteantureille, joiden tila edustaa T+N tuntia eteenpäin. Negatiivinen (esim. -24) siirtää dataa taaksepäin — hyödyllinen attribuuttipohjaisen ennustedatan kanssa huomisen ennusteen asettamiseksi tämän päivän päälle. Jätä tyhjäksi (tai 0) poistaaksesi käytöstä. Riippumaton Siirtymä-asetuksesta — molempia voi yhdistää.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Siirtää tätä entiteettiä taaksepäin ajassa annetun tuntimäärän verran. Käytä saman anturin eri jaksojen asettamiseen päällekkäin yhteen kaavioon. 24 = eilinen, 168 = viime viikko, 720 = viime kuukausi. Hyväksyy myös apurientiteetin ID:n (esim. input_number.my_offset) dynaamista siirtymää varten.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Kertoo arvon luvulla 10 korotettuna tähän potenssiin. 0 = ei muutosta. -3 = ÷1000 (muunna milliyksiköt). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "JavaScript-lauseke, joka muuntaa jokaisen data-arvon. Käytettävissä olevat muuttujat: x (nykyinen arvo), first (ikkunan ensimmäinen arvo), last, min, max, avg (sarjan tilastot), index (pisteen sijainti). Sovelletaan Arvokertoimen jälkeen. Esimerkkejä: return x - first (normalisoi nollaan), return Math.min(0, -x) (poimi vientiteho).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "JavaScript-lauseke, joka muuntaa jokaisen arvon. Käytettävissä olevat muuttujat: x (nykyinen arvo), first (ikkunan ensimmäinen arvo), last, min, max, avg (sarjan tilastot), index (pisteen sijainti), t (tämän pisteen aika millisekunteina), now (nykyinen aika millisekunteina), hour (paikallinen tunti, 0-23.99), weekday (1 = maanantai ... 7 = sunnuntai). Palauta null jättääksesi kyseiseen kohtaan aukon. Käytetään arvokertoimen jälkeen. Esimerkkejä: return x - first (normalisoi nollaan), return x > 8 ? x : null (vain yli 8), return t <= now ? null : x (vain ennuste).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Piirtää tasaisen vaakasuoran viiteviivan entiteetin nykyisen tila-arvon kohdalle historiadatan sijaan.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Piirtää palkit alaspäin nollaviivasta. Käytä pinotun tilan kanssa perhoskaavioiden luomiseen.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Lue kaavion data entiteetin attribuutista historian sijaan. Käytetään ennustedatalle (EPEX-spot-hinnat, sääennuste, aurinkoennuste). Attribuutin on sisällettävä taulukko objekteja, joissa on aika- ja arvokentät.",
@@ -5119,6 +5263,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native harmonise aussi la légende par entité : ses noms et ses valeurs utilisent la couleur de texte principale du thème à pleine intensité, au lieu de l'aspect plus terne et plus petit de la carte.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Intervalle par défaut",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Le bouton d'intervalle sur lequel le sélecteur s'ouvre. Auto = mémoriser le dernier bouton utilisé sur cette carte (conservé entre les rechargements) ; choisissez-en un pour toujours démarrer là et ignorer la valeur mémorisée. Lorsque le sélecteur est désactivé, le graphique revient à Heures à afficher.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Zoom avant",
+    "Zoom Out": "Zoom arrière",
+    "Reset Zoom": "Réinitialiser le zoom",
+    "Zoom Buttons": "Boutons de zoom",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Ajoute de petits boutons de zoom avant, zoom arrière et réinitialisation en haut à droite du graphique. Chaque clic divise par deux ou double la plage visible autour de son centre ; le bouton de réinitialisation n'apparaît qu'une fois que vous avez zoomé ou exploré un niveau, et ramène le graphique à sa fenêtre complète. Fonctionne avec le zoom par glissement et double-clic, et se révèle pratique sur les écrans tactiles où le glissement exige un appui long.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "2 dernières années",
+    "Last 3 years": "3 dernières années",
+    "Last 5 years": "5 dernières années",
+    "2Y": "2A",
+    "3Y": "3A",
+    "5Y": "5A",
+    "Last 2Y": "2 dernières A",
+    "Last 3Y": "3 dernières A",
+    "Last 5Y": "5 dernières A",
+    "Last 2 Years": "2 dernières années",
+    "Last 3 Years": "3 dernières années",
+    "Last 5 Years": "5 dernières années",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "En direct",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "L'état actuel de l'entité en ce moment, indépendamment de la période affichée sur le graphique. Toutes les autres valeurs décrivent la plage affichée.",
@@ -5322,7 +5490,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Décale temporellement les données tracées le long de l'axe X. Positif (par ex. 24) décale les données vers l'avant — pour les capteurs de prévision dont l'état représente T+N heures. Négatif (par ex. -24) décale vers l'arrière — utile avec des données de prévision par attribut pour superposer la prévision de demain sur aujourd'hui. Laisser vide (ou 0) pour désactiver. Indépendant d'Offset — les deux peuvent se combiner.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Décale cette entité en arrière dans le temps du nombre d'heures indiqué. À utiliser pour superposer le même capteur sur des périodes différentes dans un seul graphique. 24 = hier, 168 = la semaine dernière, 720 = le mois dernier. Accepte aussi un ID d'entité d'assistant (par ex. input_number.my_offset) pour un décalage dynamique.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multiplie la valeur par 10 à la puissance donnée. 0 = aucun changement. -3 = ÷1000 (convertir les milli-unités). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Une expression JavaScript pour transformer chaque valeur de donnée. Variables disponibles : x (valeur courante), first (première valeur de la fenêtre), last, min, max, avg (statistiques de la série), index (position du point). Appliquée après Facteur de valeur. Exemples : return x - first (normaliser à zéro), ou une condition renvoyant -x quand x est supérieur à 0 et sinon 0 (extraire l'export).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Une expression JavaScript pour transformer chaque valeur. Variables disponibles : x (valeur actuelle), first (première valeur de la fenêtre), last, min, max, avg (statistiques de la série), index (position du point), t (heure de ce point en ms), now (heure actuelle en ms), hour (heure locale, 0-23.99), weekday (1 = lundi à 7 = dimanche). Renvoyez null pour laisser un trou à cet endroit. Appliqué après le Facteur de valeur. Exemples : return x - first (normaliser à zéro), return x > 8 ? x : null (seulement au-dessus de 8), return t <= now ? null : x (prévision uniquement).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Trace une ligne de référence horizontale plate à la valeur d'état actuelle de l'entité au lieu des données historiques.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Dessine les barres vers le bas depuis la ligne zéro. À utiliser avec le mode empilé pour créer des graphiques papillon.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Lit les données du graphique depuis un attribut d'entité au lieu de l'historique. Utilisé pour les données de prévision (prix spot EPEX, prévisions météo, prédiction solaire). L'attribut doit contenir un tableau d'objets avec des champs de temps et de valeur.",
@@ -5979,6 +6147,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native allinea anche la legenda per entità: nomi e valori usano il colore di testo principale del tema a piena intensità, invece dell'aspetto più tenue e piccolo della scheda.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Intervallo predefinito",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Con quale pulsante di intervallo si apre il selettore. Auto = ricorda l'ultimo pulsante premuto su questa scheda (mantenuto tra i ricaricamenti); scegline uno per partire sempre da lì e ignorare il valore ricordato. Con il selettore disattivato il grafico usa ancora Ore da mostrare.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Ingrandisci",
+    "Zoom Out": "Riduci",
+    "Reset Zoom": "Ripristina zoom",
+    "Zoom Buttons": "Pulsanti zoom",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Aggiunge in alto a destra nel grafico piccoli pulsanti per ingrandire, ridurre e ripristinare. Ogni clic dimezza o raddoppia l'intervallo visibile attorno al suo centro; il pulsante di ripristino compare solo dopo aver ingrandito o approfondito e riporta il grafico alla finestra completa. Funziona insieme allo zoom con trascinamento e doppio clic ed è comodo sugli schermi touch, dove il trascinamento richiede una pressione prolungata.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Ultimi 2 anni",
+    "Last 3 years": "Ultimi 3 anni",
+    "Last 5 years": "Ultimi 5 anni",
+    "2Y": "2A",
+    "3Y": "3A",
+    "5Y": "5A",
+    "Last 2Y": "Ultimi 2A",
+    "Last 3Y": "Ultimi 3A",
+    "Last 5Y": "Ultimi 5A",
+    "Last 2 Years": "Ultimi 2 anni",
+    "Last 3 Years": "Ultimi 3 anni",
+    "Last 5 Years": "Ultimi 5 anni",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Lo stato attuale dell'entità in questo momento, indipendentemente dal periodo mostrato nel grafico. Tutti gli altri valori descrivono l'intervallo visualizzato.",
@@ -6182,7 +6374,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Trasla temporalmente i dati tracciati lungo l'asse X. Positivo (ad es. 24) sposta i dati in avanti — per sensori di previsione il cui stato rappresenta T+N ore avanti. Negativo (ad es. -24) sposta i dati indietro — utile con dati di previsione basati su attributi per sovrapporre la previsione di domani a oggi. Lasciare vuoto (o 0) per disattivare. Indipendente da Offset — i due possono essere combinati.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Sposta questa entità indietro nel tempo del numero di ore indicato. Da usare per sovrapporre lo stesso sensore di periodi diversi su un unico grafico. 24 = ieri, 168 = settimana scorsa, 720 = mese scorso. Accetta anche l'ID di un'entità helper (ad es. input_number.my_offset) per un offset dinamico.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Moltiplica il valore per 10 elevato a questa potenza. 0 = nessuna modifica. -3 = ÷1000 (converte le milli-unità). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Un'espressione JavaScript per trasformare ogni valore dei dati. Variabili disponibili: x (valore corrente), first (primo valore della finestra), last, min, max, avg (statistiche della serie), index (posizione del punto). Applicata dopo Fattore valore. Esempi: return x - first (normalizza a zero), return -Math.max(x, 0) (estrae l'esportazione).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Un'espressione JavaScript per trasformare ogni valore. Variabili disponibili: x (valore corrente), first (primo valore nella finestra), last, min, max, avg (statistiche della serie), index (posizione del punto), t (orario di questo punto in ms), now (orario attuale in ms), hour (ora locale, 0-23.99), weekday (1 = lunedì a 7 = domenica). Restituisci null per lasciare un vuoto in quel punto. Applicata dopo il Fattore valore. Esempi: return x - first (normalizza a zero), return x > 8 ? x : null (solo sopra 8), return t <= now ? null : x (solo previsione).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Disegna una linea di riferimento orizzontale piatta al valore di stato corrente dell'entità invece dei dati storici.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Disegna le barre verso il basso a partire dalla linea dello zero. Da usare con la modalità impilata per creare grafici a farfalla.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Legge i dati del grafico da un attributo dell'entità invece che dalla cronologia. Usato per dati di previsione (prezzi spot EPEX, previsioni meteo, previsione solare). L'attributo deve contenere un array di oggetti con campi di tempo e valore.",
@@ -6839,6 +7031,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native trekt ook de legenda per entiteit gelijk: de namen en waarden gebruiken de primaire tekstkleur van het thema op volle sterkte in plaats van de doffere, kleinere kaartstijl.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Standaardinterval",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Met welke intervalknop de kiezer opent. Auto = onthoud de laatste knop die op deze kaart is ingedrukt (blijft bewaard na herladen); kies er een om altijd daar te beginnen en de onthouden waarde te negeren. Als de kiezer uit staat, valt de grafiek nog steeds terug op Te tonen uren.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Inzoomen",
+    "Zoom Out": "Uitzoomen",
+    "Reset Zoom": "Zoom herstellen",
+    "Zoom Buttons": "Zoomknoppen",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Voegt rechtsboven in de grafiek kleine knoppen toe om in en uit te zoomen en te herstellen. Elke klik halveert of verdubbelt het zichtbare bereik rond het midden; de herstelknop verschijnt pas nadat je hebt ingezoomd of op een bucket bent ingezoomd, en zet de grafiek terug naar het volledige venster. Werkt samen met zoomen via slepen en dubbelklikken en is handig op touchscreens, waar slepen een lange druk vereist.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Laatste 2 jaar",
+    "Last 3 years": "Laatste 3 jaar",
+    "Last 5 years": "Laatste 5 jaar",
+    "2Y": "2J",
+    "3Y": "3J",
+    "5Y": "5J",
+    "Last 2Y": "Laatste 2J",
+    "Last 3Y": "Laatste 3J",
+    "Last 5Y": "Laatste 5J",
+    "Last 2 Years": "Laatste 2 jaar",
+    "Last 3 Years": "Laatste 3 jaar",
+    "Last 5 Years": "Laatste 5 jaar",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "De huidige status van de entiteit op dit moment, onafhankelijk van de periode die in de grafiek wordt getoond. Alle andere waarden beschrijven het weergegeven bereik.",
@@ -7042,7 +7258,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Verschuif de getekende data in de tijd langs de X-as. Positief (bijv. 24) verschuift data vooruit — voor voorspellingssensoren waarvan de status T+N uur vooruit vertegenwoordigt. Negatief (bijv. -24) verschuift data terug — handig bij attribuutgebaseerde voorspellingsdata om de voorspelling van morgen over vandaag te leggen. Laat leeg (of 0) om uit te schakelen. Onafhankelijk van Offset — beide kunnen worden gecombineerd.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Verschuift deze entiteit het opgegeven aantal uren terug in de tijd. Gebruik dit om dezelfde sensor uit verschillende periodes over elkaar te leggen in één grafiek. 24 = gisteren, 168 = vorige week, 720 = vorige maand. Accepteert ook een helper-entiteits-ID (bijv. input_number.my_offset) voor dynamische offset.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Vermenigvuldigt de waarde met 10 tot deze macht. 0 = geen verandering. -3 = ÷1000 (milli-eenheden omrekenen). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Een JavaScript-expressie om elke datawaarde te transformeren. Beschikbare variabelen: x (huidige waarde), first (eerste waarde in het venster), last, min, max, avg (reeksstatistieken), index (puntpositie). Toegepast na Waardefactor. Voorbeelden: return x - first (normaliseren naar nul), of een voorwaardelijke expressie die alleen positieve waarden omkeert (export extraheren).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Een JavaScript-expressie om elke waarde om te rekenen. Beschikbare variabelen: x (huidige waarde), first (eerste waarde in het venster), last, min, max, avg (reeksstatistiek), index (positie van het punt), t (tijd van dit punt in ms), now (huidige tijd in ms), hour (lokaal uur, 0-23.99), weekday (1 = maandag tot 7 = zondag). Geef null terug om daar een gat te laten. Wordt toegepast na de Waardefactor. Voorbeelden: return x - first (normaliseren naar nul), return x > 8 ? x : null (alleen boven 8), return t <= now ? null : x (alleen prognose).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Tekent een vlakke horizontale referentielijn op de huidige statuswaarde van de entiteit in plaats van historische data.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Tekent staven omlaag vanaf de nullijn. Gebruik samen met gestapelde modus om vlinderdiagrammen te maken.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Lees grafiekdata uit een entiteitsattribuut in plaats van de geschiedenis. Gebruikt voor voorspellingsdata (EPEX-spotprijzen, weersverwachting, zonne-energievoorspelling). Het attribuut moet een array van objecten met tijd- en waardevelden bevatten.",
@@ -7699,6 +7915,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native samkjører også forklaringen per entitet: navn og verdier bruker temaets primære tekstfarge i full styrke i stedet for kortets svakere og mindre uttrykk.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Standardintervall",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Hvilken intervallknapp velgeren åpner på. Auto = husk den siste knappen brukeren trykket på dette kortet (beholdes ved ny innlasting); velg en for alltid å starte der og se bort fra den huskede verdien. Når velgeren er av, faller diagrammet fortsatt tilbake til Timer som vises.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Zoom inn",
+    "Zoom Out": "Zoom ut",
+    "Reset Zoom": "Tilbakestill zoom",
+    "Zoom Buttons": "Zoomknapper",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Legger til små knapper for å zoome inn, zoome ut og tilbakestille øverst til høyre i diagrammet. Hvert klikk halverer eller dobler det synlige området rundt midten; tilbakestillingsknappen vises først når du har zoomet eller boret deg ned, og fører diagrammet tilbake til hele vinduet. Fungerer sammen med zoom ved draging og dobbeltklikk, og er praktisk på berøringsskjermer der draging krever et langt trykk.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Siste 2 år",
+    "Last 3 years": "Siste 3 år",
+    "Last 5 years": "Siste 5 år",
+    "2Y": "2Å",
+    "3Y": "3Å",
+    "5Y": "5Å",
+    "Last 2Y": "Siste 2Å",
+    "Last 3Y": "Siste 3Å",
+    "Last 5Y": "Siste 5Å",
+    "Last 2 Years": "Siste 2 år",
+    "Last 3 Years": "Siste 3 år",
+    "Last 5 Years": "Siste 5 år",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhetens nåværende tilstand akkurat nå, uavhengig av perioden som vises i grafen. Alle de andre verdiene beskriver det viste området.",
@@ -7902,7 +8142,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Tidsforskyv de tegnede dataene langs X-aksen. Positiv (f.eks. 24) flytter data fremover — for prognosesensorer der tilstanden representerer T+N timer frem. Negativ (f.eks. -24) flytter data bakover — nyttig med attributtbaserte prognosedata for å legge morgendagens prognose over dagens. La stå tom (eller 0) for å deaktivere. Uavhengig av Forskyvning — begge kan kombineres.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Forskyver denne entiteten bakover i tid med angitt antall timer. Brukes til å legge samme sensor fra ulike perioder over hverandre i én graf. 24 = i går, 168 = forrige uke, 720 = forrige måned. Godtar også en hjelperentitets-ID (f.eks. input_number.my_offset) for dynamisk forskyvning.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multipliserer verdien med 10 opphøyd i denne potensen. 0 = ingen endring. -3 = ÷1000 (konverter milli-enheter). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Et JavaScript-uttrykk som transformerer hver dataverdi. Tilgjengelige variabler: x (gjeldende verdi), first (første verdi i vinduet), last, min, max, avg (seriestatistikk), index (punktposisjon). Brukes etter Verdifaktor. Eksempler: return x - first (normaliser til null); for å hente ut eksport, returner -x når x er positiv, ellers 0.",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Et JavaScript-uttrykk som regner om hver verdi. Tilgjengelige variabler: x (gjeldende verdi), first (første verdi i vinduet), last, min, max, avg (seriestatistikk), index (punktets posisjon), t (tidspunktet for dette punktet i ms), now (nåværende tid i ms), hour (lokal time, 0-23.99), weekday (1 = mandag til 7 = søndag). Returner null for å la det stå et hull der. Brukes etter Verdifaktor. Eksempler: return x - first (normaliser til null), return x > 8 ? x : null (bare over 8), return t <= now ? null : x (bare prognose).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Tegner en flat horisontal referanselinje ved entitetens gjeldende tilstandsverdi i stedet for historiske data.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Tegner stolper nedover fra nullinjen. Bruk med stablet modus for å lage sommerfugldiagrammer.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Les diagramdata fra et entitetsattributt i stedet for historikk. Brukes for prognosedata (EPEX-spotpriser, værvarsel, solprognose). Attributtet må inneholde en liste av objekter med tids- og verdifelter.",
@@ -8559,6 +8799,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native ujednolica też legendę dla poszczególnych encji: nazwy i wartości używają głównego koloru tekstu motywu w pełnej mocy zamiast bledszego, mniejszego wyglądu karty.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Domyślny interwał",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Od którego przycisku interwału otwiera się selektor. Auto = zapamiętaj ostatni przycisk naciśnięty na tej karcie (zachowywany po przeładowaniu); wybierz jeden, aby zawsze zaczynać od niego i zignorować zapamiętaną wartość. Przy wyłączonym selektorze wykres nadal korzysta z opcji Godziny do pokazania.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Przybliż",
+    "Zoom Out": "Oddal",
+    "Reset Zoom": "Resetuj przybliżenie",
+    "Zoom Buttons": "Przyciski przybliżenia",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Dodaje w prawym górnym rogu wykresu małe przyciski przybliżania, oddalania i resetowania. Każde kliknięcie zmniejsza o połowę lub podwaja widoczny zakres wokół jego środka; przycisk resetowania pojawia się dopiero po przybliżeniu lub przejściu do szczegółów i przywraca wykres do pełnego okna. Działa razem z przybliżaniem przeciągnięciem i dwukliknięciem oraz przydaje się na ekranach dotykowych, gdzie przeciąganie wymaga długiego przytrzymania.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Ostatnie 2 lata",
+    "Last 3 years": "Ostatnie 3 lata",
+    "Last 5 years": "Ostatnie 5 lat",
+    "2Y": "2R",
+    "3Y": "3R",
+    "5Y": "5R",
+    "Last 2Y": "Ostatnie 2R",
+    "Last 3Y": "Ostatnie 3R",
+    "Last 5Y": "Ostatnie 5R",
+    "Last 2 Years": "Ostatnie 2 lata",
+    "Last 3 Years": "Ostatnie 3 lata",
+    "Last 5 Years": "Ostatnie 5 lat",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Na żywo",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Bieżący stan encji w tej chwili, niezależnie od okresu pokazanego na wykresie. Wszystkie pozostałe wartości opisują wyświetlany zakres.",
@@ -8762,7 +9026,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Przesuwa rysowane dane w czasie wzdłuż osi X. Dodatnie (np. 24) przesuwa dane do przodu — dla sensorów prognoz, których stan reprezentuje T+N godzin naprzód. Ujemne (np. -24) przesuwa dane wstecz — przydatne z danymi prognoz z atrybutów, aby nałożyć jutrzejszą prognozę na dziś. Pozostaw puste (lub 0), aby wyłączyć. Niezależne od Przesunięcia (offset) — można je łączyć.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Przesuwa tę encję wstecz w czasie o podaną liczbę godzin. Użyj, aby nałożyć ten sam sensor z różnych okresów na jeden wykres. 24 = wczoraj, 168 = tydzień temu, 720 = miesiąc temu. Akceptuje też ID encji pomocnika (np. input_number.my_offset) dla dynamicznego przesunięcia.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Mnoży wartość przez 10 podniesione do tej potęgi. 0 = bez zmian. -3 = ÷1000 (konwersja mili-jednostek). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Wyrażenie JavaScript przekształcające każdą wartość danych. Dostępne zmienne: x (bieżąca wartość), first (pierwsza wartość w oknie), last, min, max, avg (statystyki serii), index (pozycja punktu). Stosowane po Mnożniku wartości. Przykłady: return x - first (normalizacja do zera) albo wyrażenie warunkowe odwracające znak wartości dodatnich (wydzielenie eksportu).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Wyrażenie JavaScript przekształcające każdą wartość. Dostępne zmienne: x (bieżąca wartość), first (pierwsza wartość w oknie), last, min, max, avg (statystyki serii), index (pozycja punktu), t (czas tego punktu w ms), now (bieżący czas w ms), hour (godzina lokalna, 0-23.99), weekday (1 = poniedziałek do 7 = niedziela). Zwróć null, aby zostawić w tym miejscu przerwę. Stosowane po Współczynniku wartości. Przykłady: return x - first (normalizacja do zera), return x > 8 ? x : null (tylko powyżej 8), return t <= now ? null : x (tylko prognoza).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Rysuje płaską poziomą linię odniesienia na bieżącej wartości stanu encji zamiast danych historycznych.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Rysuje słupki w dół od linii zera. W połączeniu z trybem skumulowanym tworzy wykresy motylkowe.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Odczytuje dane wykresu z atrybutu encji zamiast z historii. Używane dla danych prognoz (ceny spot EPEX, prognoza pogody, przewidywanie produkcji solarnej). Atrybut musi zawierać tablicę obiektów z polami czasu i wartości.",
@@ -9419,6 +9683,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native também alinha a legenda por entidade: os nomes e valores usam a cor de texto principal do tema em plena intensidade, em vez do aspeto mais ténue e pequeno do cartão.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Intervalo predefinido",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Com que botão de intervalo o seletor abre. Auto = memorizar o último botão premido neste cartão (mantido entre recarregamentos); escolha um para começar sempre aí e ignorar o valor memorizado. Com o seletor desligado, o gráfico continua a usar Horas a mostrar.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Ampliar",
+    "Zoom Out": "Reduzir",
+    "Reset Zoom": "Repor zoom",
+    "Zoom Buttons": "Botões de zoom",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Adiciona pequenos botões de ampliar, reduzir e repor no canto superior direito do gráfico. Cada clique reduz para metade ou duplica o intervalo visível em torno do seu centro; o botão de reposição só aparece depois de ampliar ou detalhar e devolve o gráfico à janela completa. Funciona em conjunto com o zoom por arrasto e duplo clique e é prático em ecrãs tácteis, onde arrastar exige uma pressão longa.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Últimos 2 anos",
+    "Last 3 years": "Últimos 3 anos",
+    "Last 5 years": "Últimos 5 anos",
+    "2Y": "2A",
+    "3Y": "3A",
+    "5Y": "5A",
+    "Last 2Y": "Últimos 2A",
+    "Last 3Y": "Últimos 3A",
+    "Last 5Y": "Últimos 5A",
+    "Last 2 Years": "Últimos 2 anos",
+    "Last 3 Years": "Últimos 3 anos",
+    "Last 5 Years": "Últimos 5 anos",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Ao vivo",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "O estado atual da entidade neste momento, independentemente do período mostrado no gráfico. Todos os outros valores descrevem o intervalo apresentado.",
@@ -9622,7 +9910,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Desloca no tempo os dados traçados ao longo do eixo X. Positivo (por exemplo 24) desloca os dados para a frente — para sensores de previsão cujo estado representa T+N horas à frente. Negativo (por exemplo -24) desloca os dados para trás — útil com dados de previsão baseados em atributos para sobrepor a previsão de amanhã sobre hoje. Deixe vazio (ou 0) para desativar. Independente do Offset — ambos podem ser combinados.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Desloca esta entidade para trás no tempo pelo número de horas indicado. Use para sobrepor o mesmo sensor de períodos diferentes em um gráfico. 24 = ontem, 168 = semana passada, 720 = mês passado. Também aceita um ID de entidade auxiliar (por exemplo input_number.my_offset) para offset dinâmico.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multiplica o valor por 10 elevado a esta potência. 0 = sem alteração. -3 = ÷1000 (converter mili-unidades). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Uma expressão JavaScript para transformar cada valor de dados. Variáveis disponíveis: x (valor atual), first (primeiro valor na janela), last, min, max, avg (estatísticas da série), index (posição do ponto). Aplicada após o Fator de Valor. Exemplos: return x - first (normalizar para zero), ou um ternário que retorna -x quando x é positivo e 0 caso contrário (extrair exportação).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Uma expressão JavaScript para transformar cada valor. Variáveis disponíveis: x (valor atual), first (primeiro valor da janela), last, min, max, avg (estatísticas da série), index (posição do ponto), t (hora deste ponto em ms), now (hora atual em ms), hour (hora local, 0-23.99), weekday (1 = segunda-feira a 7 = domingo). Devolva null para deixar uma lacuna nesse ponto. Aplicada depois do Fator de valor. Exemplos: return x - first (normalizar a zero), return x > 8 ? x : null (apenas acima de 8), return t <= now ? null : x (apenas previsão).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Desenha uma linha de referência horizontal plana no valor do estado atual da entidade em vez de dados históricos.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Desenha as barras para baixo a partir da linha do zero. Use com o modo empilhado para criar gráficos borboleta.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Lê os dados do gráfico de um atributo da entidade em vez do histórico. Usado para dados de previsão (preços spot EPEX, previsão do tempo, previsão solar). O atributo deve conter um array de objetos com campos de tempo e valor.",
@@ -10279,6 +10567,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native также приводит к единому виду легенду по сущностям: её названия и значения используют основной цвет текста темы в полную силу вместо более тусклого и мелкого оформления карточки.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Интервал по умолчанию",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "С какой кнопки интервала открывается переключатель. Auto = запоминать последнюю кнопку, нажатую на этой карточке (сохраняется между перезагрузками); выберите одну, чтобы всегда начинать с неё и игнорировать запомненное значение. При выключенном переключателе график по-прежнему использует Показывать часов.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Приблизить",
+    "Zoom Out": "Отдалить",
+    "Reset Zoom": "Сбросить масштаб",
+    "Zoom Buttons": "Кнопки масштаба",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Добавляет в правый верхний угол графика небольшие кнопки приближения, отдаления и сброса. Каждый щелчок вдвое уменьшает или увеличивает видимый диапазон относительно его центра; кнопка сброса появляется только после приближения или детализации и возвращает график к полному окну. Работает вместе с масштабированием перетаскиванием и двойным щелчком и удобна на сенсорных экранах, где перетаскивание требует долгого нажатия.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Последние 2 года",
+    "Last 3 years": "Последние 3 года",
+    "Last 5 years": "Последние 5 лет",
+    "2Y": "2Г",
+    "3Y": "3Г",
+    "5Y": "5Г",
+    "Last 2Y": "Последние 2Г",
+    "Last 3Y": "Последние 3Г",
+    "Last 5Y": "Последние 5Г",
+    "Last 2 Years": "Последние 2 года",
+    "Last 3 Years": "Последние 3 года",
+    "Last 5 Years": "Последние 5 лет",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Сейчас",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Текущее состояние объекта прямо сейчас, независимо от периода, показанного на графике. Все остальные значения описывают отображаемый диапазон.",
@@ -10482,7 +10794,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Сдвигает отображаемые данные вдоль оси X. Положительное (например 24) сдвигает вперёд — для прогнозных сенсоров, чьё состояние соответствует T+N часов вперёд. Отрицательное (например -24) сдвигает назад — полезно с прогнозными данными из атрибутов, чтобы наложить завтрашний прогноз на сегодня. Оставьте пустым (или 0), чтобы отключить. Не зависит от 'Смещения' (offset) — их можно сочетать.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Сдвигает этот объект назад во времени на заданное число часов. Используйте, чтобы наложить один сенсор из разных периодов на один график. 24 = вчера, 168 = прошлая неделя, 720 = прошлый месяц. Также принимает ID вспомогательного объекта (например input_number.my_offset) для динамического смещения.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Умножает значение на 10 в этой степени. 0 = без изменений. -3 = ÷1000 (перевод милли-единиц). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Выражение JavaScript для преобразования каждого значения. Доступные переменные: x (текущее значение), first (первое значение окна), last, min, max, avg (статистика ряда), index (позиция точки). Применяется после 'Множителя значения'. Примеры: return x - first (нормализация к нулю); условное выражение, обнуляющее отрицательные и инвертирующее положительные значения (выделение экспорта).",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Выражение JavaScript для преобразования каждого значения. Доступные переменные: x (текущее значение), first (первое значение в окне), last, min, max, avg (статистика ряда), index (позиция точки), t (время этой точки в мс), now (текущее время в мс), hour (местный час, 0-23.99), weekday (1 = понедельник ... 7 = воскресенье). Верните null, чтобы оставить в этом месте разрыв. Применяется после Множителя значения. Примеры: return x - first (нормализовать к нулю), return x > 8 ? x : null (только выше 8), return t <= now ? null : x (только прогноз).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Рисует плоскую горизонтальную опорную линию на текущем значении состояния объекта вместо исторических данных.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Рисует столбцы вниз от нулевой линии. Используйте со стеком для диаграмм-бабочек.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Читает данные графика из атрибута объекта вместо истории. Используется для прогнозных данных (спотовые цены EPEX, прогноз погоды, прогноз солнечной генерации). Атрибут должен содержать массив объектов с полями времени и значения.",
@@ -11139,6 +11451,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native samordnar även förklaringen per entitet: namn och värden använder temats primära textfärg i full styrka i stället för kortets svagare och mindre utseende.",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "Standardintervall",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "Vilken intervallknapp väljaren öppnas på. Auto = kom ihåg den senaste knappen som trycktes på det här kortet (bevaras mellan omladdningar); välj en för att alltid börja där och bortse från det ihågkomna värdet. När väljaren är av använder diagrammet fortfarande Timmar att visa.",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "Zooma in",
+    "Zoom Out": "Zooma ut",
+    "Reset Zoom": "Återställ zoom",
+    "Zoom Buttons": "Zoomknappar",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "Lägger till små knappar för att zooma in, zooma ut och återställa uppe till höger i diagrammet. Varje klick halverar eller fördubblar det synliga intervallet kring dess mitt; återställningsknappen visas först när du har zoomat eller borrat ned och tar diagrammet tillbaka till hela fönstret. Fungerar tillsammans med zoom via dragning och dubbelklick och är praktisk på pekskärmar där dragning kräver en lång tryckning.",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "Senaste 2 åren",
+    "Last 3 years": "Senaste 3 åren",
+    "Last 5 years": "Senaste 5 åren",
+    "2Y": "2Å",
+    "3Y": "3Å",
+    "5Y": "5Å",
+    "Last 2Y": "Senaste 2Å",
+    "Last 3Y": "Senaste 3Å",
+    "Last 5Y": "Senaste 5Å",
+    "Last 2 Years": "Senaste 2 åren",
+    "Last 3 Years": "Senaste 3 åren",
+    "Last 5 Years": "Senaste 5 åren",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "Live",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "Enhetens nuvarande tillstånd just nu, oberoende av perioden som visas i diagrammet. Alla andra värden beskriver det visade intervallet.",
@@ -11342,7 +11678,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "Tidsförskjut den ritade datan längs X-axeln. Positivt (t.ex. 24) skjuter data framåt — för prognossensorer vars tillstånd representerar T+N timmar framåt. Negativt (t.ex. -24) skjuter data bakåt — praktiskt med attributbaserad prognosdata för att lägga morgondagens prognos ovanpå idag. Lämna tomt (eller 0) för att inaktivera. Oberoende av Förskjutning — båda kan kombineras.",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "Förskjuter denna entitet bakåt i tiden med angivet antal timmar. Använd för att lägga samma sensor från olika perioder ovanpå varandra i en graf. 24 = igår, 168 = förra veckan, 720 = förra månaden. Accepterar även ett hjälpentitets-ID (t.ex. input_number.my_offset) för dynamisk förskjutning.",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "Multiplicerar värdet med 10 upphöjt till denna potens. 0 = ingen ändring. -3 = ÷1000 (konvertera milli-enheter). 2 = ×100.",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "Ett JavaScript-uttryck som transformerar varje datavärde. Tillgängliga variabler: x (aktuellt värde), first (första värdet i fönstret), last, min, max, avg (seriestatistik), index (punktposition). Tillämpas efter Värdefaktor. Exempel: return x - first (normalisera till noll); ett villkorsuttryck kan t.ex. extrahera export genom att negera positiva värden.",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "Ett JavaScript-uttryck som räknar om varje värde. Tillgängliga variabler: x (aktuellt värde), first (första värdet i fönstret), last, min, max, avg (seriestatistik), index (punktens position), t (tidpunkten för denna punkt i ms), now (aktuell tid i ms), hour (lokal timme, 0-23.99), weekday (1 = måndag till 7 = söndag). Returnera null för att lämna ett hål där. Tillämpas efter Värdefaktor. Exempel: return x - first (normalisera till noll), return x > 8 ? x : null (endast över 8), return t <= now ? null : x (endast prognos).",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "Ritar en platt horisontell referenslinje vid entitetens aktuella tillståndsvärde i stället för historiska data.",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "Ritar staplar nedåt från nollinjen. Använd med staplat läge för att skapa fjärilsdiagram.",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "Läs diagramdata från ett entitetsattribut i stället för historik. Används för prognosdata (EPEX-spotpriser, väderprognos, solprognos). Attributet måste innehålla en array av objekt med tids- och värdefält.",
@@ -11999,6 +12335,30 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.04 (native style covers the legend)
+    "Native also brings the per-entity legend into line: its names and values use the theme's main text colour at full strength, instead of the card's dimmer, smaller look.": "Native 还会统一每个实体的图例：其名称和数值使用主题的主文本颜色并保持完整强度，而不是卡片较暗、较小的样式。",
+    // --- added in 4.04 (interval picker default)
+    "Default Interval": "默认时间区间",
+    "Which interval button the picker opens on. Auto = remember the last button the user pressed on this card (persisted across reloads); pick one to always start there and ignore the remembered value. The chart still falls back to Hours To Show when the picker is off.": "选择器打开时高亮哪个区间按钮。Auto = 记住用户在此卡片上最后按下的按钮（重新加载后保留）；选定一个则始终从该区间开始，并忽略记住的值。选择器关闭时，图表仍回退到显示小时数。",
+    // --- added in 4.04 (on-chart zoom buttons)
+    "Zoom In": "放大",
+    "Zoom Out": "缩小",
+    "Reset Zoom": "重置缩放",
+    "Zoom Buttons": "缩放按钮",
+    "Adds small zoom in, zoom out and reset buttons to the top right of the chart. Each click halves or doubles the visible range around its centre; the reset button only appears once you have zoomed or drilled in, and returns the chart to its full window. Works alongside drag and double-click zooming, and is handy on touch screens where dragging needs a long press.": "在图表右上角添加放大、缩小和重置按钮。每次点击都会以可见范围的中心为基准将其减半或加倍；重置按钮仅在放大或下钻后出现，并将图表恢复到完整窗口。可与拖动和双击缩放配合使用，在拖动需要长按的触摸屏上尤其方便。",
+    // --- added in 4.04 (multi-year date picker presets)
+    "Last 2 years": "最近2年",
+    "Last 3 years": "最近3年",
+    "Last 5 years": "最近5年",
+    "2Y": "2年",
+    "3Y": "3年",
+    "5Y": "5年",
+    "Last 2Y": "最近2年",
+    "Last 3Y": "最近3年",
+    "Last 5Y": "最近5年",
+    "Last 2 Years": "最近2年",
+    "Last 3 Years": "最近3年",
+    "Last 5 Years": "最近5年",
     // --- added in 3.32 round 1 (live legend stat)
     "Live": "实时",
     "The entity's current state right now, independent of the period shown on the chart. The other values all describe the displayed range.": "实体此刻的当前状态，与图表所显示的时间段无关。其他数值描述的都是所显示的范围。",
@@ -12202,7 +12562,7 @@ export const I18N = Object.freeze({
     "Time-shift the plotted data along the X-axis. Positive (e.g. 24) shifts data forward — for forecast sensors whose state represents T+N hours ahead. Negative (e.g. -24) shifts data backward — useful with attribute-based forecast data to overlay tomorrow's forecast onto today. Leave empty (or 0) to disable. Independent from Offset — both can be combined.": "沿 X 轴对绘制数据进行时间平移。正值(如 24)向未来平移——适用于状态代表未来 T+N 小时的预测传感器。负值(如 -24)向过去平移——适合将基于属性的预测数据(明天的预测)叠加到今天。留空(或 0)禁用。与 Offset 相互独立——两者可叠加。",
     "Shifts this entity backward in time by the given number of hours. Use to overlay the same sensor from different periods on one graph. 24 = yesterday, 168 = last week, 720 = last month. Also accepts a helper entity ID (e.g. input_number.my_offset) for dynamic offset.": "将此实体按给定小时数向过去平移。用于在一张图上叠加同一传感器不同时期的数据。24 = 昨天,168 = 上周,720 = 上月。也接受辅助实体 ID(如 input_number.my_offset)实现动态偏移。",
     "Multiplies the value by 10 raised to this power. 0 = no change. -3 = ÷1000 (convert milli-units). 2 = ×100.": "将数值乘以 10 的此次幂。0 = 不变。-3 = 除以 1000(换算毫单位)。2 = 乘以 100。",
-    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position). Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 0 ? -x : 0 (extract export).": "用于转换每个数据值的 JavaScript 表达式。可用变量:x(当前值)、first(窗口内首个值)、last、min、max、avg(序列统计)、index(点位置)。在数值因子之后应用。示例:return x - first(归零化);提取导出电量可写条件表达式,当 x 为正时返回 -x,否则返回 0。",
+    "A JavaScript expression to transform each data value. Available variables: x (current value), first (first value in window), last, min, max, avg (series stats), index (point position), t (this point's time in ms), now (current time in ms), hour (local hour, 0-23.99), weekday (1 = Monday to 7 = Sunday). Return null to leave a gap at that point. Applied after Value Factor. Examples: return x - first (normalize to zero), return x > 8 ? x : null (only above 8), return t <= now ? null : x (forecast only).": "用于转换每个数据值的 JavaScript 表达式。可用变量：x（当前值）、first（窗口中的第一个值）、last、min、max、avg（序列统计）、index（点的位置）、t（该点的时间，毫秒）、now（当前时间，毫秒）、hour（本地小时，0-23.99）、weekday（1 = 星期一至 7 = 星期日）。返回 null 可在该点留出空缺。在数值系数之后应用。示例：return x - first（归一化到零）、return x > 8 ? x : null（仅高于 8）、return t <= now ? null : x（仅预测）。",
     "Renders a flat horizontal reference line at the entity's current state value instead of historical data.": "在实体当前状态值处渲染一条水平参考直线,代替历史数据。",
     "Draws bars downward from the zero line. Use with stacked mode to create butterfly charts.": "从零线向下绘制条形。与堆叠模式配合可创建蝶形图。",
     "Read chart data from an entity attribute instead of history. Used for forecast data (EPEX spot prices, weather forecast, solar prediction). The attribute must contain an array of objects with time and value fields.": "从实体属性而非历史记录读取图表数据。用于预测数据(EPEX 现货价格、天气预报、太阳能预测)。该属性必须包含带时间和数值字段的对象数组。",
