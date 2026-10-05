@@ -77,7 +77,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📈 | Line, step, and bar charts with smooth Bezier curves |
 | 🕯️ | **Candlestick (OHLC) charts** — render any entity as trading-style candles showing the open, high, low, and close of each time bucket. Green/red up/down bodies with high–low wicks and an O/H/L/C tooltip; recolor with the Rise/Fall Colors feature. Candles snap to clean clock intervals and sit centered on the X-axis ticks |
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months, up to Last 5 Years). Or open on a rolling window that ends now — **Last 1H … Last 5Y** — set as the default mode or shown as extra picker buttons. Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
-| 🪟 | **Card styling without card-mod** — set border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
+| 🪟 | **Card styling without card-mod** — a `styles` block for plain CSS inside the card *(v4.05)*, and dedicated options for border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
 | 🎯 | **Fourteen chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial), Box Plot (distribution boxes), Waterfall (running-total bridge), Histogram (value-frequency bars) — selectable from a single dropdown |
 | 📦 | **Box Plot mode** — `chart_mode: box` draws min / Q1 / median / Q3 / max boxes per time bucket, straight from the dense source samples. Answer "what is this room's daily temperature spread?" at a glance. Bucket width follows `group_by` or is picked automatically from the window |
@@ -191,7 +191,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ➖ | **Two-entity math** — per-entity `ref_entity` + `ref_op` combines a series with a second entity **over time** (`subtract` / `add` / `multiply` / `divide`). Plot indoor − outdoor, production − consumption, or target vs actual with no template sensor; the reference is sampled as a step function so each point is combined with the value valid at that moment |
 | 💶 | **Cost view** — per-entity `price_entity` multiplies a series by the value of another entity **over time** (spot price, tariff sensor). The price is read as a step function from the price entity's own history and applied per consumption slice *before* bucketing, so every bucket is an exact Σ(value × price). Ideal with `aggregate_func: change` on energy counters — set `unit` to your currency and the kWh chart becomes a cost chart |
 | ⚡ | **Custom auto-scale rules** — card-level `auto_scale_rules` teaches Auto Scale *your* thresholds: each rule maps a visible period ("up to N hours") to a Group By and optionally a Points/Hour. The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale |
-| 📊 | **State strips** *(v4.03)* — `graph_type: state_strip` on an entity draws its states as coloured bands under the X axis of a Timeline card, so device activity reads against the curves above it. Colours and names come from `state_map`; `state_strip_height` and `state_strip_labels` control the look |
+| 📊 | **State strips** *(v4.03)* — `graph_type: state_strip` on an entity draws its states as coloured bands under the X axis of a Timeline card, so device activity reads against the curves above it. Colours and names come from `state_map`; `state_strip_height` and `state_strip_labels` control the look Since v4.05 `state_strip_titles` writes each strip's name above its band, and a live `enabled: "!input_boolean.x"` hides strips from one helper on every card. |
 | 🎛️ | **Controller card** *(v4.03)* — `custom:statistics-graph-chart-controller` is a chart-less one-row card holding only the date-picker bar: calendar periods, rolling windows (1H … 5Y) and a Reset button that drive every chart sharing its `sync_group` |
 | 📍 | **Crosshair pins** *(v4.03)* — with `crosshair: true` a tap or click pins the tooltip in place, and `crosshair_pins: 2` compares two points in time with a per-series Δ and percentage. Zoomed charts also pan with one finger |
 
@@ -284,15 +284,15 @@ These options apply to the whole card.
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
 | `auto_scale_rules` | list | `null` | Custom thresholds for Auto Scale — only active when `auto_scale_points: true`. Each rule maps a visible period to a bucketing: `up_to_hours` (number, required), `group_by` (same values as the main `group_by` — `interval`, `hour`, any `Nh` like `2h`, `date` [`day` is accepted as an alias], `week`, `month`, `year`, `raw`), and an optional `points_per_hour` (only meaningful for `group_by: interval`). The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale. While Auto Scale is on, the resolved rule fully overrides the main `group_by` (bucketing **and** data fetching); the main value only applies when Auto Scale is off. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the space the card is given instead — a **Sections** grid cell, or the whole view in a **Panel** view *(v4.03)*. See [Sections Auto-height](#-sections-auto-height). |
-| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). |
+| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). Since v4.05 an entity may carry its own `group_by`; the chart's grid is then the finest grouping in use and coarser series are drawn as calendar cells on it (e.g. monthly bars behind daily values) — see [Mixing groupings in one chart](#mixing-groupings-in-one-chart-v405). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds (minimum 5 — lower values are raised to 5 to protect your database). Empty = HA events plus a gentle background refresh; `0` disables background polling entirely. *(0 = off since v4.01)* |
 | `data_source` | string | `"auto"` | Where the card reads its data from: `auto` (raw history for short windows, statistics for long ones; a date-picker view of a day or less within the last ~10 days counts as a short window *(v4.04)* — and since **v4.02** it auto-detects flood-level sensors: on a window of at least 6 hours, a history response over 5,000 rows and 200 rows/hour flips that sensor to statistics, remembered in the browser for 7 days, with a one-time console note. A flagged sensor still falls back to raw history whenever you ask for finer detail than statistics can give — a window of 12 hours or less bucketed below the 5-minute statistics period *(v4.03)*), `statistics` (always route through long-term statistics when available — measured 287 rows/33 ms vs 21,995 rows/1.7 s for the same 24 h window of a websocket price feed), or `history` (force raw history; also opts an entity out of the auto-detection). Statistics values come from 5-minute buckets, so they are close but not tick-identical. Also available **per entity** (`entities[].data_source`). YAML only. *(v4.01, auto-detection v4.02)* |
 | `debug_fetch` | boolean | `false` | Log every backend fetch to the browser console (`[sgc fetch]` — entities, transport (`ws` / `rest`), row count, duration, cache/inflight hits). For diagnosing database load. YAML only. *(v4.01)* Since **v4.03** raw history is requested over the WebSocket (`history/history_during_period`) like Home Assistant's own history cards, so it no longer produces *"invalid authentication"* log entries when an access token expires mid-session; the REST history API is used only as a fallback on very old Home Assistant builds. |
 | `extended_window_multiplier` | number | `null` | *(new in v3.29)* Scrollback for the selected period: renders N× the period and opens scrolled to the newest part — the screen shows exactly the period you picked (same scale and buckets as without scrolling) and you can scroll back through the extra history. Follows the date picker: a Week view with `2` keeps one extra week scrollable behind the current one; the picker's header and arrows stay on the selected period. `1`/empty = off. Overrides `max_visible_interval` while active. Timeline mode. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
-| `bar_corner_radius` | number | `null` (auto) | Corner radius of bars in pixels. Unset = automatic (up to 5 px, and never more than half the bar's width **or height**, so short bars no longer turn into ovals). `0` = square corners (negative values count as `0`). In `stacked` charts only the outer end of each stack is rounded (up to the outer segment's own height) — the segments below stay square, so a stack reads as one bar; a stack with a single bar series keeps all four corners. Timeline mode only; also in the editor's Chart tab, below Bar Spacing. *(v4.03)* |
+| `bar_corner_radius` | number | `null` (auto) | Corner radius of bars in pixels. Unset = automatic (up to 5 px, and never more than half the bar's width **or height**, so short bars no longer turn into ovals). `0` = square corners (negative values count as `0`). In `stacked` charts only the outer end of each stack is rounded (up to the outer segment's own height) — the segments below stay square, so a stack reads as one bar; a stack with a single bar series keeps all four corners, unless an inverted (`invert: true`) series stacks against it — then both are square at the zero line and read as one bar through zero *(v4.05)*. Timeline mode only; also in the editor's Chart tab, below Bar Spacing. *(v4.03)* |
 | `stacked` | boolean | `false` | Stack entities on top of each other. Timeline mode only. See [Stacked Mode](#-stacked-mode). |
-| `min_bound_range` | string/number | `null` | Minimum span of the primary Y axis. Also accepts an entity ID (e.g. `input_number.axis_span`) — the axis re-snaps the moment that helper changes, and a state that isn't a number means no minimum span. The editor field is a number box, so the entity form is YAML only. *(entity support new in v4.04)* |
+| `min_bound_range` | string/number | `null` | Minimum span of the primary Y axis. Also accepts an entity ID (e.g. `input_number.axis_span`) — the axis re-snaps the moment that helper changes, and a state that isn't a number means no minimum span. The editor field takes it too — it is free text, like the other bound fields. *(entity support new in v4.04)* |
 | `min_bound_range_secondary` | string/number | `null` | Minimum span of the secondary Y axis. When combined with a locked `lower_bound_secondary` / `upper_bound_secondary`, the range grows only away from the locked edge — it won't push a locked bound past zero. Also accepts an entity ID, same rules as `min_bound_range`. *(entity support new in v4.04)* |
 | `lower_bound` | string/number | `null` | Hard or soft minimum for the primary Y axis. See [Bounds](#-bounds). |
 | `upper_bound` | string/number | `null` | Hard or soft maximum for the primary Y axis. See [Bounds](#-bounds). |
@@ -356,6 +356,7 @@ These options apply to the whole card.
 | `graph_start_hour` | number / entity | `null` | Daily start hour filter. Points before this hour each day are hidden, creating natural line breaks between days (hours are evaluated in the card's display time zone — `time_zone` — the same clock the X axis uses). Accepts a fixed number (`6` = 06:00, `6.5` = 06:30) or a sensor entity ID (`sensor.sunrise_hour`) for dynamic values. Works with Date Picker: in Day mode trims the X-axis, in Week/Month/Year modes filters per day. See [Dynamic Graph Hours](#-dynamic-graph-hours). |
 | `graph_end_hour` | number / entity | `null` | Daily end hour filter. Points after this hour each day are hidden. Same format as `graph_start_hour`. Use with `sensor.sunset_hour` for sunrise-to-sunset views. |
 | `graph_start` | string | `null` | Snaps the graph start to a calendar boundary: `day` (today 00:00 — shown as *Today* in the editor; `today` is accepted as an alias), `tomorrow` (tomorrow 00:00 — ideal for next-day spot prices via `data_attribute`), `week` (Monday 00:00), `month` (1st of month), `year` (Jan 1st). When set to `tomorrow`, the window automatically extends to cover the full next day even without `show_full_period`. Ignored when the interval picker is active. See [Long-Range Views](#-long-range-views). |
+| `year_start_month` | number | `null` | First month of the **Year** period, `1`–`12` *(v4.05)*. Unset or `1` keeps the calendar year. `7` makes the Year run from 1 July to 30 June: the date picker's Year view, its *This Year* / *Last Year* presets and `graph_start: year` all use that window, the picker header reads `2026/27`, the arrows step by that period and `compare: last_year` / `previous_period` line up with it. Month and week periods, `group_by` buckets and the X-axis are not affected. Out-of-range values are ignored. Editor: Calendar → Time Window → *Year Starts In*. |
 | `show_full_period` | boolean | `false` | Extends the X-axis to cover the full calendar period instead of stopping at "now". A dashed vertical line marks the current time. Works with `graph_start` (week/month/year) and `energy_date_sync`. Not required for `graph_start: tomorrow` — that extends automatically. See [Show Full Period](#-show-full-period). *(v4.03)* In calendar-bucketed views (day points in a week, month…) a line or area whose last bucket is complete — a previous-period comparison, or the main series of a finished period — is drawn flat to the end of that bucket so it reaches the right edge; the live series still stops at *now*, and the extension is drawing only (tooltips, statistics, markers and CSV ignore it). |
 | `card_background_color` | color | `null` | Custom background color for the card. Accepts any CSS color (hex, rgba, name). Use `rgba(R, G, B, A)` for translucent cards. Replaces `card_mod` workarounds — this value persists across re-renders. |
 | `card_padding` | string/number | `null` | Inner spacing of the card. Accepts a single number (treated as px) or any CSS shorthand like `8px 16px` or `0`. Leave empty for theme default. |
@@ -367,6 +368,7 @@ These options apply to the whole card.
 | `card_header_color` | color | `null` | Custom color for the header title text. Accepts any CSS color or variable. Leave empty for theme default. |
 | `card_header_weight` | string/number | `null` | Header text font weight. Accepts CSS keywords (`light`, `normal`, `bold`) or numbers (`300`, `400`, `600`, `700`). Leave empty for theme default. |
 | `card_header_letter_spacing` | string/number | `null` | Header letter spacing. Accepts a number (treated as px) or any CSS value like `0.5px`, `normal`, `-0.02em`. Leave empty for theme default. |
+| `styles` | string | `null` | Plain CSS applied inside the card *(v4.05)* — the same class names card-mod users target (`.sgc-card`, `.sgc-title`, `.sgc-state-value`, `.sgc-plot` …) plus `ha-card`, with no card-mod installed. The sheet is kept across re-renders and visual-editor saves; leave it out and nothing changes. A rule that collides with a card option you have set (background, border, padding, shadow, header colour) needs `!important`, because those options are applied inline — the same as with card-mod. Static CSS only (no templates). Editor: Card Settings → Card Styling → *Custom CSS*. |
 | `show_legend` | boolean | `false` | Show a compact color-coded entity name key below the graph. Click any item to temporarily toggle that entity's visibility on the graph. For per-entity stats, use the entity-level Legend toggle. |
 | `auto_hide_entities` | boolean | `false` | Start every entity hidden — the plot begins empty and you reveal series by clicking them in the legend. Reveals stick for the session; entities added later also start hidden. Best paired with `show_legend: true`. |
 | `legend_position` | string | `"center"` | Position of the compact legend: `left` / `center` / `right`. The legend flows inline at the chosen alignment. |
@@ -379,10 +381,15 @@ These options apply to the whole card.
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
 | `state_strip_height` | number | `16` | *(new in v4.03)* Height in pixels of each [state strip](#state-strips-new-in-v403) row drawn under the X axis. Range 6–60. |
 | `state_strip_labels` | boolean | `true` | *(new in v4.03)* Draw the state name inside each state-strip band (only where the band is wide enough). Set to `false` for clean color bands — the tooltip still names the state. |
+| `state_strip_titles` | boolean | `false` | *(new in v4.05)* Write each state strip's name on a small line directly above its band — the same name the legend and tooltip show, so stacked strips can be told apart without the legend. Each title adds its own height to the strip block; titles are dropped automatically when the card is too short for them. Give an entity `name: ""` to leave only that strip untitled. Editor: Chart → Visual Options → *Strip Titles* (shown when an entity uses `graph_type: state_strip`). |
+| `state_strip_title_font_size` | number | `null` (10) | *(new in v4.05)* Font size in pixels of the strip titles, 6–40. Long names are shortened with an ellipsis to the plot width. Editor: Chart → Visual Options → *Title Size*. |
+| `state_strip_title_position` | string | `"above"` | *(new in v4.05)* Where the strip name goes: `above` writes it on its own line over the band; `left` puts it in the Y-axis column beside the band — no extra height, but the name is cut to the column width with an ellipsis (≈ 5–6 characters at the default size), so keep left names short. With `show_y_axis: false` there is no column and left titles are not drawn. Editor: Chart → Visual Options → *Title Position*. |
 | `state_timeline_corner_radius` | number | `3` | Roundness of state_timeline segment corners, in pixels. `0` = sharp edges. Larger values produce rounder / pill-shaped segments (capped at half the row height). State Timeline mode only. Advanced users can also target the `sgc-stl-cell` CSS class from `card_mod` for per-state styling. |
 | `state_timeline_show_labels` | boolean | `true` | Show the state labels drawn inside state_timeline segments. Set to `false` for clean, label-free color bands — the tooltip still names each state on hover. Labels only render in segments wide enough to fit them anyway. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates). State Timeline mode only. |
 | `state_timeline_label_font_size` | number | `10` / `11` | Font size in pixels (6–40) of the state label inside each state_timeline segment **and of the entity name in the label column on the left** *(v3.32)*. Defaults differ when unset: 10 inside segments, 11 for entity names. Both budgets scale with it — segments show fewer characters with an ellipsis, entity names wrap onto up to three lines and rows grow to fit. The segment label additionally requires `state_timeline_show_labels`. State Timeline mode only. *(v3.31)* |
+| `state_timeline_row_height` | number | `null` (auto) | Height of each state_timeline row in pixels, 24–160. Unset = automatic: 32 px (taller only when an entity name wraps) with the colour band capped at 24 px. Set it to make the bands taller — the band fills the row minus a small margin. `height` does not apply in this mode. Editor: Chart → Visual Options → *Row Height* (shown when the chart mode is State Timeline). *(new in v4.05)* |
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
+| `ranking_max_value` | number | `null` | Hide entities whose absolute value is **above** this threshold *(v4.05)*. Ranking mode only. The mirror of `ranking_min_value`: use it alone to list only the devices that need attention — `20` on battery levels keeps just the ones at 20 % or lower — or together with `ranking_min_value` to keep a band. Compared against the absolute value. Leave empty for no filter. |
 | `gauge_columns` | number | `null` | Number of gauge columns in the grid (Gauge mode). Empty / `0` = auto (fits as many dials as the width allows). |
 | `gauge_span` | number | `270` | Arc sweep of each gauge in degrees, `90`–`360`. `180` = top semicircle; `270` = classic open-bottom dial. Gauge mode only. |
 | `gauge_value_position` | string | `"below"` | Where the value is drawn relative to the dial: `below` (default) or `above`. The value sits just outside the arc, clear of the needle. Gauge mode only. |
@@ -469,6 +476,7 @@ Each entry under `entities` supports the following options.
 | `compare` | string/number/object/list | `null` | Overlay a faded, dashed **ghost series** of the same entity from a previous period underneath the main line. Short forms: `previous_period`, `yesterday`, `last_week`, `last_month`, `last_year`, a number of hours, or `true` (= `previous_period`). Also accepts an object for full styling control (period, color, opacity, line style/width, fill, points, legend, tooltip delta) — or a **list** of comparison objects, one ghost per entry, each reaching further back via `periods_back` (`1` = previous period, `2` = two periods ago). Works in Timeline and, since **v4.02**, in **State Timeline** — there each comparison renders as its own extra row right under the main entity ("Sensor (yesterday)"), with faded state colors and tooltips showing the real historical time. Ignored for `candlestick`, `fixed_value`, and `data_attribute` entities and in sparkline mode. See [Period Comparison](#-period-comparison). |
 | `forecast_horizon` | number | `null` | For forecast sensors whose current state predicts T+N hours ahead (e.g. "Solar forecast in 1 hour"). Shifts each recorded data point forward by N hours so the value lands at its target future time on the X axis. The X axis is extended automatically to keep the shifted points visible. Independent from `offset` — both can be combined. See [Forecast Horizon](#-forecast-horizon). |
 | `points_per_hour` | number | `null` | Per-entity override. Inherits card-level setting if empty. The editor offers the same divisor-of-60 presets as the card-level setting; YAML accepts any integer. |
+| `group_by` | string | `null` | *(new in v4.05)* Grouping for this entity only: `hour`, `2h` … `12h`, `date`, `week`, `month`, `year`; unset = the card's `group_by`. The chart's time grid (X axis, ticks, fetch) becomes the **finest grouping in use** — card or any entity. An entity grouped coarser than that grid is re-aggregated into larger calendar cells drawn on the grid (e.g. monthly bars behind daily values); an entity grouped finer than the card refines the grid for the whole chart, and the card's other entities are then drawn as calendar cells of the card grouping. Put a coarse series on `y_axis: secondary` or `independent` when it dwarfs the others. `raw`/`interval` cannot be set per entity, and nothing changes while the card is grouped by `raw`. Editor: Entities → entity → **Data** → *Group By*. |
 | `data_source` | string | `"auto"` | Per-entity override of the card-level `data_source`: `auto` (the card decides, including the **v4.02** high-frequency auto-detection), `statistics` (always route through 5-minute long-term statistics), or `history` (force raw recorder history — also opts this sensor out of the high-frequency auto-detection). Explicit values always win over auto-detection. YAML only. *(v4.01)* |
 | `number_format` | string | `"system"` | Controls how numbers are displayed in the state row and tooltip. `system` follows HA's locale; `comma` forces European style (1.234,56); `dot` forces English style (1,234.56). Useful when mixing sensors from different regional sources. |
 | `datetime_format` | string | `"system"` | **Deprecated** — use the card-level `datetime_format` instead. Entity-level values still work for backward compatibility and override the card setting when present. |
@@ -489,7 +497,7 @@ Each entry under `entities` supports the following options.
 | `show_range_band` | boolean | `false` | Draw a min/max shaded band behind the line showing the value range within each aggregation bucket. The line shows the average while the band shows how much the value fluctuated. See [Range Band](#-range-band). Timeline mode only. |
 | `gradient` | boolean | `true` | Fade the fill from the entity color to transparent. Only applies when `show_fill` is true. Timeline mode only. |
 | `fill_opacity` | number | `0.4` | Strength of the fill under the line, 0 (invisible) to 1 (solid). With `gradient: true` this is the opacity at the top, fading to an eighth of it at the bottom; with `gradient: false` the flat fill uses half of it. Only applies when `show_fill` is true. Timeline mode only. |
-| `enabled` | boolean | `true` | Set `false` to make the card behave as if this entity was **never configured**: nothing is fetched or drawn, comparison ghosts are not created, and no card-wide logic (auto-scale guards, Y-bounds, palette colors) considers it. Its entity id is not even validated — a template placeholder is fine. Built for shared card templates (e.g. Streamline) where some instances lack a sensor: pass a per-instance variable instead of maintaining a separate card. Plain boolean by design (not Jinja-templatable — it affects data fetching); static template engines substitute it before the card sees it. The editor shows disabled rows dimmed with an **Enabled** toggle. *(v3.30)* |
+| `enabled` | boolean / string | `true` | Set `false` to make the card behave as if this entity was **never configured**: nothing is fetched or drawn, comparison ghosts are not created, and no card-wide logic (auto-scale guards, Y-bounds, palette colors) considers it. Its entity id is not even validated — a template placeholder is fine. Built for shared card templates (e.g. Streamline) where some instances lack a sensor: pass a per-instance variable instead of maintaining a separate card. Since v4.05 it also takes an entity ID for a **live** switch: `input_boolean.x` shows the entity while the helper is on, `"!input_boolean.x"` (quoted — a bare `!` is a YAML tag) hides it while the helper is on; `on` / `true` / `yes` / `1` count as on, `unknown` / `unavailable` / a missing helper (or any state that is not an on/off value) leave the entity shown. The live form is fetched as usual and only shown or hidden — flips are instant on every card pointing at the helper, nothing refetches, the other entities keep their colours and legend state; only the static `false` skips the fetch. Not Jinja-templatable (it affects data fetching); static template engines substitute it before the card sees it. The editor shows disabled rows dimmed with an **Enabled** toggle. *(v3.30)* |
 | `show_points` | boolean | `false` | Show a dot at each data point. Timeline mode only. |
 | `point_size` | number | auto | Radius of the data point dots in pixels (0.5–20). Leave unset for automatic sizing based on `line_width`. Also sets the dot size in scatter and radar modes (via YAML; in scatter, set it on the first entity — the one that styles the dots). In the editor the field appears under the **Data Points** toggle when it is enabled. *(v3.29)* |
 | `smooth` | boolean | `true` | Bezier curve smoothing. Timeline mode only. |
@@ -614,9 +622,32 @@ entities:
 - **Colours.** Binary and select-style entities are coloured automatically, one colour per state. To choose your own, give the entity a [`state_map`](#state-mapping) with a `color:` per state — the same option the State Timeline chart mode uses.
 - **Reading values.** Hovering the chart adds the strip's state to the tooltip next to the numeric values (*AC on*), and the strip's current state also appears in the state row. Strips never take part in the Y axis, the totals, stacking or auto-scaling — they carry states, not numbers.
 - **Space.** Strips are drawn inside the card's existing height, so the curve area shrinks a little for each row. Raise `height` (or `state_strip_height`, default 16 px) to taste.
+- **Titles** *(v4.05)*. `state_strip_titles: true` writes each strip's name on its own line above the band — the same name the legend and tooltip use — so several stacked strips read without the legend. `state_strip_title_font_size` (default 10) sets the size, long names get an ellipsis, and titles are dropped before the rows are when the card is too short. `name: ""` leaves a single strip untitled. `state_strip_title_position: left` moves the name into the Y-axis column beside the band instead — the layout does not change at all, but the name is cut to the column width (keep it short; needs the Y axis).
 - **Live edge.** A strip stops at *now*: the last known state is never drawn into the future, even with `show_full_period: true`.
 
-Card-level `state_strip_height` and `state_strip_labels` control the row height and the state names drawn inside the bands. Strips need per-state history, so they always read raw recorder history and are never bucketed or downsampled; on `group_by: month` / `year` views (where the X axis is slotted rather than linear) they are not drawn.
+Card-level `state_strip_height` and `state_strip_labels` control the row height and the state names drawn inside the bands; since v4.05 both, together with the title options, have fields in the editor under Chart → Visual Options whenever an entity uses `graph_type: state_strip`. Strips need per-state history, so they always read raw recorder history and are never bucketed or downsampled; on `group_by: month` / `year` views (where the X axis is slotted rather than linear) they are not drawn.
+
+### Hide strips from one helper *(v4.05)*
+
+Several cards, one global switch: give the strip entities a live `enabled` that follows an `input_boolean`, and every card hides them in the same moment.
+
+```yaml
+type: custom:statistics-graph-chart-card
+hours_to_show: 24
+entities:
+  - entity: sensor.bathroom_air_temperature
+  - entity: sensor.bathroom_floor_probe
+  - entity: binary_sensor.bathroom_pwm
+    name: PWM
+    graph_type: state_strip
+    enabled: "!input_boolean.dashboard_hide_valves"
+  - entity: binary_sensor.bathroom_valve
+    name: Valve
+    graph_type: state_strip
+    enabled: "!input_boolean.dashboard_hide_valves"
+```
+
+While the helper is on the strips, their legend entries, state-row items and tooltip rows disappear and the plot takes the strip height back; switch it off and they return — no reload, no new database query, and the other entities keep their colours. `enabled: input_boolean.x` (without `!`) is the positive form. Editor: Entities → entity → **General** → *Enabled Follows*.
 
 ### Scatter
 
@@ -705,6 +736,8 @@ entities:
   - entity: sensor.kitchen_temp
     color: "#EF9F27"
 ```
+
+**v4.05** — `ranking_min_value` and `ranking_max_value` trim the list. `ranking_min_value: 5` drops idle appliances reading under 5 W from a power ranking; `ranking_max_value: 20` on battery sensors lists only the ones at 20 % or lower; set both to keep a band. Both compare against the absolute value, and the card says so when every entity falls outside the range. Editor: Chart Settings → **Chart** → *Ranking* → *Min Value* / *Max Value*.
 
 ### Heatmap
 
@@ -883,6 +916,8 @@ entities:
         label: "Open"
         color: "#5dade2"
 ```
+
+**v4.05** — the rows are 32 px tall by default and the colour band inside them never exceeds 24 px, whatever `height` says (it does not apply in this mode). `state_timeline_row_height: 60` makes every row 60 px with the band filling it; range 24–160.
 
 **v2.28 additions:**
 - **Corner radius** is configurable via `state_timeline_corner_radius` (0–20 px, default 3). Set to `0` for sharp edges or use higher values for pill-shaped segments.
@@ -1454,6 +1489,31 @@ graph_type: bar
 
 When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
 
+### Mixing groupings in one chart *(v4.05)*
+
+A daily series and a monthly total of the same sensor — or a daily temperature line with monthly energy bars — can share one chart. Each entity may carry its own `group_by`; the chart's time grid is the finest grouping in use, and every series grouped coarser than that grid is drawn as calendar cells on it:
+
+```yaml
+type: custom:statistics-graph-chart-card
+graph_start: year
+group_by: date
+entities:
+  - entity: sensor.heat_pump_energy
+    name: Monthly
+    graph_type: bar
+    aggregate_func: change
+    group_by: month            # monthly cells on the daily grid
+    y_axis: secondary          # kWh on the right axis
+  - entity: sensor.outside_temperature
+    name: Temperature
+    aggregate_func: avg        # daily mean, drawn on top
+```
+
+- The monthly bars span their whole calendar month (real spans on the daily axis, not equal-width slots); a window that starts mid-month gets a partial first cell. List the coarse entity first so it draws behind the finer ones.
+- The tooltip shows the day's values and the containing month's total; stacking never mixes different grids.
+- The grid follows the finest grouping: `group_by: month` on the card with `group_by: date` on one entity gives a daily grid where the other entities become monthly cells — the same chart as `date` on the card with `month` on them. Only `raw`/`interval` cannot be set per entity, and nothing changes while the card is grouped by `raw`.
+- Y axis: a monthly total is ~30× a daily value in the same unit, so give it `y_axis: secondary` (its ticks sit at the same heights as the left axis, both zeros on the shared baseline) or `independent` (private hidden scale). Editor: Entities → entity → **Data** → *Group By*.
+
 ### Auto-Routing to Long-Term Statistics
 
 Even in `interval` mode with short ranges (`hours_to_show ≤ 24`), the card auto-routes to long-term statistics in two cases:
@@ -1480,6 +1540,24 @@ When `graph_start` is set, `hours_to_show` is ignored — the calendar period di
 | `year` | Start from January 1st |
 
 > **Editor:** General Settings → **Calendar** tab → *Time Window* → *Graph Start*
+
+### Year starting in another month *(v4.05)*
+
+A heating season, a school year or a fiscal year does not start on 1 January. `year_start_month` moves the start of the **Year** period:
+
+```yaml
+show_date_picker: true
+date_picker_default_mode: year
+year_start_month: 7              # 1 Jul → 30 Jun, header reads 2026/27
+group_by: month
+entities:
+  - entity: sensor.gas_consumption
+    aggregate_func: change
+    graph_type: bar
+    compare: last_year           # ghost = 1 Jul 2025 → 30 Jun 2026
+```
+
+The same key shifts `graph_start: year` (with `show_full_period` the axis then runs to 30 June). It only moves the window: the month buckets, the tick labels and the Month / Week periods stay on the calendar. Every card in a `date_picker_group` should carry the same value — the group shares mode and offset, each card computes its own window. Editor: Chart Settings → **Calendar** → *Time Window* → *Year Starts In*.
 
 ### Graph Start: Tomorrow
 
@@ -4319,6 +4397,27 @@ For users who want to go beyond the built-in styling options, the card exposes a
 
 > **Reliability note** *(v3.32)*: card-mod styles used to disappear on a page reload (F5) or app restart and only come back after re-saving the card — a race between card-mod's style injection and the card's first build ([#268](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/268)). Fixed: injected styles now survive the card's initial build and every later re-render. If you style the same property both ways — e.g. `card_background_color:` in the config **and** an `ha-card { background: ... }` in card-mod — the built-in option wins, because it is applied as an inline style; pick one, or add `!important` to the card-mod rule.
 
+### Without card-mod: the `styles` option *(v4.05)*
+
+`styles` takes plain CSS and applies it inside the card — same class names, no card-mod install, no shadow-root juggling:
+
+```yaml
+type: custom:statistics-graph-chart-card
+entities:
+  - entity: sensor.power
+styles: |
+  .sgc-state-name { font-weight: 400; }
+  .sgc-state-value,
+  .sgc-state-unit,
+  .sgc-state-second { font-weight: 500; }
+  ha-card { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); }
+```
+
+The sheet survives re-renders and visual-editor saves, and the editor has a *Custom CSS* field under Card Settings → **Card Styling**. Two things to know:
+
+- **Card options win.** Anything you set as a card option (`card_background_color`, `card_border_*`, `card_padding`, `card_shadow`, `card_header_color` …) is applied inline, so a `styles` rule for the same property needs `!important` — exactly as with card-mod.
+- **card-mod still works** next to it and wins ties, so existing `card_mod:` blocks keep behaving; `styles` is for the rules you no longer want to depend on card-mod for. The CSS is static (no `{{ }}` templates) and cannot reach outside the card.
+
 <details>
 <summary>Show CSS class reference and examples</summary>
 
@@ -4485,10 +4584,10 @@ Controls how raw data points within each time bucket (interval / hour / date / w
 | `first` | Value at the start of the bucket (earliest) | Opening price, state at midnight |
 | `last` | Value at the end of the bucket (latest) | Closing price, current state of a slowly-changing sensor |
 | `median` | Middle value when sorted | Noise-resistant center (better than avg for data with outliers) |
-| `sum` | Σ(values) | Totals over already-rate quantities (e.g. €/hour pricing × hours) |
+| `sum` | Σ(values) | Totals over already-rate quantities (e.g. €/hour pricing × hours). On long-term statistics (a calendar `group_by`, or a window beyond the recorder's retention) `sum` reads Home Assistant's sum/change columns, so it needs a counter (`state_class` total / total_increasing) — a measurement sensor (W, °C, %) has none, draws nothing, and the legend says so *(v4.05)*; use `avg` or `max`, or `change` on its energy counter |
 | `delta` | **max − min** | Spread / range — how much the value **fluctuated** inside the bucket |
 | `change` | **Σ of positive step differences** | Total **accumulated increase** over the bucket — ideal for monotonic counters (energy meters, water meters) because counter resets (jumps to zero) are ignored |
-| `diff` | **last − first** — signed net change across the bucket | Values where a decrease is real movement rather than a counter reset: prices, ratios, temperatures, `input_number`s. Unlike `change`, a fall shows as a negative number. Returns nothing for a bucket with fewer than two samples |
+| `diff` | **last − first** — signed net change across the bucket | Values where a decrease is real movement rather than a counter reset: prices, ratios, temperatures, `input_number`s. Unlike `change`, a fall shows as a negative number. Returns nothing for a bucket with fewer than two samples Not for counters that reset (daily energy totals, utility meters): the bucket's first value is the reading carried in from before the reset, so the day after a reset comes out as −(yesterday's closing value) and a pie draws that magnitude — use `change` there. |
 
 #### Worked example — 1-hour bucket with values `[10, 25, 5, 30, 28]` recorded in this order
 
@@ -4833,7 +4932,7 @@ Changing the Chart Mode dropdown instantly reconfigures the entire editor. The C
 |---|---|---|
 | **Timeline** | All five tabs | Nothing — full editor |
 | **Scatter** | Chart, X Axis, Y Axis, Overlay, Calendar | Stacked / Sparkline / Animate / Auto Scale (+ Custom Scale Rules) / Visible Window + Scroll Mode / Extended Window hidden in Chart. In X Axis the label options stay (X Label Size / Opacity / Color) — what goes is X Ticks, Date Label Color, X Axis Interval, Bar Spacing and the whole Grid block. In Y Axis the bounds, the Y2-Axis and Y Ticks toggles, Round Ticks, the grid block, Y Axis Format (number format) and Logarithmic go — the label, tick-count, decimals and tick-format options stay. |
-| **Pie / Ranking / Polar Area / Radial Bar / Radar** | Chart, Overlay, Calendar | X Axis and Y Axis tabs gone. Chart keeps only the mode-relevant blocks (Pie block for pie, Ranking's Min Value, …). Overlay keeps the interval picker, attribute list, points/hour picker, group-by picker, tooltip and battery blocks. |
+| **Pie / Ranking / Polar Area / Radial Bar / Radar** | Chart, Overlay, Calendar | X Axis and Y Axis tabs gone. Chart keeps only the mode-relevant blocks (Pie block for pie, Ranking's Min / Max Value, …). Overlay keeps the interval picker, attribute list, points/hour picker, group-by picker, tooltip and battery blocks. |
 | **Gauge / Box Plot / Waterfall / Histogram** | Chart, Overlay, Calendar | X Axis and Y Axis tabs gone — these modes read no axis settings at all. Gauge adds its own block in Chart; Histogram its Bins; Waterfall its Total. |
 | **Heatmap / Calendar** | All five tabs | The Y Axis tab keeps only the label and format options — bounds, ticks, grid, number format and Logarithmic go. |
 | **State Timeline** | Chart, X Axis, Overlay, Calendar | Y Axis tab gone (no Y values). The X Axis tab shows label options only — size, opacity, color, and date color. |
