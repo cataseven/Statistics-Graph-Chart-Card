@@ -1,4 +1,4 @@
-export const T_VERSION = "4.05";
+export const T_VERSION = "4.06";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -9,6 +9,10 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Çubuk = tam genişlikte tek bir yatay çubuk; her varlık, toplamdaki payı kadar geniş bir dilimdir. Yükseklik ayarlanmadıysa grafik alanı 28 px yüksekliğindedir.",
+    "In the Bar style the gap is in pixels.": "Çubuk stilinde boşluk piksel cinsindendir.",
+    "Not used by the Bar style.": "Çubuk stilinde kullanılmaz.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Devral",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Yalnızca bu entity için gruplama: saat, N saat, gün, hafta, ay ya da yıl. Devral, kartın Gruplama ayarını kullanır. Grafiğin zaman ızgarası kullanılan en ince gruplama olur (kart ya da herhangi bir entity): ızgaradan daha kaba gruplanan entity o ızgara üzerinde daha büyük takvim hücrelerine yeniden toplanır — örn. günlük değerlerin arkasında aylık çubuklar — karttan daha ince gruplanan entity ise tüm grafiğin ızgarasını inceltir. Kart raw ile gruplanmışken kullanılamaz.",
@@ -904,6 +908,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Balken = ein einzelner horizontaler Balken über die volle Breite, ein Segment pro Entität in der Breite ihres Anteils an der Gesamtsumme; der Diagrammbereich ist 28 px hoch, sofern keine Höhe gesetzt ist.",
+    "In the Bar style the gap is in pixels.": "Im Balken-Stil ist der Abstand in Pixeln.",
+    "Not used by the Bar style.": "Wird im Balken-Stil nicht verwendet.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Übernehmen",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppierung nur für diese Entität: Stunde, N Stunden, Tag, Woche, Monat oder Jahr. Übernehmen verwendet die Gruppierung der Karte. Das Zeitraster des Diagramms wird die feinste verwendete Gruppierung (Karte oder eine Entität): eine gröber gruppierte Entität wird auf diesem Raster in größere Kalenderzellen zusammengefasst — z. B. Monatsbalken hinter Tageswerten — und eine feiner als die Karte gruppierte Entität macht das Raster des ganzen Diagramms feiner. Nicht verfügbar, solange die Karte nach raw gruppiert.",
@@ -1799,6 +1807,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Sloupce = jeden vodorovný pruh přes celou šířku, jeden segment na entitu o šířce jejího podílu na součtu; oblast grafu je vysoká 28 px, pokud není nastavena Výška.",
+    "In the Bar style the gap is in pixels.": "Ve stylu Sloupce je mezera v pixelech.",
+    "Not used by the Bar style.": "Ve stylu Sloupce se nepoužívá.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Převzít",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Seskupení jen pro tuto entitu: hodina, N hodin, den, týden, měsíc nebo rok. Převzít použije seskupení karty. Časová mřížka grafu je nejjemnější použité seskupení (karta nebo kterákoli entita): entita seskupená hruběji se na této mřížce znovu agreguje do větších kalendářních buněk — např. měsíční sloupce za denními hodnotami — a entita seskupená jemněji než karta zjemní mřížku celého grafu. Není dostupné, dokud je karta seskupená podle raw.",
@@ -2719,6 +2731,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Søjler = én vandret bjælke i fuld bredde, ét segment pr. enhed med bredde efter dens andel af totalen; diagramområdet er 28 px højt, medmindre Højde er sat.",
+    "In the Bar style the gap is in pixels.": "I stilen Søjler er mellemrummet i pixels.",
+    "Not used by the Bar style.": "Bruges ikke i stilen Søjler.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Arv",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering kun for denne enhed: time, N timer, dag, uge, måned eller år. Arv bruger kortets gruppering. Diagrammets tidsgitter bliver den fineste gruppering i brug (kortet eller en enhed): en enhed grupperet grovere end gitteret samles på det gitter i større kalenderceller — fx månedssøjler bag daglige værdier — og en enhed grupperet finere end kortet gør hele diagrammets gitter finere. Ikke tilgængelig, mens kortet er grupperet efter raw.",
@@ -3639,6 +3655,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barras = una sola barra horizontal a todo lo ancho, un segmento por entidad con el ancho de su parte del total; el área del gráfico mide 28 px de alto salvo que se defina Altura.",
+    "In the Bar style the gap is in pixels.": "En el estilo Barras la separación se mide en píxeles.",
+    "Not used by the Bar style.": "No se usa en el estilo Barras.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Heredar",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Agrupación solo para esta entidad: hora, N horas, día, semana, mes o año. Heredar usa la agrupación de la tarjeta. La cuadrícula temporal del gráfico pasa a ser la agrupación más fina en uso (tarjeta o cualquier entidad): una entidad agrupada más grueso que la cuadrícula se reagrupa en celdas de calendario mayores sobre esa cuadrícula — p. ej. barras mensuales detrás de valores diarios — y una entidad agrupada más fino que la tarjeta afina la cuadrícula de todo el gráfico. No disponible mientras la tarjeta agrupa por raw.",
@@ -4559,6 +4579,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Palkit = yksi koko leveyden vaakapalkki, yksi segmentti per entiteetti sen osuuden mukaisella leveydellä; kaavioalue on 28 px korkea, ellei Korkeutta ole asetettu.",
+    "In the Bar style the gap is in pixels.": "Palkit-tyylissä rako on pikseleinä.",
+    "Not used by the Bar style.": "Ei käytössä Palkit-tyylissä.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Peri",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Ryhmittely vain tälle entiteetille: tunti, N tuntia, päivä, viikko, kuukausi tai vuosi. Peri käyttää kortin ryhmittelyä. Kuvaajan aikaruudukoksi tulee hienoin käytössä oleva ryhmittely (kortti tai mikä tahansa entiteetti): ruudukkoa karkeammin ryhmitelty entiteetti kootaan tälle ruudukolle suurempiin kalenterisoluihin — esim. kuukausipalkit päiväarvojen taakse — ja korttia hienommin ryhmitelty entiteetti hienontaa koko kuvaajan ruudukon. Ei käytettävissä, kun kortti on ryhmitelty raw-tilassa.",
@@ -5479,6 +5503,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barres = une seule barre horizontale sur toute la largeur, un segment par entité large de sa part du total ; la zone du graphique fait 28 px de haut sauf si Hauteur est définie.",
+    "In the Bar style the gap is in pixels.": "Dans le style Barres, l'écart est en pixels.",
+    "Not used by the Bar style.": "Sans effet dans le style Barres.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Hériter",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Regroupement pour cette entité seulement : heure, N heures, jour, semaine, mois ou année. Hériter utilise le regroupement de la carte. La grille temporelle du graphique devient le regroupement le plus fin utilisé (carte ou n'importe quelle entité) : une entité regroupée plus grossièrement que la grille est ré-agrégée en cellules de calendrier plus grandes sur cette grille — p. ex. des barres mensuelles derrière des valeurs journalières — et une entité regroupée plus finement que la carte affine la grille de tout le graphique. Indisponible tant que la carte est regroupée en raw.",
@@ -6399,6 +6427,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barre = una sola barra orizzontale a tutta larghezza, un segmento per entità largo quanto la sua quota del totale; l'area del grafico è alta 28 px se Altezza non è impostata.",
+    "In the Bar style the gap is in pixels.": "Nello stile Barre lo spazio è in pixel.",
+    "Not used by the Bar style.": "Non usato nello stile Barre.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Eredita",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Raggruppamento solo per questa entità: ora, N ore, giorno, settimana, mese o anno. Eredita usa il raggruppamento della card. La griglia temporale del grafico diventa il raggruppamento più fine in uso (card o qualsiasi entità): un'entità raggruppata più grossolanamente della griglia viene riaggregata in celle di calendario più grandi su quella griglia — es. barre mensili dietro valori giornalieri — e un'entità raggruppata più finemente della card affina la griglia dell'intero grafico. Non disponibile finché la card è raggruppata per raw.",
@@ -7319,6 +7351,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Balken = één horizontale balk over de volle breedte, één segment per entiteit zo breed als zijn aandeel in het totaal; het grafiekgebied is 28 px hoog tenzij Hoogte is ingesteld.",
+    "In the Bar style the gap is in pixels.": "In de stijl Balken is de ruimte in pixels.",
+    "Not used by the Bar style.": "Niet gebruikt in de stijl Balken.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Overnemen",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Groepering alleen voor deze entiteit: uur, N uur, dag, week, maand of jaar. Overnemen gebruikt de groepering van de kaart. Het tijdraster van de grafiek wordt de fijnste groepering in gebruik (kaart of een entiteit): een entiteit die grover dan het raster is gegroepeerd wordt op dat raster samengevoegd in grotere kalendercellen — bv. maandbalken achter dagwaarden — en een entiteit die fijner dan de kaart is gegroepeerd maakt het raster van de hele grafiek fijner. Niet beschikbaar zolang de kaart op raw groepeert.",
@@ -8239,6 +8275,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Søyler = én vannrett stolpe i full bredde, ett segment per enhet med bredde etter dets andel av totalen; diagramområdet er 28 px høyt med mindre Høyde er satt.",
+    "In the Bar style the gap is in pixels.": "I stilen Søyler er mellomrommet i piksler.",
+    "Not used by the Bar style.": "Brukes ikke i stilen Søyler.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Arv",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering bare for denne entiteten: time, N timer, dag, uke, måned eller år. Arv bruker kortets gruppering. Diagrammets tidsrutenett blir den fineste grupperingen i bruk (kortet eller en entitet): en entitet gruppert grovere enn rutenettet samles på det rutenettet i større kalenderceller — f.eks. månedsstolper bak daglige verdier — og en entitet gruppert finere enn kortet gjør hele diagrammets rutenett finere. Ikke tilgjengelig mens kortet er gruppert etter raw.",
@@ -9159,6 +9199,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Słupki = jeden poziomy pasek na całą szerokość, jeden segment na encję o szerokości jej udziału w sumie; obszar wykresu ma 28 px wysokości, o ile nie ustawiono Wysokości.",
+    "In the Bar style the gap is in pixels.": "W stylu Słupki odstęp jest w pikselach.",
+    "Not used by the Bar style.": "Nieużywane w stylu Słupki.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Dziedzicz",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Grupowanie tylko dla tej encji: godzina, N godzin, dzień, tydzień, miesiąc lub rok. Dziedzicz używa grupowania karty. Siatka czasu wykresu staje się najdrobniejszym używanym grupowaniem (karta lub dowolna encja): encja pogrupowana grubiej niż siatka jest ponownie agregowana w większe komórki kalendarza na tej siatce — np. słupki miesięczne za wartościami dziennymi — a encja pogrupowana drobniej niż karta zagęszcza siatkę całego wykresu. Niedostępne, gdy karta grupuje według raw.",
@@ -10079,6 +10123,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barras = uma única barra horizontal em toda a largura, um segmento por entidade com a largura da sua parte do total; a área do gráfico tem 28 px de altura, salvo se Altura estiver definida.",
+    "In the Bar style the gap is in pixels.": "No estilo Barras o espaço é em pixels.",
+    "Not used by the Bar style.": "Não usado no estilo Barras.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Herdar",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Agrupamento só para esta entidade: hora, N horas, dia, semana, mês ou ano. Herdar usa o agrupamento do cartão. A grelha temporal do gráfico passa a ser o agrupamento mais fino em uso (cartão ou qualquer entidade): uma entidade agrupada de forma mais grosseira do que a grelha é reagregada em células de calendário maiores nessa grelha — p. ex. barras mensais atrás de valores diários — e uma entidade agrupada de forma mais fina do que o cartão torna a grelha de todo o gráfico mais fina. Indisponível enquanto o cartão agrupa por raw.",
@@ -10999,6 +11047,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Столбцы = одна горизонтальная полоса на всю ширину, по одному сегменту на объект шириной с его долю в сумме; область графика имеет высоту 28 px, если Высота не задана.",
+    "In the Bar style the gap is in pixels.": "В стиле Столбцы зазор задаётся в пикселях.",
+    "Not used by the Bar style.": "Не используется в стиле Столбцы.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Наследовать",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Группировка только для этой сущности: час, N часов, день, неделя, месяц или год. Наследовать использует группировку карточки. Временная сетка графика становится самой мелкой из используемых группировок (карточки или любой сущности): сущность, сгруппированная крупнее сетки, заново агрегируется в более крупные календарные ячейки на этой сетке — например, месячные столбцы позади дневных значений, — а сущность, сгруппированная мельче карточки, делает сетку всего графика мельче. Недоступно, пока карточка сгруппирована по raw.",
@@ -11919,6 +11971,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Staplar = en enda vågrät stapel i full bredd, ett segment per entitet så brett som dess andel av totalen; diagramytan är 28 px hög om inte Höjd har angetts.",
+    "In the Bar style the gap is in pixels.": "I stilen Staplar anges mellanrummet i pixlar.",
+    "Not used by the Bar style.": "Används inte i stilen Staplar.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Ärv",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering endast för den här entiteten: timme, N timmar, dag, vecka, månad eller år. Ärv använder kortets gruppering. Diagrammets tidsrutnät blir den finaste grupperingen som används (kortet eller någon entitet): en entitet grupperad grövre än rutnätet aggregeras om till större kalenderceller på det rutnätet — t.ex. månadsstaplar bakom dagsvärden — och en entitet grupperad finare än kortet gör hela diagrammets rutnät finare. Inte tillgängligt medan kortet grupperas per raw.",
@@ -12839,6 +12895,10 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.06 (#422 pie_style bar)
+    "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "柱状 = 一条占满宽度的横向条，每个实体一个分段，宽度为其在总和中的份额；未设置高度时图表区域高 28 px。",
+    "In the Bar style the gap is in pixels.": "柱状样式下间隙以像素为单位。",
+    "Not used by the Bar style.": "柱状样式不使用此设置。",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "继承",
     "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "仅此实体的分组：小时、N 小时、日、周、月或年。继承使用卡片的分组。图表的时间网格取所用分组中最细的一个（卡片或任一实体）：比网格更粗的实体会在该网格上重新聚合为更大的日历单元——例如日值背后的月柱——而比卡片更细的实体会让整个图表的网格更细。卡片按 raw 分组时不可用。",
