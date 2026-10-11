@@ -79,7 +79,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 📅 | **Built-in Date Picker** — navigate Day, Week, Month, Year views with arrow buttons, calendar popup, and preset ranges (Last 7/30 Days, Last 12 Months, up to Last 5 Years). Or open on a rolling window that ends now — **Last 1H … Last 5Y** — set as the default mode or shown as extra picker buttons. Sync multiple cards with `date_picker_group` — even cards without a visible picker can follow the group. Customize visible modes with `date_picker_modes` — lock to a single mode for a minimal nav bar |
 | 🪟 | **Card styling without card-mod** — a `styles` block for plain CSS inside the card *(v4.05)*, and dedicated options for border radius, border color & width, padding, background image (with smart `/local/` path resolution), background blur (image-only — chart and header stay sharp), header color, weight, and letter-spacing directly from the editor. Combine with `rgba(...)` background colors for translucent cards over images |
 | 🔢 | Live state rows with current value, MDI icons, and configurable font sizes |
-| 🎯 | **Fourteen chart modes** — Timeline, State Timeline, Scatter, Pie (donut), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial), Box Plot (distribution boxes), Waterfall (running-total bridge), Histogram (value-frequency bars) — selectable from a single dropdown |
+| 🎯 | **Fourteen chart modes** — Timeline, State Timeline, Scatter, Pie (donut or 100 % bar), Ranking (horizontal bar), Radial Bar (concentric arcs), Polar Area (variable-radius pie), Radar (spider polygon), Heatmap (days × hours), Calendar (weekly grid), Gauge (needle dial), Box Plot (distribution boxes), Waterfall (running-total bridge), Histogram (value-frequency bars) — selectable from a single dropdown |
 | 📦 | **Box Plot mode** — `chart_mode: box` draws min / Q1 / median / Q3 / max boxes per time bucket, straight from the dense source samples. Answer "what is this room's daily temperature spread?" at a glance. Bucket width follows `group_by` or is picked automatically from the window |
 | 🪜 | **Waterfall mode** — `chart_mode: waterfall` turns each entity into a +/− step of a running total with an automatic **Total** bar — the classic bridge chart for energy balances and budgets. Steps default to `sum`; use `aggregate_func: diff` for cumulative kWh counters and `invert: true` for subtractions |
 | 📊 | **Histogram mode** — `chart_mode: histogram` shows the value-frequency distribution over the visible window. Bin count is automatic (Freedman–Diaconis) or fixed via `histogram_bins`; multiple entities share the same bins side by side |
@@ -160,7 +160,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 🔗 | **Picker group sync** — `interval_picker_group`, `pph_picker_group`, `group_by_picker_group`: one visible picker drives every card sharing the group; receivers don't need a picker at all. `sync_group` sets all four group keys at once *(v4.03)* |
 | 🙈 | **Auto Hide Entities** — start with every series hidden and reveal only what you need from the legend |
 | 📍 | **Date picker layout** — place the ‹ date › navigator and the D/W/M/Y shortcuts left / center / right, independently |
-| 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit. Customize slice and center label fonts/colors with `pie_label_font_size`, `pie_label_color`, `pie_center_font_size`, and `pie_center_color` — all accept theme variables |
+| 🥧 | **Pie chart styles** — `pie_style` presets (Classic, Thick, Donut, Thin, and Bar — the pie as one full-width 100 % bar) with optional `pie_3d` depth effect, `pie_spacing` for gaps between slices, and automatic rounded slice corners. Slice labels show the actual value with unit. Customize slice and center label fonts/colors with `pie_label_font_size`, `pie_label_color`, `pie_center_font_size`, and `pie_center_color` — all accept theme variables |
 | 🎯 | **Snap-to-data tooltips** — hovering over a line graph snaps the tooltip and dot to the nearest real data point instead of interpolating fake values between samples. The crosshair line aligns with the snapped point too, so what you see is exactly what your sensor recorded |
 | 🔤 | **Theme-aware fonts** — every canvas-rendered chart (Pie, Heatmap, Calendar, Ranking, Radial Bar, Polar Area, Radar, Gauge, axis labels) uses your active HA font (`--primary-font-family`) instead of generic sans-serif |
 | 🧹 | **Clean YAML output** — the visual editor only writes fields you've actually customized. New cards start with 5 lines, not 80. Toggle a setting and it appears in YAML; revert to default and it disappears. Explicit overrides are always preserved |
@@ -280,13 +280,13 @@ These options apply to the whole card.
 | `state_layout` | string | `"default"` | State row layout: `default` (vertical stack) or `horizontal`. Horizontal flows entities side by side in a single row, wrapping if needed. Left/center/right placement of individual rows is per entity, via `align_state`. |
 | `chart_align` | string | `"center"` | Horizontal alignment of the Ranking chart within the card. `center` (default) keeps the chart centered. `left` pins it to the left edge — the name-label strip shrinks so bars start closer to the left. `right` mirrors the layout to the right edge — bars grow from right to left with name labels on the right. Ranking mode only. |
 | `hours_to_show` | number | `24` | Hours of history to load and display. Ignored whenever `graph_start` is set (`day`, `tomorrow`, `week`, `month`, `year`) — the anchored period defines the range instead. |
-| `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. |
+| `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. On a series drawn from long-term statistics the bucket is never finer than the statistics row the card requested — 5 minutes up to 7 days, 1 hour up to 90 days, 1 day beyond — so a finer value is raised to the row period (`group_by: interval` only; calendar and `Nh` groupings are unaffected). |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, or `data_attribute`. See [Auto Scale Points](#-auto-scale-points). |
 | `auto_scale_rules` | list | `null` | Custom thresholds for Auto Scale — only active when `auto_scale_points: true`. Each rule maps a visible period to a bucketing: `up_to_hours` (number, required), `group_by` (same values as the main `group_by` — `interval`, `hour`, any `Nh` like `2h`, `date` [`day` is accepted as an alias], `week`, `month`, `year`, `raw`), and an optional `points_per_hour` (only meaningful for `group_by: interval`). The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale. While Auto Scale is on, the resolved rule fully overrides the main `group_by` (bucketing **and** data fetching); the main value only applies when Auto Scale is off. See [Auto Scale Points](#-auto-scale-points). |
 | `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the space the card is given instead — a **Sections** grid cell, or the whole view in a **Panel** view *(v4.03)*. See [Sections Auto-height](#-sections-auto-height). |
-| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). Since v4.05 an entity may carry its own `group_by`; the chart's grid is then the finest grouping in use and coarser series are drawn as calendar cells on it (e.g. monthly bars behind daily values) — see [Mixing groupings in one chart](#mixing-groupings-in-one-chart-v405). |
+| `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`: bucket edges sit on local midnight and every N hours after it in the card's time zone (`6h` → 00:00, 06:00, 12:00, 18:00), also across a DST change. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). Since v4.05 an entity may carry its own `group_by`; the chart's grid is then the finest grouping in use and coarser series are drawn as calendar cells on it (e.g. monthly bars behind daily values) — see [Mixing groupings in one chart](#mixing-groupings-in-one-chart-v405). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds (minimum 5 — lower values are raised to 5 to protect your database). Empty = HA events plus a gentle background refresh; `0` disables background polling entirely. *(0 = off since v4.01)* |
-| `data_source` | string | `"auto"` | Where the card reads its data from: `auto` (raw history for short windows, statistics for long ones; a date-picker view of a day or less within the last ~10 days counts as a short window *(v4.04)* — and since **v4.02** it auto-detects flood-level sensors: on a window of at least 6 hours, a history response over 5,000 rows and 200 rows/hour flips that sensor to statistics, remembered in the browser for 7 days, with a one-time console note. A flagged sensor still falls back to raw history whenever you ask for finer detail than statistics can give — a window of 12 hours or less bucketed below the 5-minute statistics period *(v4.03)*), `statistics` (always route through long-term statistics when available — measured 287 rows/33 ms vs 21,995 rows/1.7 s for the same 24 h window of a websocket price feed), or `history` (force raw history; also opts an entity out of the auto-detection). Statistics values come from 5-minute buckets, so they are close but not tick-identical. Also available **per entity** (`entities[].data_source`). YAML only. *(v4.01, auto-detection v4.02)* |
+| `data_source` | string | `"auto"` | Where the card reads its data from: `auto` (raw history for short windows, statistics for long ones; a date-picker view of a day or less within the last ~10 days counts as a short window *(v4.04)*; a short window whose raw history does not cover its start falls back to statistics for that sensor *(v4.06)* — and since **v4.02** it auto-detects flood-level sensors: on a window of at least 6 hours, a history response over 5,000 rows and 200 rows/hour flips that sensor to statistics, remembered in the browser for 7 days, with a one-time console note. A flagged sensor still falls back to raw history whenever you ask for finer detail than statistics can give — a window of 12 hours or less bucketed below the 5-minute statistics period *(v4.03)*), `statistics` (always route through long-term statistics when available — measured 287 rows/33 ms vs 21,995 rows/1.7 s for the same 24 h window of a websocket price feed), or `history` (force raw history; also opts an entity out of the auto-detection). Statistics values come from 5-minute buckets, so they are close but not tick-identical, and their averages are weighted by time (Home Assistant's `mean`) while raw history averages each recorded reading once — a sensor that changes rarely can therefore show a different `avg` on a 24-hour card (raw history) than on a 48-hour card (statistics). Also available **per entity** (`entities[].data_source`). YAML only. *(v4.01, auto-detection v4.02)* |
 | `debug_fetch` | boolean | `false` | Log every backend fetch to the browser console (`[sgc fetch]` — entities, transport (`ws` / `rest`), row count, duration, cache/inflight hits). For diagnosing database load. YAML only. *(v4.01)* Since **v4.03** raw history is requested over the WebSocket (`history/history_during_period`) like Home Assistant's own history cards, so it no longer produces *"invalid authentication"* log entries when an access token expires mid-session; the REST history API is used only as a fallback on very old Home Assistant builds. |
 | `extended_window_multiplier` | number | `null` | *(new in v3.29)* Scrollback for the selected period: renders N× the period and opens scrolled to the newest part — the screen shows exactly the period you picked (same scale and buckets as without scrolling) and you can scroll back through the extra history. Follows the date picker: a Week view with `2` keeps one extra week scrollable behind the current one; the picker's header and arrows stay on the selected period. `1`/empty = off. Overrides `max_visible_interval` while active. Timeline mode. |
 | `bar_spacing` | number | `4` | Gap between bar columns in pixels. Timeline mode only. |
@@ -316,14 +316,14 @@ These options apply to the whole card.
 | `x_axis_font_opacity` | number | `null` | Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5 in Timeline / State Timeline (0.55 in Scatter, 1 in Heatmap and Calendar). Applies in Timeline, State Timeline, Scatter, Heatmap and Calendar. |
 | `x_axis_color` | string | `null` | Custom color for X-axis time labels and tick marks. Accepts any CSS color or CSS variable. Leave empty for theme default. Applies in Timeline, State Timeline, Scatter, Heatmap and Calendar. |
 | `x_axis_date_color` | string | `null` | Custom color for X-axis date markers (the bold date dividers shown in 12+ hour views). Defaults to `--primary-color` so dates stand out. Set to match `x_axis_color` for a uniform axis. In State Timeline it colors the labels when the visible range spans more than a day, and defaults to the X label color there. |
-| `pie_style` | string | `"donut"` | Pie chart visual preset: `classic` (full pie), `thick` (wide donut), `donut` (default), or `thin` (narrow ring). Pie mode only. |
-| `pie_spacing` | number | `0` | Gap between pie slices in degrees (0–15). Spaced slices automatically get rounded corners. Pie mode only, donut styles only. |
-| `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style`. Pie mode only. |
+| `pie_style` | string | `"donut"` | Pie chart visual preset: `classic` (full pie), `thick` (wide donut), `donut` (default), `thin` (narrow ring) or `bar` (one full-width horizontal bar — one segment per entity in configured order, each as wide as its share of the total; with `height` unset the chart area is 28 px tall). Pie mode only. |
+| `pie_spacing` | number | `0` | Gap between pie slices in degrees (0–15). Spaced slices automatically get rounded corners. Pie mode only, donut styles only. In the `bar` style the value is a gap in pixels between the segments, and spaced segments get rounded corners. |
+| `pie_3d` | boolean | `false` | Adds depth and a perspective effect to the pie chart with subtle shadows and a glossy highlight on top. Works with any `pie_style` except `bar`. Pie mode only. |
 | `pie_label_font_size` | number | `null` | Font size in pixels of slice value labels (the per-slice numbers like *"21.1 kWh"*). Leave empty for auto-size based on chart radius. Pie mode only. |
 | `pie_label_color` | string | `null` | Color for slice value labels. Accepts any CSS color (hex, rgba, name) or CSS variable like `var(--accent-color)`. Leave empty for auto white (high contrast against any slice color). Pie mode only. |
-| `pie_label_format` | string | `"value"` | What to show inside each pie slice: `value` (number with unit, e.g. *"42.0 kWh"*), `percentage` (share of the total, e.g. *"23%"*), or `both` (value followed by percentage). Precision is controlled by the entity's `decimals` setting — affects both value and percentage display. Pie mode only. |
-| `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Pie mode only. |
-| `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Pie mode only. |
+| `pie_label_format` | string | `"value"` | What to show inside each pie slice: `value` (number with unit, e.g. *"42.0 kWh"*), `percentage` (share of the total, e.g. *"23%"*), or `both` (value followed by percentage). Precision is controlled by the entity's `decimals` setting — affects both value and percentage display. In the `bar` style a label that does not fit inside its segment is left out. Pie mode only. |
+| `pie_center_font_size` | number | `null` | Font size in pixels of the center total value shown in the donut hole. Requires `show_tooltip_total: true`. Leave empty for auto-size. Not used by the `bar` style. Pie mode only. |
+| `pie_center_color` | string | `null` | Color of the center total value and its sub-label (which inherits the same color with reduced opacity). Accepts any CSS color or variable. Leave empty for the theme default. Not used by the `bar` style. Pie mode only. |
 | `x_axis_interval` | string | `null` | Manual X-axis tick spacing. Values: `1h`–`12h`, `1d`, `2d`, `7d`, `1w`, `2w`, `1M`, `3M`. Ticks snap to clean boundaries (hour starts, midnight, Mondays, 1st of month). Leave empty for auto. |
 | `x_axis_datetime_format` | string | `null` | Custom pattern for the X-axis tick labels, independent of `datetime_format` (which drives the tooltip). Same tokens: `YYYY` `YY` `MMMM` `MMM` `MM` `DD` `dddd` `ddd` `HH` `hh` `mm` `ss` `A` `a`. Examples: `MMM` → *Jan, Feb…*; `ddd DD` → *Mon 27, Tue 28…*. ⚠️ `mm` = minutes, `MM` = month — a time-of-day pattern is `HH:mm`, **not** `HH:MM` (that prints *hour:month*, e.g. every label ending in `:08` in August). Also available per rule inside `auto_scale_rules`. YAML only. *(v3.34)* |
 | `datetime_format` | string | `"system"` | Controls how timestamps appear on the X-axis, tooltips, and extrema labels. See [Date Formats](#-date-formats). |
@@ -375,7 +375,7 @@ These options apply to the whole card.
 | `include_area_names` | boolean | `false` | Append each entity's Home Assistant area to its name across the state row, legend, tooltip, stats and exports — e.g. `Heating Temperature · Lounge`. Every entity with an area gets it (no duplicate detection, so the legend doesn't change shape when you add or remove an unrelated entity). The area comes from the entity's area, or its device's area as a fallback; if neither resolves the name is unchanged, and a name that already contains its area isn't doubled up. An explicit `name:` is never modified. Comparison ghosts inherit their parent's suffix. See [Area names](#-area-names). |
 | `include_attribute_name` | boolean | `false` | Append the plotted attribute to each entity's name in the same places — e.g. `Lounge Heating · Current temperature` *(v3.32)*. Rows that plot the entity state itself have no attribute and are left alone, as are entities with an explicit `name:`. Uses Home Assistant's own translated attribute name where one exists, otherwise a humanised form of the attribute key. |
 | `use_only_attribute_name` | boolean | `false` | Like `include_attribute_name`, but shows **only** the attribute — `Current temperature` instead of `Lounge Heating · Current temperature` *(v3.32)*. The two are alternatives: the visual editor turns one off when you switch the other on, and in YAML this one wins if both are set. Combines with `include_area_names` to give `Current temperature · Lounge`. |
-| `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. |
+| `logarithmic` | boolean | `false` | Logarithmic Y axis scale. Timeline mode only. The axis runs from the power of ten at or below the smallest positive value to the power of ten at or above the largest, with a label on every power of ten; readings of zero or below are drawn on the axis floor, and bounds of zero or below are ignored. A positive `lower_bound` / `upper_bound` is honoured as given. |
 | `animate_graph` | boolean | `false` | Draw-in animation on load (Timeline mode): lines sweep in along their length and bars grow up from the baseline. Also enables a grow-in animation on every data refresh for Pie, Radial Bar, Polar Area, Gauge, Radar, Ranking and Scatter modes — slices, arcs, bars and points sweep out from zero whenever the underlying values change. |
 | `max_visible_interval` | number | `null` | Maximum visible time range in hours. Enables horizontal scrolling. Works in Timeline and State Timeline modes. |
 | `scroll_mode` | string | `"scrollbar"` | How the scroll works when `max_visible_interval` is active. `scrollbar` (default) shows a bottom scrollbar; `wheel` hides it and lets the mouse wheel scroll horizontally. |
@@ -462,7 +462,7 @@ Each entry under `entities` supports the following options.
 | `ref_op` | string | `"subtract"` | How to combine with `ref_entity`: `subtract` (A−B), `add`, `multiply`, `divide` (A÷B), plus `reverse_subtract` (B−A) and `reverse_divide` (B÷A). The reversed forms exist because swapping the two entities is **not** equivalent — the main entity drives the timeline, unit, aggregation and data source, while the reference is only sampled. `subtract`/`add`/`reverse_subtract` combine **levels** sample by sample for level aggregations (`avg`, `min`, `max`, `last`, `first`, `median`). *(v4.03)* With a delta aggregation (`change`, `diff`, `sum`, `delta`) they are combined **bucket by bucket** instead: both entities are aggregated the same way first (for statistics-fed series that is Home Assistant's own per-period `change`), then added or subtracted per bucket (`price_entity` applies to both sides) — so two daily-production sensors can be summed into one monthly total. A bucket where either side has no data counts that side as 0. This bucket-wise path needs an `entity:` series in a bucketed chart; a `statistic_id`-only or attribute series still renders empty with a console warning. `multiply`/`divide` are allowed with any aggregation. An unrecognised value falls back to `subtract`. *(v3.31)* |
 | `ref_attribute` | string | `null` | Read the reference from an attribute of `ref_entity` instead of its state (dot notation), e.g. `temperature` on a `weather.` entity. *(v3.31)* |
 | `decimals` | number | `1` | Decimal places shown in state row and labels |
-| `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature`. In `state_timeline` mode, pair with `state_map` to plot the attribute's history ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)). |
+| `attribute` | string | `null` | Read an attribute instead of state. Supports dot notation: `forecast.0.temperature`. In `state_timeline` mode, pair with `state_map` to plot the attribute's history ([#219](https://github.com/cataseven/Statistics-Graph-Chart-Card/issues/219)); with `graph_type: state_strip` the attribute's values are discovered automatically. |
 | `value_factor` | number | `0` | Multiplies value by 10^N. `-3` = ÷1000, `2` = ×100 |
 | `value_transform` | string | `null` | JavaScript expression to transform each data value. Available variables: `x` (current value), `first`, `last`, `min`, `max`, `avg` (series stats), `index` (point position), plus the time variables `t` (this point's timestamp in ms), `now` (the current time in ms), `hour` (hour of day as a decimal, `0`–`23.99`, in the card's display timezone) and `weekday` (`1` = Monday … `7` = Sunday) *(v4.04)*. Applied after `value_factor`. Returning `null` leaves a visible gap in the line. Example: `return x - first`. See [Value Transform](#-value-transform). |
 | `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). Calendar `group_by` modes (`hour`, `date`, `week`, `month`, `year`) regroup the array with `aggregate_func` when it is finer than the requested cell — quarter-hourly prices become hourly bars with `group_by: hour` *(v3.34)*. See [Attribute Data Source](#-attribute-data-source). |
@@ -484,7 +484,7 @@ Each entry under `entities` supports the following options.
 | `invert` | boolean | `false` | Flips the sign of the value (×−1). On Timeline it draws bars downward from the zero line — tooltip, state row and extrema labels still show positive values; use with `stacked: true` for butterfly charts. Because the flip happens in the shared data pipeline it works in **every chart mode** — in Waterfall it makes the entity a subtraction step. Editor: per-entity → **Advanced** tab. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. Each entry takes a `value` plus optional `label` and `color`. See [State Map](#-state-map). |
 | `auto_hide` | boolean | `false` | Start this single entity hidden — the series is invisible until you reveal it from the legend (the reveal sticks for the session). Per-entity alternative to the card-wide `auto_hide_entities`. When `auto_hide_entities` is set, it takes precedence over per-entity values. |
-| `tap_action` | object | `null` | Action on tapping the state row. See [Tap Actions](#-tap-actions). When left unset (or set to `none`), tapping the state row instead toggles that entity's visibility on the graph — same as clicking its legend item. Hidden entities dim visually so you can tell what's off at a glance. |
+| `tap_action` | object | `null` | Action on tapping the state row (and the entity's slice, bar, point, cell or row in the other chart modes). See [Tap Actions](#-tap-actions). When left unset (*Default action* in the editor), tapping the state row toggles that entity's visibility on the graph — same as clicking its legend item; `action: none` makes the tap do nothing. Hidden entities dim visually so you can tell what's off at a glance. |
 
 #### 🎛️ Appearance
 
@@ -619,7 +619,7 @@ entities:
 ```
 
 - **Any number of strips.** Each one gets its own row under the axis, in configuration order.
-- **Colours.** Binary and select-style entities are coloured automatically, one colour per state. To choose your own, give the entity a [`state_map`](#state-mapping) with a `color:` per state — the same option the State Timeline chart mode uses.
+- **Colours.** Binary and select-style entities are coloured automatically, one colour per state. To choose your own, give the entity a [`state_map`](#state-mapping) with a `color:` per state — the same option the State Timeline chart mode uses. A strip may also read an attribute (`attribute: connected_to` on a device tracker, a Wi-Fi band, an HVAC action): its values are discovered from history and coloured automatically, and a `state_map` fixes their colours and labels.
 - **Reading values.** Hovering the chart adds the strip's state to the tooltip next to the numeric values (*AC on*), and the strip's current state also appears in the state row. Strips never take part in the Y axis, the totals, stacking or auto-scaling — they carry states, not numbers.
 - **Space.** Strips are drawn inside the card's existing height, so the curve area shrinks a little for each row. Raise `height` (or `state_strip_height`, default 16 px) to taste.
 - **Titles** *(v4.05)*. `state_strip_titles: true` writes each strip's name on its own line above the band — the same name the legend and tooltip use — so several stacked strips read without the legend. `state_strip_title_font_size` (default 10) sets the size, long names get an ellipsis, and titles are dropped before the rows are when the card is too short. `name: ""` leaves a single strip untitled. `state_strip_title_position: left` moves the name into the Y-axis column beside the band instead — the layout does not change at all, but the name is cut to the column width (keep it short; needs the Y axis).
@@ -676,12 +676,13 @@ Centered chart showing proportional shares. Slice labels show the actual value w
 - **Thick** — wide donut ring, plenty of fill
 - **Donut** *(default)* — standard donut with a center hole
 - **Thin** — narrow ring, modern minimal look
+- **Bar** — not a ring at all: one full-width horizontal bar, one rounded-corner segment per entity in configured order, each as wide as its share of the total. A compact composition strip to put above a timeline of the same period — see the second example below
 
-**3D effect** — set `pie_3d: true` to add depth, perspective and a subtle highlight on top. Works with any preset.
+**3D effect** — set `pie_3d: true` to add depth, perspective and a subtle highlight on top. Works with any preset except Bar.
 
-**Slice spacing** — set `pie_spacing` (in degrees, 0–15) for visible gaps between slices. Spaced slices automatically get rounded corners. Only applies to donut styles, not Classic.
+**Slice spacing** — set `pie_spacing` (in degrees, 0–15) for visible gaps between slices. Spaced slices automatically get rounded corners. Only applies to donut styles, not Classic. In the Bar style the same number is a gap in pixels between the segments.
 
-**Center total** — when `show_tooltip_total: true`, the total value appears in the donut hole. Disable to make Classic a true full pie.
+**Center total** — when `show_tooltip_total: true`, the total value appears in the donut hole. Disable to make Classic a true full pie. Not shown in the Bar style.
 
 **Label and color customization** — fine-tune the look of slice labels and the center total to match your theme:
 
@@ -699,7 +700,7 @@ All four accept theme variables, so `pie_label_color: var(--accent-color)` updat
 ```yaml
 chart_mode: pie
 height: 200
-pie_style: donut       # classic | thick | donut | thin
+pie_style: donut       # classic | thick | donut | thin | bar
 pie_spacing: 4         # 0-15 degrees, gap between slices
 pie_3d: true           # depth/perspective effect
 pie_label_font_size: 14
@@ -716,6 +717,28 @@ entities:
     color: "#EF9F27"
   - entity: sensor.kitchen_energy
     aggregate_func: sum
+    color: "#1D9E75"
+```
+
+**100 % bar** — `pie_style: bar` draws the same shares as one slim horizontal bar instead of a ring: segments in your entity order, each as wide as its share, rounded outer corners, `pie_spacing` as a pixel gap, labels per `pie_label_format` (left out of segments too narrow for them), and the pie's tooltip (name, value, unit, share) and tap action on every segment. Leave `height` unset for the compact 28 px strip, or set it to centre the strip in a taller area. Cumulative energy counters contribute their consumption over the visible period with `aggregate_func: change`; the center total and `pie_3d` do not apply. 10.8 kWh from the grid, 9.6 kWh from solar and 3.6 kWh from the battery give segments of 45 %, 40 % and 15 %:
+
+```yaml
+chart_mode: pie
+pie_style: bar               # one full-width horizontal bar, 28 px tall
+pie_label_format: percentage # value (default) | percentage | both
+show_legend: true
+entities:
+  - entity: sensor.grid_import_energy     # 10.8 kWh -> 45%
+    name: Grid
+    aggregate_func: change
+    color: "#E24B4A"
+  - entity: sensor.solar_self_consumed    # 9.6 kWh -> 40%
+    name: Solar
+    aggregate_func: change
+    color: "#EF9F27"
+  - entity: sensor.battery_discharged     # 3.6 kWh -> 15%
+    name: Battery
+    aggregate_func: change
     color: "#1D9E75"
 ```
 
@@ -1487,7 +1510,7 @@ aggregate_func: change     # annual consumption
 graph_type: bar
 ```
 
-When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables the `change` aggregate field and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
+When `group_by` is set to `date`, `week`, `month`, or `year`, the card fetches data using native HA statistics periods (`period: 'day'`, `'week'`, `'month'`). Year mode fetches monthly data and aggregates client-side. This enables Home Assistant's native `change` column for counters (a `change` series on a sensor without that column — `state_class: measurement` — reads hourly rows instead, like `diff`, `max`, `first` and `last` on such sensors *(v4.06)*) and bypasses the database retention limit — you can display a full year of data even if your recorder purge is set to 10 days.
 
 ### Mixing groupings in one chart *(v4.05)*
 
@@ -1516,18 +1539,19 @@ entities:
 
 ### Auto-Routing to Long-Term Statistics
 
-Even in `interval` mode with short ranges (`hours_to_show ≤ 24`), the card auto-routes to long-term statistics in two cases:
+Even in `interval` mode with short ranges (`hours_to_show ≤ 24`), the card auto-routes to long-term statistics in three cases:
 
 1. **Any entity declares `statistic_id` explicitly** — the user vouches that the entity has long-term statistics available. Useful for entities that exist only in the statistics database (Gazpar, Linky, etc.) or for forcing the route.
 2. **`hours_to_show > 240`** (≈ 10 days, the typical recorder retention) — statistics is the only source that can serve the range, so the card switches automatically.
+3. **Missing recorder coverage** *(v4.06)* — when the raw history of a `data_source: auto` sensor does not reach the start of the window (no recorded state at or before the window start, or a recorded state followed by a gap of at least 2 hours / a quarter of the window during which the long-term statistics show the value moving), that sensor is read from 5-minute statistics for that refresh. A sensor that simply did not change stays on raw history; `data_source: history` opts out.
 
 In both cases the route is **conditional on every relevant entity having long-term statistics available** — meaning a `state_class` of `measurement`, `total`, or `total_increasing`, or an explicit `statistic_id`. If any entity in the card lacks LTS, the route falls back to the regular history API to keep that entity working.
 
 When the requested range exceeds 10 days but some entities lack LTS, a console warning is printed once listing the offending entities and explaining how to enable `state_class` in HA.
 
-**Date picker, synced picker groups and the Controller card** *(v4.04)* — a picker view of a day or less (Day, 24H, 12H, 6H, 1H, today so far, or a short custom range) that reaches no further back than about 10 days is treated like a short `hours_to_show` card and reads raw recorder history, so short spikes keep their real height. Longer views (Week, Month, 7D, 30D …), older days, cards that contain an energy counter (`total` / `total_increasing`), a `statistic_id`, a `ref_entity` or a `price_entity`, and Energy-dashboard sync keep using long-term statistics. If the recorder no longer holds the start of that day (a `purge_keep_days` shorter than 10), the card switches that sensor to statistics by itself. Set `data_source: statistics` to keep the smoother statistics view on picker days.
+**Date picker, synced picker groups and the Controller card** *(v4.04)* — a picker view of a day or less (Day, 24H, 12H, 6H, 1H, today so far, or a short custom range) that reaches no further back than about 10 days is treated like a short `hours_to_show` card and reads raw recorder history, so short spikes keep their real height. Longer views (Week, Month, 7D, 30D …), older days, cards that contain an energy counter (`total` / `total_increasing`), a `statistic_id`, a `ref_entity` or a `price_entity`, and Energy-dashboard sync keep using long-term statistics. If the recorder no longer holds the start of the window (a `purge_keep_days` shorter than the window, a purged or re-created sensor, or statistics written for hours the recorder never recorded), the card switches that sensor to statistics by itself — on picker days and, since v4.06, on every short `hours_to_show` / interval-picker window. Set `data_source: statistics` to keep the smoother statistics view on picker days.
 
-Statistics store 5-minute averages, which flatten bursts shorter than a few minutes. On long views, use `aggregate_func: max` when the peak matters more than the average.
+Statistics store 5-minute averages, which flatten bursts shorter than a few minutes. On long views, use `aggregate_func: max` when the peak matters more than the average. Statistics averages are also weighted by time: a 5-minute row holds the value averaged over the minutes it was valid, whereas a bucket built from raw history averages the readings recorded inside it, each counting once. A sensor that changes rarely (a setpoint held for 59 minutes, then changed once) shows the new reading as that hour's `avg` on raw history and the time-weighted value on statistics, so the same hour can read differently on a 24-hour and a 48-hour card. Sensors that report at a steady pace give the same number either way.
 
 ### Graph Start Anchoring
 
@@ -1657,7 +1681,7 @@ Everything week-shaped on the card follows Home Assistant's **"First day of the 
 
 ### Recorder note
 
-Home Assistant's recorder computes weekly long-term statistics **Monday-anchored on the server** — there is no Sunday-based weekly row to fetch. When your week starts on any day other than Monday, the card transparently fetches **daily** statistics rows instead and builds the weekly buckets client-side, so totals and `change` aggregates stay correct. Nothing to configure.
+Home Assistant's recorder computes weekly long-term statistics **Monday-anchored on the server** — there is no Sunday-based weekly row to fetch. When your week starts on any day other than Monday, the card transparently fetches **daily** statistics rows instead and builds the weekly buckets client-side, so totals and `change` aggregates stay correct. Nothing to configure. The same applies when the card's time zone differs from the Home Assistant server's: daily, weekly and monthly rows are stamped at the server's midnight, so the card then reads hourly statistics (for windows up to a year) and builds the day / week / month cells in the card's own zone.
 
 </details>
 
@@ -1762,8 +1786,8 @@ entities:
 | Value | Ghost shows |
 |---|---|
 | `previous_period` | The window immediately before the visible one (a 24h view compares against the 24h before it) |
-| `yesterday` | Same window, 24 hours earlier |
-| `last_week` | Same window, one week earlier |
+| `yesterday` | Same window, one day earlier — same wall-clock time, so a daylight-saving change does not slide the ghost |
+| `last_week` | Same window, one week earlier — same wall-clock time |
 | `last_month` | Same window, one month earlier |
 | `last_year` | Same window, one year earlier |
 | *number* | Same window, that many hours earlier |
@@ -1859,7 +1883,7 @@ entities:
 ### Behavior
 
 - The ghost is drawn faded and dashed **under** the main series and is named *"&lt;main name&gt; (previous period)"* — the suffix follows the dashboard language.
-- `previous_period` shifts by the current window length. In the date picker's **Month / Year** modes the shift is **calendar-aware**: July compares against June, wall-clock aligned, and month-end dates are clamped (Mar 31 → Feb 28/29).
+- `previous_period` shifts by the current window length. In the date picker's **Month / Year** modes the shift is **calendar-aware**: July compares against June, wall-clock aligned, and month-end dates are clamped (Mar 31 → Feb 28/29). `yesterday`, `last_week` and the picker's **Day / Week** modes shift by whole days, wall-clock anchored at the window start (23 or 25 hours across a daylight-saving change); a *number* of hours stays exact.
 - A main entity with its own `offset` compares against the previous period of its **shifted** window.
 - Clicking the entity in the legend or its state row toggles the main series and its ghosts **together**.
 - *(improved in v3.28)* Under `stacked: true`, ghosts stack **with each other** — the previous period appears as its own faded stacked column next to the current one (one ghost stack per comparison entry, honoring `stack_group`). Ghosts never stack onto the current period and stay excluded from the tooltip's grand Total.
@@ -3012,7 +3036,7 @@ Click and drag on any Timeline mode graph to zoom into a specific time range. No
 - **Touch support** — works on mobile: long-press, then drag to select; once zoomed, a one-finger drag pans the window
 - **Minimum 15px selection** — prevents accidental zoom from regular clicks or taps
 - **Time formatting** — selection labels show time only for ranges under 24H, date + time for longer ranges
-- **Interval picker aware** — changing the time range via the interval picker resets any active zoom and fetches fresh data
+- **Picker aware** — changing the period via the interval picker or the date picker resets any active zoom and fetches fresh data
 
 
 ### Zoom Buttons *(new in v4.04)*
@@ -4578,7 +4602,7 @@ Controls how raw data points within each time bucket (interval / hour / date / w
 
 | Value | Formula | Best for |
 |-------|---------|----------|
-| `avg` *(default)* | Σ(values) ÷ count — the mean | Smooth lines for measurement sensors (temperature, power, humidity) |
+| `avg` *(default)* | Σ(values) ÷ count — the mean of the readings recorded inside the bucket, each reading counting once however long it stayed valid. Buckets built from long-term statistics (windows over 24 hours, calendar groupings, `data_source: statistics`, a sensor that fell back to statistics) average Home Assistant's period means, which are weighted by time — see [Auto-Routing to Long-Term Statistics](#auto-routing-to-long-term-statistics) | Smooth lines for measurement sensors (temperature, power, humidity) |
 | `min` | Lowest value in the bucket | Coldest temperature, minimum pressure, etc. |
 | `max` | Highest value in the bucket | Peak temperature, max demand |
 | `first` | Value at the start of the bucket (earliest) | Opening price, state at midnight |
@@ -4586,14 +4610,14 @@ Controls how raw data points within each time bucket (interval / hour / date / w
 | `median` | Middle value when sorted | Noise-resistant center (better than avg for data with outliers) |
 | `sum` | Σ(values) | Totals over already-rate quantities (e.g. €/hour pricing × hours). On long-term statistics (a calendar `group_by`, or a window beyond the recorder's retention) `sum` reads Home Assistant's sum/change columns, so it needs a counter (`state_class` total / total_increasing) — a measurement sensor (W, °C, %) has none, draws nothing, and the legend says so *(v4.05)*; use `avg` or `max`, or `change` on its energy counter |
 | `delta` | **max − min** | Spread / range — how much the value **fluctuated** inside the bucket |
-| `change` | **Σ of positive step differences** | Total **accumulated increase** over the bucket — ideal for monotonic counters (energy meters, water meters) because counter resets (jumps to zero) are ignored |
+| `change` | **Σ of positive step differences** | Total **accumulated increase** over the bucket — ideal for monotonic counters (energy meters, water meters) because counter resets (jumps to zero) are ignored. On long-term statistics a counter is read from Home Assistant's own `change` column; a sensor without one (`state_class: measurement` — a `history_stats` hours counter, an uptime sensor) is read from hourly rows (windows up to a year) and the positive steps between its hourly means are summed, so a daily or weekly reset is ignored *(v4.06)* |
 | `diff` | **last − first** — signed net change across the bucket | Values where a decrease is real movement rather than a counter reset: prices, ratios, temperatures, `input_number`s. Unlike `change`, a fall shows as a negative number. Returns nothing for a bucket with fewer than two samples Not for counters that reset (daily energy totals, utility meters): the bucket's first value is the reading carried in from before the reset, so the day after a reset comes out as −(yesterday's closing value) and a pie draws that magnitude — use `change` there. |
 
 #### Worked example — 1-hour bucket with values `[10, 25, 5, 30, 28]` recorded in this order
 
 | Function | Result | How |
 |---|---|---|
-| `avg` | 19.6 | (10 + 25 + 5 + 30 + 28) / 5 |
+| `avg` | 19.6 | (10 + 25 + 5 + 30 + 28) / 5 — each reading once, however long it stayed valid |
 | `min` | 5 | Smallest |
 | `max` | 30 | Largest |
 | `first` | 10 | First in time |
@@ -4618,6 +4642,21 @@ entities:
 group_by: date
 hours_to_show: 720    # 30 days of daily consumption bars
 ```
+
+#### When your sensor is not a counter (`state_class: measurement`)
+
+A measurement sensor that climbs and then resets — a `history_stats` "hours this week" sensor, an uptime counter, a daily runtime helper — has no `sum` / `change` columns in long-term statistics, only hourly averages. *(v4.06)* `aggregate_func: change` reads the **hourly** statistics rows for it under a daily, weekly or monthly grouping and adds up only the rises, so the reset is skipped and each bar shows what was added that day:
+
+```yaml
+entities:
+  - entity: sensor.uptime_week_tv   # history_stats, resets Monday 00:00
+    aggregate_func: change
+    graph_type: bar
+group_by: date
+hours_to_show: 168
+```
+
+Values can differ from a raw-history chart by a few tenths, because statistics rows hold hourly averages rather than the exact midnight reading; add `data_source: history` to the entity for exact readings within the recorder's retention.
 
 ---
 
@@ -4828,7 +4867,7 @@ Setting `color: threshold`, `state_color: threshold`, `icon_color: threshold`, o
 
 | Action | Description |
 |--------|-------------|
-| `none` | No action *(default)* |
+| `none` | Do nothing — the tap is ignored. Leave `tap_action` unset for the default: More Info on chart shapes, state-timeline rows and sparkline rows; the visibility toggle on the state row |
 | `more-info` | Open entity detail dialog |
 | `navigate` | Navigate to a dashboard path (requires `navigation_path`) |
 | `url` | Open an external URL (requires `url`) |
