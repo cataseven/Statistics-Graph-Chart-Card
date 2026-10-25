@@ -1,4 +1,4 @@
-export const T_VERSION = "4.06";
+export const T_VERSION = "4.07";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -9,6 +9,28 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Ad",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Dış Etiket Rengi",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Bir dilim sayısını içine sığdıramayacak kadar küçük olduğunda (toplamın %5'inden az) halkanın dışına, kılavuz çizginin ucuna çizilen değer etiketlerinin rengi. Dilim Etiketi Rengi bunlara uygulanmaz. Herhangi bir CSS rengi (hex, rgba, ad) veya CSS değişkeni kabul eder. Tema metin rengi için boş bırakın.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Kompakt Lejantta Göster",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Bu varlığı grafiğin altındaki kompakt lejantta listeler (kart düzeyindeki Kompakt Lejant anahtarı). Yalnızca o lejanttan çıkarmak için işareti kaldırın — durum satırı, ipucu, grafik ve Temel sekmesindeki istatistik Lejantı etkilenmez. Grafik anahtarı kapalı olup yalnızca durum satırını besleyen varlıklar içindir; örn. pastanın yanındaki toplamlar. Dışarıda bırakılan bir varlık, durum satırına tıklanarak yine gizlenip gösterilebilir. YAML anahtarı: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "tahmini",
+    "Solar forecast": "Güneş tahmini",
+    "No solar forecast in the Energy dashboard": "Enerji panosunda güneş tahmini yok",
+    "Solar Forecast (Energy Dashboard)": "Güneş Tahmini (Enerji Panosu)",
+    "Solar Forecast": "Güneş Tahmini",
+    "Forecast Source": "Tahmin Kaynağı",
+    "All solar sources": "Tüm güneş kaynakları",
+    "Energy dashboard not configured": "Enerji panosu yapılandırılmamış",
+    "Forecast": "Tahmin",
+    "optional": "isteğe bağlı",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Enerji panosunun güneş tahminini bu satır olarak çizer — varlık gerekmez. Noktalar, tahmin entegrasyonunun (Forecast.Solar, Solcast, Open-Meteo …) Enerji panosuna yayımladığı saatlik kWh değerleridir; geçmiş saatler entegrasyonun döndürdüğü kadar gelir; günlük toplamlar için Gruplama: Tarih kullanın. Kayan pencere son tahmin saatine kadar uzatılır; Enerji Tarih Senkronu, tarih seçici veya Grafik Başlangıcı ile seçili dönemde kalmak için Tam Dönemi Göster'i açın.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Bir varlık yerine Enerji panosunun güneş tahminini çizmek için açın. Varlık alanı isteğe bağlı olur; siz ayarlamadıkça Toplulaştırma varsayılanı Toplam, birim kWh olur.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Enerji panosunun hangi güneş kaynağı çizilecek. Tüm güneş kaynakları, tahmini olan her kaynağı toplar; yalnızca bir kaynağın tahmini için o kaynağı seçin. Yalnızca tahmini yapılandırılmış kaynaklar listelenir.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Çubuk = tam genişlikte tek bir yatay çubuk; her varlık, toplamdaki payı kadar geniş bir dilimdir. Yükseklik ayarlanmadıysa grafik alanı 28 px yüksekliğindedir.",
     "In the Bar style the gap is in pixels.": "Çubuk stilinde boşluk piksel cinsindendir.",
@@ -908,6 +930,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Name",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Außenlabel-Farbe",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Farbe der Wertlabels, die außerhalb des Rings am Ende einer Führungslinie gezeichnet werden, wenn ein Segment zu klein für seine Zahl ist (unter 5 % der Summe). Die Segmentlabel-Farbe gilt nicht für sie. Akzeptiert jede CSS-Farbe (Hex, rgba, Name) oder CSS-Variable. Leer lassen für die Textfarbe des Themes.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "In kompakter Legende anzeigen",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Diese Entität in der kompakten Legende unter dem Diagramm auflisten (Kartenoption Kompakte Legende). Abwählen, um sie nur aus dieser Legende herauszuhalten — Zustandszeile, Tooltip, Diagramm und die Statistik-Legende im Tab Basis bleiben unberührt. Gedacht für Entitäten mit ausgeschaltetem Diagramm, die nur die Zustandszeile füllen, z. B. Summen neben einem Kreisdiagramm. Eine ausgelassene Entität lässt sich weiterhin per Klick auf ihre Zustandszeile aus- und einblenden. YAML-Schlüssel: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "Prognose",
+    "Solar forecast": "Solarprognose",
+    "No solar forecast in the Energy dashboard": "Keine Solarprognose im Energie-Dashboard",
+    "Solar Forecast (Energy Dashboard)": "Solarprognose (Energie-Dashboard)",
+    "Solar Forecast": "Solarprognose",
+    "Forecast Source": "Prognosequelle",
+    "All solar sources": "Alle Solarquellen",
+    "Energy dashboard not configured": "Energie-Dashboard nicht eingerichtet",
+    "Forecast": "Prognose",
+    "optional": "optional",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Zeichnet die Solarprognose des Energie-Dashboards als diese Zeile — keine Entität nötig. Die Punkte sind die stündlichen kWh-Werte, die die Prognose-Integration (Forecast.Solar, Solcast, Open-Meteo …) an das Energie-Dashboard liefert; vergangene Stunden so weit, wie die Integration sie zurückgibt; für Tagessummen Gruppierung: Datum verwenden. Ein gleitendes Fenster wird bis zur letzten Prognosestunde verlängert; mit Energie-Datumssynchronisierung, der Datumsauswahl oder Diagrammstart „Gesamten Zeitraum anzeigen“ einschalten, um im gewählten Zeitraum zu bleiben.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Einschalten, um statt einer Entität die Solarprognose des Energie-Dashboards zu zeichnen. Das Feld Entität wird optional; Aggregation ist standardmäßig Summe und die Einheit kWh, sofern Sie nichts anderes festlegen.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Welche Solarquelle des Energie-Dashboards gezeichnet wird. Alle Solarquellen addiert jede Quelle mit einer Prognose; eine Quelle wählen, um nur deren Prognose zu zeichnen. Es werden nur Quellen mit eingerichteter Prognose aufgeführt.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Balken = ein einzelner horizontaler Balken über die volle Breite, ein Segment pro Entität in der Breite ihres Anteils an der Gesamtsumme; der Diagrammbereich ist 28 px hoch, sofern keine Höhe gesetzt ist.",
     "In the Bar style the gap is in pixels.": "Im Balken-Stil ist der Abstand in Pixeln.",
@@ -1807,6 +1851,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Název",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Barva vnějších popisků",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Barva popisků hodnot vykreslených vně prstence na konci vodicí čáry, když je výseč příliš malá na to, aby pojala své číslo (pod 5 % celku). Barva popisků výsečí se na ně nevztahuje. Přijímá libovolnou CSS barvu (hex, rgba, název) nebo CSS proměnnou. Ponechte prázdné pro barvu textu motivu.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Zobrazit v kompaktní legendě",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Uvede tuto entitu v kompaktní legendě pod grafem (přepínač karty Kompaktní legenda). Odškrtněte, aby byla vynechána jen z této legendy — řádek stavu, popisek, graf a statistická Legenda na kartě Základní zůstávají beze změny. Určeno pro entity s vypnutým grafem, které jen plní řádek stavu, např. součty vedle koláčového grafu. Vynechanou entitu lze stále skrýt a zobrazit kliknutím na její řádek stavu. Klíč YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "předpověď",
+    "Solar forecast": "Solární předpověď",
+    "No solar forecast in the Energy dashboard": "V panelu Energie není žádná solární předpověď",
+    "Solar Forecast (Energy Dashboard)": "Solární předpověď (panel Energie)",
+    "Solar Forecast": "Solární předpověď",
+    "Forecast Source": "Zdroj předpovědi",
+    "All solar sources": "Všechny solární zdroje",
+    "Energy dashboard not configured": "Panel Energie není nastaven",
+    "Forecast": "Předpověď",
+    "optional": "volitelné",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Vykreslí solární předpověď z panelu Energie jako tento řádek — entita není potřeba. Body jsou hodinové hodnoty kWh, které integrace předpovědi (Forecast.Solar, Solcast, Open-Meteo …) předává panelu Energie; minulé hodiny tak daleko, jak je integrace vrací; pro denní součty použijte Seskupení: Den. Klouzavé okno se prodlouží do poslední hodiny předpovědi; se Synchronizací s daty Energie, výběrem data nebo Začátkem grafu zapněte Zobrazit celé období, abyste zůstali ve zvoleném období.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Zapněte, aby se místo entity vykreslila solární předpověď z panelu Energie. Pole Entita se stane volitelným; Agregace je ve výchozím stavu Součet a jednotka kWh, pokud je nenastavíte sami.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Který solární zdroj panelu Energie se má vykreslit. Všechny solární zdroje sečtou každý zdroj s předpovědí; vyberte jeden zdroj, aby se vykreslila jen jeho předpověď. Uvedeny jsou jen zdroje s nastavenou předpovědí.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Sloupce = jeden vodorovný pruh přes celou šířku, jeden segment na entitu o šířce jejího podílu na součtu; oblast grafu je vysoká 28 px, pokud není nastavena Výška.",
     "In the Bar style the gap is in pixels.": "Ve stylu Sloupce je mezera v pixelech.",
@@ -2731,6 +2797,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Navn",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Farve på udvendige etiketter",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Farve på de værdietiketter, der tegnes uden for ringen for enden af en hjælpelinje, når et udsnit er for lille til at rumme sit tal (under 5 % af totalen). Farve på udsnitsetiketter gælder ikke for dem. Accepterer enhver CSS-farve (hex, rgba, navn) eller CSS-variabel. Lad stå tomt for temaets tekstfarve.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Vis i kompakt forklaring",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Viser denne enhed i den kompakte forklaring under diagrammet (kortets Kompakt forklaring). Fjern markeringen for kun at udelade den fra den forklaring — tilstandsrækken, tooltip, diagrammet og statistikforklaringen under fanen Grundlæggende påvirkes ikke. Beregnet til enheder med diagrammet slået fra, som kun fylder tilstandsrækken, fx totaler ved siden af et cirkeldiagram. En udeladt enhed kan stadig skjules og vises ved at klikke på dens tilstandsrække. YAML-nøgle: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "prognose",
+    "Solar forecast": "Solprognose",
+    "No solar forecast in the Energy dashboard": "Ingen solprognose i Energi-dashboardet",
+    "Solar Forecast (Energy Dashboard)": "Solprognose (Energi-dashboard)",
+    "Solar Forecast": "Solprognose",
+    "Forecast Source": "Prognosekilde",
+    "All solar sources": "Alle solkilder",
+    "Energy dashboard not configured": "Energi-dashboardet er ikke sat op",
+    "Forecast": "Prognose",
+    "optional": "valgfri",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Tegner Energi-dashboardets solprognose som denne række — ingen enhed nødvendig. Punkterne er de timevise kWh-værdier, som prognoseintegrationen (Forecast.Solar, Solcast, Open-Meteo …) leverer til Energi-dashboardet; tidligere timer så langt tilbage, som integrationen returnerer dem; brug Gruppering: Dag til daglige totaler. Et rullende vindue forlænges til den sidste prognosetime; med Synkronisering med Energi-datoer, datovælgeren eller Diagramstart skal du slå Vis hele perioden til for at blive i den valgte periode.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Slå til for at tegne Energi-dashboardets solprognose i stedet for en enhed. Feltet Enhed bliver valgfrit; Aggregering er som standard Sum og enheden kWh, medmindre du selv sætter dem.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Hvilken solkilde fra Energi-dashboardet der tegnes. Alle solkilder lægger hver kilde med en prognose sammen; vælg én kilde for kun at tegne dens prognose. Kun kilder med en opsat prognose vises.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Søjler = én vandret bjælke i fuld bredde, ét segment pr. enhed med bredde efter dens andel af totalen; diagramområdet er 28 px højt, medmindre Højde er sat.",
     "In the Bar style the gap is in pixels.": "I stilen Søjler er mellemrummet i pixels.",
@@ -3655,6 +3743,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nombre",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Color de etiquetas exteriores",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Color de las etiquetas de valor dibujadas fuera del anillo, al final de una línea guía, cuando un sector es demasiado pequeño para contener su número (menos del 5 % del total). El Color de etiquetas de sector no se aplica a ellas. Acepta cualquier color CSS (hex, rgba, nombre) o variable CSS. Déjalo vacío para usar el color de texto del tema.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Mostrar en la leyenda compacta",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Incluye esta entidad en la leyenda compacta bajo el gráfico (el interruptor Leyenda compacta de la tarjeta). Desmárcalo para dejarla fuera solo de esa leyenda — la fila de estado, el tooltip, el gráfico y la Leyenda de estadísticas de la pestaña Básico no cambian. Pensado para entidades con el gráfico desactivado que solo alimentan la fila de estado, p. ej. totales junto a un gráfico circular. Una entidad excluida aún puede ocultarse y mostrarse pulsando su fila de estado. Clave YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "previsión",
+    "Solar forecast": "Previsión solar",
+    "No solar forecast in the Energy dashboard": "No hay previsión solar en el panel de Energía",
+    "Solar Forecast (Energy Dashboard)": "Previsión solar (panel de Energía)",
+    "Solar Forecast": "Previsión solar",
+    "Forecast Source": "Fuente de la previsión",
+    "All solar sources": "Todas las fuentes solares",
+    "Energy dashboard not configured": "Panel de Energía no configurado",
+    "Forecast": "Previsión",
+    "optional": "opcional",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Dibuja la previsión solar del panel de Energía como esta fila — no hace falta entidad. Los puntos son los valores horarios en kWh que la integración de previsión (Forecast.Solar, Solcast, Open-Meteo …) entrega al panel de Energía; horas pasadas hasta donde la integración las devuelva; usa Agrupar por: Día para totales diarios. Una ventana deslizante se extiende hasta la última hora prevista; con Sincronización con fechas de Energía, el selector de fechas o Inicio del gráfico activa Mostrar período completo para permanecer en el período seleccionado.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Actívalo para dibujar la previsión solar del panel de Energía en lugar de una entidad. El campo Entidad pasa a ser opcional; la Agregación es Suma y la unidad kWh por defecto, salvo que los definas tú.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Qué fuente solar del panel de Energía dibujar. Todas las fuentes solares suma cada fuente con previsión; elige una fuente para dibujar solo su previsión. Solo se listan las fuentes con previsión configurada.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barras = una sola barra horizontal a todo lo ancho, un segmento por entidad con el ancho de su parte del total; el área del gráfico mide 28 px de alto salvo que se defina Altura.",
     "In the Bar style the gap is in pixels.": "En el estilo Barras la separación se mide en píxeles.",
@@ -4579,6 +4689,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nimi",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Ulkonimiöiden väri",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Renkaan ulkopuolelle viivan päähän piirrettyjen arvonimiöiden väri, kun sektori on liian pieni numerolleen (alle 5 % kokonaisuudesta). Sektorinimiöiden väri ei koske niitä. Hyväksyy minkä tahansa CSS-värin (hex, rgba, nimi) tai CSS-muuttujan. Jätä tyhjäksi, niin käytetään teeman tekstiväriä.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Näytä tiiviissä selitteessä",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Näyttää tämän entiteetin kaavion alla olevassa tiiviissä selitteessä (kortin Tiivis selite -kytkin). Poista valinta jättääksesi sen pois vain tästä selitteestä — tilarivi, vihje, kaavio ja Perus-välilehden tilastoselite eivät muutu. Tarkoitettu entiteeteille, joiden kaavio on pois päältä ja jotka vain täyttävät tilarivin, esim. piirakan vieressä olevat summat. Pois jätetty entiteetti voidaan yhä piilottaa ja näyttää napsauttamalla sen tilariviä. YAML-avain: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "ennuste",
+    "Solar forecast": "Aurinkoennuste",
+    "No solar forecast in the Energy dashboard": "Energia-kojelaudassa ei ole aurinkoennustetta",
+    "Solar Forecast (Energy Dashboard)": "Aurinkoennuste (Energia-kojelauta)",
+    "Solar Forecast": "Aurinkoennuste",
+    "Forecast Source": "Ennusteen lähde",
+    "All solar sources": "Kaikki aurinkolähteet",
+    "Energy dashboard not configured": "Energia-kojelautaa ei ole määritetty",
+    "Forecast": "Ennuste",
+    "optional": "valinnainen",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Piirtää Energia-kojelaudan aurinkoennusteen tänä rivinä — entiteettiä ei tarvita. Pisteet ovat tunneittaiset kWh-arvot, jotka ennusteintegraatio (Forecast.Solar, Solcast, Open-Meteo …) toimittaa Energia-kojelaudalle; menneet tunnit niin pitkälle kuin integraatio ne palauttaa; käytä Ryhmittely: Päivä päiväsummiin. Liukuva ikkuna venytetään viimeiseen ennustetuntiin; Synkronointi Energia-päivämääriin, päivämäärävalitsin tai Kaavion alku: ota käyttöön Näytä koko jakso pysyäksesi valitussa jaksossa.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Ota käyttöön piirtääksesi entiteetin sijaan Energia-kojelaudan aurinkoennusteen. Entiteetti-kenttä muuttuu valinnaiseksi; Koostaminen on oletuksena Summa ja yksikkö kWh, ellet aseta niitä itse.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Mikä Energia-kojelaudan aurinkolähde piirretään. Kaikki aurinkolähteet laskee yhteen jokaisen lähteen, jolla on ennuste; valitse yksi lähde piirtääksesi vain sen ennusteen. Vain lähteet, joille ennuste on määritetty, luetellaan.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Palkit = yksi koko leveyden vaakapalkki, yksi segmentti per entiteetti sen osuuden mukaisella leveydellä; kaavioalue on 28 px korkea, ellei Korkeutta ole asetettu.",
     "In the Bar style the gap is in pixels.": "Palkit-tyylissä rako on pikseleinä.",
@@ -5503,6 +5635,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nom",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Couleur des étiquettes extérieures",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Couleur des étiquettes de valeur tracées à l'extérieur de l'anneau, au bout d'une ligne de rappel, lorsqu'une part est trop petite pour contenir son nombre (moins de 5 % du total). La Couleur des étiquettes de parts ne s'applique pas à elles. Accepte toute couleur CSS (hex, rgba, nom) ou variable CSS. Laisser vide pour la couleur de texte du thème.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Afficher dans la légende compacte",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Liste cette entité dans la légende compacte sous le graphique (option Légende compacte de la carte). Décochez pour l'exclure de cette légende uniquement — la ligne d'état, l'info-bulle, le graphique et la Légende de statistiques de l'onglet Base ne changent pas. Prévu pour les entités dont le graphique est désactivé et qui n'alimentent que la ligne d'état, p. ex. des totaux à côté d'un camembert. Une entité exclue peut toujours être masquée ou affichée en cliquant sur sa ligne d'état. Clé YAML : show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "prévision",
+    "Solar forecast": "Prévision solaire",
+    "No solar forecast in the Energy dashboard": "Aucune prévision solaire dans le tableau de bord Énergie",
+    "Solar Forecast (Energy Dashboard)": "Prévision solaire (tableau de bord Énergie)",
+    "Solar Forecast": "Prévision solaire",
+    "Forecast Source": "Source de la prévision",
+    "All solar sources": "Toutes les sources solaires",
+    "Energy dashboard not configured": "Tableau de bord Énergie non configuré",
+    "Forecast": "Prévision",
+    "optional": "facultatif",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Trace la prévision solaire du tableau de bord Énergie comme cette ligne — aucune entité nécessaire. Les points sont les valeurs horaires en kWh que l'intégration de prévision (Forecast.Solar, Solcast, Open-Meteo …) fournit au tableau de bord Énergie ; heures passées aussi loin que l'intégration les renvoie ; utilisez Regrouper par : Jour pour des totaux journaliers. Une fenêtre glissante est étendue jusqu'à la dernière heure prévue ; avec la Synchronisation des dates Énergie, le sélecteur de dates ou Début du graphique, activez Afficher la période complète pour rester sur la période choisie.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Activez pour tracer la prévision solaire du tableau de bord Énergie au lieu d'une entité. Le champ Entité devient facultatif ; l'Agrégation est Somme et l'unité kWh par défaut, sauf si vous les définissez vous-même.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Quelle source solaire du tableau de bord Énergie tracer. Toutes les sources solaires additionne chaque source disposant d'une prévision ; choisissez une source pour ne tracer que sa prévision. Seules les sources avec une prévision configurée sont listées.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barres = une seule barre horizontale sur toute la largeur, un segment par entité large de sa part du total ; la zone du graphique fait 28 px de haut sauf si Hauteur est définie.",
     "In the Bar style the gap is in pixels.": "Dans le style Barres, l'écart est en pixels.",
@@ -6427,6 +6581,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nome",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Colore etichette esterne",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Colore delle etichette dei valori disegnate fuori dall'anello, all'estremità di una linea guida, quando uno spicchio è troppo piccolo per contenere il suo numero (sotto il 5 % del totale). Il Colore etichette spicchi non si applica a esse. Accetta qualsiasi colore CSS (hex, rgba, nome) o variabile CSS. Lascia vuoto per il colore del testo del tema.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Mostra nella legenda compatta",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Elenca questa entità nella legenda compatta sotto il grafico (l'interruttore Legenda compatta della scheda). Deseleziona per escluderla solo da quella legenda — riga di stato, tooltip, grafico e la Legenda statistiche della scheda Base non cambiano. Pensato per entità con il grafico disattivato che alimentano solo la riga di stato, ad es. totali accanto a una torta. Un'entità esclusa può ancora essere nascosta e mostrata cliccando sulla sua riga di stato. Chiave YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "previsione",
+    "Solar forecast": "Previsione solare",
+    "No solar forecast in the Energy dashboard": "Nessuna previsione solare nella dashboard Energia",
+    "Solar Forecast (Energy Dashboard)": "Previsione solare (dashboard Energia)",
+    "Solar Forecast": "Previsione solare",
+    "Forecast Source": "Origine della previsione",
+    "All solar sources": "Tutte le fonti solari",
+    "Energy dashboard not configured": "Dashboard Energia non configurata",
+    "Forecast": "Previsione",
+    "optional": "facoltativo",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Disegna la previsione solare della dashboard Energia come questa riga — nessuna entità necessaria. I punti sono i valori orari in kWh che l'integrazione di previsione (Forecast.Solar, Solcast, Open-Meteo …) fornisce alla dashboard Energia; ore passate fin dove l'integrazione le restituisce; usa Raggruppa per: Giorno per i totali giornalieri. Una finestra scorrevole viene estesa fino all'ultima ora prevista; con Sincronizzazione date Energia, il selettore di date o Inizio grafico attiva Mostra periodo completo per restare sul periodo selezionato.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Attiva per disegnare la previsione solare della dashboard Energia invece di un'entità. Il campo Entità diventa facoltativo; l'Aggregazione è Somma e l'unità kWh per impostazione predefinita, salvo tua scelta.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Quale fonte solare della dashboard Energia disegnare. Tutte le fonti solari somma ogni fonte con una previsione; scegli una fonte per disegnare solo la sua previsione. Sono elencate solo le fonti con previsione configurata.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barre = una sola barra orizzontale a tutta larghezza, un segmento per entità largo quanto la sua quota del totale; l'area del grafico è alta 28 px se Altezza non è impostata.",
     "In the Bar style the gap is in pixels.": "Nello stile Barre lo spazio è in pixel.",
@@ -7351,6 +7527,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Naam",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Kleur buitenlabels",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Kleur van de waardelabels die buiten de ring aan het einde van een hulplijn worden getekend wanneer een segment te klein is voor zijn getal (minder dan 5 % van het totaal). Kleur segmentlabels geldt niet voor deze labels. Accepteert elke CSS-kleur (hex, rgba, naam) of CSS-variabele. Laat leeg voor de tekstkleur van het thema.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "In compacte legenda tonen",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Toont deze entiteit in de compacte legenda onder de grafiek (de kaartoptie Compacte legenda). Vink uit om hem alleen uit die legenda weg te laten — statusrij, tooltip, grafiek en de statistiek-Legenda op het tabblad Basis blijven ongewijzigd. Bedoeld voor entiteiten met de grafiek uit die alleen de statusrij vullen, bv. totalen naast een taartdiagram. Een weggelaten entiteit kan nog steeds worden verborgen en getoond door op zijn statusrij te klikken. YAML-sleutel: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "voorspelling",
+    "Solar forecast": "Zonnevoorspelling",
+    "No solar forecast in the Energy dashboard": "Geen zonnevoorspelling in het Energie-dashboard",
+    "Solar Forecast (Energy Dashboard)": "Zonnevoorspelling (Energie-dashboard)",
+    "Solar Forecast": "Zonnevoorspelling",
+    "Forecast Source": "Voorspellingsbron",
+    "All solar sources": "Alle zonnebronnen",
+    "Energy dashboard not configured": "Energie-dashboard niet ingesteld",
+    "Forecast": "Voorspelling",
+    "optional": "optioneel",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Tekent de zonnevoorspelling van het Energie-dashboard als deze rij — geen entiteit nodig. De punten zijn de uurlijkse kWh-waarden die de voorspellingsintegratie (Forecast.Solar, Solcast, Open-Meteo …) aan het Energie-dashboard levert; verstreken uren zover de integratie ze teruggeeft; gebruik Groeperen op: Dag voor dagtotalen. Een voortschrijdend venster wordt verlengd tot het laatste voorspelde uur; zet bij Synchronisatie met Energie-datums, de datumkiezer of Grafiekstart Volledige periode tonen aan om op de gekozen periode te blijven.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Zet aan om in plaats van een entiteit de zonnevoorspelling van het Energie-dashboard te tekenen. Het veld Entiteit wordt optioneel; Aggregatie is standaard Som en de eenheid kWh, tenzij je ze zelf instelt.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Welke zonnebron van het Energie-dashboard wordt getekend. Alle zonnebronnen telt elke bron met een voorspelling op; kies één bron om alleen die voorspelling te tekenen. Alleen bronnen met een ingestelde voorspelling worden getoond.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Balken = één horizontale balk over de volle breedte, één segment per entiteit zo breed als zijn aandeel in het totaal; het grafiekgebied is 28 px hoog tenzij Hoogte is ingesteld.",
     "In the Bar style the gap is in pixels.": "In de stijl Balken is de ruimte in pixels.",
@@ -8275,6 +8473,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Navn",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Farge på ytre etiketter",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Farge på verdietikettene som tegnes utenfor ringen i enden av en hjelpelinje når en sektor er for liten til å romme tallet sitt (under 5 % av totalen). Farge på sektoretiketter gjelder ikke for dem. Godtar enhver CSS-farge (hex, rgba, navn) eller CSS-variabel. La stå tomt for temaets tekstfarge.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Vis i kompakt forklaring",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Viser denne entiteten i den kompakte forklaringen under diagrammet (kortets Kompakt forklaring). Fjern haken for å utelate den bare fra den forklaringen — tilstandsraden, tooltip, diagrammet og statistikkforklaringen i fanen Grunnleggende påvirkes ikke. Ment for entiteter med diagrammet av som bare fyller tilstandsraden, f.eks. totaler ved siden av et kakediagram. En utelatt entitet kan fortsatt skjules og vises ved å klikke på tilstandsraden. YAML-nøkkel: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "prognose",
+    "Solar forecast": "Solprognose",
+    "No solar forecast in the Energy dashboard": "Ingen solprognose i Energi-dashbordet",
+    "Solar Forecast (Energy Dashboard)": "Solprognose (Energi-dashbord)",
+    "Solar Forecast": "Solprognose",
+    "Forecast Source": "Prognosekilde",
+    "All solar sources": "Alle solkilder",
+    "Energy dashboard not configured": "Energi-dashbordet er ikke satt opp",
+    "Forecast": "Prognose",
+    "optional": "valgfritt",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Tegner Energi-dashbordets solprognose som denne raden — ingen entitet nødvendig. Punktene er de timevise kWh-verdiene prognoseintegrasjonen (Forecast.Solar, Solcast, Open-Meteo …) leverer til Energi-dashbordet; tidligere timer så langt integrasjonen returnerer dem; bruk Gruppering: Dag for dagstotaler. Et rullende vindu forlenges til siste prognosetime; med Synkronisering med Energi-datoer, datovelgeren eller Diagramstart slår du på Vis hele perioden for å bli i valgt periode.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Slå på for å tegne Energi-dashbordets solprognose i stedet for en entitet. Feltet Entitet blir valgfritt; Aggregering er som standard Sum og enheten kWh, med mindre du setter dem selv.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Hvilken solkilde fra Energi-dashbordet som tegnes. Alle solkilder legger sammen hver kilde med en prognose; velg én kilde for å tegne bare dens prognose. Bare kilder med oppsatt prognose vises.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Søyler = én vannrett stolpe i full bredde, ett segment per enhet med bredde etter dets andel av totalen; diagramområdet er 28 px høyt med mindre Høyde er satt.",
     "In the Bar style the gap is in pixels.": "I stilen Søyler er mellomrommet i piksler.",
@@ -9199,6 +9419,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nazwa",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Kolor etykiet zewnętrznych",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Kolor etykiet wartości rysowanych poza pierścieniem, na końcu linii odniesienia, gdy wycinek jest zbyt mały, aby pomieścić swoją liczbę (poniżej 5 % całości). Kolor etykiet wycinków ich nie dotyczy. Akceptuje dowolny kolor CSS (hex, rgba, nazwa) lub zmienną CSS. Pozostaw puste, aby użyć koloru tekstu motywu.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Pokaż w kompaktowej legendzie",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Umieszcza tę encję w kompaktowej legendzie pod wykresem (przełącznik karty Kompaktowa legenda). Odznacz, aby pominąć ją tylko w tej legendzie — wiersz stanu, podpowiedź, wykres i Legenda statystyk na karcie Podstawowe pozostają bez zmian. Przeznaczone dla encji z wyłączonym wykresem, które zasilają tylko wiersz stanu, np. sumy obok wykresu kołowego. Pominiętą encję nadal można ukryć i pokazać, klikając jej wiersz stanu. Klucz YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "prognoza",
+    "Solar forecast": "Prognoza słoneczna",
+    "No solar forecast in the Energy dashboard": "Brak prognozy słonecznej w panelu Energia",
+    "Solar Forecast (Energy Dashboard)": "Prognoza słoneczna (panel Energia)",
+    "Solar Forecast": "Prognoza słoneczna",
+    "Forecast Source": "Źródło prognozy",
+    "All solar sources": "Wszystkie źródła słoneczne",
+    "Energy dashboard not configured": "Panel Energia nie jest skonfigurowany",
+    "Forecast": "Prognoza",
+    "optional": "opcjonalnie",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Rysuje prognozę słoneczną z panelu Energia jako ten wiersz — encja nie jest potrzebna. Punkty to godzinowe wartości kWh, które integracja prognozy (Forecast.Solar, Solcast, Open-Meteo …) przekazuje panelowi Energia; minione godziny tak daleko, jak zwraca je integracja; dla sum dziennych użyj Grupowanie: Dzień. Okno kroczące jest wydłużane do ostatniej godziny prognozy; przy Synchronizacji z datami Energii, wyborze dat lub Początku wykresu włącz Pokaż cały okres, aby pozostać w wybranym okresie.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Włącz, aby zamiast encji rysować prognozę słoneczną z panelu Energia. Pole Encja staje się opcjonalne; Agregacja to domyślnie Suma, a jednostka kWh, chyba że ustawisz je samodzielnie.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Które źródło słoneczne z panelu Energia rysować. Wszystkie źródła słoneczne sumuje każde źródło z prognozą; wybierz jedno źródło, aby rysować tylko jego prognozę. Wymienione są tylko źródła ze skonfigurowaną prognozą.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Słupki = jeden poziomy pasek na całą szerokość, jeden segment na encję o szerokości jej udziału w sumie; obszar wykresu ma 28 px wysokości, o ile nie ustawiono Wysokości.",
     "In the Bar style the gap is in pixels.": "W stylu Słupki odstęp jest w pikselach.",
@@ -10123,6 +10365,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Nome",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Cor dos rótulos exteriores",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Cor dos rótulos de valor desenhados fora do anel, na ponta de uma linha de chamada, quando uma fatia é demasiado pequena para conter o seu número (menos de 5 % do total). A Cor dos rótulos das fatias não se aplica a eles. Aceita qualquer cor CSS (hex, rgba, nome) ou variável CSS. Deixe vazio para a cor de texto do tema.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Mostrar na legenda compacta",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Lista esta entidade na legenda compacta sob o gráfico (o interruptor Legenda compacta do cartão). Desmarque para a deixar de fora apenas dessa legenda — a linha de estado, a dica, o gráfico e a Legenda de estatísticas do separador Básico não mudam. Pensado para entidades com o gráfico desligado que só alimentam a linha de estado, p. ex. totais ao lado de um gráfico circular. Uma entidade excluída continua a poder ser ocultada e mostrada clicando na sua linha de estado. Chave YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "previsão",
+    "Solar forecast": "Previsão solar",
+    "No solar forecast in the Energy dashboard": "Sem previsão solar no painel de Energia",
+    "Solar Forecast (Energy Dashboard)": "Previsão solar (painel de Energia)",
+    "Solar Forecast": "Previsão solar",
+    "Forecast Source": "Fonte da previsão",
+    "All solar sources": "Todas as fontes solares",
+    "Energy dashboard not configured": "Painel de Energia não configurado",
+    "Forecast": "Previsão",
+    "optional": "opcional",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Desenha a previsão solar do painel de Energia como esta linha — não é preciso entidade. Os pontos são os valores horários em kWh que a integração de previsão (Forecast.Solar, Solcast, Open-Meteo …) entrega ao painel de Energia; horas passadas até onde a integração as devolver; use Agrupar por: Dia para totais diários. Uma janela deslizante é alargada até à última hora prevista; com Sincronização com datas de Energia, o seletor de datas ou Início do gráfico, ative Mostrar período completo para ficar no período selecionado.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Ative para desenhar a previsão solar do painel de Energia em vez de uma entidade. O campo Entidade passa a ser opcional; a Agregação é Soma e a unidade kWh por predefinição, salvo se os definir.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Qual fonte solar do painel de Energia desenhar. Todas as fontes solares soma cada fonte com previsão; escolha uma fonte para desenhar só a sua previsão. Só são listadas fontes com previsão configurada.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Barras = uma única barra horizontal em toda a largura, um segmento por entidade com a largura da sua parte do total; a área do gráfico tem 28 px de altura, salvo se Altura estiver definida.",
     "In the Bar style the gap is in pixels.": "No estilo Barras o espaço é em pixels.",
@@ -11047,6 +11311,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Имя",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Цвет внешних подписей",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Цвет подписей значений, выводимых за пределами кольца на конце выносной линии, когда сектор слишком мал для своего числа (меньше 5 % от общего). Цвет подписей секторов на них не распространяется. Принимает любой цвет CSS (hex, rgba, имя) или переменную CSS. Оставьте пустым для цвета текста темы.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Показывать в компактной легенде",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Показывает этот объект в компактной легенде под графиком (переключатель карточки «Компактная легенда»). Снимите флажок, чтобы исключить его только из этой легенды — строка состояния, подсказка, график и легенда статистики на вкладке «Базовые» не изменятся. Для объектов с выключенным графиком, которые только заполняют строку состояния, например итоги рядом с круговой диаграммой. Исключённый объект по-прежнему можно скрыть и показать щелчком по его строке состояния. Ключ YAML: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "прогноз",
+    "Solar forecast": "Солнечный прогноз",
+    "No solar forecast in the Energy dashboard": "В панели Энергия нет солнечного прогноза",
+    "Solar Forecast (Energy Dashboard)": "Солнечный прогноз (панель Энергия)",
+    "Solar Forecast": "Солнечный прогноз",
+    "Forecast Source": "Источник прогноза",
+    "All solar sources": "Все солнечные источники",
+    "Energy dashboard not configured": "Панель Энергия не настроена",
+    "Forecast": "Прогноз",
+    "optional": "необязательно",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Рисует солнечный прогноз панели Энергия как эту строку — объект не нужен. Точки — это часовые значения кВт·ч, которые интеграция прогноза (Forecast.Solar, Solcast, Open-Meteo …) передаёт панели Энергия; прошедшие часы — насколько их возвращает интеграция; для суточных итогов используйте Группировка: День. Скользящее окно растягивается до последнего часа прогноза; при Синхронизации с датами Энергии, выборе дат или Начале графика включите «Показывать весь период», чтобы остаться в выбранном периоде.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Включите, чтобы вместо объекта рисовать солнечный прогноз панели Энергия. Поле Объект становится необязательным; Агрегация по умолчанию — Сумма, единица — кВт·ч, если вы не зададите их сами.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Какой солнечный источник панели Энергия рисовать. «Все солнечные источники» складывает каждый источник с прогнозом; выберите один источник, чтобы рисовать только его прогноз. Перечислены только источники с настроенным прогнозом.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Столбцы = одна горизонтальная полоса на всю ширину, по одному сегменту на объект шириной с его долю в сумме; область графика имеет высоту 28 px, если Высота не задана.",
     "In the Bar style the gap is in pixels.": "В стиле Столбцы зазор задаётся в пикселях.",
@@ -11971,6 +12257,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "Namn",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "Färg på yttre etiketter",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "Färg på de värdeetiketter som ritas utanför ringen i änden av en hänvisningslinje när en sektor är för liten för sitt tal (under 5 % av totalen). Färg på sektoretiketter gäller inte för dem. Accepterar valfri CSS-färg (hex, rgba, namn) eller CSS-variabel. Lämna tomt för temats textfärg.",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "Visa i kompakt förklaring",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "Visar den här entiteten i den kompakta förklaringen under diagrammet (kortets Kompakt förklaring). Avmarkera för att bara utelämna den ur den förklaringen — tillståndsraden, tooltip, diagrammet och statistikförklaringen på fliken Grundläggande påverkas inte. Avsett för entiteter med diagrammet avstängt som bara fyller tillståndsraden, t.ex. summor bredvid ett cirkeldiagram. En utelämnad entitet kan fortfarande döljas och visas genom att klicka på dess tillståndsrad. YAML-nyckel: show_in_compact_legend.",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "prognos",
+    "Solar forecast": "Solprognos",
+    "No solar forecast in the Energy dashboard": "Ingen solprognos i Energi-panelen",
+    "Solar Forecast (Energy Dashboard)": "Solprognos (Energi-panelen)",
+    "Solar Forecast": "Solprognos",
+    "Forecast Source": "Prognoskälla",
+    "All solar sources": "Alla solkällor",
+    "Energy dashboard not configured": "Energi-panelen är inte inställd",
+    "Forecast": "Prognos",
+    "optional": "valfritt",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "Ritar Energi-panelens solprognos som den här raden — ingen entitet behövs. Punkterna är de timvisa kWh-värden som prognosintegrationen (Forecast.Solar, Solcast, Open-Meteo …) lämnar till Energi-panelen; gångna timmar så långt integrationen returnerar dem; använd Gruppering: Dag för dagssummor. Ett rullande fönster förlängs till sista prognostimmen; med Synkronisering med Energi-datum, datumväljaren eller Diagramstart slår du på Visa hela perioden för att stanna i vald period.",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "Slå på för att rita Energi-panelens solprognos i stället för en entitet. Fältet Entitet blir valfritt; Aggregering är som standard Summa och enheten kWh, om du inte anger dem själv.",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "Vilken solkälla från Energi-panelen som ritas. Alla solkällor lägger ihop varje källa med en prognos; välj en källa för att bara rita dess prognos. Bara källor med inställd prognos listas.",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "Staplar = en enda vågrät stapel i full bredd, ett segment per entitet så brett som dess andel av totalen; diagramytan är 28 px hög om inte Höjd har angetts.",
     "In the Bar style the gap is in pixels.": "I stilen Staplar anges mellanrummet i pixlar.",
@@ -12895,6 +13203,28 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.07 (#434 moving-average label name)
+    "Name": "名称",
+    // --- added in 4.07 (#428 pie_label_outside_color)
+    "Outside Label Color": "外部标签颜色",
+    "Color for the value labels drawn outside the ring, at the end of a leader line, when a slice is too small to hold its number (under 5% of the total). Slice Label Color does not apply to them. Accepts any CSS color (hex, rgba, name) or CSS variable. Leave empty for the theme text color.": "当扇区太小、放不下其数值时（占总量不足 5%），数值标签会绘制在环外引线的末端，此选项设置这些标签的颜色。扇区标签颜色不适用于它们。接受任何 CSS 颜色（hex、rgba、名称）或 CSS 变量。留空则使用主题文本颜色。",
+    // --- added in 4.07 (#425 show_in_compact_legend)
+    "Show in Compact Legend": "在紧凑图例中显示",
+    "List this entity in the compact legend under the graph (the card-level Compact Legend toggle). Untick to leave it out of that legend only — the state row, tooltip, graph and the statistics Legend on the Basic tab are not affected. Meant for entities with the Graph switch off that only feed the state row, e.g. totals next to a pie. An entity left out can still be hidden and revealed by clicking its state row. YAML key: show_in_compact_legend.": "在图表下方的紧凑图例中列出此实体（卡片级的“紧凑图例”开关）。取消勾选可仅将其从该图例中排除——状态行、提示、图表以及“基础”选项卡中的统计图例不受影响。适用于关闭图表、仅为状态行提供数值的实体，例如饼图旁的合计。被排除的实体仍可通过点击其状态行来隐藏和显示。YAML 键：show_in_compact_legend。",
+    // --- added in 4.07 (#420 solar_forecast)
+    "forecast": "预测",
+    "Solar forecast": "太阳能预测",
+    "No solar forecast in the Energy dashboard": "能源仪表板中没有太阳能预测",
+    "Solar Forecast (Energy Dashboard)": "太阳能预测（能源仪表板）",
+    "Solar Forecast": "太阳能预测",
+    "Forecast Source": "预测来源",
+    "All solar sources": "所有太阳能来源",
+    "Energy dashboard not configured": "能源仪表板未配置",
+    "Forecast": "预测",
+    "optional": "可选",
+    "Draws the Energy dashboard's solar forecast as this row — no entity needed. The points are the hourly kWh values the forecast integration (Forecast.Solar, Solcast, Open-Meteo …) publishes to the Energy dashboard, past hours as far as the integration returns them; use Group By: Date for daily totals. A rolling window is stretched to the last forecast hour; with Energy Date Sync, the date picker or Graph Start turn on Show Full Period to stay on the selected period.": "将能源仪表板的太阳能预测绘制为此行——无需实体。数据点是预测集成（Forecast.Solar、Solcast、Open-Meteo……）提供给能源仪表板的每小时 kWh 值；过去的小时以集成返回的范围为准；使用分组方式：日 可得到每日总量。滚动窗口会延伸到最后一个预测小时；使用能源日期同步、日期选择器或图表起点时，请开启显示完整周期以停留在所选周期。",
+    "Enable to plot the Energy dashboard's solar forecast instead of an entity. The Entity field becomes optional; Aggregation defaults to Sum and the unit to kWh unless you set them yourself.": "开启后将绘制能源仪表板的太阳能预测而不是实体。实体字段变为可选；除非你自行设置，聚合默认为总和，单位默认为 kWh。",
+    "Which solar source of the Energy dashboard to draw. All solar sources adds up every source that has a forecast; pick one source to draw only its forecast. Only sources with a configured forecast are listed.": "绘制能源仪表板的哪个太阳能来源。所有太阳能来源会把每个有预测的来源相加；选择一个来源则只绘制它的预测。仅列出已配置预测的来源。",
     // --- added in 4.06 (#422 pie_style bar)
     "Bar = one full-width horizontal bar, one segment per entity sized by its share of the total; the chart area is 28 px tall unless Height is set.": "柱状 = 一条占满宽度的横向条，每个实体一个分段，宽度为其在总和中的份额；未设置高度时图表区域高 28 px。",
     "In the Bar style the gap is in pixels.": "柱状样式下间隙以像素为单位。",
