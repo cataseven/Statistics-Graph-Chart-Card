@@ -9,6 +9,11 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Yalnızca alan adları",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Her entity'nin adı olarak YALNIZCA Home Assistant alanını gösterir - 'Multisensor Sıcaklık' yerine 'Yatak Odası' - durum satırı, lejant, ipuçları, istatistikler, dışa aktarımlar ve bu listede. Alan, entity'nin kendisinden ya da cihazından alınır; alanı olmayan entity'ler ve Özel Ad verdikleriniz normal etiketlerini korur. Öznitelik adları, yalnızca alandan oluşan etikete uygulanmaz. Bu ve Alan adları birbirinin alternatifidir - birini açmak diğerini kapatır.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Bu varlığı kartın diğer yığılmış varlıklarıyla yığar ya da onu her yığının dışında tutar. Devral, kart düzeyindeki Yığılmış anahtarını izler. Açık, kart yığılmamış olsa bile bu varlığı yığar — Açık olan diğer varlıklarla birlikte, Yığın Grubu, eksen ve grafik türüne göre gruplanarak. Kapalı, yığılmış bir kartta onu düz bir çizgi, alan ya da çubuk olarak kendi çubuk yuvasında çizer. YAML anahtarı: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Ad",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -930,6 +935,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Nur Bereichsnamen",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Zeigt NUR den Home-Assistant-Bereich jeder Entität als Namen - 'Schlafzimmer' statt 'Multisensor Temperatur' - in Statuszeile, Legende, Tooltips, Statistiken, Exporten und dieser Liste. Der Bereich stammt von der Entität selbst oder von ihrem Gerät; Entitäten ohne Bereich und Entitäten mit eigenem Namen behalten ihre normale Bezeichnung. Attributnamen wirken nicht auf eine reine Bereichsbezeichnung. Dies und Bereichsnamen sind Alternativen - eines einzuschalten schaltet das andere aus.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Stapelt diese Entität mit den anderen gestapelten Entitäten der Karte oder hält sie aus jedem Stapel heraus. Übernehmen folgt dem Schalter Gestapelt der Karte. Ein stapelt diese Entität auch dann, wenn die Karte nicht gestapelt ist — zusammen mit den anderen auf Ein gesetzten Entitäten, gruppiert nach Stapelgruppe, Achse und Diagrammtyp. Aus zeichnet sie auf einer gestapelten Karte als einfache Linie, Fläche oder Balken in einem eigenen Balkenplatz. YAML-Schlüssel: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Name",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -1851,6 +1861,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Pouze názvy oblastí",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Zobrazí POUZE oblast Home Assistant jako název každé entity - 'Ložnice' místo 'Multisenzor teplota' - ve stavovém řádku, legendě, popiscích, statistikách, exportech i v tomto seznamu. Oblast se bere z entity samotné, nebo z jejího zařízení; entity bez oblasti a entity s vlastním názvem si ponechají běžný popisek. Názvy atributů se na popisek jen s oblastí nepoužijí. Toto a Názvy oblastí jsou alternativy - zapnutím jednoho se druhé vypne.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Skládá tuto entitu s ostatními skládanými entitami karty, nebo ji drží mimo jakékoli skládání. Převzít se řídí přepínačem Skládaný na úrovni karty. Zap skládá tuto entitu i tehdy, když karta skládaná není — spolu s ostatními entitami nastavenými na Zap, seskupenými podle Skupiny skládání, osy a typu grafu. Vyp. ji na skládané kartě vykreslí jako obyčejnou čáru, plochu nebo sloupec ve vlastní pozici sloupce. Klíč YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Název",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -2797,6 +2812,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Kun områdenavne",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Vis KUN hver enheds Home Assistant-område som navn - 'Soveværelse' i stedet for 'Multisensor temperatur' - i statusrækken, signaturforklaringen, værktøjstips, statistik, eksport og denne liste. Området kommer fra enheden selv eller fra dens apparat; enheder uden område og enheder med et brugerdefineret navn beholder deres normale etiket. Attributnavne gælder ikke for en etiket med kun område. Denne og Områdenavne er alternativer - slår du den ene til, slås den anden fra.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Stabler denne entitet sammen med kortets andre stablede entiteter eller holder den ude af enhver stak. Arv følger kortets Stablet-kontakt. Til stabler denne entitet, selv når kortet ikke er stablet — sammen med de andre entiteter sat til Til, grupperet efter Stakgruppe, akse og graftype. Fra tegner den som en almindelig linje, flade eller søjle på et stablet kort, i sin egen søjleplads. YAML-nøgle: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Navn",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -3743,6 +3763,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Solo nombres de área",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Muestra SOLO el área de Home Assistant de cada entidad como su nombre: 'Dormitorio principal' en lugar de 'Multisensor Temperatura', en la fila de estado, la leyenda, las descripciones emergentes, las estadísticas, las exportaciones y esta lista. El área proviene de la propia entidad o de su dispositivo; las entidades sin área y las entidades con un nombre personalizado conservan su etiqueta normal. Nombres de atributo no se aplica a una etiqueta de solo área. Esta opción y Nombres de área son alternativas: activar una desactiva la otra.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Apila esta entidad con las demás entidades apiladas de la tarjeta o la mantiene fuera de toda pila. Heredar sigue el interruptor Apilado de la tarjeta. Activado apila esta entidad incluso cuando la tarjeta no está apilada — junto con las demás entidades en Activado, agrupadas por Grupo de apilado, eje y tipo de gráfico. Apagado la dibuja como una línea, área o barra normal en una tarjeta apilada, en su propio hueco de barra. Clave YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nombre",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -4689,6 +4714,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Vain alueiden nimet",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Näyttää VAIN kunkin entiteetin Home Assistant -alueen sen nimenä - 'Makuuhuone' eikä 'Monitoimianturi lämpötila' - tilarivillä, selitteessä, työkaluvihjeissä, tilastoissa, vienneissä ja tässä luettelossa. Alue tulee entiteetiltä itseltään tai sen laitteelta; entiteetit, joilla ei ole aluetta, ja mukautetun nimen saaneet entiteetit säilyttävät tavallisen nimensä. Attribuuttien nimet eivät vaikuta pelkkään aluenimeen. Tämä ja Alueiden nimet ovat vaihtoehtoja - toisen käyttöönotto poistaa toisen käytöstä.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Pinoaa tämän entiteetin kortin muiden pinottujen entiteettien kanssa tai pitää sen kaikkien pinojen ulkopuolella. Peri noudattaa kortin Pinottu-kytkintä. Päällä pinoaa tämän entiteetin, vaikka korttia ei ole pinottu — yhdessä muiden Päällä-asetettujen entiteettien kanssa, ryhmiteltynä Pinoryhmän, akselin ja kaaviotyypin mukaan. Pois piirtää sen pinotulla kortilla tavallisena viivana, alueena tai palkkina omaan palkkipaikkaansa. YAML-avain: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nimi",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -5635,6 +5665,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Noms de zone uniquement",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Affiche UNIQUEMENT la zone Home Assistant de chaque entité comme nom - 'Chambre' au lieu de 'Multicapteur Température' - dans la ligne d'état, la légende, les info-bulles, les statistiques, les exports et cette liste. La zone vient de l'entité elle-même ou de son appareil ; les entités sans zone et celles auxquelles vous avez donné un nom personnalisé gardent leur libellé normal. Noms d'attribut ne s'applique pas à un libellé zone seule. Cette option et Noms de zone sont des alternatives - activer l'une désactive l'autre.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Empile cette entité avec les autres entités empilées de la carte, ou la garde hors de toute pile. Hériter suit l'interrupteur Empilé de la carte. Activé empile cette entité même lorsque la carte n'est pas empilée — avec les autres entités réglées sur Activé, groupées par Groupe d'empilement, axe et type de graphique. Désactivé la dessine comme une simple ligne, aire ou barre sur une carte empilée, dans son propre emplacement de barre. Clé YAML : stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nom",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -6581,6 +6616,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Solo nomi area",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Mostra SOLO l'area Home Assistant di ogni entità come nome - 'Camera da letto' invece di 'Multisensore Temperatura' - nella riga di stato, nella legenda, nei suggerimenti, nelle statistiche, nelle esportazioni e in questo elenco. L'area proviene dall'entità stessa o dal suo dispositivo; le entità senza area e quelle con un nome personalizzato mantengono l'etichetta normale. Nomi attributo non si applica a un'etichetta di sola area. Questa opzione e Nomi area sono alternative: attivandone una si disattiva l'altra.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Impila questa entità con le altre entità impilate della scheda oppure la tiene fuori da ogni pila. Eredita segue l'interruttore Impilato della scheda. Attivo impila questa entità anche quando la scheda non è impilata — insieme alle altre entità impostate su Attivo, raggruppate per Gruppo di impilamento, asse e tipo di grafico. Spento la disegna come una semplice linea, area o barra su una scheda impilata, in uno slot di barra tutto suo. Chiave YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nome",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -7527,6 +7567,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Alleen gebiedsnamen",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Toont ALLEEN het Home Assistant-gebied van elke entiteit als naam - 'Slaapkamer' in plaats van 'Multisensor Temperatuur' - in de statusregel, legenda, tooltips, statistieken, exports en deze lijst. Het gebied komt van de entiteit zelf of van het bijbehorende apparaat; entiteiten zonder gebied en entiteiten met een eigen naam houden hun normale label. Attribuutnamen geldt niet voor een label met alleen het gebied. Deze en Gebiedsnamen zijn alternatieven - de een inschakelen schakelt de ander uit.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Stapelt deze entiteit met de andere gestapelde entiteiten van de kaart, of houdt haar buiten elke stapel. Overnemen volgt de schakelaar Gestapeld van de kaart. Aan stapelt deze entiteit ook wanneer de kaart niet gestapeld is — samen met de andere entiteiten op Aan, gegroepeerd per Stapelgroep, as en grafiektype. Uit tekent haar op een gestapelde kaart als een gewone lijn, vlak of staaf in een eigen staafpositie. YAML-sleutel: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Naam",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -8473,6 +8518,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Bare områdenavn",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Viser BARE Home Assistant-området til hver enhet som navn - 'Soverom' i stedet for 'Multisensor temperatur' - i statusraden, forklaringen, verktøytips, statistikk, eksporter og denne listen. Området kommer fra enheten selv eller fra apparatet den tilhører; enheter uten område og enheter du har gitt et eget navn beholder sin vanlige etikett. Attributtnavn gjelder ikke for en etikett med bare område. Dette og Områdenavn er alternativer - slår du på det ene, slås det andre av.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Stabler denne entiteten sammen med kortets andre stablede entiteter, eller holder den utenfor enhver stabel. Arv følger kortets Stablet-bryter. På stabler denne entiteten selv når kortet ikke er stablet — sammen med de andre entitetene satt til På, gruppert etter Stabelgruppe, akse og graftype. Av tegner den som en vanlig linje, flate eller stolpe på et stablet kort, i sin egen stolpeplass. YAML-nøkkel: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Navn",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -9419,6 +9469,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Tylko nazwy obszarów",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Pokazuje TYLKO obszar Home Assistant każdej encji jako jej nazwę - 'Sypialnia' zamiast 'Multisensor Temperatura' - w wierszu stanu, legendzie, podpowiedziach, statystykach, eksportach i na tej liście. Obszar pochodzi z samej encji lub z jej urządzenia; encje bez obszaru i encje z własną nazwą zachowują zwykłą etykietę. Nazwy atrybutów nie dotyczą etykiety z samym obszarem. Ta opcja i Nazwy obszarów są alternatywami - włączenie jednej wyłącza drugą.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Kumuluje tę encję z pozostałymi skumulowanymi encjami karty albo trzyma ją poza każdym stosem. Dziedzicz podąża za przełącznikiem Skumulowany karty. Wł. kumuluje tę encję nawet wtedy, gdy karta nie jest skumulowana — razem z innymi encjami ustawionymi na Wł., pogrupowanymi według Grupy stosu, osi i typu wykresu. Wył. rysuje ją na skumulowanej karcie jako zwykłą linię, obszar lub słupek we własnym miejscu słupka. Klucz YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nazwa",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -10365,6 +10420,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Apenas nomes de área",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Mostra APENAS a área do Home Assistant de cada entidade como nome - 'Quarto' em vez de 'Multissensor Temperatura' - na linha de estado, legenda, dicas, estatísticas, exportações e nesta lista. A área vem da própria entidade ou do seu dispositivo; entidades sem área e entidades com nome personalizado mantêm a etiqueta normal. Nomes de atributo não se aplica a uma etiqueta só com a área. Esta opção e Nomes de área são alternativas - ativar uma desativa a outra.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Empilha esta entidade com as outras entidades empilhadas do cartão ou mantém-na fora de qualquer pilha. Herdar segue o interruptor Empilhado do cartão. Ligado empilha esta entidade mesmo quando o cartão não está empilhado — junto com as outras entidades em Ligado, agrupadas por Grupo de empilhamento, eixo e tipo de gráfico. Desligado desenha-a como uma linha, área ou barra simples num cartão empilhado, na sua própria posição de barra. Chave YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Nome",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -11311,6 +11371,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Только названия зон",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Показывает ТОЛЬКО зону Home Assistant каждого объекта как его имя - «Спальня» вместо «Мультисенсор Температура» - в строке состояния, легенде, подсказках, статистике, экспорте и в этом списке. Зона берётся у самого объекта или у его устройства; объекты без зоны и объекты с заданным вами именем сохраняют обычную подпись. «Названия атрибутов» не применяются к подписи только с зоной. Этот параметр и «Названия зон» — альтернативы: включение одного выключает другой.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Складывает этот объект в стек с другими объектами карточки с накоплением или держит его вне любого стека. Наследовать следует переключателю карточки С накоплением. Вкл складывает этот объект, даже когда карточка без накопления — вместе с другими объектами, для которых выбрано Вкл, с группировкой по Группе стека, оси и типу графика. Выкл рисует его на карточке с накоплением как обычную линию, область или столбец в собственном слоте столбца. Ключ YAML: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Имя",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -12257,6 +12322,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "Endast områdesnamn",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "Visar ENDAST varje enhets Home Assistant-område som namn - 'Sovrum' i stället för 'Multisensor temperatur' - i statusraden, förklaringen, verktygstips, statistik, exporter och den här listan. Området kommer från enheten själv eller från dess apparat; enheter utan område och enheter du gett ett eget namn behåller sin vanliga etikett. Attributnamn gäller inte för en etikett med bara område. Detta och Områdesnamn är alternativ - slår du på det ena stängs det andra av.",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "Staplar den här entiteten med kortets andra staplade entiteter eller håller den utanför varje stapel. Ärv följer kortets Staplad-omkopplare. På staplar den här entiteten även när kortet inte är staplat — tillsammans med de andra entiteterna satta till På, grupperade efter Stapelgrupp, axel och diagramtyp. Av ritar den som en vanlig linje, yta eller stapel på ett staplat kort, i en egen stapelplats. YAML-nyckel: stacked.",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "Namn",
     // --- added in 4.07 (#428 pie_label_outside_color)
@@ -13203,6 +13273,11 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.07 (#436 area name only)
+    "Area names only": "仅区域名称",
+    "Show ONLY each entity's Home Assistant area as its name - 'Master Bedroom' instead of 'Multisensor Temperature' - in the state row, legend, tooltips, stats, exports and this list. The area comes from the entity itself, or from its device; entities without an area, and entities you gave a Custom Name, keep their normal label. Attribute names do not apply to an area-only label. This and Area names are alternatives - switching one on turns the other off.": "仅以每个实体的 Home Assistant 区域作为其名称 — 显示「主卧」而不是「多功能传感器 温度」 — 状态行、图例、提示框、统计、导出以及本列表中均生效。区域取自实体本身或其设备；没有区域的实体以及您自定义了名称的实体保留正常标签。属性名称不适用于仅区域标签。本项与区域名称互为替代 — 开启其一会关闭另一项。",
+    // --- added in 4.07 (#432 entity stacked)
+    "Stacks this entity with the other stacked entities of the card, or keeps it out of every stack. Inherit follows the card-level Stacked switch. On stacks this entity even when the card is not stacked — together with the other entities set to On, grouped by Stack Group, axis and graph type. Off draws it as a plain line, area or bar on a stacked card, in a bar slot of its own. YAML key: stacked.": "将此实体与卡片中其他堆叠的实体一起堆叠，或让它不参与任何堆叠。继承跟随卡片级的堆叠开关。开：即使卡片未堆叠也会堆叠此实体——与其他设为开的实体一起，按堆叠组、坐标轴和图表类型分组。关：在已堆叠的卡片上将其绘制为普通的线、面积或柱，占用自己的柱位。YAML 键：stacked。",
     // --- added in 4.07 (#434 moving-average label name)
     "Name": "名称",
     // --- added in 4.07 (#428 pie_label_outside_color)
