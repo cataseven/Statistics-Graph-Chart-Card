@@ -142,6 +142,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | ⚡ | **Change aggregation** — `aggregate_func: change` uses HA's native `change` field for energy, gas, and water meters. Combine with `group_by: date/week/month` for accurate consumption charts |
 | 🔀 | **Stacked Groups** — per-entity `stack_group` names let you create multiple side-by-side stacked bar groups on a single chart |
 | 🎚️ | **Per-entity stacking** *(v4.07)* — `stacked: false` on an entity keeps it out of a stacked card's stacks (plain temperature lines on Y1 next to valve positions stacked as bars on Y2), `stacked: true` stacks chosen entities on a card that is not stacked. Unset = follow the card |
+| 📑 | **Chart pages** *(v4.08)* — per-entity `graph_group` splits one card into several charts: entities that share a group name are drawn together on a page of their own, entities without one stay on the main page, and a strip directly under the graph switches between them — a dot per page with ‹ › beside them, centred. One fetch, one height, one date picker and zoom for all pages; the legend and the state row follow the page on screen. Works in every chart mode |
 | 🏷️ | **Template names** — use `{{ state_attr('sensor.x', 'attr') }}` with Jinja2 filters (`capitalize`, `upper`, `replace()`, `round()`, etc.) for dynamic entity names |
 | ↔️ | **Horizontal state layout** — `state_layout: horizontal` flows entity values side by side instead of stacking vertically |
 | 🔢 | **Y-axis decimals** — card-level `y_axis_decimals` overrides per-entity decimals for axis labels only, keeping state row precision separate |
@@ -187,6 +188,7 @@ An awesome feature-rich custom card for [Home Assistant](https://www.home-assist
 | 👥 | **Period Comparison** — per-entity `compare` overlays a faded, dashed ghost of the same sensor from a previous period (yesterday, last week, last month, last year, or any number of hours) underneath the main series. Also accepts a **list** of comparisons — one ghost per entry, each reaching further back via `periods_back` (previous period, two periods ago, …). Calendar-aware shifting in the date picker's Month/Year modes, a Δ% delta in the tooltip, and legend clicks that toggle main + ghosts together. On **State Timeline** charts each comparison renders as its own time-aligned row under the main entity *(v4.02)*, and `layout: sequential` draws the previous period at its real position before the live data on a backward-extended axis *(v4.02)* |
 | 🧩 | **Boolean template toggles** — display toggles like `show_legend`, `stacked`, `show_points`, or `show_state` accept Jinja2 `{{ }}` templates as well as plain booleans, resolved live server-side — drive card chrome from an `input_boolean` without editing YAML |
 | 🏷️ | **State timeline labels toggle** — `state_timeline_show_labels: false` hides the state labels drawn inside state_timeline segments for clean, label-free color bands |
+| 🚦 | **State timeline slices** *(v4.08)* — `state_timeline_bucket: 1h` (or `15m`, `1d`, `1w`, `1mo` …) cuts every State Timeline row into equal time slices, each in the colour of the state that lasted longest in it — an uptime view per hour or day. With `color_thresholds` a slice is coloured by the share of one state (`share_state`) instead, slices without data are muted grey, the tooltip lists the share of each state, and `state_timeline_show_share: true` writes the share at the end of every row (`On 99.6%`) |
 | 🧲 | **Raw grouping** — `group_by: raw` skips bucketing entirely and draws every recorded sample at its exact timestamp — ideal for step charts of binary/state sensors |
 | 🤏 | **Pinch zoom & zoom history** — two-finger pinch on touch devices zooms the timeline live around the gesture midpoint; any pinch angle works (the gesture measures the true 2D finger distance) and zoom responds on an amplified curve, so small real-world pinches zoom meaningfully — pinching inward zooms out just as strongly, all the way back to the full window. Every committed zoom (brush or pinch) is pushed onto a history stack (up to 20 levels) — double-click / double-tap steps **back one level** at a time instead of resetting fully. Works with cross-card `zoom_sync` |
 | 📥 | **PNG / CSV export** — `show_export: true` overlays a small download icon on the card with a three-item menu: a 2× PNG of the chart, a 2× PNG of the whole card (header, chart, state row and legend), or a wide-format CSV (ISO 8601 UTC `time` column, one column per visible series, Excel-friendly UTF-8 BOM). A zoomed chart exports exactly the zoomed range — export what you see |
@@ -287,7 +289,7 @@ These options apply to the whole card.
 | `points_per_hour` | number | `2` | Data points fetched per hour (global default). Integer only. The editor offers the common divisors of 60 (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60) so buckets tile an hour cleanly; YAML still accepts any integer. On a series drawn from long-term statistics the bucket is never finer than the statistics row the card requested — 5 minutes up to 7 days, 1 hour up to 90 days, 1 day beyond — so a finer value is raised to the row period (`group_by: interval` only; calendar and `Nh` groupings are unaffected). |
 | `auto_scale_points` | boolean | `false` | Automatically pick bucket size and `group_by` based on the visible time window. Falls back to the configured values when any entity uses `offset`, `forecast_horizon`, `data_attribute` or `solar_forecast`. See [Auto Scale Points](#-auto-scale-points). |
 | `auto_scale_rules` | list | `null` | Custom thresholds for Auto Scale — only active when `auto_scale_points: true`. Each rule maps a visible period to a bucketing: `up_to_hours` (number, required), `group_by` (same values as the main `group_by` — `interval`, `hour`, any `Nh` like `2h`, `date` [`day` is accepted as an alias], `week`, `month`, `year`, `raw`), and an optional `points_per_hour` (only meaningful for `group_by: interval`). The smallest matching threshold wins; periods beyond every threshold fall back to the built-in auto scale. While Auto Scale is on, the resolved rule fully overrides the main `group_by` (bucketing **and** data fetching); the main value only applies when Auto Scale is off. See [Auto Scale Points](#-auto-scale-points). |
-| `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the space the card is given instead — a **Sections** grid cell, or the whole view in a **Panel** view *(v4.03)*. See [Sections Auto-height](#-sections-auto-height). |
+| `height` | number / `auto` | `150` | Graph area height in pixels. Set to `auto` (or leave the editor's Height field empty) to fill the space the card is given instead — a **Sections** grid cell, or the whole view in a **Panel** view *(v4.03)*. See [Sections Auto-height](#-sections-auto-height). In State Timeline mode the card is as tall as its rows instead *(v4.08)*. |
 | `group_by` | string | `"interval"` | Bucketing strategy: `interval` / `hour` / `2h` / `3h` / `4h` / `6h` / `12h` (any `Nh` works) / `date` / `week` / `month` / `year` / `raw`. Multi-hour values create fixed-width buckets aligned like `hour`: bucket edges sit on local midnight and every N hours after it in the card's time zone (`6h` → 00:00, 06:00, 12:00, 18:00), also across a DST change. When set to `week`, `month`, or `year`, data is fetched using native HA statistics periods for accuracy and performance. See [Long-Range Views](#-long-range-views). `raw` skips bucketing entirely — every recorded sample is drawn at its exact timestamp and `points_per_hour` is ignored — ideal for step charts of binary/state sensors. See [Raw Grouping](#-raw-grouping-group_by-raw). Since v4.05 an entity may carry its own `group_by`; the chart's grid is then the finest grouping in use and coarser series are drawn as calendar cells on it (e.g. monthly bars behind daily values) — see [Mixing groupings in one chart](#mixing-groupings-in-one-chart-v405). |
 | `update_interval` | number | `null` | Auto-refresh interval in seconds (minimum 5 — lower values are raised to 5 to protect your database). Empty = HA events plus a gentle background refresh; `0` disables background polling entirely. *(0 = off since v4.01)* |
 | `data_source` | string | `"auto"` | Where the card reads its data from: `auto` (raw history for short windows, statistics for long ones; a date-picker view of a day or less within the last ~10 days counts as a short window *(v4.04)*; a short window whose raw history does not cover its start falls back to statistics for that sensor *(v4.06)* — and since **v4.02** it auto-detects flood-level sensors: on a window of at least 6 hours, a history response over 5,000 rows and 200 rows/hour flips that sensor to statistics, remembered in the browser for 7 days, with a one-time console note. A flagged sensor still falls back to raw history whenever you ask for finer detail than statistics can give — a window of 12 hours or less bucketed below the 5-minute statistics period *(v4.03)*), `statistics` (always route through long-term statistics when available — measured 287 rows/33 ms vs 21,995 rows/1.7 s for the same 24 h window of a websocket price feed), or `history` (force raw history; also opts an entity out of the auto-detection). Statistics values come from 5-minute buckets, so they are close but not tick-identical, and their averages are weighted by time (Home Assistant's `mean`) while raw history averages each recorded reading once — a sensor that changes rarely can therefore show a different `avg` on a 24-hour card (raw history) than on a 48-hour card (statistics). Also available **per entity** (`entities[].data_source`). YAML only. *(v4.01, auto-detection v4.02)* |
@@ -394,6 +396,8 @@ These options apply to the whole card.
 | `state_timeline_show_labels` | boolean | `true` | Show the state labels drawn inside state_timeline segments. Set to `false` for clean, label-free color bands — the tooltip still names each state on hover. Labels only render in segments wide enough to fit them anyway. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates). State Timeline mode only. |
 | `state_timeline_label_font_size` | number | `10` / `11` | Font size in pixels (6–40) of the state label inside each state_timeline segment **and of the entity name in the label column on the left** *(v3.32)*. Defaults differ when unset: 10 inside segments, 11 for entity names. Both budgets scale with it — segments show fewer characters with an ellipsis, entity names wrap onto up to three lines and rows grow to fit. The segment label additionally requires `state_timeline_show_labels`. State Timeline mode only. *(v3.31)* |
 | `state_timeline_row_height` | number | `null` (auto) | Height of each state_timeline row in pixels, 24–160. Unset = automatic: 32 px (taller only when an entity name wraps) with the colour band capped at 24 px. Set it to make the bands taller — the band fills the row minus a small margin. `height` does not apply in this mode. Editor: Chart → Visual Options → *Row Height* (shown when the chart mode is State Timeline). *(new in v4.05)* |
+| `state_timeline_bucket` | string | `null` | *(v4.08)* Cut every State Timeline row into equal **time slices** — one rounded block per slice in the colour of the state that lasted longest in it, an uptime view per hour or day. Sizes: `Nm` / `Nmin` (minutes), `Nh`, `Nd`, `Nw` and `Nmo` (months) with N a whole number — `15m`, `30m`, `1h`, `6h`, `1d`, `1w`, `1mo` … — plus `hour`, `day`, `week` and `month`. Unset or any other value = the continuous bars. Slices follow the card's time zone: hours and days counted from midnight, weeks from Home Assistant's first day of the week, months from the 1st. A slice without data is muted grey. With `color_thresholds` on the entity, a slice is coloured by the share of its `share_state` instead. Slices that would be narrower than 2 px fall back to the continuous bars with a console warning. Independent of `group_by`. State Timeline mode only. Editor: Chart → Visual Options → *Slices*. See [Slices](#slices--an-uptime-view-per-hour-or-day-v408). |
+| `state_timeline_show_share` | boolean | `false` | *(v4.08)* Write at the right end of every State Timeline row the share of time it spent in its main state — `On 73%`, `Kitchen 41%`: the entity's `share_state` when set, otherwise `on` for on/off entities, otherwise the state seen most. Measured over the chart's time window, leaving out time without data; one decimal below 1 % and above 99 %. Works with or without `state_timeline_bucket`. Left out when the text would need more than half of the timeline's width. No `{{ }}` templates. State Timeline mode only. Editor: Chart → Visual Options → *Show Share*. |
 | `ranking_min_value` | number | `null` | Hide entities whose absolute value falls below this threshold. Ranking mode only. Useful for energy / power rankings where idle or standby devices would otherwise crowd the chart — set to e.g. `5` to drop appliances reading under 5 W. Leave empty for no filter. |
 | `ranking_max_value` | number | `null` | Hide entities whose absolute value is **above** this threshold *(v4.05)*. Ranking mode only. The mirror of `ranking_min_value`: use it alone to list only the devices that need attention — `20` on battery levels keeps just the ones at 20 % or lower — or together with `ranking_min_value` to keep a band. Compared against the absolute value. Leave empty for no filter. |
 | `gauge_columns` | number | `null` | Number of gauge columns in the grid (Gauge mode). Empty / `0` = auto (fits as many dials as the width allows). |
@@ -474,7 +478,7 @@ Each entry under `entities` supports the following options.
 | `data_attribute` | string | `null` | Read chart data from an entity attribute array instead of history. The attribute must contain an array of objects with time and value fields. Ideal for forecast/price data (EPEX, Nordpool, weather). Calendar `group_by` modes (`hour`, `date`, `week`, `month`, `year`) regroup the array with `aggregate_func` when it is finer than the requested cell — quarter-hourly prices become hourly bars with `group_by: hour` *(v3.34)*. See [Attribute Data Source](#-attribute-data-source). |
 | `data_time_field` | string | `"start_time"` | Name of the time field in each array item when using `data_attribute`. |
 | `data_value_field` | string | `"price_per_kwh"` | Name of the value field in each array item when using `data_attribute`. |
-| `data_value_expression` | string | `null` | Compute each point's value with a safe arithmetic expression instead of reading a single `data_value_field`. The array element's own fields and any `data_vars` are in scope. Operators `+ - * / %`, parentheses, and the functions `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow`. **Not JavaScript** — no other variables, property access, or calls. Falls back to `data_value_field` when empty or invalid. See [Attribute Data Source → Computed Values](#-attribute-data-source). |
+| `data_value_expression` | string | `null` | Compute each point's value with a safe arithmetic expression instead of reading a single `data_value_field`. The array element's own fields and any `data_vars` are in scope. Operators `+ - * / %`, parentheses, and the functions `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow` and `coalesce` *(v4.08)* — `coalesce(a, b, …)` returns its first argument that is a number, so `coalesce(field, 0)` counts an element without that field as 0. **Not JavaScript** — no other variables, property access, or calls. Falls back to `data_value_field` when empty or invalid. See [Attribute Data Source → Computed Values](#-attribute-data-source). |
 | `data_vars` | map | `null` | Maps names used in `data_value_expression` to entity IDs (`name: entity_id`). Each resolves to the entity's numeric state and is re-evaluated **live** when that entity changes. |
 | `data_time_unit` | string | `"iso"` | How to interpret the time field. `iso` = string or epoch ms (default — existing behavior). `epoch_seconds` / `epoch_ms` = Unix timestamp. `month_of_year` (1–12), `day_of_month` (1–31), `day_of_year` (1–366), `week_of_year` (1–53), `hour_of_day` (0–23) = numeric category — perfect for monthly summaries, day-of-year datasets, and hourly profiles without generating artificial timestamps. See [Attribute Data Source → Time Unit](#-attribute-data-source). |
 | `data_time_year` | number | `null` | Reference year used to anchor categorical time units (`month_of_year`, `day_of_month`, `day_of_year`, `week_of_year`). Empty = current year. (`day_of_month` is anchored to that year and the month of the visible window's start.) Has no effect for `iso` or `epoch_*` units. |
@@ -491,6 +495,7 @@ Each entry under `entities` supports the following options.
 | `solar_forecast_source` | string | `null` | With `solar_forecast: true`: the energy-production statistic (`stat_energy_from`, e.g. `sensor.pv_a_energy`) of **one** solar source of the Energy dashboard to draw only its forecast. Unset = every solar source that has a forecast, summed per hour. The row is named after the source (its Energy dashboard name or the friendly name of that statistic + " forecast"), or *Solar forecast*. |
 | `invert` | boolean | `false` | Flips the sign of the value (×−1). On Timeline it draws bars downward from the zero line — tooltip, state row and extrema labels still show positive values; use with `stacked: true` for butterfly charts. Because the flip happens in the shared data pipeline it works in **every chart mode** — in Waterfall it makes the entity a subtraction step. Editor: per-entity → **Advanced** tab. See [Invert Bars](#-invert-bars-butterfly-charts). |
 | `state_map` | list | `null` | Map non-numeric states to numbers for graphing. Each entry takes a `value` plus optional `label` and `color`. See [State Map](#-state-map). |
+| `share_state` | string | `null` | *(v4.08)* State Timeline mode only. The state whose share is measured for this entity: the share written by `state_timeline_show_share`, and with `color_thresholds` the share that colours each `state_timeline_bucket` slice. Use the state's value as Home Assistant reports it — `on`, `home`, `kitchen` — not its label (case matters). Unset = `on` when the entity has an `on` state; otherwise the end-of-row share uses the state seen most and the slices use the last entry of the `state_map`. A value that is not one of the entity's states shows 0 %. Editor: entity → **Advanced** → *State Map* → *Share State*. See [Slices](#slices--an-uptime-view-per-hour-or-day-v408). |
 | `auto_hide` | boolean | `false` | Start this single entity hidden — the series is invisible until you reveal it from the legend (the reveal sticks for the session). Per-entity alternative to the card-wide `auto_hide_entities`. When `auto_hide_entities` is set, it takes precedence over per-entity values. |
 | `tap_action` | object | `null` | Action on tapping the state row (and the entity's slice, bar, point, cell or row in the other chart modes). See [Tap Actions](#-tap-actions). When left unset (*Default action* in the editor), tapping the state row toggles that entity's visibility on the graph — same as clicking its legend item; `action: none` makes the tap do nothing. Hidden entities dim visually so you can tell what's off at a glance. |
 
@@ -544,6 +549,7 @@ Each entry under `entities` supports the following options.
 | `align_state` | string | `"left"` | State row position and alignment. Top variants: `left` / `center` / `right` (above the graph). Bottom variants: `bottom-left` / `bottom-center` / `bottom-right` (below the graph). |
 | `stack_group` | string | `null` | Named group for stacked bars/lines. Entities with the same group name stack on top of each other; different groups sit side by side. Leave empty to stack all entities together (default). Only has an effect on an entity that is stacked — by the card's `stacked: true` or by its own `stacked: true` *(v4.07)*; on its own it does nothing. See [Stacked Groups](#-stacked-groups). |
 | `stacked` | boolean | `null` (inherit) | *(v4.07)* Per-entity override of the card-level `stacked`. Leave it unset to follow the card. `false` on a stacked card takes this entity out of every stack: it is drawn as a plain line, area or bar from the zero line, in a bar slot of its own beside the stacked columns, with its own Y range. `true` on a card without `stacked: true` stacks this entity with the other entities that also set `stacked: true` — grouped as always by `stack_group`, `y_axis`, `graph_type`, `group_by` and `invert`. Comparison ghosts follow their main entity. Supports `{{ }}` templates. Editor: **Graph** tab → *Stacked* dropdown (Inherit / On / Off). See [Stacked Mode](#-stacked-mode). |
+| `graph_group` | string | `null` | *(v4.08)* Name of the **chart page** this entity is drawn on. Entities that share the same name are drawn together on one page; entities without a name stay on the main page; every further name makes another page, in the order the names first appear in `entities`. With two or more pages a strip sits directly under the graph — a dot per page with ‹ › beside them, centred (hover a dot for its group name); click or tap an arrow or a dot to switch (a mouse drag inside the plot zooms as always; it does not turn pages). The compact legend, the statistics legend and the state row list the page on screen; the pickers, zoom, pins, bounds, annotations and sync are shared by all pages; CSV export writes every page, the chart PNG the one on screen. Works in every chart mode. Not the same as `stack_group`, which only decides which bars stack on each other — entities on different pages are never drawn together, so they cannot stack. A card without `graph_group` is unchanged. Not templatable. Editor: **Graph** tab → *Graph Group*. See [Chart pages](#chart-pages--several-charts-in-one-card-v408). |
 | `icon` | string | `null` | MDI icon in the state row, e.g. `mdi:thermometer` |
 | `icon_size` | string | `null` | State row icon size, e.g. `18px` |
 | `name_size` | string | `null` | State row name font size, e.g. `14px` |
@@ -951,7 +957,7 @@ entities:
         color: "#5dade2"
 ```
 
-**v4.05** — the rows are 32 px tall by default and the colour band inside them never exceeds 24 px, whatever `height` says (it does not apply in this mode). `state_timeline_row_height: 60` makes every row 60 px with the band filling it; range 24–160.
+**v4.05** — the rows are 32 px tall by default and the colour band inside them never exceeds 24 px, whatever `height` says (it does not apply in this mode). `state_timeline_row_height: 60` makes every row 60 px with the band filling it; range 24–160. **v4.08** — the card is exactly as tall as its rows: `height` (the default 150 px, or `height: auto`) no longer leaves empty space under the last row. In a Sections grid with a fixed number of `grid_options.rows` the card still fills its cell.
 
 **v2.28 additions:**
 - **Corner radius** is configurable via `state_timeline_corner_radius` (0–20 px, default 3). Set to `0` for sharp edges or use higher values for pill-shaped segments.
@@ -977,6 +983,92 @@ entities:
 - **Segment labels toggle** — card-level `state_timeline_show_labels: false` hides the state labels drawn inside the segments for clean, label-free color bands; the hover tooltip still names each state. Default `true` — and labels only render in segments wide enough to fit them anyway. In the editor the checkbox sits next to *Corner Radius* in state_timeline mode. Accepts `{{ }}` templates — see [Template Toggles](#-template-toggles-boolean-templates).
 - **Row labels wrap instead of being cropped** — the entity-name column is **measured against the actual text** (not estimated from character counts), so it is exactly as wide as the longest name needs, capped at about a third of the card. A name that still doesn't fit **wraps onto up to three lines**, left-aligned, with the row growing to match — so a long friendly name stays fully readable even on a narrow card, a More Info dialog or a phone, and a short one gives all its space back to the timeline. Only a name too long for three lines is ellipsized, and it keeps the full text as a hover tooltip. The label is also clipped to its own column, so it can never paint past the edge of the card. *(v3.31)*
 - **Label size** — `state_timeline_label_font_size` sets the font size in pixels (6–40) for **both** the state label inside each segment (default 10) and the entity name in the label column on the left (default 11) *(v3.32)*. Both budgets follow it: a bigger segment label shows fewer characters with an ellipsis instead of spilling out, and a bigger entity name re-wraps across up to three lines with the row growing to fit. The editor field sits next to *Show State Labels* and, since it now also drives the entity-name column, stays available for the whole of State Timeline mode even with that toggle off *(v3.32)*.
+
+### Slices — an uptime view per hour or day *(v4.08)*
+
+A State Timeline row draws every state change where it happened. Over a day or a week that turns a busy sensor into a crowd of thin stripes. `state_timeline_bucket` cuts every row into equal **time slices** instead — one rounded block per hour, day, week… — each in the colour of the state that lasted longest in it. It answers the questions an uptime card answers: did the washing machine run in that hour, was the NAS online all day, which room was busiest each day?
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: state_timeline
+hours_to_show: 24
+state_timeline_bucket: 1h            # one slice per hour; unset = the continuous bars
+entities:
+  - entity: binary_sensor.washing_machine_running
+    name: Washing machine
+    state_map:
+      - value: "off"
+        label: Idle
+        color: "#757575"             # grey
+      - value: "on"
+        label: Running
+        color: "#43a047"             # green
+```
+
+An hour turns green when the machine was *Running* longer than *Idle* in it — more than half of the hour when the sensor reported all along — and grey otherwise. Hover a slice to see the share of each state, e.g. *Running 73%* and *Idle 27%*.
+
+Sensors with more states work the same way: each slice takes the colour of the state that lasted longest in it. A presence sensor that reports the room you are in shows, day by day, the room you spent the most time in:
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: state_timeline
+hours_to_show: 168                   # the last 7 days
+state_timeline_bucket: 1d            # one slice per day
+state_timeline_show_share: true      # e.g. "Living room 41%" at the end of the row
+entities:
+  - entity: sensor.presence_room
+    name: Where was I?
+    state_map:                       # value as Home Assistant reports it, then label and colour
+      - value: kitchen
+        label: Kitchen
+        color: "#e53935"
+      - value: living_room
+        label: Living room
+        color: "#1e88e5"
+      - value: bedroom
+        label: Bedroom
+        color: "#8e24aa"
+      - value: office
+        label: Office
+        color: "#fdd835"
+```
+
+For an **uptime gradient**, give the entity `color_thresholds`: each slice is then coloured by the share (0–100 %) of one state — the entity's `share_state` — and takes the colour of the highest threshold that share is above.
+
+```yaml
+type: custom:statistics-graph-chart-card
+chart_mode: state_timeline
+hours_to_show: 168                   # the last 7 days
+state_timeline_bucket: 6h            # four slices a day
+state_timeline_show_share: true      # e.g. "Connected 99.6%" at the end of the row
+state_timeline_corner_radius: 6      # rounder slices
+entities:
+  - entity: binary_sensor.nas_online
+    name: NAS
+    share_state: "on"                # the state whose share is measured (default: on)
+    color_thresholds:
+      enabled: true
+      values:
+        - value: 0                   # 95 % or less → red
+          color: "#e53935"
+        - value: 95                  # above 95 % → amber
+          color: "#fb8c00"
+        - value: 99                  # above 99 % → green
+          color: "#43a047"
+```
+
+- **Slice sizes** — a whole number followed by `m` or `min` (minutes), `h` (hours), `d` (days), `w` (weeks) or `mo` (months): `15m`, `30m`, `1h`, `2h`, `6h`, `12h`, `1d`, `2d`, `1w`, `1mo`, `3mo` … `hour`, `day` (or `date`), `week` and `month` work too, and case and spaces don't matter. Mind that `m` is minutes — months are `mo`. Unset, empty or any other value keeps the continuous bars exactly as before.
+- **Aligned to the clock and the calendar** in the card's time zone — minute and hour slices are counted from midnight (`6h` → 00:00, 06:00, 12:00, 18:00), day slices start at midnight, week slices on Home Assistant's *First day of the week*, month slices on the 1st. The first and last slices are cut at the edges of the chart's time window, so with a rolling `hours_to_show` the first one is usually partial. With the [date picker](#-date-picker) the slices fill the period on screen — the Day view with `1h` gives one slice per hour of that day.
+- **Colour** — the state that lasted longest in the slice, in its `state_map` colour; on a tie, the state listed first. A state without a `color:` there — and every state of an entity without a `state_map`, such as a plain binary sensor — gets a colour of its own from the card's state palette (the one state strips use), because slices carry no labels; give a state a `color:` to choose it. With `color_thresholds` enabled on the entity, the slice takes the colour of the highest threshold its `share_state` share is above — `transition` and `direction` don't apply to slices.
+- **`share_state`** (per entity) — the state whose share is measured, written as Home Assistant reports it (`on`, `home`, `kitchen`), not as its label; case matters. Unset = `on` when the entity has an `on` state, as every binary sensor and input boolean does; for other entities the end-of-row share uses the state seen most and the threshold colours use the last entry of the `state_map`. A value that is not one of the entity's states shows 0 % — an easy way to spot a typo.
+- **No data** — time without a recorded state does not count towards the colour or the end-of-row share: before the sensor's history starts (Home Assistant's recorder keeps 10 days of state history unless `purge_keep_days` says otherwise), or the part of the window still in the future, such as the rest of today in the Day view. A slice with no data at all is drawn **muted grey**. `unavailable` and `unknown` are not gaps: the state before them carries on. Add `- value: unavailable` to the `state_map` to count them as a state of their own, with a colour of its own.
+- **Tooltip** — hovering a slice lists every state in it with its share of the slice, largest first, then *No data* for any part without data, and the slice's time range (dates only for day, week and month slices). These shares are of the whole slice and add up to 100 %; the colour and the end-of-row share count only the time with data.
+- **Too many slices** — when the slices would be narrower than 2 px (`15m` over a month, say), the rows stay continuous and the browser console says so; pick a larger slice or a shorter window.
+- **Row share** — `state_timeline_show_share: true` writes the share of each row's main state over the chart's time window at the right end of the row: `On 73%`, `Living room 41%`. The main state is the `share_state` when set, `on` for on/off entities, otherwise the state seen most. One decimal below 1 % and above 99 % (`99.6%`), whole numbers in between. It works with and without slices, and is left out on a card too narrow for it (the text may take at most half of the timeline's width).
+- **Everything else keeps working** — a zoom followed through `zoom_sync`, horizontal scrolling with `max_visible_interval`, `compare` rows (sliced too, with their own row share), `tap_action` and live updates. `state_timeline_corner_radius` rounds the slices as well — a large value gives the pill look of an uptime card. Slices carry no text, so `state_timeline_show_labels` only affects the continuous bars.
+- **Not `group_by`** — the slice size comes from `state_timeline_bucket` alone; `group_by` does not slice a State Timeline.
+- **Editor** — *Slices* and *Show Share* are in Chart → Visual Options (State Timeline mode), right below *Corner Radius* and *Row Height*; *Share State* is on the entity's **Advanced** tab, under the State Map box. A slice size set in YAML that is not in the list (e.g. `4h`) is listed as written.
+- **`card_mod`** — a slice is `.sgc-stl-cell.sgc-stl-slice` (plus `.sgc-stl-nodata` when it has no data); the end-of-row share is `.sgc-stl-share`.
 
 ### Box Plot *(new in v3.21)*
 
@@ -1120,6 +1212,7 @@ Not all card options apply to every mode. The visual editor hides irrelevant opt
 
 <details>
 <summary><strong>📅 Date Picker</strong></summary>
+<a id="-date-picker"></a>
 
 A built-in date navigation panel that lets users browse historical data by Day, Week, Month, or Year — without leaving the dashboard.
 
@@ -2527,9 +2620,19 @@ entities:
 | Element fields | `unitPrice`, `consumption`, … (any field of the array item) |
 | `data_vars` names | `mwst`, `base`, … |
 | Operators | `+` `-` `*` `/` `%` and parentheses `( )` |
-| Functions | `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow` |
+| Functions | `min`, `max`, `abs`, `round`, `floor`, `ceil`, `sqrt`, `pow`, `coalesce` *(v4.08)* |
 
 This is **not JavaScript** — there are no other variables, no property access, and no calls beyond those functions, so it can't run arbitrary code. If the expression is empty or fails to parse, the entity falls back to `data_value_field`.
+
+**Elements without a value** *(v4.08)* — an array element that lacks the value field (or holds text that isn't a number) has no reading, so it draws no point: a bar is simply missing, and a line, area or step joins its neighbours — with `line_shape: hv` the last value is held until the next element. When a missing field means zero — a solar or charging plan that only lists the quarters with energy, for example — wrap the field in `coalesce`, which returns its first argument that is a number:
+
+```yaml
+    data_attribute: plan
+    data_time_field: tijd
+    data_value_expression: "coalesce(zon_laden_kwh, 0)"
+```
+
+`coalesce` takes any number of arguments, so `coalesce(override, price, 0)` falls through a chain of fields, and it treats a division by zero or a `data_vars` entity that is unavailable as empty too. When every argument is empty the element is skipped, as before.
 
 Because each element is evaluated independently, two entities reading the same array with different expressions stack cleanly — e.g. splitting an hourly energy cost into a consumption layer and a fixed-fee layer:
 
@@ -2724,7 +2827,7 @@ Entity → General → **Statistic ID** input field (monospace, below the entity
 </details>
 
 <details>
-<summary><strong>🎨 Layout & Appearance</strong> &nbsp;&mdash;&nbsp; Sections Auto-height | Y-Axis Label Formats | Y2 Axis Visibility | Independent Y-Axis | Stacked Mode | Invert Bars (Butterfly Charts) | Data Labels | Gauge Display | Sparkline Mode | Battery Icon | Compact Legend | Per-Entity Legend Stats | State Row Position</summary>
+<summary><strong>🎨 Layout & Appearance</strong> &nbsp;&mdash;&nbsp; Sections Auto-height | Y-Axis Label Formats | Y2 Axis Visibility | Independent Y-Axis | Stacked Mode | Chart Pages | Invert Bars (Butterfly Charts) | Data Labels | Gauge Display | Sparkline Mode | Battery Icon | Compact Legend | Per-Entity Legend Stats | State Row Position</summary>
 
 <details>
 <summary><strong>📐 Sections Auto-height</strong></summary>
@@ -2928,6 +3031,50 @@ This renders two side-by-side bar groups per time slot: an "energy" stack (solar
 **Per-group tooltip totals.** With `tooltip_stacked_total: true` (the default), the tooltip shows a separate total for each named group — labelled with the group name (e.g. *"energy Total"*, *"cost Total"*) — so you can read each stack's sum at a glance. It is independent of `show_tooltip_total`: leave both on to show the per-group totals **together with** the grand Total of all entities, or turn either one off to show only the other. The per-group rows appear only when there are two or more stack groups; ungrouped entities roll into the grand Total.
 
 > **Editor:** Per-entity → Graph tab → *Stacked* dropdown (Inherit / On / Off) *(v4.07)*, with the *Stack Group* text field next to it (shown while the entity is stacked: the card's Stacked toggle on and Inherit, or the dropdown set to On)
+
+</details>
+
+<details>
+<summary><strong>📑 Chart pages</strong> <em>(v4.08)</em></summary>
+
+### Chart pages — several charts in one card *(v4.08)*
+
+One card, several charts. Give entities a `graph_group` and the card draws every group on a **page** of its own — entities that share a name are drawn together, entities without one stay on the main page — with a small strip directly under the graph to switch between them: a dot per page, with ‹ and › right beside the dots. Three temperature sensors in a *Climate* group next to an ungrouped power sensor make two pages: the power bars on the main page, the three temperatures on the *Climate* page.
+
+```yaml
+type: custom:statistics-graph-chart-card
+card_header: Living Room
+hours_to_show: 24
+entities:
+  - entity: sensor.house_power              # no graph_group → the main page
+    graph_type: bar
+  - entity: sensor.living_room_temperature
+    graph_group: Climate                    # these three share the "Climate" page
+  - entity: sensor.bedroom_temperature
+    graph_group: Climate
+  - entity: sensor.kitchen_temperature
+    graph_group: Climate
+```
+
+How the pages come together:
+
+- **The main page** holds every entity without a `graph_group` (or with an empty one). The strip shows no names — only a dot per page; hover a dot (or let a screen reader read it) for the group name, `Page N` for the main page.
+- **Order** follows the first appearance in `entities` — the dots run in that order. The card opens on the first page — the page of the first entity in the list, so put an ungrouped entity first to open on the main page. Spelling counts: `Climate` and `climate` are two pages; spaces around the name are ignored.
+- **Switching** is done with the strip: click or tap ‹ or › (they stop at the first and last page), click or tap a dot, or focus a dot and press Enter or Space. The dots and the two arrows form one compact group in the middle of the strip, so nothing moves as you page through, whatever the group names. Pages turn only from the strip — dragging inside the plot zooms, as on every other card, and the touch gestures (tooltip, long-press zoom, pinch, pan of a zoomed chart) work as usual. The card remembers the page you picked until the dashboard is reloaded.
+- **Legend and state row.** The compact legend, the per-entity statistics legend and the state rows list the entities of the page on screen — turning the page swaps the live values along with the chart. When the pages hold different numbers of entities, the number of state rows, and with it the height of the card, changes from page to page.
+- **Shared by every page:** the date, interval and resolution pickers, zoom and pan, crosshair pins, the scroll position, card-level bounds and annotations, tooltip / zoom / scroll sync. Switching pages only changes what is drawn — nothing is fetched again.
+- **Export.** CSV writes every entity of every page; the chart PNG is the page on screen; the card PNG leaves the page indicator out.
+- **Every chart mode.** Pages work on a Timeline card as on a pie, ranking, gauge, heatmap or state timeline — each page draws the chart of its own entities (heatmap and calendar draw their first entity, so a page per entity gives one heatmap per page) — and on a sparkline card, where the page strip sits under the rows.
+- A card where no entity sets `graph_group` is exactly as before: no indicator, nothing else changes.
+
+Good to know:
+
+- All pages share one `chart_mode`, one `height` and the card-level Y bounds — a page cannot have a chart type or size of its own.
+- The page strip is about 20 px tall and sits directly under the plot, never over the x-axis dates: ‹, a dot per page and › as one group in the middle. With a numeric `height` a paged card is therefore about 22 px taller than the same card without pages; with `height: auto` in a Sections grid or a Panel view the card keeps the size of its cell and the plot gives up that strip instead.
+- Entities on different pages are never drawn together, so they cannot stack: `stack_group` only arranges the stacks *within* a page. Comparison ghosts, moving averages, `ref_entity` results and other series derived from an entity stay on that entity's page.
+- Not templatable — `{{ }}` is not evaluated in a group name.
+
+> **Editor:** Per-entity → Graph tab → *Graph Group* text field, right under *Stacked* / *Stack Group*, in every chart mode. Leave it empty to keep the entity on the main page — an empty field writes no YAML.
 
 </details>
 
@@ -5113,10 +5260,10 @@ Each entity panel has six tabs in a 3×2 grid:
 |-----|----------|
 | **General** | Entity picker, statistic ID, custom name, custom unit, icon and tap action |
 | **Basic** | Data settings: Y axis, aggregation, attribute, decimals, points/hour, number format, custom unit handling |
-| **Graph** | Graph type (line / step / bar / candlestick), hide on load, show in compact legend *(v4.07)*, stacked override (Inherit / On / Off) *(v4.07)*, extrema, average line, moving averages, range band, period comparison, break on gaps, line / fill / data points, Y axis range |
+| **Graph** | Graph type (line / step / bar / candlestick), hide on load, show in compact legend *(v4.07)*, stacked override (Inherit / On / Off) *(v4.07)*, graph group — chart pages *(v4.08)*, extrema, average line, moving averages, range band, period comparison, break on gaps, line / fill / data points, Y axis range |
 | **State Row** | State visibility and layout, primary state, trend icon, timestamp and name/state positioning |
 | **Colors** | Base colors (line/fill, point, icon, state), rise/fall colors and color thresholds with transition mode |
-| **Advanced** | Advanced calculations (time offset, value transform, value factor, cost view, forecast horizon), state map, solar forecast (Energy dashboard) and attribute data source |
+| **Advanced** | Advanced calculations (time offset, value transform, value factor, cost view, forecast horizon), state map (+ *Share State* in State Timeline mode *(v4.08)*), solar forecast (Energy dashboard) and attribute data source |
 
 Entity options also adapt dynamically based on Chart Mode — see [Dynamic Editor Behavior](#-dynamic-editor-behavior).
 
@@ -5171,6 +5318,7 @@ Below is the complete list of entity options that are mode-restricted. **Anythin
 | Y Axis Range (Lower / Upper Bound) | Graph | Timeline, Scatter, Radial Bar, Radar, Heatmap, Calendar, Gauge |
 | Tooltip Name | General | Timeline, Pie, Ranking, Radial Bar, Polar Area, Radar, Gauge |
 | Needle Color | Colors | Gauge |
+| Share State *(v4.08)* | Advanced | State Timeline |
 | Trend Icon (+ period, size, up/down/stable colours) | State Row | All modes **except** State Timeline |
 
 > Three corrections landed here in 3.32. **Invert (Mirror)** was documented as Timeline-only; it has always worked in every mode and is now shown in every mode. **Colour Thresholds** used to be hidden in Pie, Box Plot, Waterfall, Histogram and State Timeline even though they colour the legend, the state row and the tooltip there — they are now shown everywhere. **Y Axis** (Primary/Secondary) also stays visible everywhere: besides choosing an axis it selects which of `y_axis_format` / `y2_axis_format` formats that entity's numbers, and that applies in every chart mode.
@@ -5191,7 +5339,7 @@ Within each entity, toggle states cascade downward — disabling a parent hides 
 
 | When this is… | These become hidden / disabled |
 |---|---|
-| `show_graph: off` | The Graph block is marked locked (dashed border, 65% opacity) and its contents — Stack Group, Show Average, Break on Gaps, Data Labels — are dimmed and disabled. Graph Type, Z-Index, Extrema, Line, Range Band, Data Points and Fill are separate blocks with their own master switches and are not affected |
+| `show_graph: off` | The Graph block is marked locked (dashed border, 65% opacity) and its contents — Stack Group, Graph Group *(v4.08)*, Show Average, Break on Gaps, Data Labels — are dimmed and disabled. Graph Type, Z-Index, Extrema, Line, Range Band, Data Points and Fill are separate blocks with their own master switches and are not affected |
 | `show_line: off` | Line Width, Bezier, Line Style — disabled |
 | `show_fill: off` | Gradient — disabled |
 | `show_state: off` | Show Last, Adaptive Color, Icon, Align, all Size fields — disabled |
