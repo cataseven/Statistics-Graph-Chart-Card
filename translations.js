@@ -1,4 +1,4 @@
-export const T_VERSION = "4.08";
+export const T_VERSION = "4.09";
 
 export const LANG_NAMES = Object.freeze({
   en: "English", cs: "Čeština", da: "Dansk", de: "Deutsch", es: "Español",
@@ -9,6 +9,26 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Burada seçilen değerlerin yanına birimi ekler, örn. 21,5 °C: ayarlanmışsa özel birim, ayarlanmamışsa sensörün kendi birimi.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sıralama Ölçütü",
+    "Entity Order": "Varlık Sırası",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Çubukların yukarıdan aşağıya sırası. Değer = en yüksek değer en üstte (varsayılan). Varlık Sırası = Varlıklar listesindeki sıra; değerler değişirken her çubuk yerinde kalır. Alfabetik = çubuğun yanında görünen ada göre A'dan Z'ye. Min Değer ve Maks Değer çubukları yine gizler; biri gizlenince ya da geri gelince altındaki çubuklar bir satır kayar.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15dk",
+    "30m": "30dk",
+    "Last 15 minutes": "Son 15 dakika",
+    "Last 30 minutes": "Son 30 dakika",
+    "Last 15m": "Son 15dk",
+    "Last 30m": "Son 30dk",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Yalnızca bu entity için gruplama: saat, N saat, gün, hafta, ay ya da yıl. Devral, kartın Gruplama ayarını kullanır. Grafiğin zaman ızgarası kullanılan en ince gruplama olur (kart ya da herhangi bir entity): ızgaradan daha kaba gruplanan entity o ızgara üzerinde daha büyük takvim hücrelerine yeniden toplanır — örn. günlük değerlerin arkasında aylık çubuklar — karttan daha ince gruplanan entity ise tüm grafiğin ızgarasını inceltir. Kayan pencere ilk ve son takvim hücresinin yalnızca bir kısmını gösterir; eşit genişlikte çubuklar için bunun yerine kartın Gruplama ayarını kullanın. Kart raw ile gruplanmışken kullanılamaz.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "X ekseni etiketlerinin (ısı haritasında saatler, takvimde gün adları) piksel cinsinden yazı boyutu. Varsayılan ısı haritasında 9, takvimde 10.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "X ekseni etiketlerinin opaklığı. 0 = görünmez, 1 = tamamen opak. Varsayılan 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Y ekseni etiketlerinin (ısı haritasında tarihler, takvimde haftalar) piksel cinsinden yazı boyutu. Varsayılan 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Y ekseni etiketlerinin opaklığı. 0 = görünmez, 1 = tamamen opak. Varsayılan 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Dilimler",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Her satırı eşit zaman dilimlerine böler — her dilim, içinde en uzun süren durumun rengini ya da varlıkta Renk Eşikleri tanımlıysa Pay Durumu'nun o dilimdeki payına karşılık gelen eşik rengini alır. Verisi olmayan dilimler gri görünür. Kapalı = kesintisiz zaman çizgisi.",
@@ -62,7 +82,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Çubuk stilinde kullanılmaz.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Devral",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Yalnızca bu entity için gruplama: saat, N saat, gün, hafta, ay ya da yıl. Devral, kartın Gruplama ayarını kullanır. Grafiğin zaman ızgarası kullanılan en ince gruplama olur (kart ya da herhangi bir entity): ızgaradan daha kaba gruplanan entity o ızgara üzerinde daha büyük takvim hücrelerine yeniden toplanır — örn. günlük değerlerin arkasında aylık çubuklar — karttan daha ince gruplanan entity ise tüm grafiğin ızgarasını inceltir. Kart raw ile gruplanmışken kullanılamaz.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Etkinliği İzle",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Durumu bu entity'yi canlı olarak açıp kapatan entity. input_boolean.x yardımcı açıkken (on / true / yes / 1) entity'yi gösterir; !input_boolean.x yardımcı açıkken gizler. Entity yine fetch edilir, bu yüzden geçiş anlıktır ve diğer entity'ler renklerini korur; unknown, unavailable ya da eksik yardımcı onu görünür bırakır. Yukarıdaki sabit anahtarı kullanmak için boş bırakın.",
@@ -223,8 +242,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Kadran ölçeği uçlarını - alt ve üst sınırı - göstergenin iki ucunda küçük etiketler olarak çizer. Aralığı varlık başına Gösterge Aralığı (Min / Maks) altından ayarlayın. Gözlenen dönem zirvesi ve dibi araç ipucunda her zaman görünür.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Her durum bölütünün köşe yuvarlaklığı, piksel cinsinden. 0 = tamamen keskin. 3 = varsayılan. Daha büyük değerler hap şekline yuvarlar (satır yüksekliğinin yarısıyla sınırlı). İleri düzey kullanıcılar durum bazlı stil için card_mod üzerinden sgc-stl-cell sınıfını da hedefleyebilir.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Durum adını (örn. Açık, Kapalı, Evde) sığabileceği genişlikteki bölütlerin içine yazar. Temiz bir renk bandı görünümü için kapatın.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Y ekseni etiketlerinin (ısı haritasında tarihler, takvimde haftalar) piksel cinsinden yazı boyutu. Varsayılan 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Y ekseni etiketlerinin opaklığı. 0 = görünmez, 1 = tamamen opak. Varsayılan 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Y ekseni etiketleri için özel renk. Herhangi bir CSS rengi (hex, rgba, renk adı) veya bir CSS değişkeni kabul eder. Tema --primary-text-color değerini kullanmak için boş bırakın.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Grafiğin sol (birincil) kenarında sayısal değer etiketlerini gösterir.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Grafiğin sağ (ikincil) kenarında sayısal değer etiketlerini gösterir. Yalnızca en az bir varlık Y Ekseni = İkincil kullandığında görünür. İkincil varlıklar çizilmeye devam ederken yalnızca birincil eksen etiketlerini göstermek için devre dışı bırakın.",
@@ -253,8 +270,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Birincil Y ekseni için katı veya esnek üst sınır. Alt Sınır ile aynı sözdizimi: sayı, ~sayı veya entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "İkincil (sağ) Y ekseni için katı veya esnek alt sınır.",
     "Hard or soft maximum for the secondary (right) Y axis.": "İkincil (sağ) Y ekseni için katı veya esnek üst sınır.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "X ekseni etiketlerinin (ısı haritasında saatler, takvimde gün adları) piksel cinsinden yazı boyutu. Varsayılan 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X ekseni etiketlerinin opaklığı. 0 = görünmez, 1 = tamamen opak. Varsayılan 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "X ekseni etiketleri için özel renk. Herhangi bir CSS rengi veya CSS değişkeni kabul eder. Tema --primary-text-color değerini kullanmak için boş bırakın.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "X ekseni zaman/tarih etiketlerinin piksel cinsinden yazı boyutu. Varsayılan 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X ekseni etiketlerinin opaklığı. 0 = görünmez, 1 = tamamen opak. Varsayılan 0.5.",
@@ -955,6 +970,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Hängt die Einheit an die hier gewählten Werte an, z. B. 21,5 °C: die benutzerdefinierte Einheit, falls gesetzt, sonst die eigene Einheit des Sensors.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sortieren nach",
+    "Entity Order": "Entitäten-Reihenfolge",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Reihenfolge der Balken von oben nach unten. Wert = höchster Wert zuerst (Standard). Entitäten-Reihenfolge = die Reihenfolge der Entitäten-Liste, sodass jeder Balken seinen Platz behält, während sich die Werte ändern. Alphabetisch = A bis Z nach dem Namen neben dem Balken. Min-Wert und Max. Wert blenden weiterhin Balken aus; wird einer ausgeblendet oder kehrt zurück, rücken die Balken darunter um eine Zeile.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Letzte 15 Minuten",
+    "Last 30 minutes": "Letzte 30 Minuten",
+    "Last 15m": "Letzte 15m",
+    "Last 30m": "Letzte 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Gruppierung nur für diese Entität: Stunde, N Stunden, Tag, Woche, Monat oder Jahr. Übernehmen verwendet die Gruppierung der Karte. Das Zeitraster des Diagramms wird die feinste verwendete Gruppierung (Karte oder eine Entität): eine gröber gruppierte Entität wird auf diesem Raster in größere Kalenderzellen zusammengefasst — z. B. Monatsbalken hinter Tageswerten — und eine feiner als die Karte gruppierte Entität macht das Raster des ganzen Diagramms feiner. Ein gleitendes Fenster zeigt von der ersten und der letzten Kalenderzelle nur einen Teil; für gleich breite Balken stattdessen die Gruppierung der Karte verwenden. Nicht verfügbar, solange die Karte nach raw gruppiert.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Schriftgröße der X-Achsen-Beschriftungen (Stunden bei Heatmap, Tagesnamen bei Kalender) in Pixeln. Standard ist 9 bei Heatmap, 10 bei Kalender.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Deckkraft der X-Achsen-Beschriftungen. 0 = unsichtbar, 1 = voll deckend. Standard ist 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Schriftgröße der Y-Achsen-Beschriftungen (Daten bei Heatmap, Wochen bei Kalender) in Pixeln. Standard ist 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Deckkraft der Y-Achsen-Beschriftungen. 0 = unsichtbar, 1 = voll deckend. Standard ist 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Zeitabschnitte",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Teilt jede Zeile in gleich lange Zeitabschnitte — jeder Abschnitt erhält die Farbe des Zustands, der darin überwiegt, oder, wenn die Entität Farbschwellen hat, die Schwellenfarbe für den Anteil des Anteilszustands am Abschnitt. Abschnitte ohne Daten sind grau. Aus = die durchgehende Zeitachse.",
@@ -1008,7 +1043,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Wird im Balken-Stil nicht verwendet.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Übernehmen",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppierung nur für diese Entität: Stunde, N Stunden, Tag, Woche, Monat oder Jahr. Übernehmen verwendet die Gruppierung der Karte. Das Zeitraster des Diagramms wird die feinste verwendete Gruppierung (Karte oder eine Entität): eine gröber gruppierte Entität wird auf diesem Raster in größere Kalenderzellen zusammengefasst — z. B. Monatsbalken hinter Tageswerten — und eine feiner als die Karte gruppierte Entität macht das Raster des ganzen Diagramms feiner. Nicht verfügbar, solange die Karte nach raw gruppiert.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Aktiv folgt",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entität, deren Zustand diese Entität live ein- und ausschaltet. input_boolean.x zeigt die Entität, solange der Helfer an ist (on / true / yes / 1); !input_boolean.x blendet sie aus, solange der Helfer an ist. Die Entität wird weiterhin geladen, daher ist das Umschalten sofort und die anderen Entitäten behalten ihre Farben; unknown, unavailable oder ein fehlender Helfer lassen sie sichtbar. Leer lassen, um den festen Schalter oben zu verwenden.",
@@ -1169,8 +1203,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Zeichnet die Skalenenden — untere und obere Grenze — als kleine Beschriftungen an beiden Enden der Anzeige. Der Bereich wird je Entität unter Anzeigebereich (Min / Max) gesetzt. Spitzen- und Tiefstwert des Zeitraums erscheinen immer im Tooltip.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Eckenrundung der Status-Segmente in Pixeln. 0 = völlig scharf. 3 = Standard. Größere Werte runden zur Pillenform (begrenzt auf die halbe Zeilenhöhe). Fortgeschrittene können zusätzlich die Klasse sgc-stl-cell über card_mod für Styling je Status ansprechen.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Zeichnet den Statusnamen (z. B. Klar, An, Zuhause) in Segmente, die breit genug dafür sind. Ausschalten für einen reinen Farbband-Look.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Schriftgröße der Y-Achsen-Beschriftungen (Daten bei Heatmap, Wochen bei Kalender) in Pixeln. Standard ist 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Deckkraft der Y-Achsen-Beschriftungen. 0 = unsichtbar, 1 = voll deckend. Standard ist 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Benutzerdefinierte Farbe der Y-Achsen-Beschriftungen. Akzeptiert jede CSS-Farbe (Hex, rgba, Farbname) oder eine CSS-Variable. Leer lassen für das Theme --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Zeigt numerische Wertbeschriftungen am linken (primären) Rand des Diagramms.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Zeigt numerische Wertbeschriftungen am rechten (sekundären) Rand des Diagramms. Nur sichtbar, wenn mindestens eine Entität Y-Achse = Sekundär verwendet. Deaktivieren, um nur die primären Achsenbeschriftungen zu zeigen, während sekundäre Entitäten weiterhin gezeichnet werden.",
@@ -1199,8 +1231,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Hartes oder weiches Maximum der primären Y-Achse. Gleiche Syntax wie Untere Grenze: Zahl, ~Zahl oder entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Hartes oder weiches Minimum der sekundären (rechten) Y-Achse.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Hartes oder weiches Maximum der sekundären (rechten) Y-Achse.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Schriftgröße der X-Achsen-Beschriftungen (Stunden bei Heatmap, Tagesnamen bei Kalender) in Pixeln. Standard ist 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Deckkraft der X-Achsen-Beschriftungen. 0 = unsichtbar, 1 = voll deckend. Standard ist 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Benutzerdefinierte Farbe der X-Achsen-Beschriftungen. Akzeptiert jede CSS-Farbe oder CSS-Variable. Leer lassen für das Theme --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Schriftgröße der Zeit-/Datumsbeschriftungen der X-Achse in Pixeln. Standard ist 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Deckkraft der X-Achsen-Beschriftungen. 0 = unsichtbar, 1 = voll deckend. Standard ist 0.5.",
@@ -1901,6 +1931,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Přidá jednotku za zde vybrané hodnoty, např. 21,5 °C: vlastní jednotku, je-li nastavena, jinak jednotku senzoru.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Řadit podle",
+    "Entity Order": "Pořadí entit",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Pořadí pruhů shora dolů. Hodnota = nejvyšší hodnota první (výchozí). Pořadí entit = pořadí v seznamu Entity, takže každý pruh zůstává na svém místě, i když se hodnoty mění. Abecedně = od A do Z podle názvu vedle pruhu. Min. hodnota a Max. hodnota pruhy dál skrývají; když se některý skryje nebo vrátí, pruhy pod ním se posunou o jeden řádek.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Posledních 15 minut",
+    "Last 30 minutes": "Posledních 30 minut",
+    "Last 15m": "Posledních 15m",
+    "Last 30m": "Posledních 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Seskupení jen pro tuto entitu: hodina, N hodin, den, týden, měsíc nebo rok. Převzít použije seskupení karty. Časová mřížka grafu je nejjemnější použité seskupení (karta nebo kterákoli entita): entita seskupená hruběji se na této mřížce znovu agreguje do větších kalendářních buněk — např. měsíční sloupce za denními hodnotami — a entita seskupená jemněji než karta zjemní mřížku celého grafu. Klouzavé okno zobrazí z první a poslední kalendářní buňky jen část; pro stejně široké sloupce místo toho použijte seskupení karty. Není dostupné, dokud je karta seskupená podle raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Velikost písma popisků osy X (hodiny u heatmapy, názvy dnů u kalendáře) v pixelech. Výchozí je 9 u heatmapy, 10 u kalendáře.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Neprůhlednost popisků osy X. 0 = neviditelné, 1 = plně neprůhledné. Výchozí je 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Velikost písma popisků osy Y (data u heatmapy, týdny u kalendáře) v pixelech. Výchozí je 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Neprůhlednost popisků osy Y. 0 = neviditelné, 1 = plně neprůhledné. Výchozí je 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Časové úseky",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Rozdělí každý řádek na stejně dlouhé časové úseky — každý úsek dostane barvu stavu, který v něm převažuje, nebo, má-li entita Barevné prahy, barvu prahu podle podílu Sledovaného stavu v daném úseku. Úseky bez dat jsou šedé. Vyp. = souvislá časová osa.",
@@ -1954,7 +2004,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Ve stylu Sloupce se nepoužívá.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Převzít",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Seskupení jen pro tuto entitu: hodina, N hodin, den, týden, měsíc nebo rok. Převzít použije seskupení karty. Časová mřížka grafu je nejjemnější použité seskupení (karta nebo kterákoli entita): entita seskupená hruběji se na této mřížce znovu agreguje do větších kalendářních buněk — např. měsíční sloupce za denními hodnotami — a entita seskupená jemněji než karta zjemní mřížku celého grafu. Není dostupné, dokud je karta seskupená podle raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Povoleno podle",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entita, jejíž stav tuto entitu živě zapíná a vypíná. input_boolean.x entitu zobrazí, dokud je pomocník zapnutý (on / true / yes / 1); !input_boolean.x ji skryje, dokud je pomocník zapnutý. Entita se stále načítá, takže přepnutí je okamžité a ostatní entity si zachovají barvy; unknown, unavailable nebo chybějící pomocník ji nechají zobrazenou. Nechte prázdné, chcete-li použít pevný přepínač výše.",
@@ -2115,8 +2164,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Vykreslí konce stupnice — dolní a horní mez — jako malé popisky na obou koncích měřidla. Rozsah nastavte u entity ve volbě Rozsah měřidla (Min / Max). Maximum a minimum sledovaného období se vždy zobrazí v tooltipu.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Zaoblení rohů jednotlivých stavových segmentů v pixelech. 0 = zcela ostré. 3 = výchozí. Vyšší hodnoty zaoblí do tvaru pilulky (omezeno na polovinu výšky řádku). Pokročilí uživatelé mohou přes card_mod cílit na třídu sgc-stl-cell pro stylování jednotlivých stavů.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Vypíše název stavu (např. Clear, On, Home) uvnitř segmentů, které jsou dost široké. Vypněte pro čistý vzhled barevných pruhů.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Velikost písma popisků osy Y (data u heatmapy, týdny u kalendáře) v pixelech. Výchozí je 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Neprůhlednost popisků osy Y. 0 = neviditelné, 1 = plně neprůhledné. Výchozí je 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Vlastní barva popisků osy Y. Přijímá libovolnou CSS barvu (hex, rgba, název barvy) nebo CSS proměnnou. Ponechte prázdné pro --primary-text-color motivu.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Zobrazí číselné popisky hodnot na levém (primárním) okraji grafu.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Zobrazí číselné popisky hodnot na pravém (sekundárním) okraji grafu. Viditelné jen tehdy, když alespoň jedna entita používá Osa Y = Sekundární. Vypnutím zobrazíte jen popisky primární osy, sekundární entity zůstanou vykreslené.",
@@ -2145,8 +2192,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Tvrdé nebo měkké maximum primární osy Y. Stejná syntaxe jako Dolní mez: číslo, ~číslo nebo entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Tvrdé nebo měkké minimum sekundární (pravé) osy Y.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Tvrdé nebo měkké maximum sekundární (pravé) osy Y.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Velikost písma popisků osy X (hodiny u heatmapy, názvy dnů u kalendáře) v pixelech. Výchozí je 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Neprůhlednost popisků osy X. 0 = neviditelné, 1 = plně neprůhledné. Výchozí je 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Vlastní barva popisků osy X. Přijímá libovolnou CSS barvu nebo CSS proměnnou. Ponechte prázdné pro --primary-text-color motivu.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Velikost písma časových/datových popisků osy X v pixelech. Výchozí je 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Neprůhlednost popisků osy X. 0 = neviditelné, 1 = plně neprůhledné. Výchozí je 0.5.",
@@ -2872,6 +2917,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Tilføjer enheden efter de værdier, der er valgt her, f.eks. 21,5 °C: den brugerdefinerede enhed, hvis der er angivet en, ellers sensorens egen enhed.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sortér efter",
+    "Entity Order": "Enhedsrækkefølge",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Søjlernes rækkefølge fra top til bund. Værdi = højeste værdi først (standard). Enhedsrækkefølge = rækkefølgen i listen Enheder, så hver søjle beholder sin plads, mens værdierne ændrer sig. Alfabetisk = A til Å efter navnet ved siden af søjlen. Min.-værdi og Maks. værdi skjuler stadig søjler; når en skjules eller kommer tilbage, rykker søjlerne under den én række.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Seneste 15 minutter",
+    "Last 30 minutes": "Seneste 30 minutter",
+    "Last 15m": "Seneste 15m",
+    "Last 30m": "Seneste 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Gruppering kun for denne enhed: time, N timer, dag, uge, måned eller år. Arv bruger kortets gruppering. Diagrammets tidsgitter bliver den fineste gruppering i brug (kortet eller en enhed): en enhed grupperet grovere end gitteret samles på det gitter i større kalenderceller — fx månedssøjler bag daglige værdier — og en enhed grupperet finere end kortet gør hele diagrammets gitter finere. Et rullende vindue viser kun en del af den første og den sidste kalendercelle; brug i stedet kortets gruppering til søjler med ens bredde. Ikke tilgængelig, mens kortet er grupperet efter raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Skriftstørrelse for X-akseetiketter (timer for heatmap, dagnavne for kalender) i pixels. Standard er 9 for heatmap, 10 for kalender.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacitet for X-akseetiketter. 0 = usynlig, 1 = helt uigennemsigtig. Standard er 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Skriftstørrelse for Y-akseetiketter (datoer for heatmap, uger for kalender) i pixels. Standard er 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacitet for Y-akseetiketter. 0 = usynlig, 1 = helt uigennemsigtig. Standard er 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tidsblokke",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Deler hver række op i lige lange tidsblokke — hver blok får farven fra den tilstand, der fylder mest i den, eller, når entiteten har Farvetærskler, tærskelfarven for den andel af blokken, som Målt tilstand udgør. Blokke uden data er grå. Fra = den sammenhængende tidslinje.",
@@ -2925,7 +2990,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Bruges ikke i stilen Søjler.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Arv",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering kun for denne enhed: time, N timer, dag, uge, måned eller år. Arv bruger kortets gruppering. Diagrammets tidsgitter bliver den fineste gruppering i brug (kortet eller en enhed): en enhed grupperet grovere end gitteret samles på det gitter i større kalenderceller — fx månedssøjler bag daglige værdier — og en enhed grupperet finere end kortet gør hele diagrammets gitter finere. Ikke tilgængelig, mens kortet er grupperet efter raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Aktiveret følger",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Enhed, hvis tilstand slår denne enhed til og fra live. input_boolean.x viser enheden, mens hjælperen er tændt (on / true / yes / 1); !input_boolean.x skjuler den, mens hjælperen er tændt. Enheden hentes stadig, så skiftet er øjeblikkeligt, og de andre enheder beholder deres farver; unknown, unavailable eller en manglende hjælper lader den stå synlig. Lad feltet stå tomt for at bruge den faste kontakt ovenfor.",
@@ -3086,8 +3150,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Tegn skalaens endepunkter — nedre og øvre grænse — som små etiketter i målerens to ender. Angiv området pr. entitet under Målerområde (Min / Max). Periodens observerede top og bund vises altid i tooltippet.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Afrunding af hvert tilstandssegments hjørner i pixels. 0 = helt skarp. 3 = standard. Større værdier afrunder til pilleform (begrænset til halvdelen af rækkehøjden). Avancerede brugere kan også ramme klassen sgc-stl-cell via card_mod for styling pr. tilstand.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Tegn tilstandsnavnet (f.eks. Klar, Tændt, Hjemme) inde i segmenter, der er brede nok til det. Slå fra for et rent farvebåndsudseende.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Skriftstørrelse for Y-akseetiketter (datoer for heatmap, uger for kalender) i pixels. Standard er 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacitet for Y-akseetiketter. 0 = usynlig, 1 = helt uigennemsigtig. Standard er 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Brugerdefineret farve til Y-akseetiketter. Accepterer enhver CSS-farve (hex, rgba, farvenavn) eller en CSS-variabel. Lad feltet stå tomt for at bruge temaets --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Viser numeriske værdietiketter langs grafens venstre (primære) kant.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Viser numeriske værdietiketter langs grafens højre (sekundære) kant. Kun synlig når mindst én entitet bruger Y-akse = Sekundær. Slå fra for kun at vise den primære akses etiketter, mens sekundære entiteter stadig tegnes.",
@@ -3116,8 +3178,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Hård eller blød maksimumgrænse for den primære Y-akse. Samme syntaks som Nedre grænse: tal, ~tal eller entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Hård eller blød minimumgrænse for den sekundære (højre) Y-akse.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Hård eller blød maksimumgrænse for den sekundære (højre) Y-akse.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Skriftstørrelse for X-akseetiketter (timer for heatmap, dagnavne for kalender) i pixels. Standard er 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacitet for X-akseetiketter. 0 = usynlig, 1 = helt uigennemsigtig. Standard er 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Brugerdefineret farve til X-akseetiketter. Accepterer enhver CSS-farve eller CSS-variabel. Lad feltet stå tomt for at bruge temaets --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Skriftstørrelse for X-aksens tids-/datoetiketter i pixels. Standard er 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacitet for X-akseetiketterne. 0 = usynlig, 1 = helt uigennemsigtig. Standard er 0.5.",
@@ -3843,6 +3903,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Añade la unidad tras los valores elegidos aquí, p. ej. 21,5 °C: la unidad personalizada si se ha definido; si no, la unidad del propio sensor.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Ordenar por",
+    "Entity Order": "Orden de entidades",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Orden de las barras de arriba abajo. Valor = el valor más alto primero (predeterminado). Orden de entidades = el orden de la lista de Entidades, así cada barra conserva su lugar mientras cambian los valores. Alfabético = de la A a la Z por el nombre junto a la barra. Valor mín. y Valor máximo siguen ocultando barras; cuando una se oculta o vuelve, las barras de debajo se desplazan una fila.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Últimos 15 minutos",
+    "Last 30 minutes": "Últimos 30 minutos",
+    "Last 15m": "Últimos 15m",
+    "Last 30m": "Últimos 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Agrupación solo para esta entidad: hora, N horas, día, semana, mes o año. Heredar usa la agrupación de la tarjeta. La cuadrícula temporal del gráfico pasa a ser la agrupación más fina en uso (tarjeta o cualquier entidad): una entidad agrupada más grueso que la cuadrícula se reagrupa en celdas de calendario mayores sobre esa cuadrícula — p. ej. barras mensuales detrás de valores diarios — y una entidad agrupada más fino que la tarjeta afina la cuadrícula de todo el gráfico. Una ventana deslizante solo muestra parte de la primera y la última celda de calendario; para barras de igual ancho, use en su lugar la agrupación de la tarjeta. No disponible mientras la tarjeta agrupa por raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Tamaño de fuente de las etiquetas del eje X (horas para el mapa de calor, nombres de días para el calendario) en píxeles. El valor predeterminado es 9 para el mapa de calor y 10 para el calendario.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacidad de las etiquetas del eje X. 0 = invisible, 1 = totalmente opaco. El valor predeterminado es 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Tamaño de fuente de las etiquetas del eje Y (fechas para el mapa de calor, semanas para el calendario) en píxeles. El valor predeterminado es 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacidad de las etiquetas del eje Y. 0 = invisible, 1 = totalmente opaco. El valor predeterminado es 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tramos de tiempo",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Divide cada fila en tramos de tiempo iguales: cada tramo toma el color del estado predominante en él o, si la entidad tiene Umbrales de color, el color del umbral que corresponde a la proporción del Estado medido en el tramo. Los tramos sin datos se muestran en gris. Apagado = la línea de tiempo continua.",
@@ -3896,7 +3976,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "No se usa en el estilo Barras.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Heredar",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Agrupación solo para esta entidad: hora, N horas, día, semana, mes o año. Heredar usa la agrupación de la tarjeta. La cuadrícula temporal del gráfico pasa a ser la agrupación más fina en uso (tarjeta o cualquier entidad): una entidad agrupada más grueso que la cuadrícula se reagrupa en celdas de calendario mayores sobre esa cuadrícula — p. ej. barras mensuales detrás de valores diarios — y una entidad agrupada más fino que la tarjeta afina la cuadrícula de todo el gráfico. No disponible mientras la tarjeta agrupa por raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Habilitado sigue a",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entidad cuyo estado activa y desactiva esta entidad en vivo. input_boolean.x muestra la entidad mientras el ayudante está encendido (on / true / yes / 1); !input_boolean.x la oculta mientras el ayudante está encendido. La entidad se sigue cargando, así que el cambio es instantáneo y las demás entidades conservan sus colores; unknown, unavailable o un ayudante inexistente la dejan visible. Déjalo vacío para usar el interruptor fijo de arriba.",
@@ -4057,8 +4136,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Dibuja los extremos de la escala del dial — el límite inferior y el superior — como pequeñas etiquetas en los dos extremos del indicador. Establezca el rango por entidad en Rango del Indicador (Mín / Máx). El pico y el mínimo observados del período siempre aparecen en el tooltip.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Redondez de las esquinas de cada segmento de estado en píxeles. 0 = perfectamente afilado. 3 = predeterminado. Valores mayores redondean hasta forma de píldora (limitado a la mitad de la altura de la fila). Los usuarios avanzados también pueden apuntar a la clase sgc-stl-cell desde card_mod para estilizar por estado.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Dibuja el nombre del estado (p. ej. Despejado, Encendido, En casa) dentro de los segmentos lo bastante anchos para contenerlo. Desactívelo para un aspecto limpio de bandas de color.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Tamaño de fuente de las etiquetas del eje Y (fechas para el mapa de calor, semanas para el calendario) en píxeles. El valor predeterminado es 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacidad de las etiquetas del eje Y. 0 = invisible, 1 = totalmente opaco. El valor predeterminado es 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Color personalizado para las etiquetas del eje Y. Acepta cualquier color CSS (hex, rgba, nombre de color) o una variable CSS. Déjelo vacío para usar --primary-text-color del tema.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Muestra etiquetas numéricas de valor en el borde izquierdo (primario) del gráfico.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Muestra etiquetas numéricas de valor en el borde derecho (secundario) del gráfico. Solo visible cuando al menos una entidad usa Eje Y = Secundario. Desactívelo para mostrar solo las etiquetas del eje primario manteniendo trazadas las entidades secundarias.",
@@ -4087,8 +4164,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Máximo duro o suave para el eje Y primario. Misma sintaxis que Límite Inferior: número, ~número o entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Mínimo duro o suave para el eje Y secundario (derecho).",
     "Hard or soft maximum for the secondary (right) Y axis.": "Máximo duro o suave para el eje Y secundario (derecho).",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Tamaño de fuente de las etiquetas del eje X (horas para el mapa de calor, nombres de días para el calendario) en píxeles. El valor predeterminado es 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacidad de las etiquetas del eje X. 0 = invisible, 1 = totalmente opaco. El valor predeterminado es 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Color personalizado para las etiquetas del eje X. Acepta cualquier color o variable CSS. Déjelo vacío para usar --primary-text-color del tema.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Tamaño de fuente de las etiquetas de hora/fecha del eje X en píxeles. El valor predeterminado es 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacidad de las etiquetas del eje X. 0 = invisible, 1 = totalmente opaco. El valor predeterminado es 0.5.",
@@ -4814,6 +4889,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Lisää yksikön tässä valittujen arvojen perään, esim. 21,5 °C: mukautetun yksikön, jos se on asetettu, muuten anturin oman yksikön.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Lajitteluperuste",
+    "Entity Order": "Entiteettien järjestys",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Palkkien järjestys ylhäältä alas. Arvo = suurin arvo ensin (oletus). Entiteettien järjestys = Entiteetit-luettelon järjestys, joten jokainen palkki pysyy paikallaan arvojen muuttuessa. Aakkosjärjestys = A–Ö palkin vieressä näkyvän nimen mukaan. Minimiarvo ja Enimmäisarvo piilottavat edelleen palkkeja; kun jokin palkki piilotetaan tai palaa, sen alla olevat palkit siirtyvät yhden rivin.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15min",
+    "30m": "30min",
+    "Last 15 minutes": "Viimeiset 15 minuuttia",
+    "Last 30 minutes": "Viimeiset 30 minuuttia",
+    "Last 15m": "Viimeiset 15min",
+    "Last 30m": "Viimeiset 30min",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Ryhmittely vain tälle entiteetille: tunti, N tuntia, päivä, viikko, kuukausi tai vuosi. Peri käyttää kortin ryhmittelyä. Kuvaajan aikaruudukoksi tulee hienoin käytössä oleva ryhmittely (kortti tai mikä tahansa entiteetti): ruudukkoa karkeammin ryhmitelty entiteetti kootaan tälle ruudukolle suurempiin kalenterisoluihin — esim. kuukausipalkit päiväarvojen taakse — ja korttia hienommin ryhmitelty entiteetti hienontaa koko kuvaajan ruudukon. Liukuva ikkuna näyttää ensimmäisestä ja viimeisestä kalenterisolusta vain osan; käytä tasalevyisiin palkkeihin sen sijaan kortin ryhmittelyä. Ei käytettävissä, kun kortti on ryhmitelty raw-tilassa.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "X-akselin nimikkeiden (lämpökartassa tunnit, kalenterissa päivien nimet) fonttikoko pikseleinä. Oletus on lämpökartassa 9, kalenterissa 10.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "X-akselin nimikkeiden läpinäkyvyys. 0 = näkymätön, 1 = täysin peittävä. Oletus on 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Y-akselin nimikkeiden (lämpökartassa päivämäärät, kalenterissa viikot) fonttikoko pikseleinä. Oletus on 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Y-akselin nimikkeiden läpinäkyvyys. 0 = näkymätön, 1 = täysin peittävä. Oletus on 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Aikalohkot",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Jakaa jokaisen rivin yhtä pitkiin aikalohkoihin — kukin lohko saa sen tilan värin, joka on kestänyt siinä pisimpään, tai, jos entiteetillä on Värikynnykset, sen kynnysvärin, joka vastaa Seurattavan tilan osuutta lohkosta. Lohkot ilman dataa ovat harmaita. Pois = yhtenäinen aikajana.",
@@ -4867,7 +4962,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Ei käytössä Palkit-tyylissä.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Peri",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Ryhmittely vain tälle entiteetille: tunti, N tuntia, päivä, viikko, kuukausi tai vuosi. Peri käyttää kortin ryhmittelyä. Kuvaajan aikaruudukoksi tulee hienoin käytössä oleva ryhmittely (kortti tai mikä tahansa entiteetti): ruudukkoa karkeammin ryhmitelty entiteetti kootaan tälle ruudukolle suurempiin kalenterisoluihin — esim. kuukausipalkit päiväarvojen taakse — ja korttia hienommin ryhmitelty entiteetti hienontaa koko kuvaajan ruudukon. Ei käytettävissä, kun kortti on ryhmitelty raw-tilassa.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Käytössä seuraa",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entiteetti, jonka tila kytkee tämän entiteetin päälle ja pois reaaliajassa. input_boolean.x näyttää entiteetin, kun apuri on päällä (on / true / yes / 1); !input_boolean.x piilottaa sen, kun apuri on päällä. Entiteetti haetaan silti, joten vaihto on välitön ja muut entiteetit säilyttävät värinsä; unknown, unavailable tai puuttuva apuri jättää sen näkyviin. Jätä tyhjäksi käyttääksesi yllä olevaa kiinteää kytkintä.",
@@ -5028,8 +5122,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Piirrä asteikon päät — ala- ja yläraja — pieninä nimikkeinä mittarin kahteen päähän. Aseta alue entiteettikohtaisesti kohdassa Mittarin alue (Min / Max). Tarkastelujakson huippu- ja pohja-arvo näkyvät aina työkaluvihjeessä.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Kunkin tilasegmentin kulmien pyöreys pikseleinä. 0 = täysin terävä. 3 = oletus. Suuremmat arvot pyöristävät pillerimäiseksi (enintään puolet rivin korkeudesta). Edistyneet käyttäjät voivat myös kohdistaa sgc-stl-cell-luokkaan card_mod-työkalulla tilakohtaista muotoilua varten.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Piirrä tilan nimi (esim. Selkeää, Päällä, Kotona) segmentteihin, jotka ovat riittävän leveitä sille. Poista käytöstä saadaksesi pelkän värinauhailmeen.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Y-akselin nimikkeiden (lämpökartassa päivämäärät, kalenterissa viikot) fonttikoko pikseleinä. Oletus on 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Y-akselin nimikkeiden läpinäkyvyys. 0 = näkymätön, 1 = täysin peittävä. Oletus on 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Mukautettu väri Y-akselin nimikkeille. Hyväksyy minkä tahansa CSS-värin (hex, rgba, värinimi) tai CSS-muuttujan. Jätä tyhjäksi käyttääksesi teeman --primary-text-color-arvoa.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Näyttää numeeriset arvonimikkeet kaavion vasemmassa (ensisijaisessa) reunassa.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Näyttää numeeriset arvonimikkeet kaavion oikeassa (toissijaisessa) reunassa. Näkyy vain, kun vähintään yksi entiteetti käyttää asetusta Y-akseli = Toissijainen. Poista käytöstä näyttääksesi vain ensisijaisen akselin nimikkeet mutta pitääksesi toissijaiset entiteetit piirrettyinä.",
@@ -5058,8 +5150,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Kova tai pehmeä maksimi ensisijaiselle Y-akselille. Sama syntaksi kuin Alaraja: numero, ~numero tai entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Kova tai pehmeä minimi toissijaiselle (oikealle) Y-akselille.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Kova tai pehmeä maksimi toissijaiselle (oikealle) Y-akselille.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "X-akselin nimikkeiden (lämpökartassa tunnit, kalenterissa päivien nimet) fonttikoko pikseleinä. Oletus on 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X-akselin nimikkeiden läpinäkyvyys. 0 = näkymätön, 1 = täysin peittävä. Oletus on 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Mukautettu väri X-akselin nimikkeille. Hyväksyy minkä tahansa CSS-värin tai CSS-muuttujan. Jätä tyhjäksi käyttääksesi teeman --primary-text-color-arvoa.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "X-akselin aika-/päivämääränimikkeiden fonttikoko pikseleinä. Oletus on 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X-akselin nimikkeiden läpinäkyvyys. 0 = näkymätön, 1 = täysin peittävä. Oletus on 0.5.",
@@ -5785,6 +5875,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Ajoute l'unité après les valeurs choisies ici, par ex. 21,5 °C : l'unité personnalisée si elle est définie, sinon l'unité propre du capteur.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Trier par",
+    "Entity Order": "Ordre des entités",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Ordre des barres de haut en bas. Valeur = valeur la plus haute en premier (par défaut). Ordre des entités = l'ordre de la liste Entités, chaque barre garde donc sa place quand les valeurs changent. Alphabétique = de A à Z selon le nom affiché à côté de la barre. Valeur min. et Valeur max masquent toujours des barres ; quand l'une est masquée ou revient, les barres en dessous se décalent d'une ligne.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "15 dernières minutes",
+    "Last 30 minutes": "30 dernières minutes",
+    "Last 15m": "Dernières 15m",
+    "Last 30m": "Dernières 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Regroupement pour cette entité seulement : heure, N heures, jour, semaine, mois ou année. Hériter utilise le regroupement de la carte. La grille temporelle du graphique devient le regroupement le plus fin utilisé (carte ou n'importe quelle entité) : une entité regroupée plus grossièrement que la grille est ré-agrégée en cellules de calendrier plus grandes sur cette grille — p. ex. des barres mensuelles derrière des valeurs journalières — et une entité regroupée plus finement que la carte affine la grille de tout le graphique. Une fenêtre glissante n'affiche qu'une partie de la première et de la dernière cellule de calendrier ; pour des barres de même largeur, utilisez plutôt le regroupement de la carte. Indisponible tant que la carte est regroupée en raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Taille de police des libellés de l'axe X (heures pour la carte thermique, noms de jours pour le calendrier) en pixels. La valeur par défaut est 9 pour la carte thermique, 10 pour le calendrier.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacité des libellés de l'axe X. 0 = invisible, 1 = totalement opaque. La valeur par défaut est 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Taille de police des libellés de l'axe Y (dates pour la carte thermique, semaines pour le calendrier) en pixels. La valeur par défaut est 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacité des libellés de l'axe Y. 0 = invisible, 1 = totalement opaque. La valeur par défaut est 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tranches de temps",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Découpe chaque ligne en tranches de temps égales — chaque tranche prend la couleur de l'état le plus présent sur sa durée ou, si l'entité a des Seuils de couleur, la couleur du seuil qui correspond à la part de l'État suivi dans la tranche. Les tranches sans données sont grises. Désactivé = la chronologie en continu, sans tranches.",
@@ -5838,7 +5948,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Sans effet dans le style Barres.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Hériter",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Regroupement pour cette entité seulement : heure, N heures, jour, semaine, mois ou année. Hériter utilise le regroupement de la carte. La grille temporelle du graphique devient le regroupement le plus fin utilisé (carte ou n'importe quelle entité) : une entité regroupée plus grossièrement que la grille est ré-agrégée en cellules de calendrier plus grandes sur cette grille — p. ex. des barres mensuelles derrière des valeurs journalières — et une entité regroupée plus finement que la carte affine la grille de tout le graphique. Indisponible tant que la carte est regroupée en raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Activé suit",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entité dont l'état active et désactive cette entité en direct. input_boolean.x affiche l'entité tant que l'assistant est allumé (on / true / yes / 1) ; !input_boolean.x la masque tant que l'assistant est allumé. L'entité reste chargée, le basculement est donc instantané et les autres entités gardent leurs couleurs ; unknown, unavailable ou un assistant absent la laissent visible. Laissez vide pour utiliser l'interrupteur fixe ci-dessus.",
@@ -5999,8 +6108,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Dessine les extrémités de l'échelle du cadran — la borne inférieure et la borne supérieure — sous forme de petits libellés aux deux bouts de la jauge. Définir la plage par entité sous Plage de la jauge (Min / Max). Le pic et le creux observés sur la période apparaissent toujours dans l'infobulle.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Arrondi des coins de chaque segment d'état en pixels. 0 = parfaitement net. 3 = par défaut. Des valeurs plus grandes arrondissent en forme de pilule (plafonné à la moitié de la hauteur de ligne). Les utilisateurs avancés peuvent aussi cibler la classe sgc-stl-cell depuis card_mod pour un style par état.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Dessine le nom de l'état (par ex. Dégagé, On, Domicile) dans les segments assez larges pour le contenir. Désactiver pour un rendu épuré en bandes de couleur.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Taille de police des libellés de l'axe Y (dates pour la carte thermique, semaines pour le calendrier) en pixels. La valeur par défaut est 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacité des libellés de l'axe Y. 0 = invisible, 1 = totalement opaque. La valeur par défaut est 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Couleur personnalisée des libellés de l'axe Y. Accepte toute couleur CSS (hex, rgba, nom de couleur) ou une variable CSS. Laisser vide pour utiliser --primary-text-color du thème.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Affiche des libellés de valeur numériques sur le bord gauche (principal) du graphique.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Affiche des libellés de valeur numériques sur le bord droit (secondaire) du graphique. Visible uniquement quand au moins une entité utilise Axe Y = Secondaire. Désactiver pour n'afficher que les libellés de l'axe principal tout en gardant les entités secondaires tracées.",
@@ -6029,8 +6136,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Maximum strict ou souple pour l'axe Y principal. Même syntaxe que Borne inférieure : nombre, ~nombre, ou entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Minimum strict ou souple pour l'axe Y secondaire (droit).",
     "Hard or soft maximum for the secondary (right) Y axis.": "Maximum strict ou souple pour l'axe Y secondaire (droit).",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Taille de police des libellés de l'axe X (heures pour la carte thermique, noms de jours pour le calendrier) en pixels. La valeur par défaut est 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacité des libellés de l'axe X. 0 = invisible, 1 = totalement opaque. La valeur par défaut est 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Couleur personnalisée des libellés de l'axe X. Accepte toute couleur CSS ou variable CSS. Laisser vide pour utiliser --primary-text-color du thème.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Taille de police des libellés d'heure/date de l'axe X en pixels. La valeur par défaut est 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacité des libellés de l'axe X. 0 = invisible, 1 = totalement opaque. La valeur par défaut est 0.5.",
@@ -6756,6 +6861,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Aggiunge l'unità dopo i valori scelti qui, ad es. 21,5 °C: l'unità personalizzata se impostata, altrimenti l'unità del sensore.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Ordina per",
+    "Entity Order": "Ordine entità",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Ordine delle barre dall'alto in basso. Valore = valore più alto per primo (predefinito). Ordine entità = l'ordine della lista Entità, così ogni barra mantiene il suo posto mentre i valori cambiano. Alfabetico = dalla A alla Z in base al nome accanto alla barra. Valore min. e Valore massimo nascondono ancora le barre; quando una viene nascosta o ritorna, le barre sotto di essa si spostano di una riga.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Ultimi 15 minuti",
+    "Last 30 minutes": "Ultimi 30 minuti",
+    "Last 15m": "Ultimi 15m",
+    "Last 30m": "Ultimi 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Raggruppamento solo per questa entità: ora, N ore, giorno, settimana, mese o anno. Eredita usa il raggruppamento della card. La griglia temporale del grafico diventa il raggruppamento più fine in uso (card o qualsiasi entità): un'entità raggruppata più grossolanamente della griglia viene riaggregata in celle di calendario più grandi su quella griglia — es. barre mensili dietro valori giornalieri — e un'entità raggruppata più finemente della card affina la griglia dell'intero grafico. Una finestra scorrevole mostra solo una parte della prima e dell'ultima cella di calendario; per barre di uguale larghezza usare invece il raggruppamento della card. Non disponibile finché la card è raggruppata per raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Dimensione del carattere delle etichette dell'asse X (ore per la heatmap, nomi dei giorni per il calendario) in pixel. Il valore predefinito è 9 per la heatmap, 10 per il calendario.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacità delle etichette dell'asse X. 0 = invisibili, 1 = completamente opache. Il valore predefinito è 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Dimensione del carattere delle etichette dell'asse Y (date per la heatmap, settimane per il calendario) in pixel. Il valore predefinito è 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacità delle etichette dell'asse Y. 0 = invisibili, 1 = completamente opache. Il valore predefinito è 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Fasce temporali",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Divide ogni riga in fasce temporali di uguale durata — ogni fascia prende il colore dello stato prevalente al suo interno oppure, se l'entità ha Soglie colore, il colore della soglia corrispondente alla quota dello Stato misurato nella fascia. Le fasce senza dati sono grigie. Spento = la normale linea temporale senza fasce.",
@@ -6809,7 +6934,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Non usato nello stile Barre.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Eredita",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Raggruppamento solo per questa entità: ora, N ore, giorno, settimana, mese o anno. Eredita usa il raggruppamento della card. La griglia temporale del grafico diventa il raggruppamento più fine in uso (card o qualsiasi entità): un'entità raggruppata più grossolanamente della griglia viene riaggregata in celle di calendario più grandi su quella griglia — es. barre mensili dietro valori giornalieri — e un'entità raggruppata più finemente della card affina la griglia dell'intero grafico. Non disponibile finché la card è raggruppata per raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Abilitato segue",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entità il cui stato attiva e disattiva questa entità in tempo reale. input_boolean.x mostra l'entità finché l'helper è acceso (on / true / yes / 1); !input_boolean.x la nasconde finché l'helper è acceso. L'entità viene comunque caricata, quindi il cambio è istantaneo e le altre entità mantengono i colori; unknown, unavailable o un helper mancante la lasciano visibile. Lascia vuoto per usare l'interruttore fisso qui sopra.",
@@ -6970,8 +7094,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Disegna gli estremi della scala del quadrante — il limite inferiore e superiore — come piccole etichette alle due estremità dell'indicatore. Impostare l'intervallo per entità in Intervallo indicatore (Min / Max). Il picco e il minimo del periodo osservato compaiono sempre nel tooltip.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Arrotondamento degli angoli di ogni segmento di stato in pixel. 0 = perfettamente netti. 3 = predefinito. Valori maggiori arrotondano fino a una forma a pillola (limitato a metà dell'altezza della riga). Gli utenti avanzati possono anche usare la classe sgc-stl-cell da card_mod per lo stile per stato.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Disegna il nome dello stato (ad es. Sereno, On, A casa) nei segmenti abbastanza larghi da contenerlo. Disattivare per un aspetto pulito a bande di colore.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Dimensione del carattere delle etichette dell'asse Y (date per la heatmap, settimane per il calendario) in pixel. Il valore predefinito è 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacità delle etichette dell'asse Y. 0 = invisibili, 1 = completamente opache. Il valore predefinito è 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Colore personalizzato per le etichette dell'asse Y. Accetta qualsiasi colore CSS (hex, rgba, nome colore) o una variabile CSS. Lasciare vuoto per usare --primary-text-color del tema.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Mostra le etichette numeriche dei valori sul bordo sinistro (primario) del grafico.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Mostra le etichette numeriche dei valori sul bordo destro (secondario) del grafico. Visibili solo quando almeno un'entità usa Asse Y = Secondario. Disattivare per mostrare solo le etichette dell'asse primario mantenendo tracciate le entità secondarie.",
@@ -7000,8 +7122,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Massimo rigido o flessibile per l'asse Y primario. Stessa sintassi del Limite inferiore: numero, ~numero o entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Minimo rigido o flessibile per l'asse Y secondario (destro).",
     "Hard or soft maximum for the secondary (right) Y axis.": "Massimo rigido o flessibile per l'asse Y secondario (destro).",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Dimensione del carattere delle etichette dell'asse X (ore per la heatmap, nomi dei giorni per il calendario) in pixel. Il valore predefinito è 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacità delle etichette dell'asse X. 0 = invisibili, 1 = completamente opache. Il valore predefinito è 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Colore personalizzato per le etichette dell'asse X. Accetta qualsiasi colore CSS o variabile CSS. Lasciare vuoto per usare --primary-text-color del tema.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Dimensione del carattere delle etichette di ora/data dell'asse X in pixel. Il valore predefinito è 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacità delle etichette dell'asse X. 0 = invisibili, 1 = completamente opache. Il valore predefinito è 0.5.",
@@ -7727,6 +7847,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Voegt de eenheid toe achter de hier gekozen waarden, bijv. 21,5 °C: de aangepaste eenheid als die is ingesteld, anders de eigen eenheid van de sensor.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sorteren op",
+    "Entity Order": "Entiteitvolgorde",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Volgorde van de balken van boven naar beneden. Waarde = hoogste waarde eerst (standaard). Entiteitvolgorde = de volgorde van de lijst Entiteiten, zodat elke balk zijn plek houdt terwijl de waarden veranderen. Alfabetisch = A tot Z op de naam naast de balk. Min. waarde en Max. waarde verbergen nog steeds balken; als er een verborgen wordt of terugkomt, schuiven de balken eronder één rij op.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Laatste 15 minuten",
+    "Last 30 minutes": "Laatste 30 minuten",
+    "Last 15m": "Laatste 15m",
+    "Last 30m": "Laatste 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Groepering alleen voor deze entiteit: uur, N uur, dag, week, maand of jaar. Overnemen gebruikt de groepering van de kaart. Het tijdraster van de grafiek wordt de fijnste groepering in gebruik (kaart of een entiteit): een entiteit die grover dan het raster is gegroepeerd wordt op dat raster samengevoegd in grotere kalendercellen — bv. maandbalken achter dagwaarden — en een entiteit die fijner dan de kaart is gegroepeerd maakt het raster van de hele grafiek fijner. Een voortschrijdend venster toont slechts een deel van de eerste en de laatste kalendercel; gebruik voor even brede balken in plaats daarvan de groepering van de kaart. Niet beschikbaar zolang de kaart op raw groepeert.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Lettergrootte van X-aslabels (uren voor heatmap, dagnamen voor kalender) in pixels. Standaard is 9 voor heatmap, 10 voor kalender.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Dekking van X-aslabels. 0 = onzichtbaar, 1 = volledig dekkend. Standaard is 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Lettergrootte van Y-aslabels (datums voor heatmap, weken voor kalender) in pixels. Standaard is 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Dekking van Y-aslabels. 0 = onzichtbaar, 1 = volledig dekkend. Standaard is 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tijdvakken",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Verdeelt elke rij in even lange tijdvakken — elk tijdvak krijgt de kleur van de toestand die erin overheerst, of, als de entiteit Kleurdrempels heeft, de drempelkleur die past bij het aandeel van de Gemeten toestand in het tijdvak. Tijdvakken zonder gegevens zijn grijs. Uit = de doorlopende tijdlijn.",
@@ -7780,7 +7920,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Niet gebruikt in de stijl Balken.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Overnemen",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Groepering alleen voor deze entiteit: uur, N uur, dag, week, maand of jaar. Overnemen gebruikt de groepering van de kaart. Het tijdraster van de grafiek wordt de fijnste groepering in gebruik (kaart of een entiteit): een entiteit die grover dan het raster is gegroepeerd wordt op dat raster samengevoegd in grotere kalendercellen — bv. maandbalken achter dagwaarden — en een entiteit die fijner dan de kaart is gegroepeerd maakt het raster van de hele grafiek fijner. Niet beschikbaar zolang de kaart op raw groepeert.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Ingeschakeld volgt",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entiteit waarvan de status deze entiteit live in- en uitschakelt. input_boolean.x toont de entiteit zolang de helper aan is (on / true / yes / 1); !input_boolean.x verbergt haar zolang de helper aan is. De entiteit wordt nog steeds opgehaald, dus de omschakeling is direct en de andere entiteiten houden hun kleuren; unknown, unavailable of een ontbrekende helper laten haar zichtbaar. Leeg laten om de vaste schakelaar hierboven te gebruiken.",
@@ -7941,8 +8080,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Teken de uiteinden van de schaal — de onder- en bovengrens — als kleine labels aan de twee uiteinden van de meter. Stel het bereik per entiteit in onder Meterbereik (Min / Max). De waargenomen piek- en laagwaarde van de periode verschijnen altijd in de tooltip.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Afronding van de hoeken van elk statussegment in pixels. 0 = volledig scherp. 3 = standaard. Grotere waarden ronden af tot een pilvorm (begrensd op de halve rijhoogte). Gevorderde gebruikers kunnen via card_mod ook de klasse sgc-stl-cell aanspreken voor styling per status.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Teken de statusnaam (bijv. Helder, Aan, Thuis) binnen segmenten die breed genoeg zijn. Schakel uit voor een strakke kleurbandweergave.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Lettergrootte van Y-aslabels (datums voor heatmap, weken voor kalender) in pixels. Standaard is 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Dekking van Y-aslabels. 0 = onzichtbaar, 1 = volledig dekkend. Standaard is 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Aangepaste kleur voor Y-aslabels. Accepteert elke CSS-kleur (hex, rgba, kleurnaam) of een CSS-variabele. Laat leeg om de thema-variabele --primary-text-color te gebruiken.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Toont numerieke waardelabels aan de linker (primaire) rand van de grafiek.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Toont numerieke waardelabels aan de rechter (secundaire) rand van de grafiek. Alleen zichtbaar wanneer minstens één entiteit Y-as = Secundair gebruikt. Schakel uit om alleen de labels van de primaire as te tonen terwijl secundaire entiteiten getekend blijven.",
@@ -7971,8 +8108,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Harde of zachte bovengrens voor de primaire Y-as. Zelfde syntaxis als Ondergrens: getal, ~getal of entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Harde of zachte ondergrens voor de secundaire (rechter) Y-as.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Harde of zachte bovengrens voor de secundaire (rechter) Y-as.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Lettergrootte van X-aslabels (uren voor heatmap, dagnamen voor kalender) in pixels. Standaard is 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Dekking van X-aslabels. 0 = onzichtbaar, 1 = volledig dekkend. Standaard is 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Aangepaste kleur voor X-aslabels. Accepteert elke CSS-kleur of CSS-variabele. Laat leeg om de thema-variabele --primary-text-color te gebruiken.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Lettergrootte van de tijd-/datumlabels op de X-as in pixels. Standaard is 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Dekking van de X-aslabels. 0 = onzichtbaar, 1 = volledig dekkend. Standaard is 0.5.",
@@ -8698,6 +8833,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Legger til enheten etter verdiene som er valgt her, f.eks. 21,5 °C: den egendefinerte enheten hvis den er satt, ellers sensorens egen enhet.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sorter etter",
+    "Entity Order": "Entitetsrekkefølge",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Rekkefølgen på søylene fra topp til bunn. Verdi = høyeste verdi først (standard). Entitetsrekkefølge = rekkefølgen i Entiteter-listen, slik at hver søyle beholder plassen sin mens verdiene endrer seg. Alfabetisk = A til Å etter navnet ved siden av søylen. Min.-verdi og Maks. verdi skjuler fortsatt søyler; når én skjules eller kommer tilbake, flytter søylene under den seg én rad.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Siste 15 minutter",
+    "Last 30 minutes": "Siste 30 minutter",
+    "Last 15m": "Siste 15m",
+    "Last 30m": "Siste 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Gruppering bare for denne entiteten: time, N timer, dag, uke, måned eller år. Arv bruker kortets gruppering. Diagrammets tidsrutenett blir den fineste grupperingen i bruk (kortet eller en entitet): en entitet gruppert grovere enn rutenettet samles på det rutenettet i større kalenderceller — f.eks. månedsstolper bak daglige verdier — og en entitet gruppert finere enn kortet gjør hele diagrammets rutenett finere. Et rullende vindu viser bare en del av den første og den siste kalendercellen; bruk heller kortets gruppering for like brede stolper. Ikke tilgjengelig mens kortet er gruppert etter raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Skriftstørrelse for X-akseetiketter (timer for varmekart, dagnavn for kalender) i piksler. Standard er 9 for varmekart, 10 for kalender.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Dekkevne for X-akseetiketter. 0 = usynlig, 1 = helt dekkende. Standard er 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Skriftstørrelse for Y-akseetiketter (datoer for varmekart, uker for kalender) i piksler. Standard er 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Dekkevne for Y-akseetiketter. 0 = usynlig, 1 = helt dekkende. Standard er 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tidsblokker",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Deler hver rad i like lange tidsblokker — hver blokk får fargen til tilstanden som varte lengst i den, eller, når entiteten har Fargeterskler, terskelfargen for andelen av blokken som Målt tilstand utgjør. Blokker uten data er grå. Av = den sammenhengende tidslinjen.",
@@ -8751,7 +8906,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Brukes ikke i stilen Søyler.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Arv",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering bare for denne entiteten: time, N timer, dag, uke, måned eller år. Arv bruker kortets gruppering. Diagrammets tidsrutenett blir den fineste grupperingen i bruk (kortet eller en entitet): en entitet gruppert grovere enn rutenettet samles på det rutenettet i større kalenderceller — f.eks. månedsstolper bak daglige verdier — og en entitet gruppert finere enn kortet gjør hele diagrammets rutenett finere. Ikke tilgjengelig mens kortet er gruppert etter raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Aktivert følger",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entitet hvis tilstand slår denne entiteten av og på live. input_boolean.x viser entiteten mens hjelperen er på (on / true / yes / 1); !input_boolean.x skjuler den mens hjelperen er på. Entiteten hentes fortsatt, så byttet er umiddelbart og de andre entitetene beholder fargene sine; unknown, unavailable eller en manglende hjelper lar den være synlig. La stå tomt for å bruke den faste bryteren over.",
@@ -8912,8 +9066,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Tegn skalaens ytterpunkter — nedre og øvre grense — som små etiketter i begge ender av måleren. Angi området per entitet under Målerområde (Min / Maks). Periodens observerte topp og bunn vises alltid i verktøytipset.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Avrunding av hjørnene på hvert tilstandssegment i piksler. 0 = helt skarpe. 3 = standard. Større verdier runder mot pilleform (begrenset til halve radhøyden). Avanserte brukere kan også style per tilstand via klassen sgc-stl-cell fra card_mod.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Tegn tilstandsnavnet (f.eks. Klarvær, På, Hjemme) inne i segmenter som er brede nok. Slå av for et rent fargebåndsutseende.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Skriftstørrelse for Y-akseetiketter (datoer for varmekart, uker for kalender) i piksler. Standard er 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Dekkevne for Y-akseetiketter. 0 = usynlig, 1 = helt dekkende. Standard er 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Egendefinert farge for Y-akseetiketter. Godtar enhver CSS-farge (hex, rgba, fargenavn) eller en CSS-variabel. La stå tom for å bruke temaets --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Viser numeriske verdietiketter langs venstre (primær) kant av grafen.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Viser numeriske verdietiketter langs høyre (sekundær) kant av grafen. Kun synlig når minst én entitet bruker Y-akse = Sekundær. Slå av for kun å vise primæraksens etiketter mens sekundærentitetene fortsatt tegnes.",
@@ -8942,8 +9094,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Hardt eller mykt maksimum for primær Y-akse. Samme syntaks som Nedre grense: tall, ~tall eller entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Hardt eller mykt minimum for sekundær (høyre) Y-akse.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Hardt eller mykt maksimum for sekundær (høyre) Y-akse.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Skriftstørrelse for X-akseetiketter (timer for varmekart, dagnavn for kalender) i piksler. Standard er 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Dekkevne for X-akseetiketter. 0 = usynlig, 1 = helt dekkende. Standard er 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Egendefinert farge for X-akseetiketter. Godtar enhver CSS-farge eller CSS-variabel. La stå tom for å bruke temaets --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Skriftstørrelse for X-aksens tids-/datoetiketter i piksler. Standard er 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Dekkevne for X-akseetikettene. 0 = usynlig, 1 = helt dekkende. Standard er 0.5.",
@@ -9669,6 +9819,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Dodaje jednostkę po wybranych tu wartościach, np. 21,5 °C: niestandardową jednostkę, jeśli jest ustawiona, w przeciwnym razie własną jednostkę sensora.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sortuj według",
+    "Entity Order": "Kolejność encji",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Kolejność pasków od góry do dołu. Wartość = najwyższa wartość pierwsza (domyślnie). Kolejność encji = kolejność listy Encje, więc każdy pasek zostaje na swoim miejscu, gdy wartości się zmieniają. Alfabetycznie = od A do Z według nazwy obok paska. Wartość min. i Wartość maks. nadal ukrywają paski; gdy któryś zostanie ukryty lub wróci, paski pod nim przesuwają się o jeden wiersz.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Ostatnie 15 minut",
+    "Last 30 minutes": "Ostatnie 30 minut",
+    "Last 15m": "Ostatnie 15m",
+    "Last 30m": "Ostatnie 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Grupowanie tylko dla tej encji: godzina, N godzin, dzień, tydzień, miesiąc lub rok. Dziedzicz używa grupowania karty. Siatka czasu wykresu staje się najdrobniejszym używanym grupowaniem (karta lub dowolna encja): encja pogrupowana grubiej niż siatka jest ponownie agregowana w większe komórki kalendarza na tej siatce — np. słupki miesięczne za wartościami dziennymi — a encja pogrupowana drobniej niż karta zagęszcza siatkę całego wykresu. Okno kroczące pokazuje tylko część pierwszej i ostatniej komórki kalendarza; dla słupków równej szerokości użyj zamiast tego grupowania karty. Niedostępne, gdy karta grupuje według raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Rozmiar czcionki etykiet osi X (godziny dla mapy cieplnej, nazwy dni dla kalendarza) w pikselach. Domyślnie 9 dla mapy cieplnej, 10 dla kalendarza.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Nieprzezroczystość etykiet osi X. 0 = niewidoczne, 1 = w pełni kryjące. Domyślnie 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Rozmiar czcionki etykiet osi Y (daty dla mapy cieplnej, tygodnie dla kalendarza) w pikselach. Domyślnie 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Nieprzezroczystość etykiet osi Y. 0 = niewidoczne, 1 = w pełni kryjące. Domyślnie 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Przedziały czasu",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Dzieli każdy wiersz na równe przedziały czasu — każdy przedział przyjmuje kolor stanu, który w nim przeważa, albo, jeśli encja ma Progi kolorów, kolor progu odpowiadający udziałowi Śledzonego stanu w przedziale. Przedziały bez danych są szare. Wył. = ciągła oś czasu.",
@@ -9722,7 +9892,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Nieużywane w stylu Słupki.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Dziedzicz",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Grupowanie tylko dla tej encji: godzina, N godzin, dzień, tydzień, miesiąc lub rok. Dziedzicz używa grupowania karty. Siatka czasu wykresu staje się najdrobniejszym używanym grupowaniem (karta lub dowolna encja): encja pogrupowana grubiej niż siatka jest ponownie agregowana w większe komórki kalendarza na tej siatce — np. słupki miesięczne za wartościami dziennymi — a encja pogrupowana drobniej niż karta zagęszcza siatkę całego wykresu. Niedostępne, gdy karta grupuje według raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Włączone według",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Encja, której stan włącza i wyłącza tę encję na żywo. input_boolean.x pokazuje encję, gdy pomocnik jest włączony (on / true / yes / 1); !input_boolean.x ukrywa ją, gdy pomocnik jest włączony. Encja nadal jest pobierana, więc przełączenie jest natychmiastowe, a pozostałe encje zachowują kolory; unknown, unavailable lub brakujący pomocnik pozostawiają ją widoczną. Zostaw puste, aby używać stałego przełącznika powyżej.",
@@ -9883,8 +10052,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Rysuje końce skali tarczy — dolną i górną granicę — jako małe etykiety na obu końcach wskaźnika. Zakres ustawia się dla każdej encji w sekcji Zakres wskaźnika (Min / Maks). Zaobserwowane maksimum i minimum okresu zawsze pojawiają się w dymku.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Zaokrąglenie narożników segmentów stanu w pikselach. 0 = idealnie ostre. 3 = domyślne. Większe wartości zaokrąglają do kształtu pigułki (ograniczone do połowy wysokości wiersza). Zaawansowani użytkownicy mogą też stylizować poszczególne stany przez klasę sgc-stl-cell z card_mod.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Rysuje nazwę stanu (np. Clear, On, Home) wewnątrz segmentów wystarczająco szerokich, by ją pomieścić. Wyłącz dla czystego wyglądu pasków kolorów.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Rozmiar czcionki etykiet osi Y (daty dla mapy cieplnej, tygodnie dla kalendarza) w pikselach. Domyślnie 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Nieprzezroczystość etykiet osi Y. 0 = niewidoczne, 1 = w pełni kryjące. Domyślnie 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Niestandardowy kolor etykiet osi Y. Akceptuje dowolny kolor CSS (hex, rgba, nazwa koloru) lub zmienną CSS. Pozostaw puste, aby użyć motywu --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Pokazuje etykiety wartości liczbowych na lewej (głównej) krawędzi wykresu.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Pokazuje etykiety wartości liczbowych na prawej (pomocniczej) krawędzi wykresu. Widoczne tylko, gdy co najmniej jedna encja używa Oś Y = Pomocnicza. Wyłącz, aby pokazywać tylko etykiety osi głównej, nadal rysując encje pomocnicze.",
@@ -9913,8 +10080,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Twarde lub miękkie maksimum głównej osi Y. Ta sama składnia co Dolna granica: liczba, ~liczba lub entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Twarde lub miękkie minimum pomocniczej (prawej) osi Y.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Twarde lub miękkie maksimum pomocniczej (prawej) osi Y.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Rozmiar czcionki etykiet osi X (godziny dla mapy cieplnej, nazwy dni dla kalendarza) w pikselach. Domyślnie 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Nieprzezroczystość etykiet osi X. 0 = niewidoczne, 1 = w pełni kryjące. Domyślnie 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Niestandardowy kolor etykiet osi X. Akceptuje dowolny kolor CSS lub zmienną CSS. Pozostaw puste, aby użyć motywu --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Rozmiar czcionki etykiet czasu/daty osi X w pikselach. Domyślnie 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Nieprzezroczystość etykiet osi X. 0 = niewidoczne, 1 = w pełni kryjące. Domyślnie 0.5.",
@@ -10640,6 +10805,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Acrescenta a unidade depois dos valores escolhidos aqui, por exemplo 21,5 °C: a unidade personalizada, se estiver definida, caso contrário a unidade do próprio sensor.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Ordenar por",
+    "Entity Order": "Ordem das entidades",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Ordem das barras de cima para baixo. Valor = o valor mais alto primeiro (padrão). Ordem das entidades = a ordem da lista Entidades, para que cada barra mantenha o seu lugar enquanto os valores mudam. Alfabético = de A a Z pelo nome ao lado da barra. Valor mín. e Valor máximo continuam a ocultar barras; quando uma é ocultada ou volta, as barras abaixo dela deslocam-se uma linha.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Últimos 15 minutos",
+    "Last 30 minutes": "Últimos 30 minutos",
+    "Last 15m": "Últimos 15m",
+    "Last 30m": "Últimos 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Agrupamento só para esta entidade: hora, N horas, dia, semana, mês ou ano. Herdar usa o agrupamento do cartão. A grelha temporal do gráfico passa a ser o agrupamento mais fino em uso (cartão ou qualquer entidade): uma entidade agrupada de forma mais grosseira do que a grelha é reagregada em células de calendário maiores nessa grelha — p. ex. barras mensais atrás de valores diários — e uma entidade agrupada de forma mais fina do que o cartão torna a grelha de todo o gráfico mais fina. Uma janela deslizante mostra apenas parte da primeira e da última célula de calendário; para barras de largura igual, use antes o agrupamento do cartão. Indisponível enquanto o cartão agrupa por raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Tamanho da fonte dos rótulos do eixo X (horas para heatmap, nomes dos dias para calendário) em pixels. O padrão é 9 para heatmap, 10 para calendário.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacidade dos rótulos do eixo X. 0 = invisível, 1 = totalmente opaco. O padrão é 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Tamanho da fonte dos rótulos do eixo Y (datas para heatmap, semanas para calendário) em pixels. O padrão é 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacidade dos rótulos do eixo Y. 0 = invisível, 1 = totalmente opaco. O padrão é 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Blocos de tempo",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Divide cada linha em blocos de tempo iguais — cada bloco assume a cor do estado predominante nele ou, se a entidade tiver Limites de cor, a cor do limite correspondente à proporção do Estado medido no bloco. Blocos sem dados aparecem em cinza. Desligado = a linha do tempo contínua.",
@@ -10693,7 +10878,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Não usado no estilo Barras.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Herdar",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Agrupamento só para esta entidade: hora, N horas, dia, semana, mês ou ano. Herdar usa o agrupamento do cartão. A grelha temporal do gráfico passa a ser o agrupamento mais fino em uso (cartão ou qualquer entidade): uma entidade agrupada de forma mais grosseira do que a grelha é reagregada em células de calendário maiores nessa grelha — p. ex. barras mensais atrás de valores diários — e uma entidade agrupada de forma mais fina do que o cartão torna a grelha de todo o gráfico mais fina. Indisponível enquanto o cartão agrupa por raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Ativado segue",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entidade cujo estado liga e desliga esta entidade em tempo real. input_boolean.x mostra a entidade enquanto o auxiliar está ligado (on / true / yes / 1); !input_boolean.x oculta-a enquanto o auxiliar está ligado. A entidade continua a ser carregada, por isso a troca é imediata e as outras entidades mantêm as cores; unknown, unavailable ou um auxiliar inexistente deixam-na visível. Deixe vazio para usar o interruptor fixo acima.",
@@ -10854,8 +11038,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Desenha os extremos da escala do mostrador — o limite inferior e o superior — como pequenos rótulos nas duas pontas do medidor. Defina a faixa por entidade em Faixa do Medidor (Mín / Máx). O pico e o mínimo observados no período aparecem sempre no tooltip.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Arredondamento dos cantos de cada segmento de estado em pixels. 0 = perfeitamente reto. 3 = padrão. Valores maiores arredondam até uma forma de pílula (limitado a metade da altura da linha). Usuários avançados também podem estilizar por estado visando a classe sgc-stl-cell via card_mod.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Desenha o nome do estado (por exemplo Limpo, Ligado, Em Casa) dentro de segmentos largos o suficiente para contê-lo. Desligue para um visual limpo de faixas de cor.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Tamanho da fonte dos rótulos do eixo Y (datas para heatmap, semanas para calendário) em pixels. O padrão é 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacidade dos rótulos do eixo Y. 0 = invisível, 1 = totalmente opaco. O padrão é 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Cor personalizada para os rótulos do eixo Y. Aceita qualquer cor CSS (hex, rgba, nome de cor) ou uma variável CSS. Deixe vazio para usar --primary-text-color do tema.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Mostra rótulos numéricos de valor na borda esquerda (primária) do gráfico.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Mostra rótulos numéricos de valor na borda direita (secundária) do gráfico. Visível apenas quando pelo menos uma entidade usa Eixo Y = Secundário. Desative para mostrar apenas os rótulos do eixo primário mantendo as entidades secundárias no gráfico.",
@@ -10884,8 +11066,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Máximo rígido ou flexível para o eixo Y primário. Mesma sintaxe do Limite Inferior: número, ~número ou entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Mínimo rígido ou flexível para o eixo Y secundário (direito).",
     "Hard or soft maximum for the secondary (right) Y axis.": "Máximo rígido ou flexível para o eixo Y secundário (direito).",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Tamanho da fonte dos rótulos do eixo X (horas para heatmap, nomes dos dias para calendário) em pixels. O padrão é 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacidade dos rótulos do eixo X. 0 = invisível, 1 = totalmente opaco. O padrão é 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Cor personalizada para os rótulos do eixo X. Aceita qualquer cor CSS ou variável CSS. Deixe vazio para usar --primary-text-color do tema.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Tamanho da fonte dos rótulos de hora/data do eixo X em pixels. O padrão é 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacidade dos rótulos do eixo X. 0 = invisível, 1 = totalmente opaco. O padrão é 0.5.",
@@ -11611,6 +11791,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Добавляет единицу после выбранных здесь значений, например 21,5 °C: пользовательскую единицу, если она задана, иначе собственную единицу сенсора.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Сортировать по",
+    "Entity Order": "Порядок объектов",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Порядок полос сверху вниз. Значение = сначала наибольшее значение (по умолчанию). Порядок объектов = порядок в списке «Объекты», поэтому каждая полоса остаётся на своём месте, пока меняются значения. По алфавиту = от А до Я по имени рядом с полосой. Мин. значение и Макс. значение по-прежнему скрывают полосы; когда одна скрывается или возвращается, полосы под ней сдвигаются на одну строку.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15м",
+    "30m": "30м",
+    "Last 15 minutes": "Последние 15 минут",
+    "Last 30 minutes": "Последние 30 минут",
+    "Last 15m": "Последние 15м",
+    "Last 30m": "Последние 30м",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Группировка только для этой сущности: час, N часов, день, неделя, месяц или год. Наследовать использует группировку карточки. Временная сетка графика становится самой мелкой из используемых группировок (карточки или любой сущности): сущность, сгруппированная крупнее сетки, заново агрегируется в более крупные календарные ячейки на этой сетке — например, месячные столбцы позади дневных значений, — а сущность, сгруппированная мельче карточки, делает сетку всего графика мельче. Скользящее окно показывает только часть первой и последней календарной ячейки; для столбцов одинаковой ширины используйте вместо этого группировку карточки. Недоступно, пока карточка сгруппирована по raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Размер шрифта подписей оси X (часы для тепловой карты, дни недели для календаря) в пикселях. По умолчанию 9 для тепловой карты, 10 для календаря.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Непрозрачность подписей оси X. 0 = невидимы, 1 = полностью непрозрачны. По умолчанию 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Размер шрифта подписей оси Y (даты для тепловой карты, недели для календаря) в пикселях. По умолчанию 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Непрозрачность подписей оси Y. 0 = невидимы, 1 = полностью непрозрачны. По умолчанию 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Временные отрезки",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Делит каждую строку на равные временные отрезки — каждый отрезок получает цвет преобладающего в нём состояния или, если у объекта заданы «Цветовые пороги», цвет порога, соответствующий доле «Отслеживаемого состояния» в отрезке. Отрезки без данных — серые. Выкл = непрерывная хронология.",
@@ -11664,7 +11864,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Не используется в стиле Столбцы.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Наследовать",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Группировка только для этой сущности: час, N часов, день, неделя, месяц или год. Наследовать использует группировку карточки. Временная сетка графика становится самой мелкой из используемых группировок (карточки или любой сущности): сущность, сгруппированная крупнее сетки, заново агрегируется в более крупные календарные ячейки на этой сетке — например, месячные столбцы позади дневных значений, — а сущность, сгруппированная мельче карточки, делает сетку всего графика мельче. Недоступно, пока карточка сгруппирована по raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Включено по",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Сущность, состояние которой включает и выключает эту сущность в реальном времени. input_boolean.x показывает сущность, пока помощник включён (on / true / yes / 1); !input_boolean.x скрывает её, пока помощник включён. Сущность по-прежнему загружается, поэтому переключение мгновенное, а остальные сущности сохраняют цвета; unknown, unavailable или отсутствующий помощник оставляют её видимой. Оставьте пустым, чтобы использовать фиксированный переключатель выше.",
@@ -11825,8 +12024,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Рисовать концы шкалы — нижнюю и верхнюю границы — маленькими подписями на двух концах шкалы. Диапазон задаётся для каждого объекта в 'Диапазоне шкалы' (Min / Max). Пик и минимум за наблюдаемый период всегда показываются в подсказке.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Скругление углов сегментов состояний в пикселях. 0 = абсолютно острые. 3 = по умолчанию. Большие значения скругляют до формы таблетки (ограничено половиной высоты строки). Продвинутые пользователи могут также обращаться к классу sgc-stl-cell через card_mod для стилизации отдельных состояний.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Писать имя состояния (например Clear, On, Home) внутри сегментов, достаточно широких для него. Отключите для чистого вида цветных полос.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Размер шрифта подписей оси Y (даты для тепловой карты, недели для календаря) в пикселях. По умолчанию 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Непрозрачность подписей оси Y. 0 = невидимы, 1 = полностью непрозрачны. По умолчанию 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Пользовательский цвет подписей оси Y. Принимает любой CSS-цвет (hex, rgba, имя цвета) или CSS-переменную. Оставьте пустым для темы --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Показывает числовые подписи значений у левого (основного) края графика.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Показывает числовые подписи у правого (вторичного) края графика. Видимы, только когда хотя бы один объект использует ось Y = Secondary. Отключите, чтобы показывать подписи только основной оси, продолжая рисовать вторичные объекты.",
@@ -11855,8 +12052,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Жёсткий или мягкий максимум основной оси Y. Тот же синтаксис, что 'Нижняя граница': число, ~число или entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Жёсткий или мягкий минимум вторичной (правой) оси Y.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Жёсткий или мягкий максимум вторичной (правой) оси Y.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Размер шрифта подписей оси X (часы для тепловой карты, дни недели для календаря) в пикселях. По умолчанию 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Непрозрачность подписей оси X. 0 = невидимы, 1 = полностью непрозрачны. По умолчанию 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Пользовательский цвет подписей оси X. Принимает любой CSS-цвет или CSS-переменную. Оставьте пустым для темы --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Размер шрифта подписей времени/даты на оси X в пикселях. По умолчанию 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Непрозрачность подписей оси X. 0 = невидимы, 1 = полностью непрозрачны. По умолчанию 0.5.",
@@ -12582,6 +12777,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Lägger till enheten efter de värden som valts här, t.ex. 21,5 °C: den anpassade enheten om en sådan är angiven, annars sensorns egen enhet.",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "Sortera efter",
+    "Entity Order": "Entitetsordning",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "Staplarnas ordning uppifrån och ned. Värde = högsta värdet först (standard). Entitetsordning = ordningen i listan Entiteter, så att varje stapel behåller sin plats medan värdena ändras. Alfabetisk = A till Ö efter namnet bredvid stapeln. Min-värde och Maxvärde döljer fortfarande staplar; när en döljs eller kommer tillbaka flyttas staplarna under den en rad.",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15m",
+    "30m": "30m",
+    "Last 15 minutes": "Senaste 15 minuterna",
+    "Last 30 minutes": "Senaste 30 minuterna",
+    "Last 15m": "Senaste 15m",
+    "Last 30m": "Senaste 30m",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "Gruppering endast för den här entiteten: timme, N timmar, dag, vecka, månad eller år. Ärv använder kortets gruppering. Diagrammets tidsrutnät blir den finaste grupperingen som används (kortet eller någon entitet): en entitet grupperad grövre än rutnätet aggregeras om till större kalenderceller på det rutnätet — t.ex. månadsstaplar bakom dagsvärden — och en entitet grupperad finare än kortet gör hela diagrammets rutnät finare. Ett rullande fönster visar bara en del av den första och den sista kalendercellen; använd i stället kortets gruppering för lika breda staplar. Inte tillgängligt medan kortet grupperas per raw.",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "Teckenstorlek för X-axelns etiketter (timmar för värmekarta, dagnamn för kalender) i pixlar. Standard är 9 för värmekarta, 10 för kalender.",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacitet för X-axelns etiketter. 0 = osynlig, 1 = helt täckande. Standard är 1.",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Teckenstorlek för Y-axelns etiketter (datum för värmekarta, veckor för kalender) i pixlar. Standard är 9.",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Opacitet för Y-axelns etiketter. 0 = osynlig, 1 = helt täckande. Standard är 1.",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "Tidsblock",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "Delar upp varje rad i lika långa tidsblock — varje block får färgen från det tillstånd som varade längst i det, eller, när entiteten har Färgtrösklar, tröskelfärgen för den andel av blocket som Uppmätt tillstånd utgör. Block utan data är grå. Av = den sammanhängande tidslinjen.",
@@ -12635,7 +12850,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "Används inte i stilen Staplar.",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "Ärv",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "Gruppering endast för den här entiteten: timme, N timmar, dag, vecka, månad eller år. Ärv använder kortets gruppering. Diagrammets tidsrutnät blir den finaste grupperingen som används (kortet eller någon entitet): en entitet grupperad grövre än rutnätet aggregeras om till större kalenderceller på det rutnätet — t.ex. månadsstaplar bakom dagsvärden — och en entitet grupperad finare än kortet gör hela diagrammets rutnät finare. Inte tillgängligt medan kortet grupperas per raw.",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "Aktiverad följer",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "Entitet vars tillstånd slår på och av denna entitet live. input_boolean.x visar entiteten medan hjälparen är på (on / true / yes / 1); !input_boolean.x döljer den medan hjälparen är på. Entiteten hämtas fortfarande, så växlingen är omedelbar och de andra entiteterna behåller sina färger; unknown, unavailable eller en saknad hjälpare lämnar den synlig. Lämna tomt för att använda den fasta brytaren ovan.",
@@ -12796,8 +13010,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "Rita skalans ändar — undre och övre gräns — som små etiketter i mätarens båda ändar. Ange intervallet per entitet under Mätarintervall (Min / Max). Periodens observerade topp- och bottenvärde visas alltid i verktygstipset.",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "Rundning av varje tillståndssegments hörn i pixlar. 0 = helt skarpa. 3 = standard. Större värden rundar till pillerform (begränsat till halva radhöjden). Avancerade användare kan också rikta in sig på klassen sgc-stl-cell från card_mod för styling per tillstånd.",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "Rita tillståndsnamnet (t.ex. Klart, På, Hemma) inuti segment som är breda nog att rymma det. Stäng av för ett rent färgbandsutseende.",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Teckenstorlek för Y-axelns etiketter (datum för värmekarta, veckor för kalender) i pixlar. Standard är 10.",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Opacitet för Y-axelns etiketter. 0 = osynlig, 1 = helt täckande. Standard är 0.65.",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Anpassad färg för Y-axelns etiketter. Accepterar valfri CSS-färg (hex, rgba, färgnamn) eller en CSS-variabel. Lämna tomt för att använda temats --primary-text-color.",
     "Shows numeric value labels on the left (primary) edge of the graph.": "Visar numeriska värdeetiketter längs grafens vänstra (primära) kant.",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "Visar numeriska värdeetiketter längs grafens högra (sekundära) kant. Syns bara när minst en entitet använder Y-axel = Sekundär. Inaktivera för att bara visa den primära axelns etiketter men ändå rita sekundära entiteter.",
@@ -12826,8 +13038,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "Hård eller mjuk övre gräns för den primära Y-axeln. Samma syntax som Undre gräns: tal, ~tal eller entity_id.",
     "Hard or soft minimum for the secondary (right) Y axis.": "Hård eller mjuk undre gräns för den sekundära (högra) Y-axeln.",
     "Hard or soft maximum for the secondary (right) Y axis.": "Hård eller mjuk övre gräns för den sekundära (högra) Y-axeln.",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "Teckenstorlek för X-axelns etiketter (timmar för värmekarta, dagnamn för kalender) i pixlar. Standard är 10.",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacitet för X-axelns etiketter. 0 = osynlig, 1 = helt täckande. Standard är 0.5.",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "Anpassad färg för X-axelns etiketter. Accepterar valfri CSS-färg eller CSS-variabel. Lämna tomt för att använda temats --primary-text-color.",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "Teckenstorlek för X-axelns tids-/datumetiketter i pixlar. Standard är 10.",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "Opacitet för X-axelns etiketter. 0 = osynlig, 1 = helt täckande. Standard är 0.5.",
@@ -13553,6 +13763,26 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.09 (#439 legend unit)
+    "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "在此处所选的数值后添加单位，例如 21.5 °C：已设置自定义单位时使用该单位，否则使用传感器自身的单位。",
+    // --- added in 4.09 (#456 ranking_order)
+    "Sort By": "排序依据",
+    "Entity Order": "实体顺序",
+    "Order of the bars from top to bottom. Value = highest value first (default). Entity Order = the order of the Entities list, so every bar keeps its place while the values change. Alphabetic = A to Z by the name shown next to the bar. Min Value and Max Value still hide bars; when one is hidden or comes back, the bars below it move by one row.": "条形从上到下的顺序。数值 = 最高值在最前（默认）。实体顺序 = 实体列表中的顺序，数值变化时每个条形保持原位。按字母 = 按条形旁显示的名称从 A 到 Z 排序。最小值和最大值仍会隐藏条形；某个条形被隐藏或重新出现时，其下方的条形会移动一行。",
+    // --- added in 4.09 (#455 sub-hour intervals)
+    "15m": "15分",
+    "30m": "30分",
+    "Last 15 minutes": "最近 15 分钟",
+    "Last 30 minutes": "最近 30 分钟",
+    "Last 15m": "最近 15分钟",
+    "Last 30m": "最近 30分钟",
+    // --- added in 4.09 (#454 entity group_by tip)
+    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. A rolling window shows only part of the first and last calendar cell; for equal-width bars, set the card's Group By instead. Not available while the card is grouped by raw.": "仅此实体的分组：小时、N 小时、日、周、月或年。继承使用卡片的分组。图表的时间网格取所用分组中最细的一个（卡片或任一实体）：比网格更粗的实体会在该网格上重新聚合为更大的日历单元——例如日值背后的月柱——而比卡片更细的实体会让整个图表的网格更细。滚动窗口只会显示第一个和最后一个日历单元的一部分；若要等宽的柱，请改用卡片的分组。卡片按 raw 分组时不可用。",
+    // --- added in 4.09 (#440 side: Heatmap / Calendar axis label hints)
+    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 9 for heatmap, 10 for calendar.": "X 轴标签(热力图为小时,日历为星期名)的字体大小(像素)。热力图默认为 9,日历默认为 10。",
+    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "X 轴标签的不透明度。0 = 不可见,1 = 完全不透明。默认为 1。",
+    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 9.": "Y 轴标签(热力图为日期,日历为周)的字体大小(像素)。默认为 9。",
+    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 1.": "Y 轴标签的不透明度。0 = 不可见,1 = 完全不透明。默认为 1。",
     // --- added in 4.08 (#437 state timeline slices)
     "Slices": "时段",
     "Split every row into equal time slices — each slice takes the colour of the state seen most in it, or, when the entity has Color Thresholds, the threshold colour for the Share State's share of the slice. Slices without data are grey. Off = the continuous timeline.": "将每一行划分为等长的时段 — 每个时段采用其中持续时间最长的状态的颜色；若该实体设置了颜色阈值，则采用与占比状态在该时段内所占比例相对应的阈值颜色。没有数据的时段显示为灰色。关 = 连续的时间线。",
@@ -13606,7 +13836,6 @@ export const I18N = Object.freeze({
     "Not used by the Bar style.": "柱状样式不使用此设置。",
     // --- added in 4.05 (#401 entity group_by)
     "Inherit": "继承",
-    "Grouping for this entity only: hour, N hours, date, week, month or year. Inherit uses the card's Group By. The chart's time grid becomes the finest grouping in use (card or any entity): an entity grouped coarser than the grid is re-aggregated into larger calendar cells drawn on that grid — e.g. monthly bars behind daily values — and an entity grouped finer than the card makes the whole chart's grid finer. Not available while the card is grouped by raw.": "仅此实体的分组：小时、N 小时、日、周、月或年。继承使用卡片的分组。图表的时间网格取所用分组中最细的一个（卡片或任一实体）：比网格更粗的实体会在该网格上重新聚合为更大的日历单元——例如日值背后的月柱——而比卡片更细的实体会让整个图表的网格更细。卡片按 raw 分组时不可用。",
     // --- added in 4.05 (#413 live enabled)
     "Enabled Follows": "启用跟随",
     "Entity whose state switches this entity on and off live. input_boolean.x shows the entity while the helper is on (on / true / yes / 1); !input_boolean.x hides it while the helper is on. The entity is still fetched, so the flip is instant and the other entities keep their colours; unknown, unavailable or a missing helper leave it shown. Leave empty to use the fixed switch above.": "由其状态实时开关本实体的实体。input_boolean.x 在助手开启时（on / true / yes / 1）显示本实体；!input_boolean.x 在助手开启时隐藏它。实体仍会被获取，因此切换是即时的，其他实体保持各自的颜色；unknown、unavailable 或助手不存在时保持显示。留空则使用上方的固定开关。",
@@ -13767,8 +13996,6 @@ export const I18N = Object.freeze({
     "Draw the dial scale ends — the lower and upper bound — as small labels at the two ends of the gauge. Set the range per entity under Gauge Range (Min / Max). The observed period peak and low always appear in the tooltip.": "在仪表两端以小标签绘制表盘刻度端点——下限和上限。范围在每个实体的仪表范围(最小/最大)中设置。所观察时段的峰值和谷值始终显示在提示框中。",
     "Roundness of each state segment corners in pixels. 0 = perfectly sharp. 3 = default. Larger values round into a pill shape (capped at half the row height). Advanced users can also target the sgc-stl-cell class from card_mod for per-state styling.": "每个状态区段圆角的弧度(像素)。0 = 完全直角。3 = 默认。较大值会形成药丸形状(上限为行高的一半)。高级用户还可通过 card_mod 针对 sgc-stl-cell 类进行按状态样式定制。",
     "Draw the state name (e.g. Clear, On, Home) inside segments wide enough to fit it. Turn off for a clean color-band look.": "在宽度足够的区段内绘制状态名称(如 Clear、On、Home)。关闭可获得干净的色带外观。",
-    "Font size of Y-axis labels (dates for heatmap, weeks for calendar) in pixels. Default is 10.": "Y 轴标签(热力图为日期,日历为周)的字体大小(像素)。默认为 10。",
-    "Opacity of Y-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.65.": "Y 轴标签的不透明度。0 = 不可见,1 = 完全不透明。默认为 0.65。",
     "Custom color for Y-axis labels. Accepts any CSS color (hex, rgba, color name) or a CSS variable. Leave empty to use theme --primary-text-color.": "Y 轴标签的自定义颜色。接受任何 CSS 颜色(十六进制、rgba、颜色名)或 CSS 变量。留空使用主题的 --primary-text-color。",
     "Shows numeric value labels on the left (primary) edge of the graph.": "在图表左侧(主轴)边缘显示数值标签。",
     "Shows numeric value labels on the right (secondary) edge of the graph. Only visible when at least one entity uses Y Axis = Secondary. Disable to show only the primary axis labels while keeping secondary entities plotted.": "在图表右侧(副轴)边缘显示数值标签。仅当至少有一个实体的 Y 轴设为副轴时可见。关闭后仅显示主轴标签,同时保留副轴实体的绘制。",
@@ -13797,8 +14024,6 @@ export const I18N = Object.freeze({
     "Hard or soft maximum for the primary Y axis. Same syntax as Lower Bound: number, ~number, or entity_id.": "主 Y 轴的硬性或软性上限。语法与下限相同:数字、~数字或 entity_id。",
     "Hard or soft minimum for the secondary (right) Y axis.": "副(右)Y 轴的硬性或软性下限。",
     "Hard or soft maximum for the secondary (right) Y axis.": "副(右)Y 轴的硬性或软性上限。",
-    "Font size of X-axis labels (hours for heatmap, day names for calendar) in pixels. Default is 10.": "X 轴标签(热力图为小时,日历为星期名)的字体大小(像素)。默认为 10。",
-    "Opacity of X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X 轴标签的不透明度。0 = 不可见,1 = 完全不透明。默认为 0.5。",
     "Custom color for X-axis labels. Accepts any CSS color or CSS variable. Leave empty to use theme --primary-text-color.": "X 轴标签的自定义颜色。接受任何 CSS 颜色或 CSS 变量。留空使用主题的 --primary-text-color。",
     "Font size of the X-axis time/date labels in pixels. Default is 10.": "X 轴时间/日期标签的字体大小(像素)。默认为 10。",
     "Opacity of the X-axis labels. 0 = invisible, 1 = fully opaque. Default is 0.5.": "X 轴标签的不透明度。0 = 不可见,1 = 完全不透明。默认为 0.5。",
