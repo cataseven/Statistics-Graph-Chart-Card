@@ -9,6 +9,8 @@ export const LANG_NAMES = Object.freeze({
 export const I18N = Object.freeze({
   en: Object.freeze({}),
   tr: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Adın ardındaki parantez için kendi metniniz - Speed (önceki dönem) yerine Speed (2 hafta önce). Boş = kutuda görünen yerleşik kelime, kart dilinde. Her dilde yazdığınız gibi gösterilir ve Kaç Dönem Geri ona ×2 eklemez. Sabit metindir: Tarih Seçici, Aralık Seçici veya Detaya İnme dönemi değiştirebiliyorsa boş bırakın.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Burada seçilen değerlerin yanına birimi ekler, örn. 21,5 °C: ayarlanmışsa özel birim, ayarlanmamışsa sensörün kendi birimi.",
     // --- added in 4.09 (#456 ranking_order)
@@ -970,6 +972,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Eksen Stili Yerel olduğundan boş bırakılan alan Home Assistant tema rengini kullanır.",
   }),
   de: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Eigene Worte für die Klammer nach dem Namen - Speed (vor 2 Wochen) statt Speed (vorherige Periode). Leer = das eingebaute Wort, das im Feld steht, in der Kartensprache. Wird in jeder Sprache so angezeigt, wie Sie es eingeben, und Perioden zurück hängt kein ×2 an. Fester Text: Wenn Datumsauswahl, Intervallauswahl oder Detailansicht die Periode ändern können, leer lassen.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Hängt die Einheit an die hier gewählten Werte an, z. B. 21,5 °C: die benutzerdefinierte Einheit, falls gesetzt, sonst die eigene Einheit des Sensors.",
     // --- added in 4.09 (#456 ranking_order)
@@ -1931,6 +1935,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Der Achsenstil ist Nativ, daher folgt ein leeres Feld der Themenfarbe von Home Assistant.",
   }),
   cs: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Vlastní slova do závorky za názvem - Speed (před 2 týdny) místo Speed (předchozí období). Prázdné = vestavěné slovo zobrazené v poli, v jazyce karty. Zobrazí se tak, jak je napsáno, v každém jazyce, a Období zpět k němu nepřidá ×2. Pevný text: pokud Výběr data, Výběr intervalu nebo Podrobný rozpad mohou období změnit, nechte pole prázdné.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Přidá jednotku za zde vybrané hodnoty, např. 21,5 °C: vlastní jednotku, je-li nastavena, jinak jednotku senzoru.",
     // --- added in 4.09 (#456 ranking_order)
@@ -2917,6 +2923,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl os je Nativní, takže prázdné pole se řídí barvou motivu Home Assistantu.",
   }),
   da: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Dine egne ord i parentesen efter navnet - Speed (for 2 uger siden) i stedet for Speed (forrige periode). Tom = det indbyggede ord, der står i feltet, på kortets sprog. Vises som skrevet på alle sprog, og Perioder tilbage tilføjer ikke ×2. Fast tekst: Hvis Datovælger, Intervalvælger eller Detaljevisning kan ændre perioden, så lad feltet være tomt.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Tilføjer enheden efter de værdier, der er valgt her, f.eks. 21,5 °C: den brugerdefinerede enhed, hvis der er angivet en, ellers sensorens egen enhed.",
     // --- added in 4.09 (#456 ranking_order)
@@ -3903,6 +3911,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Indbygget, så et tomt felt følger Home Assistants temafarve.",
   }),
   es: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Sus propias palabras para el paréntesis tras el nombre - Speed (hace 2 semanas) en lugar de Speed (período anterior). Vacío = la palabra integrada que aparece en el campo, en el idioma de la tarjeta. Se muestra tal como lo escriba en todos los idiomas, y Periodos atrás no le añade ×2. Texto fijo: si el Selector de fechas, el Selector de intervalo o el Desglose pueden cambiar el período, déjelo vacío.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Añade la unidad tras los valores elegidos aquí, p. ej. 21,5 °C: la unidad personalizada si se ha definido; si no, la unidad del propio sensor.",
     // --- added in 4.09 (#456 ranking_order)
@@ -4889,6 +4899,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "El estilo de ejes es Nativo, así que un campo vacío sigue el color del tema de Home Assistant.",
   }),
   fi: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Omat sanat nimen jälkeisiin sulkeisiin - Speed (2 viikkoa sitten) eikä Speed (edellinen jakso). Tyhjä = kentässä näkyvä sisäänrakennettu sana kortin kielellä. Näytetään kirjoitettuna kaikilla kielillä, eikä Jaksoa taaksepäin lisää siihen ×2. Kiinteä teksti: jos Päivämäärävalitsin, Välivalitsin tai Porautuminen voi muuttaa jaksoa, jätä kenttä tyhjäksi.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Lisää yksikön tässä valittujen arvojen perään, esim. 21,5 °C: mukautetun yksikön, jos se on asetettu, muuten anturin oman yksikön.",
     // --- added in 4.09 (#456 ranking_order)
@@ -5875,6 +5887,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Akselityyli on Natiivi, joten tyhjä kenttä seuraa Home Assistantin teeman väriä.",
   }),
   fr: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Vos propres mots pour les parenthèses après le nom - Speed (il y a 2 semaines) au lieu de Speed (période précédente). Vide = le mot intégré affiché dans le champ, dans la langue de la carte. Affiché tel que saisi dans toutes les langues, et Périodes en arrière n'y ajoute pas ×2. Texte fixe : si le Sélecteur de dates, le Sélecteur d'intervalle ou l'Exploration peuvent changer la période, laissez le champ vide.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Ajoute l'unité après les valeurs choisies ici, par ex. 21,5 °C : l'unité personnalisée si elle est définie, sinon l'unité propre du capteur.",
     // --- added in 4.09 (#456 ranking_order)
@@ -6861,6 +6875,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Le style des axes est Natif : un champ vide suit donc la couleur du thème Home Assistant.",
   }),
   it: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Le tue parole per le parentesi dopo il nome - Speed (2 settimane fa) invece di Speed (periodo precedente). Vuoto = la parola predefinita mostrata nel campo, nella lingua della card. Mostrato così come scritto in ogni lingua, e Periodi indietro non vi aggiunge ×2. Testo fisso: se il Selettore date, il Selettore intervallo o l'Approfondimento possono cambiare il periodo, lascia vuoto il campo.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Aggiunge l'unità dopo i valori scelti qui, ad es. 21,5 °C: l'unità personalizzata se impostata, altrimenti l'unità del sensore.",
     // --- added in 4.09 (#456 ranking_order)
@@ -7847,6 +7863,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Lo stile assi è Nativo, quindi un campo vuoto segue il colore del tema di Home Assistant.",
   }),
   nl: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Je eigen woorden voor de haakjes na de naam - Speed (2 weken geleden) in plaats van Speed (vorige periode). Leeg = het ingebouwde woord dat in het veld staat, in de taal van de kaart. Wordt in elke taal getoond zoals getypt, en Perioden terug voegt er geen ×2 aan toe. Vaste tekst: als de Datumkiezer, de Intervalkiezer of Inzoomen op periode de periode kan wijzigen, laat het veld leeg.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Voegt de eenheid toe achter de hier gekozen waarden, bijv. 21,5 °C: de aangepaste eenheid als die is ingesteld, anders de eigen eenheid van de sensor.",
     // --- added in 4.09 (#456 ranking_order)
@@ -8833,6 +8851,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "De asstijl is Native, dus een leeg veld volgt de themakleur van Home Assistant.",
   }),
   nb: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Dine egne ord i parentesen etter navnet - Speed (for 2 uker siden) i stedet for Speed (forrige periode). Tom = det innebygde ordet som står i feltet, på kortets språk. Vises slik det er skrevet på alle språk, og Perioder tilbake legger ikke til ×2. Fast tekst: Hvis Datovelger, Intervallvelger eller Detaljvisning kan endre perioden, la feltet stå tomt.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Legger til enheten etter verdiene som er valgt her, f.eks. 21,5 °C: den egendefinerte enheten hvis den er satt, ellers sensorens egen enhet.",
     // --- added in 4.09 (#456 ranking_order)
@@ -9819,6 +9839,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Aksestilen er Innebygd, så et tomt felt følger temafargen til Home Assistant.",
   }),
   pl: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Własne słowa w nawiasie po nazwie - Speed (2 tygodnie temu) zamiast Speed (poprzedni okres). Puste = wbudowane słowo widoczne w polu, w języku karty. Wyświetlane tak, jak wpisano, w każdym języku, a pole Okresy wstecz nie dodaje do niego ×2. Stały tekst: jeśli Wybór daty, Wybór interwału lub Szczegóły okresu mogą zmienić okres, zostaw pole puste.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Dodaje jednostkę po wybranych tu wartościach, np. 21,5 °C: niestandardową jednostkę, jeśli jest ustawiona, w przeciwnym razie własną jednostkę sensora.",
     // --- added in 4.09 (#456 ranking_order)
@@ -10805,6 +10827,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Styl osi jest Natywny, więc puste pole podąża za kolorem motywu Home Assistanta.",
   }),
   pt: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "As suas próprias palavras para os parênteses após o nome - Speed (há 2 semanas) em vez de Speed (período anterior). Vazio = a palavra integrada mostrada no campo, no idioma do cartão. Mostrado como escrito em todos os idiomas, e Períodos atrás não lhe acrescenta ×2. Texto fixo: se o Seletor de datas, o Seletor de intervalo ou o Detalhamento puderem mudar o período, deixe o campo vazio.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Acrescenta a unidade depois dos valores escolhidos aqui, por exemplo 21,5 °C: a unidade personalizada, se estiver definida, caso contrário a unidade do próprio sensor.",
     // --- added in 4.09 (#456 ranking_order)
@@ -11791,6 +11815,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "O estilo dos eixos é Nativo, então um campo vazio segue a cor do tema do Home Assistant.",
   }),
   ru: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Собственные слова в скобках после имени - Speed (2 недели назад) вместо Speed (предыдущий период). Пусто = встроенное слово, показанное в поле, на языке карточки. Отображается так, как введено, на любом языке, а «Периодов назад» не добавляет к нему ×2. Фиксированный текст: если «Выбор даты», «Выбор интервала» или «Детализация» могут изменить период, оставьте поле пустым.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Добавляет единицу после выбранных здесь значений, например 21,5 °C: пользовательскую единицу, если она задана, иначе собственную единицу сенсора.",
     // --- added in 4.09 (#456 ranking_order)
@@ -12777,6 +12803,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Стиль осей — Родной, поэтому пустое поле следует цвету темы Home Assistant.",
   }),
   sv: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "Dina egna ord inom parentesen efter namnet - Speed (för 2 veckor sedan) i stället för Speed (föregående period). Tom = det inbyggda ordet som står i fältet, på kortets språk. Visas som du skrev det på alla språk, och Perioder bakåt lägger inte till ×2. Fast text: om Datumväljare, Intervallväljare eller Detaljvy kan ändra perioden, lämna fältet tomt.",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "Lägger till enheten efter de värden som valts här, t.ex. 21,5 °C: den anpassade enheten om en sådan är angiven, annars sensorns egen enhet.",
     // --- added in 4.09 (#456 ranking_order)
@@ -13763,6 +13791,8 @@ export const I18N = Object.freeze({
     "Axis Style is Native, so an empty field follows the Home Assistant theme colour.": "Axelstilen är Inbyggd, så ett tomt fält följer Home Assistants temafärg.",
   }),
   zh: Object.freeze({
+    // --- added in 4.09 (#462 compare label)
+    "Your own words for the brackets after the name - Speed (2 weeks ago) instead of Speed (previous period). Empty = the built-in word shown in the box, in the card language. Shown as typed in every language, and Periods Back adds no ×2 to it. Fixed text: if the Date Picker, Interval Picker or Drill Down can change the period, leave it empty.": "名称后括号内的自定义文字 - 例如 Speed (2 周前) 而不是 Speed (上一周期)。留空 = 使用框中显示的内置词，随卡片语言变化。在所有语言中都按原样显示，回溯周期数不会为其添加 ×2。固定文字：如果日期选择器、区间选择器或下钻查看会改变周期，请留空。",
     // --- added in 4.09 (#439 legend unit)
     "Adds the unit after the values chosen here, e.g. 21.5 °C: the custom Unit if one is set, otherwise the sensor's own unit.": "在此处所选的数值后添加单位，例如 21.5 °C：已设置自定义单位时使用该单位，否则使用传感器自身的单位。",
     // --- added in 4.09 (#456 ranking_order)
